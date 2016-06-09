@@ -25,9 +25,9 @@ navbar:
         - text: "Reproducible research"
         - text: "RMarkdown"
           href: r-rmarkdown.html
-    - text: "Syllabus"
-      icon: fa-book
-      href: syllabus.html
+#    - text: "Syllabus"
+#      icon: fa-book
+#      href: syllabus.html
     - text: "Topics"
       href: topics.html
   right:
