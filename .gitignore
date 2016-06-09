@@ -1,0 +1,29 @@
+# Remove later. See:
+# https://gist.github.com/cobyism/4730490
+_site/
+
+# R project, history, etc.
+.Rproj.user
+.Rhistory
+.RData
+.Rprofile
+*.Rproj
+
+# knitr caches
+*_cache/
+
+# image sources
+*.psd
+*.key
+
+# Unfinished lessons
+Untitled*
+
+# development notes
+_dev/
+
+# OSX Stuff
+.gitconfig.local
+.DS_Store*
+._*
+.Trashes

@@ -1,0 +1,51 @@
+# See http://rmarkdown.rstudio.com/rmarkdown_websites.html
+
+name: "Bioconnector Workshops"
+navbar:
+  title: "BIOCONNECTOR"
+  icon: fa-home
+  type: inverse
+  left:
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "Lessons"
+      icon: fa-book
+      menu:
+        - text: "R"
+        - text: "Setup"
+          href: r-setup.html
+        - text: "R basics"
+          href: r-basics.html
+        - text: "Data frames"
+          href: r-dataframes.html
+        - text: "----"
+        - text: "Reproducible research"
+        - text: "RMarkdown"
+          href: r-rmarkdown.html
+    - text: "Syllabus"
+      icon: fa-book
+      href: syllabus.html
+    - text: "Topics"
+      href: topics.html
+  right:
+    - icon: fa-question fa-lg
+      menu:
+        - text: "FAQ"
+          href: faq.html
+        - text: "People"
+          href: people.html
+        - text: "Further resources"
+          href: help.html
+output:
+  html_document:
+    theme: default
+    toc: yes
+    fig_align: center
+    css:
+      - https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css
+      - styles.css
+    includes:
+      in_header: _include/in_header.html
+      after_body: _include/after_body.html
+

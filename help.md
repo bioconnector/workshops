@@ -1,0 +1,65 @@
+---
+title: "Further Resources"
+---
+
+## R resources
+
+### Getting Help
+
+- [Google it!](http://lmgtfy.com/?q=R+Error+in+library+there+is+no+package+called): Try Googling generalized versions of any error messages you get. That is, remove text that is specific to your problem (names of variables, paths, datasets, etc.). You'd be surprised how many other people have probably had the same problem and solved it.
+- [Stack Overflow](http://stackoverflow.com/questions/tagged/r): There are over 100,000 questions tagged with "R" on SO. [Here are the most popular ones, ranked by vote](https://stackoverflow.com/questions/tagged/r?sort=votes). Always search before asking, and make a [reproducible example](http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example/5963610#5963610) if you want to get useful advice. This is a minimal example that allows others who are trying to help you to see the error themselves.
+- [Bioconductor Support Site](https://support.bioconductor.org/): Like SO, but specifically for Bioconductor-related questions.
+- Read package vignettes. For example, see the [dplyr CRAN page](https://cran.r-project.org/web/packages/dplyr/index.html), scroll about halfway down to see the [introduction to dplyr](https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html) vignette.
+
+### General R Resources
+
+- [TryR](http://tryr.codeschool.com/): An interactive, browser-based R tutor
+- [Swirl](http://swirlstats.com/): An R package that teaches you R (_and statistics!_) from within R
+- [Jenny Bryan's Stat 545 "Data wrangling, exploration, and analysis with R" course material](https://stat545-ubc.github.io/): An excellent resource for learning R, dplyr, and ggplot2
+- [DataCamp's free introduction to R](https://www.datacamp.com/courses/free-introduction-to-r)
+- [RStudio's printable cheat sheets](https://www.rstudio.com/resources/cheatsheets/)
+- [Rseek](http://rseek.org/): A custom Google search for R-related sites
+- Bioconductor [vignettes](https://www.bioconductor.org/help/package-vignettes/), [workflows](https://www.bioconductor.org/help/workflows/), and [course/conference materials](https://www.bioconductor.org/help/course-materials/)
+
+### dplyr resources
+
+- [The dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html)
+- [A longer dplyr tutorial with video and code](http://www.dataschool.io/dplyr-tutorial-for-faster-data-manipulation-in-r/)
+- [The dplyr tutorial from the HarvardX Biomedical Data Science MOOC](http://genomicsclass.github.io/book/pages/dplyr_tutorial.html)
+- [A dplyr cheat sheet from RStudio](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)
+
+### ggplot2 resources
+
+- [The official ggplot2 documentation](http://docs.ggplot2.org/)
+- [The ggplot2 book](http://amzn.to/1akjqsR), edition 1, by the developer, Hadley Wickham
+- [New version of the ggplot2 book, freely available on GitHub](https://github.com/hadley/ggplot2-book)
+- [The ggplot2 Google Group](https://groups.google.com/d/forum/ggplot2) (mailing list, support forum)
+- [LearnR](http://learnr.wordpress.com/): A blog with a good number of posts describing how to reproduce various kind of plots using ggplot2
+- [SO questions tagged with ggplot2](http://stackoverflow.com/questions/tagged/ggplot2)
+- [A catalog of graphs made with ggplot2, complete with accompanying R code](http://shinyapps.stat.ubc.ca/r-graph-catalog/)
+- [RStudio's ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/05/ggplot2-cheatsheet.pdf)
+
+### Markdown / RMarkdown resources
+
+- [Basic Markdown + RMarkdown reference](http://bioconnector.org/markdown)
+- [RStudio's RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) and [RMarkdown Reference Sheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+- [RStudio's RMarkdown documentation](http://rmarkdown.rstudio.com/): covers all the v2 enhancements to RMarkdown, [RMarkdown basics](http://rmarkdown.rstudio.com/authoring_basics.html) in more detail than covered here, the full [Pandoc Markdown specification](http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html) which lets you do more than just regular Markdown, information on [citations and bibliographies](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html), and several [examples](http://rmarkdown.rstudio.com/articles.html) illustrating advanced usage.
+- [knitr documentation](http://yihui.name/knitr/): has lots of useful reference material about how knitr works, [options](http://yihui.name/knitr/options/), controlling output, [examples](http://yihui.name/knitr/demos/), and more.
+
+## RNA-seq resources
+
+- [University of Oregon's RNA-seqlopedia](http://rnaseq.uoregon.edu/): a comprehensive guide to RNA-seq starting with experimental design, going through library prep, sequencing, and data analysis.
+- [Conesa et al. A survey of best practices for RNA-seq data analysis. _Genome Biology_ 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8). If there's one review to read on RNA-seq and data analysis, it's this one.
+- [rnaseq.wiki](http://rnaseq.wiki) & accompanying [paper](http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004393) for hands-on RNA-seq data analysis examples using cloud computing.
+- [RNA-seq blog](http://www.rna-seqblog.com/): Several blog posts per week on new methods and tools for RNA-seq analysis.
+- [YouTube playlist: 2015 UC Davis Workshop on RNA-seq methods & algorithms (Harold Pimentel)](https://www.youtube.com/playlist?list=PLfFNmoa-yUIb5cYG2R1zf5rtrQQKZvKwG).
+- [What the FPKM? A review of RNA-Seq expression units](https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/) A blog post from Harold Pimentel describing the relationship between R/FPKM and TPM.
+- [RNA-seq analysis exercise using Galaxy](https://usegalaxy.org/u/jeremy/p/galaxy-rna-seq-analysis-exercise): an example analysis you can run yourself using the Tophat+Cufflinks workflow.
+- ["RNA-Seq workflow: gene-level exploratory analysis and differential expression."](http://f1000research.com/articles/4-1070/v1) This paper walks through an end-to-end gene-level RNA-Seq differential expression workflow using Bioconductor packages, starting from FASTQ files.
+- [The DESeq2 paper](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8) describes the modeling approach and shows some benchmarks against other normalization and differential expression strategies.
+- [The DESeq2 vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf) is packed full of examples on using DESeq2, importing data, fitting models, creating visualizations, references, etc.
+- [Lior Pachter's paper "Models for transcript quantification from RNA-Seq"](http://arxiv.org/abs/1104.3889) reviews different approaches for quantifying expression from RNA-seq data and how these affect downstream analysis. 
+- SEQAnswers [RNA-seq](http://seqanswers.com/forums/forumdisplay.php?f=26) and more general [bioinformatics](http://seqanswers.com/forums/forumdisplay.php?f=18) forums are a great place to search for answers.
+- [Biostars RNA-seq](https://www.biostars.org/t/RNA-Seq/) Q&A section.
+- [Blog post](http://www.gettinggeneticsdone.com/2015/12/tutorial-rna-seq-differential.html) and [printable PDF](https://dx.doi.org/10.6084/m9.figshare.1619655.v1) I created demonstrating how to do pathway analysis with RNA-seq data and R.
+
