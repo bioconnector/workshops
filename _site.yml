@@ -19,6 +19,8 @@ navbar:
           href: r-basics.html
         - text: "Data frames"
           href: r-dataframes.html
+        - text: "Data manipulation (yeast)"
+          href: r-dplyr-yeast.html
         - text: "----"
         - text: "Reproducible research"
         - text: "RMarkdown"
