@@ -1,5 +1,8 @@
 ---
 title: "BIMS 8382: Intro to Biomedical Data Science"
+output: 
+  html_document:
+    toc: false
 ---
 
 This class introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, and culminates with analysis of data from a real RNA-seq experiment using R and Bioconductor packages.
