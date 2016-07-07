@@ -42,7 +42,10 @@ navbar:
 output:
   html_document:
     theme: default
-    toc: yes
+    toc: true
+    toc_depth: 3
+    toc_float:
+      collapsed: false
     fig_align: center
     css:
       - https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css
