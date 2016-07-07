@@ -9,6 +9,12 @@ navbar:
     - text: "Home"
       icon: fa-home
       href: index.html
+    - text: "Setup"
+      icon: fa-cog
+      href: setup.html
+    - text: "Data"
+      icon: fa-download
+      href: "data/index.html"
     - text: "Lessons"
       icon: fa-book
       menu:
