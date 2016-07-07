@@ -1,6 +1,6 @@
 # Remove later. See:
 # https://gist.github.com/cobyism/4730490
-_site/
+# _site/
 
 # R project, history, etc.
 .Rproj.user
