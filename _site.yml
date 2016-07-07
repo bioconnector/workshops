@@ -14,7 +14,7 @@ navbar:
       href: setup.html
     - text: "Data"
       icon: fa-download
-      href: "data/index.html"
+      href: "data.html"
     - text: "Lessons"
       icon: fa-book
       menu:
