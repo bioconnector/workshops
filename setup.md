@@ -1,5 +1,5 @@
 ---
-title: 'R Setup Instructions'
+title: 'Setup Instructions'
 ---
 
 ## R
@@ -78,16 +78,8 @@ First, install R and RStudio as described above. Several additional setup steps 
         1. Run the installer package. 
 
 
-## Get Data
+## [Get Data](data.html)
 
 1. **Create a new folder** somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. 
-1. **Download datasets as needed** from [bioconnector.org/workshops/data](data/index.html). Save these data files to `bioconnector/data`, that new folder you just made. Or just click these direct links:
-    1. [brauer2007_tidy.csv](data/brauer2007_tidy.csv)
-    1. [brauer2007_messy.csv](data/brauer2007_messy.csv)
-    1. [brauer2007_sysname2go.csv](data/brauer2007_sysname2go.csv)
-    1. [heartrate2dose.csv](data/heartrate2dose.csv)
-    1. [gapminder.csv](data/gapminder.csv)
-    1. [airway_rawcounts.csv](data/airway_rawcounts.csv)
-    1. [airway_metadata.csv](data/airway_metadata.csv)
-    1. [annotables_grch37.csv](data/annotables_grch37.csv)
+1. **Download datasets as needed** by [clicking here](data.html) or using the link at the top. Save these data files to the new `bioconnector/data` folder you just made.
 
