@@ -21,6 +21,8 @@ navbar:
           href: r-dataframes.html
         - text: "Data manipulation (yeast)"
           href: r-dplyr-yeast.html
+        - text: "Data visualization (gapminder)"
+          href: r-viz-gapminder.html
         - text: "----"
         - text: "Reproducible research"
         - text: "RMarkdown"
