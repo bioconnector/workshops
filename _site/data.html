@@ -11,12 +11,9 @@
 
 
 
-<title>People</title>
+<title>Data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -183,107 +180,6 @@ $(document).ready(function () {
 
 
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = false;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.9em;
-  padding-left: 5px;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-.tocify-subheader {
-  display: inline;
-}
-.tocify-subheader .tocify-item {
-  font-size: 0.95em;
-  padding-left: 10px;
-}
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
 
 
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
@@ -384,34 +280,26 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">People</h1>
+<h1 class="title toc-ignore">Data</h1>
 
 </div>
 
 
-<div id="stephen-turner" class="section level3">
-<h3>Stephen Turner</h3>
-<p>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the <a href="http://bioinformatics.virginia.edu">Bioinformatics Core</a> at the UVA School of Medicine.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Create a new folder</strong> somewhere on your computer that’s easy to get to (e.g., your Desktop). Name it <code>bioconnector</code>. Inside that folder, make a folder called <code>data</code>, all lowercase.</li>
+<li><strong>Download datasets as needed</strong>. Save these data files to the new <code>bioconnector/data</code> folder you just made. Click to download. If data displays in your browser, right-click and select <em>Save link as…</em> (or similar) to save to the desired location.</li>
+</ol>
 <ul>
-<li>Email: <a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">s…</a><span class="citation">@virginia.edu</span></li>
-<li>Web: <a href="http://stephenturner.us">stephenturner.us</a></li>
-<li>Twitter: <a href="https://twitter.com/genetics_blog"><span class="citation">@genetics_blog</span></a></li>
-<li>Blog: <a href="http://www.gettinggeneticsdone.com/">gettinggeneticsdone.com</a></li>
-<li>GitHub: <a href="https://github.com/stephenturner/">github.com/stephenturner</a></li>
+<li><a href="data/airway_metadata.csv">airway_metadata.csv</a></li>
+<li><a href="data/airway_rawcounts.csv">airway_rawcounts.csv</a></li>
+<li><a href="data/annotables_grch37.csv">annotables_grch37.csv</a></li>
+<li><a href="data/annotables_grch38.csv">annotables_grch38.csv</a></li>
+<li><a href="data/brauer2007_messy.csv">brauer2007_messy.csv</a></li>
+<li><a href="data/brauer2007_sysname2go.csv">brauer2007_sysname2go.csv</a></li>
+<li><a href="data/brauer2007_tidy.csv">brauer2007_tidy.csv</a></li>
+<li><a href="data/gapminder.csv">gapminder.csv</a></li>
+<li><a href="data/heartrate2dose.csv">heartrate2dose.csv</a></li>
 </ul>
-</div>
-<div id="vp-nagraj" class="section level3">
-<h3>VP Nagraj</h3>
-<p>VP is a research data analyst in UVA’s Health Sciences Library, and runs the HSL’s <a href="https://www.bioconnector.virginia.edu/dash">Data Analysis Support Hub (DASH) service</a>.</p>
-<ul>
-<li>Email: <a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=L6Yf0_ZmAoCwCbPyxLxBbGrIq97gwXUiKEBKeJFEJ9k=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75L6Yf0_ZmAoCwCbPyxLxBbGrIq97gwXUiKEBKeJFEJ9k\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">v…</a><span class="citation">@virginia.edu</span></li>
-<li>GitHub: <a href="https://github.com/vpnagraj">github.com/vpnagraj</a></li>
-</ul>
-</div>
-<div id="others" class="section level3">
-<h3>Others</h3>
-<p><em>Administrative contact</em>: Bart Ragon (<a href="http://www.google.com/recaptcha/mailhide/d?k=01Fpsn9fRqsAnOn2xvB6hPaw==&amp;c=gJBxKZodv6VkyiheH-XULOo6Hd2KyoERfhLPLohoLZE=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Fpsn9fRqsAnOn2xvB6hPaw\75\75\46c\75gJBxKZodv6VkyiheH-XULOo6Hd2KyoERfhLPLohoLZE\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">b…</a><span class="citation">@virginia.edu</span>)</p>
-</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
@@ -424,8 +312,6 @@ For more information, visit <a href="https://www.bioconnector.virginia.edu/" tar
 </div>
 
 
-</div>
-</div>
 
 </div>
 

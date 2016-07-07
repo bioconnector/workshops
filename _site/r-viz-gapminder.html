@@ -305,6 +305,20 @@ div.tocify {
     Home
   </a>
 </li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-book"></span>
@@ -381,14 +395,14 @@ div.tocify {
 <h2>Review</h2>
 <div id="our-data-gapminder" class="section level3">
 <h3>Our data: Gapminder</h3>
-<p>We’re going to work with a different dataset for this section. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download this data at <a href="http://bioconnector.org/data/">bioconnector.org/data</a> – it’s the <a href="http://bioconnector.org/data/gapminder.csv"><strong>gapminder.csv</strong> file</a>.</p>
+<p>We’re going to work with a different dataset for this section. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download the <a href="data/gapminder.csv"><strong>gapminder.csv</strong> data by clicking here</a> or using the link above.</p>
 <p>Let’s read in the data to an object called <code>gm</code> and take a look with <code>View</code>. Remember, we need to load both the dplyr and readr packages for efficiently reading in and displaying this data.</p>
 <pre class="r"><code># Load packages
 library(readr)
 library(dplyr)
 
 # You could read the data directly from the web:
-# gm &lt;- read_csv(&quot;http://bioconnector.org/data/gapminder.csv&quot;)
+# gm &lt;- read_csv(&quot;http://bioconnector.org/workshops/data/gapminder.csv&quot;)
 
 # Or better to download the data locally and read the file
 gm &lt;- read_csv(file=&quot;data/gapminder.csv&quot;)
@@ -684,7 +698,7 @@ p + theme_tufte()</code></pre>
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
 For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
 <a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
-<a href="https://github.com/bioconnector/" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--
 <a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
 -->

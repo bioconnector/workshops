@@ -305,6 +305,20 @@ div.tocify {
     Home
   </a>
 </li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-book"></span>
@@ -326,6 +340,9 @@ div.tocify {
     </li>
     <li>
       <a href="r-dplyr-yeast.html">Data manipulation (yeast)</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data visualization (gapminder)</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Reproducible research</li>
@@ -373,7 +390,7 @@ div.tocify {
 
 
 <p>Contemporary life science is plagued by reproducibility issues. This workshop covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this workshop we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents.</p>
-<p>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-ggplot2.html">plotting with ggplot2</a>. It also assumes that you’ve successfully installed all packages on the <a href="setup-r.html">R setup page</a>, including the <a href="setup-r.html#additional-steps-for-reproducible-research-classes">additional steps</a> needed specifically for this class.</p>
+<p>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-ggplot2.html">plotting with ggplot2</a>. It also assumes that you’ve successfully installed all packages on the <a href="setup.html">R setup page</a>, including the <a href="setup.html#rmarkdown">additional steps</a> needed specifically for this class.</p>
 <p>Finally, see <a href="help.html#markdown-rmarkdown-resources">this course’s help page</a> for links to getting more help with reproducible research, Markdown, and RMarkdown.</p>
 <div id="who-cares-about-reproducible-research" class="section level2">
 <h2>Who cares about reproducible research?</h2>
@@ -413,12 +430,12 @@ div.tocify {
 </div>
 <p>How do we reproduce it? What do we need?</p>
 <ul>
-<li>The <a href="http://bioconnector.org/data/">data</a>.
+<li>The data.
 <ul>
 <li>Data points themselves.</li>
 <li>Other metadata.</li>
 </ul></li>
-<li>The <a href="http://bioconnector.org/bims8382/r-ggplot2">code</a>.
+<li>The code.
 <ul>
 <li>Should be readable.</li>
 <li>Comments in the code / well-documented so a normal person can figure out how it runs.</li>
@@ -702,7 +719,7 @@ output:
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
 For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
 <a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
-<a href="https://github.com/bioconnector/" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--
 <a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
 -->

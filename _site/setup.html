@@ -11,7 +11,7 @@
 
 
 
-<title>R Setup Instructions</title>
+<title>Setup Instructions</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
@@ -305,6 +305,20 @@ div.tocify {
     Home
   </a>
 </li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-book"></span>
@@ -326,6 +340,9 @@ div.tocify {
     </li>
     <li>
       <a href="r-dplyr-yeast.html">Data manipulation (yeast)</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data visualization (gapminder)</a>
     </li>
     <li class="divider"></li>
     <li class="dropdown-header">Reproducible research</li>
@@ -367,27 +384,17 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">R Setup Instructions</h1>
+<h1 class="title toc-ignore">Setup Instructions</h1>
 
 </div>
 
 
-<div id="basic-r-setup" class="section level2">
-<h2>Basic R Setup</h2>
+<div id="r" class="section level2">
+<h2>R</h2>
+<div id="rrstudiopackages" class="section level3">
+<h3>R+RStudio+Packages</h3>
 <p><strong>Note:</strong> R and RStudio are separate downloads and installations. <strong>R</strong> is the underlying statistical computing environment, but using R alone is no fun. <strong>RStudio</strong> is a graphical integrated development environment that makes using R much easier. You need R installed before you install RStudio.</p>
 <ol style="list-style-type: decimal">
-<li><strong>Create a new folder</strong> somewhere on your computer that’s easy to get to (e.g., your Desktop). Name it <code>bims8382</code>. Inside that folder, make a folder called <code>data</code>, all lowercase.</li>
-<li><strong>Download 8 datasets</strong> from <a href="http://bioconnector.org/data/">bioconnector.org/data</a>. Save these data files to <code>bims8382/data</code>, that new folder you just made. Or just click these direct links:
-<ol style="list-style-type: decimal">
-<li><a href="http://bioconnector.org/data/brauer2007_tidy.csv">brauer2007_tidy.csv</a></li>
-<li><a href="http://bioconnector.org/data/brauer2007_messy.csv">brauer2007_messy.csv</a></li>
-<li><a href="http://bioconnector.org/data/brauer2007_sysname2go.csv">brauer2007_sysname2go.csv</a></li>
-<li><a href="http://bioconnector.org/data/heartrate2dose.csv">heartrate2dose.csv</a></li>
-<li><a href="http://bioconnector.org/data/gapminder.csv">gapminder.csv</a></li>
-<li><a href="http://bioconnector.org/data/airway_rawcounts.csv">airway_rawcounts.csv</a></li>
-<li><a href="http://bioconnector.org/data/airway_metadata.csv">airway_metadata.csv</a></li>
-<li><a href="http://bioconnector.org/data/annotables_grch37.csv">annotables_grch37.csv</a></li>
-</ol></li>
 <li><strong>Install R.</strong> You’ll need R version 3.1.2 or higher. Download and install R for <a href="http://cran.r-project.org/bin/windows/base/">Windows</a> or <a href="http://cran.r-project.org/bin/macosx/">Mac OS X</a> (download the latest R-3.x.x.pkg file for your appropriate version of OS X).</li>
 <li><strong>Install RStudio.</strong> Download and install the latest stable version of <a href="https://www.rstudio.com/products/rstudio/download/">RStudio Desktop</a>.</li>
 <li><strong>Install R packages.</strong> Launch RStudio (RStudio, <em>not R itself</em>). Ensure that you have internet access, then enter the following commands into the <strong>Console</strong> panel (usually the lower-left panel, by default). <em>A few notes</em>:
@@ -417,8 +424,8 @@ library(knitr)
 library(rmarkdown)</code></pre>
 <p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email me</a> <em>prior to the course</em> if you are still having difficulty.</p>
 </div>
-<div id="bioconductor" class="section level2">
-<h2>Bioconductor</h2>
+<div id="bioconductor" class="section level3">
+<h3>Bioconductor</h3>
 <p>Additionally, you’ll need to install a few <a href="http://bioconductor.org/">Bioconductor</a> packages. These packages are installed differently than “regular” R packages from CRAN. Copy and paste these lines of code into your R console.</p>
 <pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite()
@@ -427,11 +434,11 @@ biocLite(&quot;DESeq2&quot;)</code></pre>
 <pre class="r"><code>library(DESeq2)</code></pre>
 <p>If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email me</a> <em>prior to the course</em> if you are still having difficulty.</p>
 </div>
-<div id="additional-steps-for-reproducible-research-classes" class="section level2">
-<h2>Additional steps for Reproducible Research classes</h2>
-<p>A few additional setup steps required for the reproducible research / dynamic documents class.</p>
+<div id="rmarkdown" class="section level3">
+<h3>RMarkdown</h3>
+<p>First, install R and RStudio as described above. Several additional setup steps required for the reproducible research with RMarkdown class.</p>
 <ol style="list-style-type: decimal">
-<li>First, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (knitr, yaml, htmltools, caTools, bitops, and rmarkdown). Click “Yes” to install these.</li>
+<li>First, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (<code>knitr</code>, <code>yaml</code>, <code>htmltools</code>, <code>caTools</code>, <code>bitops</code>, and <code>rmarkdown</code>). Click “Yes” to install these.</li>
 <li>Sign up for a free account at <strong><a href="http://rpubs.com/">RPubs.com</a></strong>.</li>
 <li>If you want to convert to PDF, you will need to install a <strong>LaTeX</strong> typesetting engine. This differs on Mac and Windows. <strong>Note that this part of the installation may take up to several hours, and isn’t strictly required for the class.</strong>
 <ul>
@@ -452,12 +459,20 @@ biocLite(&quot;DESeq2&quot;)</code></pre>
 </ul></li>
 </ol>
 </div>
+</div>
+<div id="get-data" class="section level2">
+<h2><a href="data.html">Get Data</a></h2>
+<ol style="list-style-type: decimal">
+<li><strong>Create a new folder</strong> somewhere on your computer that’s easy to get to (e.g., your Desktop). Name it <code>bioconnector</code>. Inside that folder, make a folder called <code>data</code>, all lowercase.</li>
+<li><strong>Download datasets as needed</strong> by <a href="data.html">clicking here</a> or using the link at the top. Save these data files to the new <code>bioconnector/data</code> folder you just made.</li>
+</ol>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
 For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
 <a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
-<a href="https://github.com/bioconnector/" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--
 <a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
 -->
