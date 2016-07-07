@@ -2,20 +2,12 @@
 title: 'R Setup Instructions'
 ---
 
-## Basic R Setup
+## R
+
+### R+RStudio+Packages
 
 **Note:** R and RStudio are separate downloads and installations. **R** is the underlying statistical computing environment, but using R alone is no fun. **RStudio** is a graphical integrated development environment that makes using R much easier. You need R installed before you install RStudio.
 
-1. **Create a new folder** somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bims8382`. Inside that folder, make a folder called `data`, all lowercase. 
-1. **Download 8 datasets** from [bioconnector.org/data](http://bioconnector.org/data/). Save these data files to `bims8382/data`, that new folder you just made. Or just click these direct links:
-    1. [brauer2007_tidy.csv](http://bioconnector.org/data/brauer2007_tidy.csv)
-    1. [brauer2007_messy.csv](http://bioconnector.org/data/brauer2007_messy.csv)
-    1. [brauer2007_sysname2go.csv](http://bioconnector.org/data/brauer2007_sysname2go.csv)
-    1. [heartrate2dose.csv](http://bioconnector.org/data/heartrate2dose.csv)
-    1. [gapminder.csv](http://bioconnector.org/data/gapminder.csv)
-    1. [airway_rawcounts.csv](http://bioconnector.org/data/airway_rawcounts.csv)
-    1. [airway_metadata.csv](http://bioconnector.org/data/airway_metadata.csv)
-    1. [annotables_grch37.csv](http://bioconnector.org/data/annotables_grch37.csv)
 1. **Install R.** You'll need R version 3.1.2 or higher. Download and install R for [Windows](http://cran.r-project.org/bin/windows/base/) or [Mac OS X](http://cran.r-project.org/bin/macosx/) (download the latest R-3.x.x.pkg file for your appropriate version of OS X).
 1. **Install RStudio.** Download and install the latest stable version of [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/).
 1. **Install R packages.** Launch RStudio (RStudio, *not R itself*). Ensure that you have internet access, then enter the following commands into the **Console** panel (usually the lower-left panel, by default). _A few notes_:
@@ -50,7 +42,7 @@ library(rmarkdown)
 
 These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
 
-## Bioconductor
+### Bioconductor
 
 Additionally, you'll need to install a few [Bioconductor](http://bioconductor.org/) packages. These packages are installed differently than "regular" R packages from CRAN. Copy and paste these lines of code into your R console.
 
@@ -68,11 +60,12 @@ library(DESeq2)
 
 If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
 
-## Additional steps for Reproducible Research classes
 
-A few additional setup steps required for the reproducible research / dynamic documents class.
+### RMarkdown
 
-1. First, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (knitr, yaml, htmltools, caTools, bitops, and rmarkdown). Click "Yes" to install these.
+First, install R and RStudio as described above. Several additional setup steps required for the reproducible research with RMarkdown class.
+
+1. First, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (`knitr`, `yaml`, `htmltools`, `caTools`, `bitops`, and `rmarkdown`). Click "Yes" to install these.
 1. Sign up for a free account at **[RPubs.com](http://rpubs.com/)**.
 1. If you want to convert to PDF, you will need to install a **LaTeX** typesetting engine. This differs on Mac and Windows. **Note that this part of the installation may take up to several hours, and isn't strictly required for the class.**
     - **Windows LaTeX instructions**:
@@ -83,4 +76,18 @@ A few additional setup steps required for the reproducible research / dynamic do
     - **Mac LaTeX instructions**:
         1. Download the installer .pkg file [using this link](http://tug.org/cgi-bin/mactex-download/MacTeX.pkg). This is a very large download (>2 gigabytes). It can take a while depending on your network speed.
         1. Run the installer package. 
+
+
+## Get Data
+
+1. **Create a new folder** somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. 
+1. **Download datasets as needed** from [bioconnector.org/workshops/data](data/index.html). Save these data files to `bioconnector/data`, that new folder you just made. Or just click these direct links:
+    1. [brauer2007_tidy.csv](data/brauer2007_tidy.csv)
+    1. [brauer2007_messy.csv](data/brauer2007_messy.csv)
+    1. [brauer2007_sysname2go.csv](data/brauer2007_sysname2go.csv)
+    1. [heartrate2dose.csv](data/heartrate2dose.csv)
+    1. [gapminder.csv](data/gapminder.csv)
+    1. [airway_rawcounts.csv](data/airway_rawcounts.csv)
+    1. [airway_metadata.csv](data/airway_metadata.csv)
+    1. [annotables_grch37.csv](data/annotables_grch37.csv)
 
