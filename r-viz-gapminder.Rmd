@@ -21,7 +21,7 @@ This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r
 
 ### Our data: Gapminder
 
-We're going to work with a different dataset for this section. It's a [cleaned-up excerpt](https://github.com/jennybc/gapminder) from the [Gapminder data](http://www.gapminder.org/data/). Download this data at [bioconnector.org/data](http://bioconnector.org/data/) -- it's the [**gapminder.csv** file](http://bioconnector.org/data/gapminder.csv).
+We're going to work with a different dataset for this section. It's a [cleaned-up excerpt](https://github.com/jennybc/gapminder) from the [Gapminder data](http://www.gapminder.org/data/). Download the [**gapminder.csv** data by clicking here](data/gapminder.csv) or using the link above.
 
 Let's read in the data to an object called `gm` and take a look with `View`. Remember, we need to load both the dplyr and readr packages for efficiently reading in and displaying this data. 
 
@@ -31,7 +31,7 @@ library(readr)
 library(dplyr)
 
 # You could read the data directly from the web:
-# gm <- read_csv("http://bioconnector.org/data/gapminder.csv")
+# gm <- read_csv("http://bioconnector.org/workshops/data/gapminder.csv")
 
 # Or better to download the data locally and read the file
 gm <- read_csv(file="data/gapminder.csv")
