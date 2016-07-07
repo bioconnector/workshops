@@ -522,10 +522,10 @@ ydat %>%
 
 Take the above code and continue to process the result to show only results where the process has at least 5 genes. Add a column corresponding to the absolute value of the correlation coefficient, and show for each nutrient the singular process with the highest correlation between rate and expression, regardless of direction. _Hint:_ 4 more pipes: `filter`, `mutate`, `arrange`, and `filter` again with `row_number()==1`. Ignore the warning.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, warning=FALSE}
 ydat %>% 
   group_by(nutrient, bp) %>% 
-  summarize(r=round(cor(rate, expression), 2), ngenes=n_distinct(symbol)) %>% 
+  summarize(r=round(suppressWarnings(cor(rate, expression)), 2), ngenes=n_distinct(symbol)) %>% 
   filter(ngenes>=5) %>% 
   mutate(absr=abs(r)) %>% 
   arrange(desc(absr)) %>% 
