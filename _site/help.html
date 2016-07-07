@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Further Resources</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/default.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+  padding-left: 10px;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">R</li>
+    <li>
+      <a href="r-setup.html">Setup</a>
+    </li>
+    <li>
+      <a href="r-basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data manipulation (yeast)</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Reproducible research</li>
+    <li>
+      <a href="r-rmarkdown.html">RMarkdown</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="topics.html">Topics</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Further Resources</h1>
+
+</div>
+
+
+<div id="r-resources" class="section level2">
+<h2>R resources</h2>
+<div id="getting-help" class="section level3">
+<h3>Getting Help</h3>
+<ul>
+<li><a href="http://lmgtfy.com/?q=R+Error+in+library+there+is+no+package+called">Google it!</a>: Try Googling generalized versions of any error messages you get. That is, remove text that is specific to your problem (names of variables, paths, datasets, etc.). You’d be surprised how many other people have probably had the same problem and solved it.</li>
+<li><a href="http://stackoverflow.com/questions/tagged/r">Stack Overflow</a>: There are over 100,000 questions tagged with “R” on SO. <a href="https://stackoverflow.com/questions/tagged/r?sort=votes">Here are the most popular ones, ranked by vote</a>. Always search before asking, and make a <a href="http://stackoverflow.com/questions/5963269/how-to-make-a-great-r-reproducible-example/5963610#5963610">reproducible example</a> if you want to get useful advice. This is a minimal example that allows others who are trying to help you to see the error themselves.</li>
+<li><a href="https://support.bioconductor.org/">Bioconductor Support Site</a>: Like SO, but specifically for Bioconductor-related questions.</li>
+<li>Read package vignettes. For example, see the <a href="https://cran.r-project.org/web/packages/dplyr/index.html">dplyr CRAN page</a>, scroll about halfway down to see the <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/introduction.html">introduction to dplyr</a> vignette.</li>
+</ul>
+</div>
+<div id="general-r-resources" class="section level3">
+<h3>General R Resources</h3>
+<ul>
+<li><a href="http://tryr.codeschool.com/">TryR</a>: An interactive, browser-based R tutor</li>
+<li><a href="http://swirlstats.com/">Swirl</a>: An R package that teaches you R (<em>and statistics!</em>) from within R</li>
+<li><a href="https://stat545-ubc.github.io/">Jenny Bryan’s Stat 545 “Data wrangling, exploration, and analysis with R” course material</a>: An excellent resource for learning R, dplyr, and ggplot2</li>
+<li><a href="https://www.datacamp.com/courses/free-introduction-to-r">DataCamp’s free introduction to R</a></li>
+<li><a href="https://www.rstudio.com/resources/cheatsheets/">RStudio’s printable cheat sheets</a></li>
+<li><a href="http://rseek.org/">Rseek</a>: A custom Google search for R-related sites</li>
+<li>Bioconductor <a href="https://www.bioconductor.org/help/package-vignettes/">vignettes</a>, <a href="https://www.bioconductor.org/help/workflows/">workflows</a>, and <a href="https://www.bioconductor.org/help/course-materials/">course/conference materials</a></li>
+</ul>
+</div>
+<div id="dplyr-resources" class="section level3">
+<h3>dplyr resources</h3>
+<ul>
+<li><a href="https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html">The dplyr vignette</a></li>
+<li><a href="http://www.dataschool.io/dplyr-tutorial-for-faster-data-manipulation-in-r/">A longer dplyr tutorial with video and code</a></li>
+<li><a href="http://genomicsclass.github.io/book/pages/dplyr_tutorial.html">The dplyr tutorial from the HarvardX Biomedical Data Science MOOC</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">A dplyr cheat sheet from RStudio</a></li>
+</ul>
+</div>
+<div id="ggplot2-resources" class="section level3">
+<h3>ggplot2 resources</h3>
+<ul>
+<li><a href="http://docs.ggplot2.org/">The official ggplot2 documentation</a></li>
+<li><a href="http://amzn.to/1akjqsR">The ggplot2 book</a>, edition 1, by the developer, Hadley Wickham</li>
+<li><a href="https://github.com/hadley/ggplot2-book">New version of the ggplot2 book, freely available on GitHub</a></li>
+<li><a href="https://groups.google.com/d/forum/ggplot2">The ggplot2 Google Group</a> (mailing list, support forum)</li>
+<li><a href="http://learnr.wordpress.com/">LearnR</a>: A blog with a good number of posts describing how to reproduce various kind of plots using ggplot2</li>
+<li><a href="http://stackoverflow.com/questions/tagged/ggplot2">SO questions tagged with ggplot2</a></li>
+<li><a href="http://shinyapps.stat.ubc.ca/r-graph-catalog/">A catalog of graphs made with ggplot2, complete with accompanying R code</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/05/ggplot2-cheatsheet.pdf">RStudio’s ggplot2 cheat sheet</a></li>
+</ul>
+</div>
+<div id="markdown-rmarkdown-resources" class="section level3">
+<h3>Markdown / RMarkdown resources</h3>
+<ul>
+<li><a href="http://bioconnector.org/markdown">Basic Markdown + RMarkdown reference</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">RStudio’s RMarkdown Cheat Sheet</a> and <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">RMarkdown Reference Sheet</a></li>
+<li><a href="http://rmarkdown.rstudio.com/">RStudio’s RMarkdown documentation</a>: covers all the v2 enhancements to RMarkdown, <a href="http://rmarkdown.rstudio.com/authoring_basics.html">RMarkdown basics</a> in more detail than covered here, the full <a href="http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html">Pandoc Markdown specification</a> which lets you do more than just regular Markdown, information on <a href="http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html">citations and bibliographies</a>, and several <a href="http://rmarkdown.rstudio.com/articles.html">examples</a> illustrating advanced usage.</li>
+<li><a href="http://yihui.name/knitr/">knitr documentation</a>: has lots of useful reference material about how knitr works, <a href="http://yihui.name/knitr/options/">options</a>, controlling output, <a href="http://yihui.name/knitr/demos/">examples</a>, and more.</li>
+</ul>
+</div>
+</div>
+<div id="rna-seq-resources" class="section level2">
+<h2>RNA-seq resources</h2>
+<ul>
+<li><a href="http://rnaseq.uoregon.edu/">University of Oregon’s RNA-seqlopedia</a>: a comprehensive guide to RNA-seq starting with experimental design, going through library prep, sequencing, and data analysis.</li>
+<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8">Conesa et al. A survey of best practices for RNA-seq data analysis. <em>Genome Biology</em> 17:13 (2016)</a>. If there’s one review to read on RNA-seq and data analysis, it’s this one.</li>
+<li><a href="http://rnaseq.wiki">rnaseq.wiki</a> &amp; accompanying <a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004393">paper</a> for hands-on RNA-seq data analysis examples using cloud computing.</li>
+<li><a href="http://www.rna-seqblog.com/">RNA-seq blog</a>: Several blog posts per week on new methods and tools for RNA-seq analysis.</li>
+<li><a href="https://www.youtube.com/playlist?list=PLfFNmoa-yUIb5cYG2R1zf5rtrQQKZvKwG">YouTube playlist: 2015 UC Davis Workshop on RNA-seq methods &amp; algorithms (Harold Pimentel)</a>.</li>
+<li><a href="https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/">What the FPKM? A review of RNA-Seq expression units</a> A blog post from Harold Pimentel describing the relationship between R/FPKM and TPM.</li>
+<li><a href="https://usegalaxy.org/u/jeremy/p/galaxy-rna-seq-analysis-exercise">RNA-seq analysis exercise using Galaxy</a>: an example analysis you can run yourself using the Tophat+Cufflinks workflow.</li>
+<li><a href="http://f1000research.com/articles/4-1070/v1">“RNA-Seq workflow: gene-level exploratory analysis and differential expression.”</a> This paper walks through an end-to-end gene-level RNA-Seq differential expression workflow using Bioconductor packages, starting from FASTQ files.</li>
+<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-014-0550-8">The DESeq2 paper</a> describes the modeling approach and shows some benchmarks against other normalization and differential expression strategies.</li>
+<li><a href="http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf">The DESeq2 vignette</a> is packed full of examples on using DESeq2, importing data, fitting models, creating visualizations, references, etc.</li>
+<li><a href="http://arxiv.org/abs/1104.3889">Lior Pachter’s paper “Models for transcript quantification from RNA-Seq”</a> reviews different approaches for quantifying expression from RNA-seq data and how these affect downstream analysis.</li>
+<li>SEQAnswers <a href="http://seqanswers.com/forums/forumdisplay.php?f=26">RNA-seq</a> and more general <a href="http://seqanswers.com/forums/forumdisplay.php?f=18">bioinformatics</a> forums are a great place to search for answers.</li>
+<li><a href="https://www.biostars.org/t/RNA-Seq/">Biostars RNA-seq</a> Q&amp;A section.</li>
+<li><a href="http://www.gettinggeneticsdone.com/2015/12/tutorial-rna-seq-differential.html">Blog post</a> and <a href="https://dx.doi.org/10.6084/m9.figshare.1619655.v1">printable PDF</a> I created demonstrating how to do pathway analysis with RNA-seq data and R.</li>
+</ul>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

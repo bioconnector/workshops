@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Advanced Data Visualization with ggplot2</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/default.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+  padding-left: 10px;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">R</li>
+    <li>
+      <a href="r-setup.html">Setup</a>
+    </li>
+    <li>
+      <a href="r-basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data manipulation (yeast)</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data visualization (gapminder)</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Reproducible research</li>
+    <li>
+      <a href="r-rmarkdown.html">RMarkdown</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="topics.html">Topics</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Advanced Data Visualization with ggplot2</h1>
+
+</div>
+
+
+<p>This section will cover fundamental concepts for creating effective data visualization and will introduce tools and techniques for visualizing large, high-dimensional data using R. We will review fundamental concepts for visually displaying quantitative information, such as using series of small multiples, avoiding “chart-junk,” and maximizing the data-ink ratio. We will cover the grammar of graphics (geoms, aesthetics, stats, and faceting), and using the ggplot2 package to create plots layer-by-layer.</p>
+<p>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, and <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>.</p>
+<div id="review" class="section level2">
+<h2>Review</h2>
+<div id="our-data-gapminder" class="section level3">
+<h3>Our data: Gapminder</h3>
+<p>We’re going to work with a different dataset for this section. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download this data at <a href="http://bioconnector.org/data/">bioconnector.org/data</a> – it’s the <a href="http://bioconnector.org/data/gapminder.csv"><strong>gapminder.csv</strong> file</a>.</p>
+<p>Let’s read in the data to an object called <code>gm</code> and take a look with <code>View</code>. Remember, we need to load both the dplyr and readr packages for efficiently reading in and displaying this data.</p>
+<pre class="r"><code># Load packages
+library(readr)
+library(dplyr)
+
+# You could read the data directly from the web:
+# gm &lt;- read_csv(&quot;http://bioconnector.org/data/gapminder.csv&quot;)
+
+# Or better to download the data locally and read the file
+gm &lt;- read_csv(file=&quot;data/gapminder.csv&quot;)
+
+# Show the first few lines of the data
+gm</code></pre>
+<pre><code>## # A tibble: 1,704 x 6
+##        country continent  year lifeExp      pop gdpPercap
+##          &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1  Afghanistan      Asia  1952    28.8  8425333       779
+## 2  Afghanistan      Asia  1957    30.3  9240934       821
+## 3  Afghanistan      Asia  1962    32.0 10267083       853
+## 4  Afghanistan      Asia  1967    34.0 11537966       836
+## 5  Afghanistan      Asia  1972    36.1 13079460       740
+## 6  Afghanistan      Asia  1977    38.4 14880372       786
+## 7  Afghanistan      Asia  1982    39.9 12881816       978
+## 8  Afghanistan      Asia  1987    40.8 13867957       852
+## 9  Afghanistan      Asia  1992    41.7 16317921       649
+## 10 Afghanistan      Asia  1997    41.8 22227415       635
+## # ... with 1,694 more rows</code></pre>
+<pre class="r"><code># Optionally bring up data in a viewer window.
+# View(gm)</code></pre>
+<p>This particular excerpt has 1704 observations on six variables:</p>
+<ul>
+<li><code>country</code> a categorical variable 142 levels</li>
+<li><code>continent</code>, a categorical variable with 5 levels</li>
+<li><code>year</code>: going from 1952 to 2007 in increments of 5 years</li>
+<li><code>pop</code>: population</li>
+<li><code>gdpPercap</code>: GDP per capita</li>
+<li><code>lifeExp</code>: life expectancy</li>
+</ul>
+</div>
+<div id="dplyr-review" class="section level3">
+<h3>dplyr review</h3>
+<p>The dplyr package gives you a handful of useful <strong>verbs</strong> for managing data. On their own they don’t do anything that base R can’t do. Here are some of the <em>single-table</em> verbs we’ll be working with in this lesson (single-table meaning that they only work on a single table – contrast that to <em>two-table</em> verbs used for joining data together). They all take a <code>data.frame</code> or <code>tbl_df</code> as their input for the first argument, and they all return a <code>data.frame</code> or <code>tbl_df</code> as output.</p>
+<ol style="list-style-type: decimal">
+<li><code>filter()</code>: filters <em>rows</em> of the data where some condition is true</li>
+<li><code>select()</code>: selects out particular <em>columns</em> of interest</li>
+<li><code>mutate()</code>: adds new columns or changes values of existing columns</li>
+<li><code>arrange()</code>: arranges a data frame by the value of a column</li>
+<li><code>summarize()</code>: summarizes multiple values to a single value, most useful when combined with…</li>
+<li><code>group_by()</code>: groups a data frame by one or more variable. Most data operations are useful done on groups defined by variables in the the dataset. The <code>group_by</code> function takes an existing data frame and converts it into a grouped data frame where <code>summarize()</code> operations are performed <em>by group</em>.</li>
+</ol>
+<p>Additionally, the <strong><code>%&gt;%</code></strong> operator allows you to “chain” operations together. Rather than nesting functions inside out, the <code>%&gt;%</code> operator allows you to write operations left-to-right, top-to-bottom. Let’s say we wanted to get the average life expectancy and GDP (not GDP per capita) for Asian countries for each year.</p>
+<div class="figure">
+<img src="img/nest_vs_pipe_gm.png" />
+
+</div>
+<p>The <code>%&gt;%</code> would allow us to do this:</p>
+<pre class="r"><code>gm %&gt;%
+  mutate(gdp=gdpPercap*pop) %&gt;%
+  filter(continent==&quot;Asia&quot;) %&gt;%
+  group_by(year) %&gt;%
+  summarize(mean(lifeExp), mean(gdp))</code></pre>
+<pre><code>## # A tibble: 12 x 3
+##     year mean(lifeExp) mean(gdp)
+##    &lt;int&gt;         &lt;dbl&gt;     &lt;dbl&gt;
+## 1   1952          46.3  3.41e+10
+## 2   1957          49.3  4.73e+10
+## 3   1962          51.6  6.01e+10
+## 4   1967          54.7  8.46e+10
+## 5   1972          57.3  1.24e+11
+## 6   1977          59.6  1.60e+11
+## 7   1982          62.6  1.94e+11
+## 8   1987          64.9  2.42e+11
+## 9   1992          66.5  3.07e+11
+## 10  1997          68.0  3.88e+11
+## 11  2002          69.2  4.58e+11
+## 12  2007          70.7  6.28e+11</code></pre>
+<p>Instead of this:</p>
+<pre class="r"><code>summarize(
+  group_by(
+    filter(
+      mutate(gm, gdp=gdpPercap*pop), 
+    continent==&quot;Asia&quot;), 
+  year), 
+mean(lifeExp), mean(gdp))</code></pre>
+</div>
+</div>
+<div id="about-ggplot2" class="section level2">
+<h2>About ggplot2</h2>
+<p><strong>ggplot2</strong> is a widely used R package that extends R’s visualization capabilities. It takes the hassle out of things like creating legends, mapping other variables to scales like color, or faceting plots into small multiples. We’ll learn about what all these things mean shortly.</p>
+<p><em>Where does the “gg” in ggplot2 come from?</em> The <strong>ggplot2</strong> package provides an R implementation of Leland Wilkinson’s <em>Grammar of Graphics</em> (1999). The <em>Grammar of Graphics</em> allows you to think beyond the garden variety plot types (e.g. scatterplot, barplot) and the consider the components that make up a plot or graphic, such as how data are represented on the plot (as lines, points, etc.), how variables are mapped to coordinates or plotting shape or color, what transformation or statistical summary is required, and so on.</p>
+<p>Specifically, <strong>ggplot2</strong> allows you to build a plot layer-by-layer by specifying:</p>
+<ul>
+<li>a <strong>geom</strong>, which specifies how the data are represented on the plot (points, lines, bars, etc.),</li>
+<li><strong>aesthetics</strong> that map variables in the data to axes on the plot or to plotting size, shape, color, etc.,</li>
+<li>a <strong>stat</strong>, a statistical transformation or summary of the data applied prior to plotting,</li>
+<li><strong>facets</strong>, which we’ve already seen above, that allow the data to be divided into chunks on the basis of other categorical or continuous variables and the same plot drawn for each chunk.</li>
+</ul>
+<p><em>First, a note about <code>qplot()</code>.</em> The <code>qplot()</code> function is a quick and dirty way of making ggplot2 plots. You might see it if you look for help with ggplot2, and it’s even covered extensively in the ggplot2 book. And if you’re used to making plots with built-in base graphics, the <code>qplot()</code> function will probably feel more familiar. But the sooner you abandon the <code>qplot()</code> syntax the sooner you’ll start to really understand ggplot2’s approach to building up plots layer by layer. So we’re not going to use it at all in this class.</p>
+<p>Finally, see <a href="help.html#ggplot2-resources">this course’s help page</a> for links to getting more help with ggplot2.</p>
+</div>
+<div id="plotting-bivariate-data-continuous-y-by-continuous-x" class="section level2">
+<h2>Plotting bivariate data: continuous Y by continuous X</h2>
+<p>The <code>ggplot</code> function has two required arguments: the <em>data</em> used for creating the plot, and an <em>aesthetic</em> mapping to describe how variables in said data are mapped to things we can see on the plot.</p>
+<p>First let’s load the package:</p>
+<pre class="r"><code>library(ggplot2)</code></pre>
+<p>Now, let’s lay out the plot. If we want to plot a continuous Y variable by a continuous X variable we’re probably most interested in a scatter plot. Here, we’re telling ggplot that we want to use the <code>gm</code> dataset, and the aesthetic mapping will map <code>gdpPercap</code> onto the x-axis and <code>lifeExp</code> onto the y-axis. Remember that the variable names are case sensitive!</p>
+<pre class="r"><code>ggplot(gm, aes(x = gdpPercap, y = lifeExp))</code></pre>
+<p>When we do that we get a blank canvas with no data showing (you might get an error if you’re using an old version of ggplot2). That’s because all we’ve done is laid out a two-dimensional plot specifying what goes on the x and y axes, but we haven’t told it what kind of geometric object to plot. The obvious choice here is a point. Check out <a href="http://docs.ggplot2.org/">docs.ggplot2.org</a> to see what kind of geoms are available.</p>
+<pre class="r"><code>ggplot(gm, aes(x = gdpPercap, y = lifeExp)) + geom_point()</code></pre>
+<p>Here, we’ve built our plot in layers. First, we create a canvas for plotting layers to come using the <code>ggplot</code> function, specifying which <strong>data</strong> to use (here, the <strong>gm</strong> data frame), and an <strong>aesthetic mapping</strong> of <code>gdpPercap</code> to the x-axis and <code>lifeExp</code> to the y-axis. We next add a layer to the plot, specifying a <strong>geom</strong>, or a way of visually representing the aesthetic mapping.</p>
+<p>Now, the typical workflow for building up a ggplot2 plot is to first construct the figure and save that to a variable (for example, <code>p</code>), and as you’re experimenting, you can continue to re-define the <code>p</code> object as you develop “keeper commands”.</p>
+<p>First, let’s construct the graphic. Notice that we don’t have to specify <code>x=</code> and <code>y=</code> if we specify the arguments in the correct order (x is first, y is second).</p>
+<pre class="r"><code>p &lt;- ggplot(gm, aes(gdpPercap, lifeExp))</code></pre>
+<p>The <code>p</code> object now contains the canvas, but nothing else. Try displaying it by just running <code>p</code>. Let’s experiment with adding points and a different scale to the x-axis.</p>
+<pre class="r"><code># Experiment with adding poings
+p + geom_point()
+
+# Experiment with a different scale
+p + geom_point() + scale_x_log10()</code></pre>
+<p>I like the look of using a log scale for the x-axis. Let’s make that stick.</p>
+<pre class="r"><code>p &lt;- p + scale_x_log10()</code></pre>
+<p>Now, if we re-ran <code>p</code> still nothing would show up because the <code>p</code> object just contains a blank canvas. Now, re-plot again with a layer of points:</p>
+<pre class="r"><code>p + geom_point()</code></pre>
+<p>Now notice what I’ve saved to <code>p</code> at this point: only the basic plot layout and the log10 mapping on the x-axis. I didn’t save any layers yet because I want to fiddle around with the points for a bit first.</p>
+<p>Above we implied the aesthetic mappings for the x- and y- axis should be <code>gdpPercap</code> and <code>lifeExp</code>, but we can also add aesthetic mappings to the geoms themselves. For instance, what if we wanted to color the points by the value of another variable in the dataset, say, continent?</p>
+<pre class="r"><code>p + geom_point(aes(color=continent))</code></pre>
+<p>Notice the difference here. If I wanted the colors to be some static value, I wouldn’t wrap that in a call to <code>aes()</code>. I would just specify it outright. Same thing with other features of the points. For example, lets make all the points huge (<code>size=8</code>) blue (<code>color=&quot;blue&quot;</code>) semitransparent (<code>alpha=(1/4)</code>) triangles (<code>pch=17</code>):</p>
+<pre class="r"><code>p + geom_point(color=&quot;blue&quot;, pch=17, size=8, alpha=1/4)</code></pre>
+<p>Now, this time, let’s map the aesthetics of the point character to certain features of the data. For instance, let’s give the points different colors and character shapes according to the continent, and map the size of the point onto the life Expectancy:</p>
+<pre class="r"><code>p + geom_point(aes(col=continent, shape=continent, size=lifeExp))</code></pre>
+<p>Now, this isn’t a great plot because there are several aesthetic mappings that are redundant. Life expectancy is mapped to both the y-axis and the size of the points – the size mapping is superfluous. Similarly, continent is mapped to both the color and the point character (the shape is superfluous). Let’s get rid of that, but let’s make the points a little bigger outsize of an aesthetic mapping.</p>
+<pre class="r"><code>p + geom_point(aes(col=continent), size=3)</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/scatter_colContinent_size4-1.png" width="672" /></p>
+<hr />
+<p><strong>EXERCISE 1</strong></p>
+<p>Re-create this same plot from scratch without saving anything to a variable. That is, start from the <code>ggplot</code> call.</p>
+<ul>
+<li>Start with the <code>ggplot()</code> function.</li>
+<li>Use the gm data.</li>
+<li>Map <code>gdpPercap</code> to the x-axis and <code>lifeExp</code> to the y-axis.</li>
+<li>Add points to the plot</li>
+<li>Make the points size 3</li>
+<li>Map continent onto the aesthetics of the point</li>
+<li>Use a log<sub>10</sub> scale for the x-axis.</li>
+</ul>
+<hr />
+<div id="adding-layers-to-the-plot" class="section level3">
+<h3>Adding layers to the plot</h3>
+<p>Let’s add a fitted curve to the points. Recreate the plot in the <code>p</code> object if you need to.</p>
+<pre class="r"><code>p &lt;- ggplot(gm, aes(gdpPercap, lifeExp)) + scale_x_log10()
+p + geom_point() + geom_smooth()</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/scatter_addsmoothlayer-1.png" width="672" /></p>
+<p>By default <code>geom_smooth()</code> will try to lowess for data with n&lt;1000 or generalized additive models for data with n&gt;1000. We can change that behavior by tweaking the parameters to use a thick red line, use a linear model instead of a GAM, and to turn off the standard error stripes.</p>
+<pre class="r"><code>p + geom_point() + geom_smooth(lwd=2, se=FALSE, method=&quot;lm&quot;, col=&quot;red&quot;)</code></pre>
+<p>But let’s add back in our aesthetic mapping to the continents. Notice what happens here. We’re mapping continent as an aesthetic mapping <em>to the color of the points only</em> – so <code>geom_smooth()</code> still works only on the entire data.</p>
+<pre class="r"><code>p + geom_point(aes(color = continent)) + geom_smooth()</code></pre>
+<p>But notice what happens here: we make the call to <code>aes()</code> outside of the <code>geom_point()</code> call, and the continent variable gets mapped as an aesthetic to any further geoms. So here, we get separate smoothing lines for each continent. Let’s do it again but remove the standard error stripes and make the lines a bit thicker.</p>
+<pre class="r"><code>p + aes(color = continent) + geom_point() + geom_smooth()
+p + aes(color = continent) + geom_point() + geom_smooth(se=F, lwd=2)</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/scatter_final-1.png" width="672" /></p>
+</div>
+<div id="faceting" class="section level3">
+<h3>Faceting</h3>
+<p>Facets display subsets of the data in different panels. There are a couple ways to do this, but <code>facet_wrap()</code> tries to sensibly wrap a series of facets into a 2-dimensional grid of small multiples. Just give it a formula specifying which variables to facet by. We can continue adding more layers, such as smoothing. If you have a look at the help for <code>?facet_wrap()</code> you’ll see that we can control how the wrapping is laid out.</p>
+<pre class="r"><code>p + geom_point() + facet_wrap(~continent)
+p + geom_point() + geom_smooth() + facet_wrap(~continent, ncol=1)</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/scatter_facet1-1.png" width="480" /></p>
+</div>
+<div id="saving-plots" class="section level3">
+<h3>Saving plots</h3>
+<p>There are a few ways to save ggplots. The quickest way, that works in an interactive session, is to use the <code>ggsave()</code> function. You give it a file name and by default it saves the last plot that was printed to the screen.</p>
+<pre class="r"><code>p + geom_point()
+ggsave(file=&quot;myplot.png&quot;)</code></pre>
+<p>But if you’re running this through a script, the best way to do it is to pass <code>ggsave()</code> the object containing the plot that is meant to be saved. We can also adjust things like the width, height, and resolution. <code>ggsave()</code> also recognizes the name of the file extension and saves the appropriate kind of file. Let’s save a PDF.</p>
+<pre class="r"><code>pfinal &lt;- p + geom_point() + geom_smooth() + facet_wrap(~continent, ncol=1)
+ggsave(pfinal, file=&quot;myplot.pdf&quot;, width=5, height=15)</code></pre>
+<hr />
+<p><strong>EXERCISE 2</strong></p>
+<ol style="list-style-type: decimal">
+<li>Make a scatter plot of <code>lifeExp</code> on the y-axis against <code>year</code> on the x.</li>
+<li>Make a series of small multiples faceting on continent.</li>
+<li>Add a fitted curve, smooth or lm, with and without facets.</li>
+<li><strong>Bonus</strong>: using <code>geom_line()</code> and and aesthetic mapping <code>country</code> to <code>group=</code>, make a “spaghetti plot”, showing <em>semitransparent</em> lines connected for each country, faceted by continent. Add a smoothed loess curve with a thick (<code>lwd=3</code>) line with no standard error stripe. Reduce the opacity (<code>alpha=</code>) of the individual black lines. <em>Don’t</em> show Oceania countries (that is, <code>filter()</code> the data where <code>continent!=&quot;Oceania&quot;</code> before you plot it).</li>
+</ol>
+<p><img src="r-viz-gapminder_files/figure-html/spaghetti-1.png" width="768" /></p>
+<hr />
+</div>
+</div>
+<div id="plotting-bivariate-data-continuous-y-by-categorical-x" class="section level2">
+<h2>Plotting bivariate data: continuous Y by categorical X</h2>
+<p>With the last example we examined the relationship between a continuous Y variable against a continuous X variable. A scatter plot was the obvious kind of data visualization. But what if we wanted to visualize a continuous Y variable against a categorical X variable? We sort of saw what that looked like in the last exercise. <code>year</code> is a continuous variable, but in this dataset, it’s broken up into 5-year segments, so you could almost think of each year as a categorical variable. But a better example would be life expectancy against continent or country.</p>
+<p>First, let’s set up the basic plot:</p>
+<pre class="r"><code>p &lt;- ggplot(gm, aes(continent, lifeExp)) </code></pre>
+<p>Then add points:</p>
+<pre class="r"><code>p + geom_point()</code></pre>
+<p>That’s not terribly useful. There’s a big overplotting problem. We can try to solve with transparency:</p>
+<pre class="r"><code>p + geom_point(alpha=1/4)</code></pre>
+<p>But that really only gets us so far. What if we spread things out by adding a little bit of horizontal noise (aka “jitter”) to the data.</p>
+<pre class="r"><code>p + geom_jitter()</code></pre>
+<p>Note that the little bit of horizontal noise that’s added to the jitter is random. If you run that command over and over again, each time it will look slightly different. The idea is to visualize the density at each vertical position, and spreading out the points horizontally allows you to do that. If there were still lots of over-plotting you might think about adding some transparency by setting the <code>alpha=</code> value for the jitter.</p>
+<pre class="r"><code>p + geom_jitter(alpha=1/2)</code></pre>
+<p>Probably a more common visualization is to show a box plot:</p>
+<pre class="r"><code>p + geom_boxplot()</code></pre>
+<p>But why not show the summary and the raw data?</p>
+<pre class="r"><code>p + geom_jitter() + geom_boxplot()</code></pre>
+<p>Notice how in that example we first added the jitter layer then added the boxplot layer. But the boxplot is now superimposed over the jitter layer. Let’s make the jitter layer go on top. Also, go back to just the boxplots. Notice that the outliers are represented as points. But there’s no distinction between the outlier point from the boxplot geom and all the other points from the jitter geom. Let’s change that. Notice the British spelling.</p>
+<pre class="r"><code>p + geom_boxplot(outlier.colour = &quot;red&quot;) + geom_jitter(alpha=1/2)</code></pre>
+<p>There’s another geom that’s useful here, called a voilin plot.</p>
+<pre class="r"><code>p + geom_violin()
+
+p + geom_violin() + geom_jitter(alpha=1/2)</code></pre>
+<p>Let’s go back to our boxplot for a moment.</p>
+<pre class="r"><code>p + geom_boxplot()</code></pre>
+<p>This plot would be a lot more effective if the continents were shown in some sort of order other than alphabetical. To do that, we’ll have to go back to our basic build of the plot again and use the <code>reorder</code> function in our original aesthetic mapping. Here, reorder is taking the first variable, which is some categorical variable, and ordering it by the level of the mean of the second variable, which is a continuous variable. It looks like this</p>
+<pre class="r"><code>p &lt;- ggplot(gm, aes(x=reorder(continent, lifeExp), y=lifeExp))</code></pre>
+<pre class="r"><code>p + geom_boxplot()</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/boxplot-1.png" width="672" /></p>
+<hr />
+<p><strong>EXERCISE 3</strong></p>
+<ol style="list-style-type: decimal">
+<li>Make a jittered strip plot of GDP per capita against continent.</li>
+<li>Make a box plot of GDP per capita against continent.</li>
+<li>Using a log<sub>10</sub> y-axis scale, overlay semitransparent jittered points on top of box plots, where outlying points are colored.</li>
+<li><strong>BONUS</strong>: Try to reorder the continents on the x-axis by GDP per capita. Why isn’t this working as expected? See <code>?reorder</code> for clues.</li>
+</ol>
+<hr />
+</div>
+<div id="plotting-univariate-continuous-data" class="section level2">
+<h2>Plotting univariate continuous data</h2>
+<p>What if we just wanted to visualize distribution of a single continuous variable? A histogram is the usual go-to visualization. Here we only have one aesthetic mapping instead of two.</p>
+<pre class="r"><code>p &lt;- ggplot(gm, aes(lifeExp))</code></pre>
+<pre class="r"><code>p + geom_histogram()</code></pre>
+<p>When we do this ggplot lets us know that we’re automatically selecting the width of the bins, and we might want to think about this a little further.</p>
+<pre class="r"><code>p + geom_histogram(bins=30)
+p + geom_histogram(bins=10)
+p + geom_histogram(bins=200)</code></pre>
+<pre class="r"><code>p + geom_histogram(bins=60)</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/histogram-1.png" width="672" /></p>
+<p>Alternative we could plot a smoothed density curve instead of a histogram:</p>
+<pre class="r"><code>p + geom_density()</code></pre>
+<p>Back to histograms. What if we wanted to color this by continent?</p>
+<pre class="r"><code>p + geom_histogram(aes(color=continent))</code></pre>
+<p>That’s not what we had in mind. That’s just the outline of the bars. We want to change the <em>fill</em> color of the bars.</p>
+<pre class="r"><code>p + geom_histogram(aes(fill=continent))</code></pre>
+<p>Well, that’s not exactly what we want either. If you look at the help for <code>?geom_histogram</code> you’ll see that by default it stacks overlapping points. This isn’t really an effective visualization. Let’s change the position argument.</p>
+<pre class="r"><code>p + geom_histogram(aes(fill=continent), position=&quot;identity&quot;)</code></pre>
+<p>But the problem there is that the histograms are blocking each other. What if we tried transparency?</p>
+<pre class="r"><code>p + geom_histogram(aes(fill=continent), position=&quot;identity&quot;, alpha=1/3)</code></pre>
+<p>That’s somewhat helpful, and might work for two distributions, but it gets cumbersome with 5. Let’s go back and try this with density plots, first changing the color of the line:</p>
+<pre class="r"><code>p + geom_density(aes(color=continent))</code></pre>
+<p>Then by changing the color of the fill and setting the transparency to 25%:</p>
+<pre class="r"><code>p + geom_density(aes(fill=continent), alpha=1/4)</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/densityplot-1.png" width="672" /></p>
+<hr />
+<p><strong>EXERCISE 4</strong></p>
+<ol style="list-style-type: decimal">
+<li>Plot a histogram of GDP Per Capita.</li>
+<li>Do the same but use a log<sub>10</sub> x-axis.</li>
+<li>Still on the log<sub>10</sub> x-axis scale, try a density plot mapping continent to the fill of each density distribution, and reduce the opacity.</li>
+<li>Still on the log<sub>10</sub> x-axis scale, make a histogram faceted by continent <em>and</em> filled by continent. Facet with a single column (see <code>?facet_wrap</code> for help).</li>
+<li>Save this figure to a 6x10 PDF file.</li>
+</ol>
+<hr />
+</div>
+<div id="publication-ready-plots-themes" class="section level2">
+<h2>Publication-ready plots &amp; themes</h2>
+<p>Let’s make a plot we made earlier (life expectancy versus the log of GDP per capita with points colored by continent with lowess smooth curves overlaid without the standard error ribbon):</p>
+<pre class="r"><code>p &lt;- ggplot(gm, aes(gdpPercap, lifeExp)) 
+p &lt;- p + scale_x_log10()
+p &lt;- p + aes(col=continent) + geom_point() + geom_smooth(lwd=2, se=FALSE)</code></pre>
+<p>Give the plot a title and axis labels:</p>
+<pre class="r"><code>p &lt;- p + ggtitle(&quot;Life expectancy vs GDP by Continent&quot;)
+p &lt;- p + xlab(&quot;GDP Per Capita (USD)&quot;) + ylab(&quot;Life Expectancy (years)&quot;)</code></pre>
+<p>By default, the “gray” theme is the usual background (I’ve changed this course website to use the black and white background for all images).</p>
+<pre class="r"><code>p + theme_gray()</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/theme_gray-1.png" width="672" /></p>
+<p>We could also get a black and white background:</p>
+<pre class="r"><code>p + theme_bw()</code></pre>
+<p>Or go a step further and remove the gridlines:</p>
+<pre class="r"><code>p + theme_classic()</code></pre>
+<p><img src="r-viz-gapminder_files/figure-html/theme_classic-1.png" width="672" /></p>
+<p>Finally, there’s another package that gives us lots of different themes. Install it if you don’t have it already. Install all its dependencies along with it.</p>
+<pre class="r"><code>install.packages(&quot;ggthemes&quot;, dependencies = TRUE)</code></pre>
+<pre class="r"><code>library(ggthemes)
+p &lt;- ggplot(gm, aes(gdpPercap, lifeExp)) 
+p &lt;- p + scale_x_log10()
+p &lt;- p + aes(col=continent) + geom_point() + geom_smooth(lwd=2, se=FALSE)
+p + theme_excel()
+p + theme_excel() + scale_colour_excel()
+p + theme_gdocs() + scale_colour_gdocs()
+p + theme_stata() + scale_colour_stata()
+p + theme_wsj() + scale_colour_wsj()
+p + theme_economist() 
+p + theme_fivethirtyeight()
+p + theme_tufte()</code></pre>
+<p>Don’t forget - see <a href="help.html#ggplot2-resources">this course’s help page</a> for links to getting more help with ggplot2!</p>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
