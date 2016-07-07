@@ -1,0 +1,25 @@
+---
+title: "Data"
+output: 
+  html_document:
+    toc: false
+---
+
+```{r, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=FALSE)
+suppressPackageStartupMessages(library(dplyr))
+```
+
+1. **Create a new folder** somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. 
+1. **Download datasets as needed**. Save these data files to the new `bioconnector/data` folder you just made. Click to download. If data displays in your browser, right-click and select _Save link as..._ (or similar) to save to the desired location.
+
+```{r, results='asis'}
+dir <- "data/"
+list.files(dir) %>%
+  sort %>% 
+  grep("\\.html$", ., value=TRUE, invert=TRUE) %>% 
+  paste0("- [", ., "](", paste0(dir, .), ")") %>% 
+  cat(sep="\n")
+```
+
