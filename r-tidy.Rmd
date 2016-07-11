@@ -94,7 +94,9 @@ hr %>%
 ```
 
 
-### Putting it all together: `gather %>% separate %>% filter %>% group_by %>% summarize`
+### `%>%` it all together
+
+Let's put it all together with `gather %>% separate %>% filter %>% group_by %>% summarize`.
 
 If we create a new data frame that's a tidy version of hr, we can do those kinds of manipulations we talked about before:
 
@@ -120,7 +122,7 @@ hrtidy %>%
 ```
 
 
-## Tidying the yeast data
+## Tidy the yeast data
 
 Now, let's take a look at the yeast data again. The data we've been working with up to this point was already cleaned up to a good degree. All of our variables (symbol, nutrient, rate, expression, GO terms, etc.) were each in their own column. Make sure you have the necessary libraries loaded, and read in the tidy data once more into an object called `ydat`.
 
@@ -157,7 +159,7 @@ There are several issues here.
 
 Let's tackle these issues one at a time, all on a `%>%` pipeline.
 
-### `separate()` the `NAME` column
+### `separate()` the `NAME`
 
 Let's `separate()` the `NAME` column `into` multiple different variables. The first row looks like this:
 
@@ -178,7 +180,7 @@ yorig %>%
   select(-GID, -YORF, -somenumber, -GWEIGHT)
 ```
 
-### `gather()` the nutrient+rate and expression data
+### `gather()` the data
 
 Let's gather the data from wide to long format so we get nutrient/rate (key) and expression (value) in their own columns.
 
@@ -199,7 +201,7 @@ ynogo <- yorig %>%
   separate(nutrientrate, into=c("nutrient", "rate"), sep=1)
 ```
 
-### `inner_join()` it to the gene ontology information
+### `inner_join()` to GO
 
 It's rare that a data analysis involves only a single table of data. You normally have many tables that contribute to an analysis, and you need flexible tools to combine them. The **dplyr** package has several tools that let you work with multiple tables at once. Do a [Google image search for "SQL Joins"](https://www.google.com/search?q=SQL+join&tbm=isch), and look at [RStudio's Data Wrangling Cheat Sheet](http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) to learn more. 
 

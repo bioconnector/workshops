@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Tidy Data &amp; Advanced Data Manipulation</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/default.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+  padding-left: 10px;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">R</li>
+    <li>
+      <a href="r-setup.html">Setup</a>
+    </li>
+    <li>
+      <a href="r-basics.html">R basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data manipulation (yeast)</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data visualization (gapminder)</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Reproducible research</li>
+    <li>
+      <a href="r-rmarkdown.html">RMarkdown</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">NGS analysis</li>
+    <li class="dropdown-header">RNA-seq: airway</li>
+    <li>
+      <a></a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="topics.html">Topics</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Tidy Data &amp; Advanced Data Manipulation</h1>
+
+</div>
+
+
+<div id="review" class="section level2">
+<h2>Review</h2>
+<div id="prior-classes" class="section level3">
+<h3>Prior classes</h3>
+<ul>
+<li><a href="r-basics.html">R basics</a></li>
+<li><a href="r-dataframes.html">Data frames</a></li>
+<li><a href="r-dplyr.html">Manipulating data with dplyr and <code>%&gt;%</code></a></li>
+</ul>
+</div>
+<div id="data-needed" class="section level3">
+<h3>Data needed</h3>
+<p>Hit the <a href="data.html">“Data”</a> link above or use the direct links below to download the following datasets, saving them in a <code>data</code> folder relative to your current working RStudio project:</p>
+<ul>
+<li>Heart rate data: <a href="data/heartrate2dose.csv">heartrate2dose.csv</a></li>
+<li><em>Tidy</em> yeast data: <a href="data/brauer2007_tidy.csv">brauer2007_tidy.csv</a></li>
+<li><em>Original</em> (untidy) yeast data: <a href="data/brauer2007_messy.csv">brauer2007_messy.csv</a></li>
+<li>Yeast systematic names to GO terms: <a href="data/brauer2007_sysname2go.csv">brauer2007_sysname2go.csv</a></li>
+</ul>
+</div>
+</div>
+<div id="tidy-data" class="section level2">
+<h2>Tidy data</h2>
+<p>So far we’ve dealt exclusively with tidy data – data that’s easy to work with, manipulate, and visualize. That’s because our dataset has two key properties:</p>
+<ol style="list-style-type: decimal">
+<li>Each <em>column</em> is a <em>variable</em>.</li>
+<li>Each <em>row</em> is an <em>observation</em>.</li>
+</ol>
+<p>You can read a lot more about tidy data <a href="http://www.jstatsoft.org/v59/i10/paper">in this paper</a>. Let’s load some untidy data and see if we can see the difference. This is some made-up data for five different patients (Jon, Ann, Bill, Kate, and Joe) given three different drugs (A, B, and C), at two doses (10 and 20), and measuring their heart rate. Download the <a href="data/heartrate2dose.csv">heartrate2dose.csv</a> file directly from <a href="data.html">the data downloads page</a>. Load <strong>readr</strong> and <strong>dplyr</strong>, and import and display the data.</p>
+<pre class="r"><code>library(readr)
+library(dplyr)
+hr &lt;- read_csv(&quot;data/heartrate2dose.csv&quot;)
+hr</code></pre>
+<pre><code>## # A tibble: 5 x 7
+##    name  a_10  a_20  b_10  b_20  c_10  c_20
+##   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1   jon    60    55    65    60    70    70
+## 2   ann    65    60    70    65    75    75
+## 3  bill    70    65    75    70    80    80
+## 4  kate    75    70    80    75    85    85
+## 5   joe    80    75    85    80    90    90</code></pre>
+<p>Notice how with the yeast data each variable (symbol, nutrient, rate, expression, etc.) were each in their own column. In this heart rate data, we have four variables: name, drug, dose, and heart rate. <em>Name</em> is in a column, but <em>drug</em> is in the header row. Furthermore the drug and <em>dose</em> are tied together in the same column, and the <em>heart rate</em> is scattered around the entire table. If we wanted to do things like <code>filter</code> the dataset where <code>drug==&quot;a&quot;</code> or <code>dose==20</code> or <code>heartrate&gt;=80</code> we couldn’t do it because these variables aren’t in columns.</p>
+</div>
+<div id="the-tidyr-package" class="section level2">
+<h2>The <strong>tidyr</strong> package</h2>
+<p>The <strong>tidyr</strong> package helps with this. There are several functions in the tidyr package but the ones we’re going to use are <code>separate()</code> and <code>gather()</code>. The <code>gather()</code> function takes multiple columns, and gathers them into key-value pairs: it makes “wide” data longer. The <code>separate()</code> function separates one column into multiple columns. So, what we need to do is <em>gather</em> all the drug/dose data into a column with their corresponding heart rate, and then <em>separate</em> that column into two separate columns for the drug and dose.</p>
+<p>Before we get started, load the <strong>tidyr</strong> package, and look at the help pages for <code>?gather</code> and <code>?separate</code>. Notice how each of these functions takes a data frame as input and returns a data frame as output. Thus, we can pipe from one function to the next.</p>
+<pre class="r"><code>library(tidyr)</code></pre>
+<div id="gather" class="section level3">
+<h3><code>gather()</code></h3>
+<p>The help for <code>?gather</code> tells us that we first pass in a data frame (or omit the first argument, and pipe in the data with <code>%&gt;%</code>). The next two arguments are the names of the key and value columns to create, and all the relevant arguments that come after that are the columns we want to <em>gather</em> together. Here’s one way to do it.</p>
+<pre class="r"><code>hr %&gt;% gather(key=drugdose, value=hr, a_10, a_20, b_10, b_20, c_10, c_20)</code></pre>
+<pre><code>## # A tibble: 30 x 3
+##     name drugdose    hr
+##    &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1    jon     a_10    60
+## 2    ann     a_10    65
+## 3   bill     a_10    70
+## 4   kate     a_10    75
+## 5    joe     a_10    80
+## 6    jon     a_20    55
+## 7    ann     a_20    60
+## 8   bill     a_20    65
+## 9   kate     a_20    70
+## 10   joe     a_20    75
+## # ... with 20 more rows</code></pre>
+<p>But that gets cumbersome to type all those names. What if we had 100 drugs and 3 doses of each? There are two other ways of specifying which columns to gather. The help for <code>?gather</code> tells you how to do this:</p>
+<blockquote>
+<p><code>...</code> Specification of columns to gather. Use bare variable names. Select all variables between x and z with x:z, exclude y with -y. For more options, see the <code>select</code> documentation.</p>
+</blockquote>
+<p>So, we could accomplish the same thing by doing this:</p>
+<pre class="r"><code>hr %&gt;% gather(key=drugdose, value=hr, a_10:c_20)</code></pre>
+<pre><code>## # A tibble: 30 x 3
+##     name drugdose    hr
+##    &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1    jon     a_10    60
+## 2    ann     a_10    65
+## 3   bill     a_10    70
+## 4   kate     a_10    75
+## 5    joe     a_10    80
+## 6    jon     a_20    55
+## 7    ann     a_20    60
+## 8   bill     a_20    65
+## 9   kate     a_20    70
+## 10   joe     a_20    75
+## # ... with 20 more rows</code></pre>
+<p>But what if we didn’t know the drug names or doses, but we <em>did</em> know that the only other column in there that we <em>don’t</em> want to gather is <code>name</code>?</p>
+<pre class="r"><code>hr %&gt;% gather(key=drugdose, value=hr, -name)</code></pre>
+<pre><code>## # A tibble: 30 x 3
+##     name drugdose    hr
+##    &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1    jon     a_10    60
+## 2    ann     a_10    65
+## 3   bill     a_10    70
+## 4   kate     a_10    75
+## 5    joe     a_10    80
+## 6    jon     a_20    55
+## 7    ann     a_20    60
+## 8   bill     a_20    65
+## 9   kate     a_20    70
+## 10   joe     a_20    75
+## # ... with 20 more rows</code></pre>
+</div>
+<div id="separate" class="section level3">
+<h3><code>separate()</code></h3>
+<p>Finally, look at the help for <code>?separate</code>. We can pipe in data and omit the first argument. The second argument is the column to separate; the <code>into</code> argument is a <em>character vector</em> of the new column names, and the <code>sep</code> argument is a character used to separate columns, or a number indicating the position to split at.</p>
+<blockquote>
+<p><strong><em>Side note, and 60-second lesson on vectors</em></strong>: We can create arbitrary-length <em>vectors</em>, which are simply variables that contain an arbitrary number of values. To create a numeric vector, try this: <code>c(5, 42, 22908)</code>. That creates a three element vector. Try <code>c(&quot;cat&quot;, &quot;dog&quot;)</code>.</p>
+</blockquote>
+<pre class="r"><code>hr %&gt;% 
+  gather(key=drugdose, value=hr, -name) %&gt;% 
+  separate(drugdose, into=c(&quot;drug&quot;, &quot;dose&quot;), sep=&quot;_&quot;)</code></pre>
+<pre><code>## # A tibble: 30 x 4
+##     name  drug  dose    hr
+## *  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1    jon     a    10    60
+## 2    ann     a    10    65
+## 3   bill     a    10    70
+## 4   kate     a    10    75
+## 5    joe     a    10    80
+## 6    jon     a    20    55
+## 7    ann     a    20    60
+## 8   bill     a    20    65
+## 9   kate     a    20    70
+## 10   joe     a    20    75
+## # ... with 20 more rows</code></pre>
+</div>
+<div id="it-all-together" class="section level3">
+<h3><code>%&gt;%</code> it all together</h3>
+<p>Let’s put it all together with <code>gather %&gt;% separate %&gt;% filter %&gt;% group_by %&gt;% summarize</code>.</p>
+<p>If we create a new data frame that’s a tidy version of hr, we can do those kinds of manipulations we talked about before:</p>
+<pre class="r"><code># Create a new data.frame
+hrtidy &lt;- hr %&gt;% 
+  gather(key=drugdose, value=hr, -name) %&gt;% 
+  separate(drugdose, into=c(&quot;drug&quot;, &quot;dose&quot;), sep=&quot;_&quot;)
+
+# Optionally, view it
+# View(hrtidy)
+
+# filter
+hrtidy %&gt;% filter(drug==&quot;a&quot;)</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##     name  drug  dose    hr
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1    jon     a    10    60
+## 2    ann     a    10    65
+## 3   bill     a    10    70
+## 4   kate     a    10    75
+## 5    joe     a    10    80
+## 6    jon     a    20    55
+## 7    ann     a    20    60
+## 8   bill     a    20    65
+## 9   kate     a    20    70
+## 10   joe     a    20    75</code></pre>
+<pre class="r"><code>hrtidy %&gt;% filter(dose==20)</code></pre>
+<pre><code>## # A tibble: 15 x 4
+##     name  drug  dose    hr
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1    jon     a    20    55
+## 2    ann     a    20    60
+## 3   bill     a    20    65
+## 4   kate     a    20    70
+## 5    joe     a    20    75
+## 6    jon     b    20    60
+## 7    ann     b    20    65
+## 8   bill     b    20    70
+## 9   kate     b    20    75
+## 10   joe     b    20    80
+## 11   jon     c    20    70
+## 12   ann     c    20    75
+## 13  bill     c    20    80
+## 14  kate     c    20    85
+## 15   joe     c    20    90</code></pre>
+<pre class="r"><code>hrtidy %&gt;% filter(hr&gt;=80)</code></pre>
+<pre><code>## # A tibble: 10 x 4
+##     name  drug  dose    hr
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1    joe     a    10    80
+## 2   kate     b    10    80
+## 3    joe     b    10    85
+## 4    joe     b    20    80
+## 5   bill     c    10    80
+## 6   kate     c    10    85
+## 7    joe     c    10    90
+## 8   bill     c    20    80
+## 9   kate     c    20    85
+## 10   joe     c    20    90</code></pre>
+<pre class="r"><code># analyze
+hrtidy %&gt;%
+  filter(name!=&quot;joe&quot;) %&gt;% 
+  group_by(drug, dose) %&gt;%
+  summarize(meanhr=mean(hr))</code></pre>
+<pre><code>## Source: local data frame [6 x 3]
+## Groups: drug [?]
+## 
+##    drug  dose meanhr
+##   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+## 1     a    10   67.5
+## 2     a    20   62.5
+## 3     b    10   72.5
+## 4     b    20   67.5
+## 5     c    10   77.5
+## 6     c    20   77.5</code></pre>
+</div>
+</div>
+<div id="tidy-the-yeast-data" class="section level2">
+<h2>Tidy the yeast data</h2>
+<p>Now, let’s take a look at the yeast data again. The data we’ve been working with up to this point was already cleaned up to a good degree. All of our variables (symbol, nutrient, rate, expression, GO terms, etc.) were each in their own column. Make sure you have the necessary libraries loaded, and read in the tidy data once more into an object called <code>ydat</code>.</p>
+<pre class="r"><code># Load libraries
+library(readr)
+library(dplyr)
+library(tidyr)
+
+# Import data
+ydat &lt;- read_csv(&quot;data/brauer2007_tidy.csv&quot;)
+
+# Optionally, View
+# View(ydat)
+
+# Or just display to the screen
+ydat</code></pre>
+<pre><code>## # A tibble: 198,430 x 7
+##    symbol systematic_name nutrient  rate expression
+##     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
+## 1    SFB2         YNL049C  Glucose  0.05      -0.24
+## 2    &lt;NA&gt;         YNL095C  Glucose  0.05       0.28
+## 3    QRI7         YDL104C  Glucose  0.05      -0.02
+## 4    CFT2         YLR115W  Glucose  0.05      -0.33
+## 5    SSO2         YMR183C  Glucose  0.05       0.05
+## 6    PSP2         YML017W  Glucose  0.05      -0.69
+## 7    RIB2         YOL066C  Glucose  0.05      -0.55
+## 8   VMA13         YPR036W  Glucose  0.05      -0.75
+## 9    EDC3         YEL015W  Glucose  0.05      -0.24
+## 10   VPS5         YOR069W  Glucose  0.05      -0.16
+## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
+<p>But let’s take a look to see what this data originally looked like.</p>
+<pre class="r"><code>yorig &lt;- read_csv(&quot;data/brauer2007_messy.csv&quot;)
+# View(yorig)
+yorig</code></pre>
+<pre><code>## # A tibble: 5,536 x 40
+##          GID       YORF                    NAME GWEIGHT G0.05  G0.1 G0.15
+##        &lt;chr&gt;      &lt;chr&gt;                   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  GENE1331X A_06_P5820  SFB2::YNL049C::1082129       1 -0.24 -0.13 -0.21
+## 2  GENE4924X A_06_P5866    NA::YNL095C::1086222       1  0.28  0.13 -0.40
+## 3  GENE4690X A_06_P1834  QRI7::YDL104C::1085955       1 -0.02 -0.27 -0.27
+## 4  GENE1177X A_06_P4928  CFT2::YLR115W::1081958       1 -0.33 -0.41 -0.24
+## 5   GENE511X A_06_P5620  SSO2::YMR183C::1081214       1  0.05  0.02  0.40
+## 6  GENE2133X A_06_P5307  PSP2::YML017W::1083036       1 -0.69 -0.03  0.23
+## 7  GENE1002X A_06_P6258  RIB2::YOL066C::1081766       1 -0.55 -0.30 -0.12
+## 8  GENE5478X A_06_P7082 VMA13::YPR036W::1086860       1 -0.75 -0.12 -0.07
+## 9  GENE2065X A_06_P2554  EDC3::YEL015W::1082963       1 -0.24 -0.22  0.14
+## 10 GENE2440X A_06_P6431  VPS5::YOR069W::1083389       1 -0.16 -0.38  0.05
+## # ... with 5,526 more rows, and 33 more variables: G0.2 &lt;dbl&gt;,
+## #   G0.25 &lt;dbl&gt;, G0.3 &lt;dbl&gt;, N0.05 &lt;dbl&gt;, N0.1 &lt;dbl&gt;, N0.15 &lt;dbl&gt;,
+## #   N0.2 &lt;dbl&gt;, N0.25 &lt;dbl&gt;, N0.3 &lt;dbl&gt;, P0.05 &lt;dbl&gt;, P0.1 &lt;dbl&gt;,
+## #   P0.15 &lt;dbl&gt;, P0.2 &lt;dbl&gt;, P0.25 &lt;dbl&gt;, P0.3 &lt;dbl&gt;, S0.05 &lt;dbl&gt;,
+## #   S0.1 &lt;dbl&gt;, S0.15 &lt;dbl&gt;, S0.2 &lt;dbl&gt;, S0.25 &lt;dbl&gt;, S0.3 &lt;dbl&gt;,
+## #   L0.05 &lt;dbl&gt;, L0.1 &lt;dbl&gt;, L0.15 &lt;dbl&gt;, L0.2 &lt;dbl&gt;, L0.25 &lt;dbl&gt;,
+## #   L0.3 &lt;dbl&gt;, U0.05 &lt;dbl&gt;, U0.1 &lt;dbl&gt;, U0.15 &lt;dbl&gt;, U0.2 &lt;dbl&gt;,
+## #   U0.25 &lt;dbl&gt;, U0.3 &lt;dbl&gt;</code></pre>
+<p>There are several issues here.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Multiple variables are stored in one column.</strong> The <code>NAME</code> column contains lots of information, split up by <code>::</code>’s.</li>
+<li><strong>Nutrient and rate variables are stuck in column headers.</strong> That is, the column names contain the values of two variables: nutrient (G, N, P, S, L, U) and growth rate (0.05-0.3). Remember, with tidy data, <strong>each <em>column</em> is a <em>variable</em> and each <em>row</em> is an <em>observation</em>.</strong> Here, we have not one observation per row, but 36 (6 nutrients <span class="math inline">\(\times\)</span> 6 rates)! There’s no way we could filter this data by a certain nutrient, or try to calculate statistics between rate and expression.</li>
+<li><strong>Expression values are scattered throughout the table.</strong> Related to the problem above, and just like our heart rate example, <code>expression</code> isn’t a single-column variable as in the cleaned tidy data, but it’s scattered around these 36 columns.</li>
+<li><strong>Other important information is in a separate table.</strong> We’re missing all the gene ontology information we had in the tidy data (no information about biological process (<code>bp</code>) or molecular function (<code>mf</code>)).</li>
+</ol>
+<p>Let’s tackle these issues one at a time, all on a <code>%&gt;%</code> pipeline.</p>
+<div id="separate-the-name" class="section level3">
+<h3><code>separate()</code> the <code>NAME</code></h3>
+<p>Let’s <code>separate()</code> the <code>NAME</code> column <code>into</code> multiple different variables. The first row looks like this:</p>
+<blockquote>
+<p><code>SFB2::YNL049C::1082129</code></p>
+</blockquote>
+<p>That is, it looks like we’ve got the gene symbol, the systematic name, and some other number (that isn’t discussed in the paper). Let’s <code>separate()</code>!</p>
+<pre class="r"><code>yorig %&gt;% 
+  separate(NAME, into=c(&quot;symbol&quot;, &quot;systematic_name&quot;, &quot;somenumber&quot;), sep=&quot;::&quot;)</code></pre>
+<pre><code>## # A tibble: 5,536 x 42
+##          GID       YORF symbol systematic_name somenumber GWEIGHT G0.05
+## *      &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+## 1  GENE1331X A_06_P5820   SFB2         YNL049C    1082129       1 -0.24
+## 2  GENE4924X A_06_P5866     NA         YNL095C    1086222       1  0.28
+## 3  GENE4690X A_06_P1834   QRI7         YDL104C    1085955       1 -0.02
+## 4  GENE1177X A_06_P4928   CFT2         YLR115W    1081958       1 -0.33
+## 5   GENE511X A_06_P5620   SSO2         YMR183C    1081214       1  0.05
+## 6  GENE2133X A_06_P5307   PSP2         YML017W    1083036       1 -0.69
+## 7  GENE1002X A_06_P6258   RIB2         YOL066C    1081766       1 -0.55
+## 8  GENE5478X A_06_P7082  VMA13         YPR036W    1086860       1 -0.75
+## 9  GENE2065X A_06_P2554   EDC3         YEL015W    1082963       1 -0.24
+## 10 GENE2440X A_06_P6431   VPS5         YOR069W    1083389       1 -0.16
+## # ... with 5,526 more rows, and 35 more variables: G0.1 &lt;dbl&gt;,
+## #   G0.15 &lt;dbl&gt;, G0.2 &lt;dbl&gt;, G0.25 &lt;dbl&gt;, G0.3 &lt;dbl&gt;, N0.05 &lt;dbl&gt;,
+## #   N0.1 &lt;dbl&gt;, N0.15 &lt;dbl&gt;, N0.2 &lt;dbl&gt;, N0.25 &lt;dbl&gt;, N0.3 &lt;dbl&gt;,
+## #   P0.05 &lt;dbl&gt;, P0.1 &lt;dbl&gt;, P0.15 &lt;dbl&gt;, P0.2 &lt;dbl&gt;, P0.25 &lt;dbl&gt;,
+## #   P0.3 &lt;dbl&gt;, S0.05 &lt;dbl&gt;, S0.1 &lt;dbl&gt;, S0.15 &lt;dbl&gt;, S0.2 &lt;dbl&gt;,
+## #   S0.25 &lt;dbl&gt;, S0.3 &lt;dbl&gt;, L0.05 &lt;dbl&gt;, L0.1 &lt;dbl&gt;, L0.15 &lt;dbl&gt;,
+## #   L0.2 &lt;dbl&gt;, L0.25 &lt;dbl&gt;, L0.3 &lt;dbl&gt;, U0.05 &lt;dbl&gt;, U0.1 &lt;dbl&gt;,
+## #   U0.15 &lt;dbl&gt;, U0.2 &lt;dbl&gt;, U0.25 &lt;dbl&gt;, U0.3 &lt;dbl&gt;</code></pre>
+<p>Now, let’s <code>select()</code> out the stuff we don’t want.</p>
+<pre class="r"><code>yorig %&gt;% 
+  separate(NAME, into=c(&quot;symbol&quot;, &quot;systematic_name&quot;, &quot;somenumber&quot;), sep=&quot;::&quot;) %&gt;% 
+  select(-GID, -YORF, -somenumber, -GWEIGHT)</code></pre>
+<pre><code>## # A tibble: 5,536 x 38
+##    symbol systematic_name G0.05  G0.1 G0.15  G0.2 G0.25  G0.3 N0.05  N0.1
+## *   &lt;chr&gt;           &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1    SFB2         YNL049C -0.24 -0.13 -0.21 -0.15 -0.05 -0.05  0.20  0.24
+## 2      NA         YNL095C  0.28  0.13 -0.40 -0.48 -0.11  0.17  0.31  0.00
+## 3    QRI7         YDL104C -0.02 -0.27 -0.27 -0.02  0.24  0.25  0.23  0.06
+## 4    CFT2         YLR115W -0.33 -0.41 -0.24 -0.03 -0.03  0.00  0.20 -0.25
+## 5    SSO2         YMR183C  0.05  0.02  0.40  0.34 -0.13 -0.14 -0.35 -0.09
+## 6    PSP2         YML017W -0.69 -0.03  0.23  0.20  0.00 -0.27  0.17 -0.40
+## 7    RIB2         YOL066C -0.55 -0.30 -0.12 -0.03 -0.16 -0.11  0.04  0.00
+## 8   VMA13         YPR036W -0.75 -0.12 -0.07  0.02 -0.32 -0.41  0.11 -0.16
+## 9    EDC3         YEL015W -0.24 -0.22  0.14  0.06  0.00 -0.13  0.30  0.07
+## 10   VPS5         YOR069W -0.16 -0.38  0.05  0.14 -0.04 -0.01  0.39  0.20
+## # ... with 5,526 more rows, and 28 more variables: N0.15 &lt;dbl&gt;,
+## #   N0.2 &lt;dbl&gt;, N0.25 &lt;dbl&gt;, N0.3 &lt;dbl&gt;, P0.05 &lt;dbl&gt;, P0.1 &lt;dbl&gt;,
+## #   P0.15 &lt;dbl&gt;, P0.2 &lt;dbl&gt;, P0.25 &lt;dbl&gt;, P0.3 &lt;dbl&gt;, S0.05 &lt;dbl&gt;,
+## #   S0.1 &lt;dbl&gt;, S0.15 &lt;dbl&gt;, S0.2 &lt;dbl&gt;, S0.25 &lt;dbl&gt;, S0.3 &lt;dbl&gt;,
+## #   L0.05 &lt;dbl&gt;, L0.1 &lt;dbl&gt;, L0.15 &lt;dbl&gt;, L0.2 &lt;dbl&gt;, L0.25 &lt;dbl&gt;,
+## #   L0.3 &lt;dbl&gt;, U0.05 &lt;dbl&gt;, U0.1 &lt;dbl&gt;, U0.15 &lt;dbl&gt;, U0.2 &lt;dbl&gt;,
+## #   U0.25 &lt;dbl&gt;, U0.3 &lt;dbl&gt;</code></pre>
+</div>
+<div id="gather-the-data" class="section level3">
+<h3><code>gather()</code> the data</h3>
+<p>Let’s gather the data from wide to long format so we get nutrient/rate (key) and expression (value) in their own columns.</p>
+<pre class="r"><code>yorig %&gt;% 
+  separate(NAME, into=c(&quot;symbol&quot;, &quot;systematic_name&quot;, &quot;somenumber&quot;), sep=&quot;::&quot;) %&gt;% 
+  select(-GID, -YORF, -somenumber, -GWEIGHT) %&gt;% 
+  gather(key=nutrientrate, value=expression, G0.05:U0.3)</code></pre>
+<pre><code>## # A tibble: 199,296 x 4
+##    symbol systematic_name nutrientrate expression
+##     &lt;chr&gt;           &lt;chr&gt;        &lt;chr&gt;      &lt;dbl&gt;
+## 1    SFB2         YNL049C        G0.05      -0.24
+## 2      NA         YNL095C        G0.05       0.28
+## 3    QRI7         YDL104C        G0.05      -0.02
+## 4    CFT2         YLR115W        G0.05      -0.33
+## 5    SSO2         YMR183C        G0.05       0.05
+## 6    PSP2         YML017W        G0.05      -0.69
+## 7    RIB2         YOL066C        G0.05      -0.55
+## 8   VMA13         YPR036W        G0.05      -0.75
+## 9    EDC3         YEL015W        G0.05      -0.24
+## 10   VPS5         YOR069W        G0.05      -0.16
+## # ... with 199,286 more rows</code></pre>
+<p>And while we’re at it, let’s <code>separate()</code> that newly created key column. Take a look at the help for <code>?separate</code> again. The <code>sep</code> argument could be a delimiter or a number position to split at. Let’s split after the first character. While we’re at it, let’s hold onto this intermediate data frame before we add gene ontology information. Call it <code>ynogo</code>.</p>
+<pre class="r"><code>ynogo &lt;- yorig %&gt;% 
+  separate(NAME, into=c(&quot;symbol&quot;, &quot;systematic_name&quot;, &quot;somenumber&quot;), sep=&quot;::&quot;) %&gt;% 
+  select(-GID, -YORF, -somenumber, -GWEIGHT) %&gt;% 
+  gather(key=nutrientrate, value=expression, G0.05:U0.3) %&gt;% 
+  separate(nutrientrate, into=c(&quot;nutrient&quot;, &quot;rate&quot;), sep=1)</code></pre>
+</div>
+<div id="inner_join-to-go" class="section level3">
+<h3><code>inner_join()</code> to GO</h3>
+<p>It’s rare that a data analysis involves only a single table of data. You normally have many tables that contribute to an analysis, and you need flexible tools to combine them. The <strong>dplyr</strong> package has several tools that let you work with multiple tables at once. Do a <a href="https://www.google.com/search?q=SQL+join&amp;tbm=isch">Google image search for “SQL Joins”</a>, and look at <a href="http://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">RStudio’s Data Wrangling Cheat Sheet</a> to learn more.</p>
+<p>First, let’s import the dataset that links the systematic name to gene ontology information. It’s the <a href="data/brauer2007_sysname2go.csv">brauer2007_sysname2go.csv</a> file available at <a href="data.html">the data downloads page</a>. Let’s call the imported data frame <code>sn2go</code>.</p>
+<pre class="r"><code># Import the data
+sn2go &lt;- read_csv(&quot;data/brauer2007_sysname2go.csv&quot;)
+
+# Take a look
+# View(sn2go)
+head(sn2go)</code></pre>
+<pre><code>## # A tibble: 6 x 3
+##   systematic_name                           bp
+##             &lt;chr&gt;                        &lt;chr&gt;
+## 1         YNL049C        ER to Golgi transport
+## 2         YNL095C   biological process unknown
+## 3         YDL104C proteolysis and peptidolysis
+## 4         YLR115W      mRNA polyadenylylation*
+## 5         YMR183C              vesicle fusion*
+## 6         YML017W   biological process unknown
+## # ... with 1 more variables: mf &lt;chr&gt;</code></pre>
+<p>Now, look up some help for <code>?inner_join</code>. Inner join will return a table with all rows from the first table where there are matching rows in the second table, and returns all columns from both tables. Let’s give this a try.</p>
+<pre class="r"><code>yjoined &lt;- inner_join(ynogo, sn2go, by=&quot;systematic_name&quot;)
+# View(yjoined)
+yjoined</code></pre>
+<pre><code>## # A tibble: 199,296 x 7
+##    symbol systematic_name nutrient  rate expression
+##     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;      &lt;dbl&gt;
+## 1    SFB2         YNL049C        G  0.05      -0.24
+## 2      NA         YNL095C        G  0.05       0.28
+## 3    QRI7         YDL104C        G  0.05      -0.02
+## 4    CFT2         YLR115W        G  0.05      -0.33
+## 5    SSO2         YMR183C        G  0.05       0.05
+## 6    PSP2         YML017W        G  0.05      -0.69
+## 7    RIB2         YOL066C        G  0.05      -0.55
+## 8   VMA13         YPR036W        G  0.05      -0.75
+## 9    EDC3         YEL015W        G  0.05      -0.24
+## 10   VPS5         YOR069W        G  0.05      -0.16
+## # ... with 199,286 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
+<pre class="r"><code># The glimpse function makes it possible to see a little bit of everything in your data.
+glimpse(yjoined)</code></pre>
+<pre><code>## Observations: 199,296
+## Variables: 7
+## $ symbol          &lt;chr&gt; &quot;SFB2&quot;, &quot;NA&quot;, &quot;QRI7&quot;, &quot;CFT2&quot;, &quot;SSO2&quot;, &quot;PSP2&quot;, ...
+## $ systematic_name &lt;chr&gt; &quot;YNL049C&quot;, &quot;YNL095C&quot;, &quot;YDL104C&quot;, &quot;YLR115W&quot;, &quot;Y...
+## $ nutrient        &lt;chr&gt; &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;...
+## $ rate            &lt;chr&gt; &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;...
+## $ expression      &lt;dbl&gt; -0.24, 0.28, -0.02, -0.33, 0.05, -0.69, -0.55,...
+## $ bp              &lt;chr&gt; &quot;ER to Golgi transport&quot;, &quot;biological process u...
+## $ mf              &lt;chr&gt; &quot;molecular function unknown&quot;, &quot;molecular funct...</code></pre>
+<p>Looks like that did it! There are many different kinds of two-table verbs/joins in dplyr. In this example, every systematic name in <code>ynogo</code> had a corresponding entry in <code>sn2go</code>, but if this weren’t the case, those un-annotated genes would have been removed entirely by the <code>inner_join</code>. A <code>left_join</code> would have returned all the rows in <code>ynogo</code>, but would have filled in <code>bp</code> and <code>mf</code> with missing values (<code>NA</code>) when there was no corresponding entry. See also: <code>right_join</code>, <code>semi_join</code>, and <code>anti_join</code>.</p>
+</div>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
