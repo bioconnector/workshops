@@ -134,7 +134,7 @@ filter(ydat, expression>2.07)
 
 ----
 
-### Aside: Writing Data to File
+#### Aside: Writing Data to File
 
 What we've done up to this point is read in data from a file (`read_csv(...)`), and assigning that to an object in our _workspace_ (`ydat <- ...`). When we run operations like `filter()` on our data, consider two things:
 
@@ -306,9 +306,9 @@ summarize(group_by(ydat, symbol), meanexp=mean(expression))
 summarize(group_by(ydat, nutrient), r=cor(rate, expression))
 ```
 
-## The almighty pipe: **%>%**
+## The pipe: **%>%**
 
-### How the pipe works
+### How %>% works
 
 This is where things get awesome. The dplyr package imports functionality from the [magrittr](https://github.com/smbache/magrittr) package that lets you _pipe_ the output of one function to the input of another, so you can avoid nesting functions. It looks like this: **`%>%`**. You don't have to load the magrittr package to use it since dplyr imports its functionality when you load the dplyr package.
 
@@ -335,7 +335,7 @@ ydat %>%
   arrange(r)
 ```
 
-### Nesting versus piping 
+### Nesting versus %>% 
 
 So what? 
 
@@ -534,6 +534,10 @@ ydat %>%
 
 ## Homework
 
+```{r inithw, echo=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+```
+
 ### Key Concepts
 
 > 
@@ -547,13 +551,10 @@ ydat %>%
 - summary functions
 - window functions
 
-```{r inithw, echo=FALSE}
-opts_chunk$set(echo=FALSE, fig.keep="none")
-```
-
 ### Getting Started
 
-We're going to work with a different dataset for the homework here. It's a [cleaned-up excerpt](https://github.com/jennybc/gapminder) from the [Gapminder data](http://www.gapminder.org/data/). Download this data at [bioconnector.org/data](http://bioconnector.org/data/) -- it's the [**gapminder.csv** file](http://bioconnector.org/data/gapminder.csv). Download it, and save it in your project directory where you can access it easily from R.
+We're going to work with a different dataset for the homework here. It's a [cleaned-up excerpt](https://github.com/jennybc/gapminder) from the [Gapminder data](http://www.gapminder.org/data/). Download the [**gapminder.csv** data by clicking here](data/gapminder.csv) or using the link above. Download it, and save it in a `data/` subfolder of the project directory where you can access it easily from R.
+
 
 Load the **dplyr** and **readr** packages, and read the gapminder data into R using the `read_csv()` function (n.b. `read_csv()` is _not_ the same as `read.csv()`). Assign the data to an object called `gm`.
 
@@ -582,17 +583,20 @@ gm
 ```
 
 
-## Problem Set
+### Problem set
 
 Use **dplyr** functions to address the following questions:
 
 1) How many unique countries are represented per continent?
 
 ```{r problem1}
-gm %>%
-    distinct(country) %>%
-    group_by(continent) %>%
-    summarise(n = n())
+# gm %>%
+#     distinct(country, .keep_all=TRUE) %>%
+#     group_by(continent) %>%
+#     summarise(n = n())
+gm %>% 
+  group_by(continent) %>% 
+  summarize(n=n_distinct(country))
 ```
 
 
@@ -628,9 +632,7 @@ gm %>%
 ```
 
 
-5) What countries and years had life expectancies of _at least_ 80 years? 
-
-**n.b. only output the columns of interest: country, life expectancy and year (in that order)**
+5) What countries and years had life expectancies of _at least_ 80 years? _N.b. only output the columns of interest: country, life expectancy and year (in that order)._
 
 ```{r problem5}
 gm %>%
@@ -650,9 +652,7 @@ gm %>%
 ```
 
 
-7) Which combinations of continent (besides Asia) and year have the highest average population across all countries?
-
-**n.b. your output should include all results sorted by highest average population**. With what you already know, this one may stump you. See [this Q&A](http://stackoverflow.com/q/27207963/654296) for how to `ungroup` before `arrange`ing.
+7) Which combinations of continent (besides Asia) and year have the highest average population across all countries? _N.b. your output should include all results sorted by highest average population_. With what you already know, this one may stump you. See [this Q&A](http://stackoverflow.com/q/27207963/654296) for how to `ungroup` before `arrange`ing. This also [behaves differently in more recent versions of dplyr](https://github.com/hadley/dplyr/releases/tag/v0.5.0).
 
 ```{r problem7}
 gm %>%
@@ -669,13 +669,13 @@ gm %>%
 ```{r problem8}
 gm %>%
     group_by(country) %>%
-    summarise(sd.pop = sd(pop)) %>%
+    summarize(sd.pop = sd(pop)) %>%
     arrange(sd.pop) %>%
     head(3)
 ```
 
 
-9) Subset *gm* to only include observations from 1992 and store the results as  *gm1992*. What kind of object is this?
+9) Subset **gm** to only include observations from 1992 and store the results as **gm1992**. What kind of object is this?
 
 ```{r problem10}
 gm1992 <-
@@ -687,9 +687,8 @@ gm1992 %>%
 ```
 
 
-10) **_Bonus!_** Excluding records from 1952, which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased*. See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
+10) **_Bonus!_** Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 
 ```{r problem9}
-gm %>%
-    filter(year!=1952 & pop < lag(pop) & lifeExp > lag(lifeExp))
+gm %>% filter(pop < lag(pop) & lifeExp > lag(lifeExp))
 ```
