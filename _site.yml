@@ -39,7 +39,7 @@ navbar:
         - text: "----"
         - text: "NGS analysis"
         - text: "RNA-seq: airway"
-        - href:
+          href: r-rnaseq-airway.html
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
