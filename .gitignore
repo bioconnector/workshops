@@ -8,7 +8,9 @@
 .RData
 .Rprofile
 
-# knitr caches and files
+# knitr caches will always be ignored.
+# cached _files/ directories in the project root will be ignored, but will NOT
+# be ignored in the rendered output.
 *_cache/
 *_files/
 !_site/*_files
