@@ -359,9 +359,6 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li>
-  <a href="topics.html">Topics</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown">
@@ -573,9 +570,8 @@ filter(ydat, symbol==&quot;LEU1&quot;) %&gt;%
 <li>Gene/rate combinations had high expression (in the top 1% of expressed genes)? <em>Hint:</em> see <code>?quantile</code> and try <code>quantile(ydat$expression, probs=.99)</code> to see the expression value which is higher than 99% of all the data, then <code>filter()</code> based on that. Try wrapping your answer with a <code>View()</code> function so you can see the whole thing. What does it look like those genes are doing? Answer should return a 1971-by-7 data frame.</li>
 </ol>
 <hr />
-</div>
-<div id="aside-writing-data-to-file" class="section level3">
-<h3>Aside: Writing Data to File</h3>
+<div id="aside-writing-data-to-file" class="section level4">
+<h4>Aside: Writing Data to File</h4>
 <p>What we’ve done up to this point is read in data from a file (<code>read_csv(...)</code>), and assigning that to an object in our <em>workspace</em> (<code>ydat &lt;- ...</code>). When we run operations like <code>filter()</code> on our data, consider two things:</p>
 <ol style="list-style-type: decimal">
 <li>The <code>ydat</code> object in our workspace is not being modified directly. That is, we can <code>filter(ydat, ...)</code>, and a result is returned to the screen, but <code>ydat</code> remains the same. This effect is similar to what we demonstrated in our first session.</li>
@@ -608,6 +604,7 @@ leudat &lt;- filter(ydat, nutrient==&quot;Leucine&quot; &amp; bp==&quot;leucine 
 # Write that out to disk
 write_csv(leudat, &quot;leucinedata.csv&quot;)</code></pre>
 <p>Note that this is different than saving your <em>entire workspace to an Rdata file</em>, which would contain all the objects we’ve created (weight, ydat, leudat, etc).</p>
+</div>
 </div>
 <div id="select" class="section level3">
 <h3>select()</h3>
@@ -913,10 +910,10 @@ summarize(group_by(ydat, nutrient), r=cor(rate, expression))</code></pre>
 ## 6    Uracil -0.0353</code></pre>
 </div>
 </div>
-<div id="the-almighty-pipe" class="section level2">
-<h2>The almighty pipe: <strong>%&gt;%</strong></h2>
-<div id="how-the-pipe-works" class="section level3">
-<h3>How the pipe works</h3>
+<div id="the-pipe" class="section level2">
+<h2>The pipe: <strong>%&gt;%</strong></h2>
+<div id="how-works" class="section level3">
+<h3>How %&gt;% works</h3>
 <p>This is where things get awesome. The dplyr package imports functionality from the <a href="https://github.com/smbache/magrittr">magrittr</a> package that lets you <em>pipe</em> the output of one function to the input of another, so you can avoid nesting functions. It looks like this: <strong><code>%&gt;%</code></strong>. You don’t have to load the magrittr package to use it since dplyr imports its functionality when you load the dplyr package.</p>
 <p>Here’s the simplest way to use it. Remember the <code>tail()</code> function. It expects a data frame as input, and the next argument is the number of lines to print. These two commands are identical:</p>
 <pre class="r"><code>tail(ydat, 5)</code></pre>
@@ -971,8 +968,8 @@ summarize(group_by(ydat, nutrient), r=cor(rate, expression))</code></pre>
 ## 10   VPS5         YOR069W  Leucine  0.05      -0.20
 ## # ... with 33,168 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
 </div>
-<div id="nesting-versus-piping" class="section level3">
-<h3>Nesting versus piping</h3>
+<div id="nesting-versus" class="section level3">
+<h3>Nesting versus %&gt;%</h3>
 <p>So what?</p>
 <p>Now, think about this for a minute. What if we wanted to get the correlation between the growth rate and expression separately for each limiting nutrient only for genes in the leucine biosynthesis pathway, and return a sorted list of those correlation coeffients rounded to two digits? Mentally we would do something like this:</p>
 <ol start="0" style="list-style-type: decimal">
@@ -1218,6 +1215,227 @@ r)</code></pre>
 ## 4 Phosphate telomerase-independent telomere maintenance -0.90      7  0.90
 ## 5    Uracil telomerase-independent telomere maintenance -0.81      7  0.81
 ## 6   Sulfate                   translational elongation*  0.79      5  0.79</code></pre>
+</div>
+</div>
+<div id="homework" class="section level2">
+<h2>Homework</h2>
+<div id="key-concepts" class="section level3">
+<h3>Key Concepts</h3>
+<blockquote>
+<ul>
+<li><strong>dplyr</strong> verbs</li>
+<li>the pipe <code>%&gt;%</code></li>
+<li>the <code>tbl_df</code></li>
+<li>variable creation</li>
+<li>multiple conditions</li>
+<li>properties of grouped data</li>
+<li>aggregation</li>
+<li>summary functions</li>
+<li>window functions</li>
+</ul>
+</blockquote>
+</div>
+<div id="getting-started" class="section level3">
+<h3>Getting Started</h3>
+<p>We’re going to work with a different dataset for the homework here. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download the <a href="data/gapminder.csv"><strong>gapminder.csv</strong> data by clicking here</a> or using the link above. Download it, and save it in a <code>data/</code> subfolder of the project directory where you can access it easily from R.</p>
+<p>Load the <strong>dplyr</strong> and <strong>readr</strong> packages, and read the gapminder data into R using the <code>read_csv()</code> function (n.b. <code>read_csv()</code> is <em>not</em> the same as <code>read.csv()</code>). Assign the data to an object called <code>gm</code>.</p>
+<!-- In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not. -->
+<pre class="r"><code>library(dplyr)
+library(readr)
+
+# Preferably: read data from web
+gm &lt;- read_csv(&quot;data/gapminder.csv&quot;)
+
+# Alternatively read from file:
+# gm &lt;- read_csv(&quot;http://bioconnector.org/workshops/data/gapminder.csv&quot;)
+
+# Display the data
+gm</code></pre>
+<pre><code>## # A tibble: 1,704 x 6
+##        country continent  year lifeExp      pop gdpPercap
+##          &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1  Afghanistan      Asia  1952    28.8  8425333       779
+## 2  Afghanistan      Asia  1957    30.3  9240934       821
+## 3  Afghanistan      Asia  1962    32.0 10267083       853
+## 4  Afghanistan      Asia  1967    34.0 11537966       836
+## 5  Afghanistan      Asia  1972    36.1 13079460       740
+## 6  Afghanistan      Asia  1977    38.4 14880372       786
+## 7  Afghanistan      Asia  1982    39.9 12881816       978
+## 8  Afghanistan      Asia  1987    40.8 13867957       852
+## 9  Afghanistan      Asia  1992    41.7 16317921       649
+## 10 Afghanistan      Asia  1997    41.8 22227415       635
+## # ... with 1,694 more rows</code></pre>
+</div>
+<div id="problem-set" class="section level3">
+<h3>Problem set</h3>
+<p>Use <strong>dplyr</strong> functions to address the following questions:</p>
+<ol style="list-style-type: decimal">
+<li>How many unique countries are represented per continent?</li>
+</ol>
+<pre class="r"><code># gm %&gt;%
+#     distinct(country, .keep_all=TRUE) %&gt;%
+#     group_by(continent) %&gt;%
+#     summarise(n = n())
+gm %&gt;% 
+  group_by(continent) %&gt;% 
+  summarize(n=n_distinct(country))</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   continent     n
+##       &lt;chr&gt; &lt;int&gt;
+## 1    Africa    52
+## 2  Americas    25
+## 3      Asia    33
+## 4    Europe    30
+## 5   Oceania     2</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Which European nation had the lowest GDP per capita in 1997?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(continent == &quot;Europe&quot; &amp; year == 1997) %&gt;%
+    arrange(gdpPercap) %&gt;%
+    head(1)</code></pre>
+<pre><code>## # A tibble: 1 x 6
+##   country continent  year lifeExp     pop gdpPercap
+##     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+## 1 Albania    Europe  1997      73 3428038      3193</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>According to the data available, what was the average life expectancy across each continent in the 1980s?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(year == 1982 | year == 1987) %&gt;%
+    group_by(continent) %&gt;%
+    summarize(mean.lifeExp = mean(lifeExp))</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   continent mean.lifeExp
+##       &lt;chr&gt;        &lt;dbl&gt;
+## 1    Africa         52.5
+## 2  Americas         67.2
+## 3      Asia         63.7
+## 4    Europe         73.2
+## 5   Oceania         74.8</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>What 5 countries have the highest total GDP over all years combined?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    mutate(gdp = gdpPercap*pop) %&gt;%
+    group_by(country) %&gt;%
+    summarise(Total.GDP = sum(gdp)) %&gt;%
+    arrange(desc(Total.GDP)) %&gt;%
+    head(5)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##          country Total.GDP
+##            &lt;chr&gt;     &lt;dbl&gt;
+## 1  United States  7.68e+13
+## 2          Japan  2.54e+13
+## 3          China  2.04e+13
+## 4        Germany  1.95e+13
+## 5 United Kingdom  1.33e+13</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>What countries and years had life expectancies of <em>at least</em> 80 years? <em>N.b. only output the columns of interest: country, life expectancy and year (in that order).</em></li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(lifeExp &gt;= 80) %&gt;%
+    select(country, lifeExp, year)</code></pre>
+<pre><code>## # A tibble: 22 x 3
+##             country lifeExp  year
+##               &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;
+## 1         Australia    80.4  2002
+## 2         Australia    81.2  2007
+## 3            Canada    80.7  2007
+## 4            France    80.7  2007
+## 5  Hong Kong, China    80.0  1997
+## 6  Hong Kong, China    81.5  2002
+## 7  Hong Kong, China    82.2  2007
+## 8           Iceland    80.5  2002
+## 9           Iceland    81.8  2007
+## 10           Israel    80.7  2007
+## # ... with 12 more rows</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    group_by(country) %&gt;%
+    summarise(r = abs(cor(lifeExp, gdpPercap))) %&gt;%
+    arrange(desc(r)) %&gt;%
+    head(10)</code></pre>
+<pre><code>## # A tibble: 10 x 2
+##           country     r
+##             &lt;chr&gt; &lt;dbl&gt;
+## 1          France 0.996
+## 2         Austria 0.993
+## 3         Belgium 0.993
+## 4          Norway 0.992
+## 5            Oman 0.991
+## 6  United Kingdom 0.990
+## 7           Italy 0.990
+## 8          Israel 0.988
+## 9         Denmark 0.987
+## 10      Australia 0.986</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Which combinations of continent (besides Asia) and year have the highest average population across all countries? <em>N.b. your output should include all results sorted by highest average population</em>. With what you already know, this one may stump you. See <a href="http://stackoverflow.com/q/27207963/654296">this Q&amp;A</a> for how to <code>ungroup</code> before <code>arrange</code>ing. This also <a href="https://github.com/hadley/dplyr/releases/tag/v0.5.0">behaves differently in more recent versions of dplyr</a>.</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(continent != &quot;Asia&quot;) %&gt;%
+    group_by(continent, year) %&gt;%
+    summarise(mean.pop = mean(pop)) %&gt;%
+    ungroup() %&gt;%
+    arrange(desc(mean.pop)) </code></pre>
+<pre><code>## # A tibble: 48 x 3
+##    continent  year mean.pop
+##        &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;
+## 1   Americas  2007 35954847
+## 2   Americas  2002 33990910
+## 3   Americas  1997 31876016
+## 4   Americas  1992 29570964
+## 5   Americas  1987 27310159
+## 6   Americas  1982 25211637
+## 7   Americas  1977 23122708
+## 8   Americas  1972 21175368
+## 9     Europe  2007 19536618
+## 10    Europe  2002 19274129
+## # ... with 38 more rows</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    group_by(country) %&gt;%
+    summarize(sd.pop = sd(pop)) %&gt;%
+    arrange(sd.pop) %&gt;%
+    head(3)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##                 country sd.pop
+##                   &lt;chr&gt;  &lt;dbl&gt;
+## 1 Sao Tome and Principe  45906
+## 2               Iceland  48542
+## 3            Montenegro  99738</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>Subset <strong>gm</strong> to only include observations from 1992 and store the results as <strong>gm1992</strong>. What kind of object is this?</li>
+</ol>
+<pre class="r"><code>gm1992 &lt;-
+    gm %&gt;%
+    filter(year == 1992)
+
+gm1992 %&gt;% 
+    class()</code></pre>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li><strong><em>Bonus!</em></strong> Which observations indicate that the population of a country has <em>decreased</em> from the previous year <strong>and</strong> the life expectancy has <em>increased</em> from the previous year? See <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html">the vignette on window functions</a>.</li>
+</ol>
+<pre class="r"><code>gm %&gt;% filter(pop &lt; lag(pop) &amp; lifeExp &gt; lag(lifeExp))</code></pre>
+<pre><code>## # A tibble: 53 x 6
+##                   country continent  year lifeExp      pop gdpPercap
+##                     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+## 1             Afghanistan      Asia  1982    39.9 12881816       978
+## 2                 Albania    Europe  1952    55.2  1282697      1601
+## 3                 Belgium    Europe  1952    68.0  8730405      8343
+## 4  Bosnia and Herzegovina    Europe  1992    72.2  4256013      2547
+## 5  Bosnia and Herzegovina    Europe  1997    73.2  3607000      4766
+## 6                Bulgaria    Europe  2002    72.1  7661799      7697
+## 7                Bulgaria    Europe  2007    73.0  7322858     10681
+## 8                  Canada  Americas  1952    68.8 14785584     11367
+## 9                   Chile  Americas  1952    54.7  6377619      3940
+## 10             Costa Rica  Americas  1952    57.2   926317      2627
+## # ... with 43 more rows</code></pre>
 </div>
 </div>
 
