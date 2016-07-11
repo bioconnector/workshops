@@ -24,11 +24,11 @@ navbar:
           href: r-basics.html
         - text: "Data frames"
           href: r-dataframes.html
-        - text: "Data manipulation (yeast)"
+        - text: "Data manipulation"
           href: r-dplyr-yeast.html
         - text: "Tidying data"
           href: r-tidy.html
-        - text: "Data visualization (gapminder)"
+        - text: "Data visualization"
           href: r-viz-gapminder.html
         - text: "----"
         - text: "Reproducible research"
