@@ -15,9 +15,9 @@
 *_files/
 !_site/*_files
 
-# image sources
-# *.psd
-# *.key
+# ignore image sources that make it into _site
+_site/**/*.psd
+_site/**/*.key
 
 # Unfinished lessons
 Untitled*
