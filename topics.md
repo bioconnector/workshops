@@ -28,6 +28,7 @@ title: "Topics"
 1. [dplyr exercises with the Gapminder data](r-hw-dplyr.html).
 1. [ggplot2 homework with Brauer yeast data](r-hw-ggplot2.html).
 1. [Reproducible reporting homework](r-hw-repres.html).
+1. [Learn a bit about Markdown](r-hw-markdown.html).
 
 ### Readings
 

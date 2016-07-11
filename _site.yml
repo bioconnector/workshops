@@ -43,8 +43,8 @@ navbar:
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
-    - text: "Topics"
-      href: topics.html
+#    - text: "Topics"
+#      href: topics.html
   right:
     - icon: fa-question fa-lg
       menu:
