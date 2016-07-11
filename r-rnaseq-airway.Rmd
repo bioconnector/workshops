@@ -10,11 +10,27 @@ library(ggplot2)
 theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 ```
 
-This is an introduction to RNAseq analysis involving reading in count data from an RNAseq experiment, exploring the data using base R functions and then analysis with the DESeq2 package. This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and [manipulating data with dplyr and `%>%`](r-dplyr.html). See also the [_Bioconductor_ heading on the setup page](setup-r.html#bioconductor) -- you'll need a few additional packages that are available through Bioconductor, not CRAN (the installation process is slightly different).
+This is an introduction to RNAseq analysis involving reading in count data from an RNAseq experiment, exploring the data using base R functions and then analysis with the DESeq2 package. This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html). See also the [_Bioconductor_ heading on the setup page](setup.html#bioconductor) -- you'll need a few additional packages that are available through Bioconductor, not CRAN (the installation process is slightly different).
+
+
+## Review
+
+### Prerequsite skills
+
+- [R basics](r-basics.html)
+- [Data frames](r-dataframes.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr.html)
+- [Tidy data & advanced manipulation](r-tidy.html)
+- [Data Visualization with ggplot2](r-viz-gapminder.html)
+
+### Data needed
+
+- Count matrix (i.e., `countData`): [airway_rawcounts.csv](data/airway_rawcounts.csv)
+- Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
 
 ## Background
 
-### The Biology
+### The biology
 
 The data for this lesson comes from:
 
@@ -24,7 +40,7 @@ Glucocorticoids are potent inhibitors of inflammatory processes, and are widely 
 
 They did their analysis using [Tophat and Cufflinks](http://rdcu.be/gk0S). We're taking a different approach and using an R package called [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). [Click here](help.html#rna-seq-resources) to read more on DESeq2 and other approaches.
 
-### Data Pre-processing
+### Data pre-processing
 
 Analyzing an RNAseq experiment begins with sequencing reads. There are many ways to begin analyzing this data, and you should check out the three papers below to get a sense of other analysis strategies. In the workflow we'll use here, sequencing reads were aligned to a reference genome, then the number of reads that mapped to each gene region were counted. This is the starting point - a "count matrix," where each cell indicates the number of reads mapping to a particular gene (in rows) for each sample (in columns). This workflow was chosen because of its widespread use, and because of recent data showing that it's relatively robust to potential gene length biases [3]. However, there are many well-established alternative analysis paths, and the goal here is to provide a reference point to acquire fundamental skills that will be applicable to other bioinformatics tools and workflows.
 
@@ -44,10 +60,10 @@ We'll come back to this again later, but the data at our starting point looks li
 
 That is, we have **two tables**:
 
-1. The "count matrix" (called the `countData` in DESeq-speak) -- where _genes_ are in _rows_ and _samples_ are in _columns_, and the number in each cell is the number of reads that mapped to exons in that gene for that sample.
-1. The sample metadata (called the `colData` in DESeq-speak) -- where _samples_ are in _rows_ and _metadata_ about those samples are in _columns_. It's called the `colData` because this table supplies metadata/information about the columns of the `countData` matrix. Notice that the column names of the `countData` must match the row names of the `colData`. A bit later we'll revisit this, because there's special syntax in R for specifying row names and column names of data frames.
+1. The "count matrix" (called the `countData` in DESeq-speak) -- where _genes_ are in _rows_ and _samples_ are in _columns_, and the number in each cell is the number of reads that mapped to exons in that gene for that sample: **[airway_rawcounts.csv](data/airway_rawcounts.csv)**.
+1. The sample metadata (called the `colData` in DESeq-speak) -- where _samples_ are in _rows_ and _metadata_ about those samples are in _columns_: **[airway_metadata.csv](data/airway_metadata.csv)**. It's called the `colData` because this table supplies metadata/information about the columns of the `countData` matrix. Notice that the column names of the `countData` must match the row names of the `colData`. A bit later we'll revisit this, because there's special syntax in R for specifying row names and column names of data frames.
 
-## Import count data and metadata
+## Import data
 
 First, let's load the **readr**, **dplyr**, and **ggplot2** libraries, and import our data [like we've always done](r-dataframes.html) with `read_csv()` (_note_: not `read.csv()`). Let's read in the actual count data and the experimental metadata.
 
@@ -69,9 +85,9 @@ metadata
 
 Notice something here. The sample IDs in the metadata sheet (SRR1039508, SRR1039509, etc.) exactly match the column names of the countdata, except for the first column, which contains the Ensembl gene ID. This is important, and we'll get more strict about it later on. 
 
-## Poor man's differential expression
+## Poor man's DGE
 
-**_Note: this analysis is for demonstration only. NEVER do differential expression analysis this way!_**
+Let's look for differential gene expression. **_Note: this analysis is for demonstration only. NEVER do differential expression analysis this way!_**
 
 Let's start with an exercise.
 
@@ -158,7 +174,7 @@ In total, we've got `r sum(abs(meancounts$log2fc)>2)` differentially expressed g
 
 #### **EXERCISE `r .ex``r .ex=.ex+1`**
 
-Go back and refresh your memory on [using `inner_join()` to join two tables by a common column/key](r-tidy.html#inner_join-it-to-the-gene-ontology-information). You previously downloaded [annotables_grch37.csv](http://bioconnector.org/data/annotables_grch37.csv) from [bioconnector.org/data](http://bioconnector.org/data/). Load this data with `read_csv()` into an object called `anno`. Pipe it to `View` or click on the object in the Environment pane to view the entire dataset. This table links the unambiguous Ensembl gene ID to things like the gene symbol, full gene name, location, Entrez gene ID, etc.
+Go back and refresh your memory on [using `inner_join()` to join two tables by a common column/key](r-tidy.html#inner_join%28%29_to_go). You previously downloaded [annotables_grch37.csv](data/annotables_grch37.csv) from [the data downloads page](data.html). Load this data with `read_csv()` into an object called `anno`. Pipe it to `View` or click on the object in the Environment pane to view the entire dataset. This table links the unambiguous Ensembl gene ID to things like the gene symbol, full gene name, location, Entrez gene ID, etc.
 
 ```{r importAnno}
 anno <- read_csv("data/annotables_grch37.csv")
@@ -183,13 +199,13 @@ meancounts %>%
 
 ## DESeq2 analysis
 
-### The DESeq2 package
+### DESeq2 package
 
 Let's do this the right way. DESeq2 is an R package for analyzing count-based NGS data like RNA-seq. It is available from [Bioconductor](http://www.bioconductor.org/). Bioconductor is a project to provide tools for analysing high-throughput genomic data including RNA-seq, ChIP-seq and arrays. You can explore Bioconductor packages [here](http://www.bioconductor.org/packages/release/BiocViews.html#___Software).
 
 Bioconductor packages usually have great documentation in the form of _vignettes_. For a great example, take a look at the [DESeq2 vignette for analyzing count data](http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf). This 40+ page manual is packed full of examples on using DESeq2, importing data, fitting models, creating visualizations, references, etc.
 
-Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup-r.html#bioconductor)), then load them every time you start a new R session. 
+Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup.html#bioconductor)), then load them every time you start a new R session. 
 
 ```{r loadDESeq2}
 library(DESeq2)
@@ -241,13 +257,18 @@ row.names(rawcountsRN)
 
 Now we can move on to constructing the actual DESeqDataSet object. The last thing we'll need to specify is a _design_ -- a _formula_ which expresses how the counts for each gene depend on the variables in colData. Take a look at `metadataRN` again. The thing we're interested in is the `dex` column, which tells us which samples are treated with dexamethasone versus which samples are untreated controls. We'll specify the design with a tilde, like this: `design=~dex`. (The tilde is the shifted key to the left of the number 1 key on my keyboard. It looks like a little squiggly line). So let's contruct the object and call it `dds`, short for our DESeqDataSet. If you get a warning about "some variables in design formula are characters, converting to factors" don't worry about it. Take a look at the `dds` object once you create it.
 
-```{r constructDDS}
+```{r constructDDS_phony, eval=FALSE}
 dds <- DESeqDataSetFromMatrix(countData=rawcountsRN, colData=metadataRN, design=~dex)
 dds
 ```
 
+```{r constructDDS_real, echo=FALSE}
+dds <- suppressWarnings(DESeqDataSetFromMatrix(countData=rawcountsRN, colData=metadataRN, design=~dex))
+dds
+```
 
-### Run the DESeq pipeline
+
+### DESeq pipeline
 
 Next, let's run the DESeq pipeline on the dataset, and reassign the resulting object back to the same variable. Before we start, `dds` is a bare-bones DESeqDataSet. The `DESeq()` function takes a DESeqDataSet and returns a DESeqDataSet, but with lots of other information filled in (normalization, dispersion estimates, differential expression results, etc). Notice how if we try to access these objects before running the analysis, nothing exists.
 
@@ -379,9 +400,9 @@ res %>% ggplot(aes(log2FoldChange, -1*log10(pvalue), col=sig)) + geom_point() + 
 ----
 
 
-### Principal Components Analysis
+### PCA
 
-Let's do some exploratory plotting of the data.
+Let's do some exploratory plotting of the data using principal components analysis.
 
 The differential expression analysis above operates on the raw (normalized) count data. But for visualizing or clustering data as you would with a microarray experiment, you ned to work with transformed versions of the data. First, let's use a _regularlized log_ transformation, which transforms the count data to the log2 scale in a way which minimizes differences between samples for rows with small counts. Let's call the returned object `rld`, short for regularized log data.
 
@@ -403,7 +424,11 @@ Principal Components Analysis (PCA) is a dimension reduction and visualization t
 [Heatmaps are complicated, and are often poorly understood](http://www.opiniomics.org/you-probably-dont-understand-heatmaps/). It's a type of visualization used very often in high-throughput biology where data are clustered on rows and columns, and the actual data is displayed as tiles on a grid, where the values are mapped to some color spectrum. Our R useRs group MeetUp had a session on making heatmaps, which I summarized in [this blog post](http://www.gettinggeneticsdone.com/2015/04/r-user-group-recap-heatmaps-and-using.html). Take a look at [the code from that meetup](https://github.com/UVa-R-Users-Group/meetup/blob/master/2015-02-19-heat-maps/heatmaps.R), and the [documentation for the `aheatmap` function in the NMF package](http://nmf.r-forge.r-project.org/aheatmap.html) to see if you can re-create this image. Here, I'm clustering all samples using the top 50 most differentially regulatd genes, labeling the rows with the gene symbol, and putting two annotation color bars across the top of the main heatmap panel showing treatment and cell line annotations from our metadata. Take a look at the [Rmarkdown source for this lesson](https://github.com/bioconnector/bims8382/blame/10667525b2798d4f79af616d936ecac0b58c9622/r-rnaseq-airway.Rmd#L406) for the code.
 
 ```{r NMFaheatmap, fig.height=12, echo=F}
-NMF::aheatmap(assay(rld)[arrange(res, padj, pvalue)$row[1:50], ], labRow=arrange(res, padj, pvalue)$symbol[1:50], scale="row", distfun="pearson", annCol=dplyr::select(metadata, dex, celltype), col=c("green","black","black","red"))
+NMF::aheatmap(assay(rld)[arrange(res, padj, pvalue)$row[1:50], ], 
+              labRow=arrange(res, padj, pvalue)$symbol[1:50], 
+              scale="row", distfun="pearson", 
+              annCol=dplyr::select(metadata, dex, celltype), 
+              col=c("green","black","black","red"))
 ```
 
 
