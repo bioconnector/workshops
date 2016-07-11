@@ -11,7 +11,7 @@ To contribute:
 1. `git pull`, `git push` to your remote, then submit a pull request to the master branch of this repo.
 
 
-## Authoring and deploying
+### Authoring and deploying
 
 All lessons are stored as individual **.Rmd** files in the root directory of the site. Building the website with the "Build Website" button in RStudio or using `rmarkdown::render_site()` at the console will render all the **.md** and **.Rmd** into a single output directory (`_site/`). Any other files except those starting with `_` are also copied into the `_site/` directory. This is how data, images, css, etc. are included in the rendered site.
 
@@ -31,11 +31,11 @@ You can simplify the last bit by creating an alias in your .gitconfig so you onl
     deploy = subtree push --prefix _site origin gh-pages
 ```
 
-## Data
+### Data
 
 All data used in this repo is stored in the `data/` directory. All you should have to do to is drop the data you need into this directory. The `data.Rmd` file when rendered will create a page giving direct links to all the files stored in the `data/` directory, with the exception of files ending in .html (e.g., index.html). In case someone were to navigate directly to the `data/` folder instead of the `data.html`, I created an index.html file for convenience using [this script](https://github.com/stephenturner/devnotes/blob/master/scripts/makeindex.sh). Avoid committing large files to the data directory -- host them somewhere else if they're more than a few megabytes.
 
-## Other info/tips/gotchas
+### Other info/tips/gotchas
 
 - The site's configuration is controlled by `_site.yml`. See the [RMarkdown websites documentation](http://rmarkdown.rstudio.com/rmarkdown_websites.html) for more information. The navigation bar is controlled by this file, as well as various output parameters. I'm using icons from [Font Awesome](http://fontawesome.io/) reading in the CSS from a CDN.
 - Note that the `exclude` list in `_site.yml` will _not_ stop .md or .Rmd files from being rendered. You can disable rendering of a .md/.Rmd by renaming it with a preceding `_`.
