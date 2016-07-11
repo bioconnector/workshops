@@ -7,7 +7,6 @@
 .Rhistory
 .RData
 .Rprofile
-*.Rproj
 
 # knitr caches and files
 *_cache/
