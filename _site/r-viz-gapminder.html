@@ -398,8 +398,8 @@ div.tocify {
 <p>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, and <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>.</p>
 <div id="review" class="section level2">
 <h2>Review</h2>
-<div id="our-data-gapminder" class="section level3">
-<h3>Our data: Gapminder</h3>
+<div id="gapminder-data" class="section level3">
+<h3>Gapminder data</h3>
 <p>We’re going to work with a different dataset for this section. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download the <a href="data/gapminder.csv"><strong>gapminder.csv</strong> data by clicking here</a> or using the link above.</p>
 <p>Let’s read in the data to an object called <code>gm</code> and take a look with <code>View</code>. Remember, we need to load both the dplyr and readr packages for efficiently reading in and displaying this data.</p>
 <pre class="r"><code># Load packages
@@ -547,8 +547,8 @@ p + geom_point() + scale_x_log10()</code></pre>
 <li>Use a log<sub>10</sub> scale for the x-axis.</li>
 </ul>
 <hr />
-<div id="adding-layers-to-the-plot" class="section level3">
-<h3>Adding layers to the plot</h3>
+<div id="adding-layers" class="section level3">
+<h3>Adding layers</h3>
 <p>Let’s add a fitted curve to the points. Recreate the plot in the <code>p</code> object if you need to.</p>
 <pre class="r"><code>p &lt;- ggplot(gm, aes(gdpPercap, lifeExp)) + scale_x_log10()
 p + geom_point() + geom_smooth()</code></pre>
@@ -697,6 +697,181 @@ p + theme_economist()
 p + theme_fivethirtyeight()
 p + theme_tufte()</code></pre>
 <p>Don’t forget - see <a href="help.html#ggplot2-resources">this course’s help page</a> for links to getting more help with ggplot2!</p>
+</div>
+<div id="homework" class="section level2">
+<h2>Homework</h2>
+<div id="key-concepts" class="section level3">
+<h3>Key Concepts</h3>
+<blockquote>
+<ul>
+<li>geoms</li>
+<li>aesthetic mappings</li>
+<li>statistical layers</li>
+<li>scales</li>
+<li>ggthemes</li>
+<li>ggsave</li>
+</ul>
+</blockquote>
+</div>
+<div id="getting-started" class="section level3">
+<h3>Getting Started</h3>
+<p>The data we’re going to look at is cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Raise or lower their expression in response to growth rate</strong>. Growth-rate dependent expression patterns can tell us a lot about cell cycle control, and how the cell responds to stress. The authors found that expression of &gt;25% of all yeast genes is linearly correlated with growth rate, independent of the limiting nutrient. They also found that the subset of negatively growth-correlated genes is enriched for peroxisomal functions, and positively correlated genes mainly encode ribosomal functions.</li>
+<li><strong>Respond differently when different nutrients are being limited</strong>. If you see particular genes that respond very differently when a nutrient is sharply restricted, these genes might be involved in the transport or metabolism of that specific nutrient.</li>
+</ol>
+<p>You can download the cleaned up version of the data at <a href="data.html">the link above</a>. The file is called <a href="data/brauer2007_tidy.csv"><strong>brauer2007_tidy.csv</strong></a>. Load the <strong>ggplot2</strong>, <strong>dplyr</strong>, <strong>readr</strong> packages, and read the tidy <em>Brauer</em> data into R using the <code>read_csv()</code> function (<em>note, <strong>not</strong> <code>read.csv()</code></em>). Assign the data to an object called <code>ydat</code>.</p>
+<pre class="r"><code>library(ggplot2)
+library(dplyr)
+library(readr)
+library(ggthemes)
+
+# Read data from file
+ydat &lt;- read_csv(&quot;data/brauer2007_tidy.csv&quot;)
+
+# Alternatively read data from web 
+# ydat &lt;- read_csv(&quot;http://bioconnector.org/workshops/data/brauer2007_tidy.csv&quot;)
+
+# Display the data
+ydat</code></pre>
+<pre><code>## # A tibble: 198,430 x 7
+##    symbol systematic_name nutrient  rate expression
+##     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
+## 1    SFB2         YNL049C  Glucose  0.05      -0.24
+## 2    &lt;NA&gt;         YNL095C  Glucose  0.05       0.28
+## 3    QRI7         YDL104C  Glucose  0.05      -0.02
+## 4    CFT2         YLR115W  Glucose  0.05      -0.33
+## 5    SSO2         YMR183C  Glucose  0.05       0.05
+## 6    PSP2         YML017W  Glucose  0.05      -0.69
+## 7    RIB2         YOL066C  Glucose  0.05      -0.55
+## 8   VMA13         YPR036W  Glucose  0.05      -0.75
+## 9    EDC3         YEL015W  Glucose  0.05      -0.24
+## 10   VPS5         YOR069W  Glucose  0.05      -0.16
+## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
+</div>
+<div id="problem-set" class="section level3">
+<h3>Problem Set</h3>
+<p>Follow the prompts and use <strong>ggplot2</strong> to reproduce the plots below.</p>
+<div id="part-1" class="section level4">
+<h4>Part 1</h4>
+<p>We can start by taking a look at the distribution of the expression values.</p>
+<ol style="list-style-type: decimal">
+<li>Plot a histogram of the expression variable, and set the bin number equal to 100.</li>
+</ol>
+<pre class="r"><code>ggplot(ydat, aes(x = expression)) +
+    geom_histogram(bins = 100) </code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Check the distribution of each nutrient in the data set by adjusting the fill aesthetic. Use the same bin number for this histogram.</li>
+</ol>
+<pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
+    geom_histogram(bins = 100)</code></pre>
+<p>Wow. That’s ugly. Might be a candidate for <a href="http://accidental-art.tumblr.com/">accidental aRt</a> but not very helpful for our analysis.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Now split off the same histogram into a faceted display with 3 columns.</li>
+</ol>
+<pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
+    geom_histogram(bins = 100) +
+    facet_wrap(~ nutrient, ncol = 3)</code></pre>
+<p>The basic exploratory process above confirms that the overall distribution (as well each distribution by nutrient) is normal.</p>
+</div>
+<div id="part-2" class="section level4">
+<h4>Part 2</h4>
+<p>Let’s compare the genes with the highest and lowest average expression values.</p>
+<p>We can figure out which these are using some familiar logic:</p>
+<ol style="list-style-type: decimal">
+<li>Take the original <em>ydat</em> data frame …</li>
+<li>Then <em>group by</em> symbol …</li>
+<li>Then <em>summarize</em> mean of all expression values for that symbol …</li>
+<li>Then <em>arrange</em> descending by the mean …</li>
+<li>Then <em>filter</em> for the first or last row.</li>
+</ol>
+<p>The code below implements that pipeline in <strong>dplyr</strong> syntax:</p>
+<pre class="r"><code>ydat %&gt;%
+    group_by(symbol) %&gt;%
+    summarise(meanexp = mean(expression)) %&gt;%
+    arrange(desc(meanexp)) %&gt;%
+    filter(row_number() == 1 | row_number() == n())</code></pre>
+<p>The output tells us that the gene with the highest mean expression is <em>HXT3</em>, while the gene with the lowest mean expression is <em>HXT6</em>.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Subset the data to only include these genes, and create a stripplot that has expression values as “jittered” points on the y-axis and the gene symbols the x-axis.</li>
+</ol>
+<blockquote>
+<p><strong>HINT</strong> you can add a “jitter” position to <code>geom_point()</code> but it’s easier to control width of the effect if you use <code>geom_jitter()</code></p>
+</blockquote>
+<pre class="r"><code>gene_exp &lt;- 
+    ydat %&gt;%
+    filter(symbol == &quot;HXT3&quot; | symbol == &quot;HXT6&quot;)
+
+ggplot(gene_exp, aes(x = symbol, y = expression)) +
+    geom_jitter(width = 0.1)</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>Now map each observation to its nutrient by color and adjust the size of the points to be 2.</li>
+</ol>
+<pre class="r"><code>ggplot(gene_exp, aes(x = symbol, y = expression)) +
+    geom_jitter(aes(col = nutrient), width = 0.1, size = 2)</code></pre>
+<p>Although these two genes are on opposite ends of the distribution of average expression values, they both seem to express similar amounts when Glucose is the restricted nutrient.</p>
+</div>
+<div id="part-3" class="section level4">
+<h4>Part 3</h4>
+<p>Now let’s try to make something that has a little bit more of a polished look.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>Using <strong>dplyr</strong> logic, create a data frame that has the mean expression values for all combinations of rate and nutrient (<em>hint</em>: use <code>group_by()</code> and <code>summarize()</code>). Create a plot of this data with rate on the x-axis and mean expression on the y-axis and lines colored by nutrient.</li>
+</ol>
+<pre class="r"><code>nutrient_rates &lt;-
+    ydat %&gt;%
+    group_by(rate, nutrient) %&gt;%
+    summarise(meanexp = mean(expression)) 
+
+ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + geom_line(aes(col=nutrient))</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Add black dotted line (lty=3) that represents the smoothed mean of expression across all combinations of nutrients and rates.</li>
+</ol>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, lty=3, se = FALSE) </code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Change the scale to include breaks for <em>all</em> of the rates.</li>
+</ol>
+<blockquote>
+<p><strong>HINT</strong> The <code>read_csv()</code> function read in the rate variable as continuous rather than discrete. There are a few ways to remedy this, but first see if you can set the scale for the x axis variable without changing the dataframe.</p>
+</blockquote>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate)</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>By default <code>ggplot()</code> will name the x and y axes with names of their respective variables. You might want to apply more meaningful labels. Change the name of the x-axis to “Rate”, the name of the y-axis to “Mean Expression” and the plot title to “Mean Expression By Rate (Brauer)”</li>
+</ol>
+<blockquote>
+<p><strong>HINT</strong> <code>?labs</code> will pull up the <strong>ggplot2</strong> documentation on axes labels and plot titles.</p>
+</blockquote>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;)</code></pre>
+<ol start="10" style="list-style-type: decimal">
+<li>Add a theme from the <strong>ggthemes</strong> package. The plot below is based on Edward Tufte’s book <em>The Visual Display of Quantitative Information</em>. Choose a theme that you like, but choose wisely – some of these themes will override other adjustments you’ve made to your plot above, including axis labels.</li>
+</ol>
+<blockquote>
+<p><strong>HINT 1</strong>: <code>library(ggthemes)</code> not working for you? <a href="https://github.com/jrnold/ggthemes#install">Install the package first</a>.</p>
+</blockquote>
+<blockquote>
+<p><strong>HINT 2</strong> You can either do this by trial-and-error or check out the package vignette to get an idea of what each theme looks like: <a href="https://github.com/jrnold/ggthemes" class="uri">https://github.com/jrnold/ggthemes</a></p>
+</blockquote>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;) + 
+  theme_tufte()</code></pre>
+<ol start="11" style="list-style-type: decimal">
+<li>The last step is to save the plot you’ve created. Write your plot to a 10 X 6 PDF using a <strong>ggplot2</strong> function.</li>
+</ol>
+</div>
+</div>
 </div>
 
 <div class="footer">
