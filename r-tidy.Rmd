@@ -4,7 +4,7 @@ title: "Tidy Data and Advanced Data Manipulation"
 
 ```{r init, include=F}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
 .ex <- 1
 # library(ggplot2)
 # theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
