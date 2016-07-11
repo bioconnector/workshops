@@ -20,8 +20,6 @@ navbar:
       icon: fa-book
       menu:
         - text: "R"
-        - text: "Setup"
-          href: r-setup.html
         - text: "R basics"
           href: r-basics.html
         - text: "Data frames"
