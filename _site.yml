@@ -28,12 +28,18 @@ navbar:
           href: r-dataframes.html
         - text: "Data manipulation (yeast)"
           href: r-dplyr-yeast.html
+        - text: "Tidying data"
+          href: r-tidy.html
         - text: "Data visualization (gapminder)"
           href: r-viz-gapminder.html
         - text: "----"
         - text: "Reproducible research"
         - text: "RMarkdown"
           href: r-rmarkdown.html
+        - text: "----"
+        - text: "NGS analysis"
+        - text: "RNA-seq: airway"
+        - href:
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
