@@ -17,7 +17,17 @@ Contemporary life science is plagued by reproducibility issues. This workshop co
 
 This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), [manipulating data with dplyr and `%>%`](r-dplyr.html), and [plotting with ggplot2](r-ggplot2.html). It also assumes that you've successfully installed all packages on the [R setup page](setup.html), including the [additional steps](setup.html#rmarkdown) needed specifically for this class.
 
-Finally, see [this course's help page](help.html#markdown-rmarkdown-resources) for links to getting more help with reproducible research, Markdown, and RMarkdown.
+## Before class
+
+Prior to class, spend a few minutes to learn a little bit about _Markdown_. All you really need to know is that Markdown is a lightweight markup language that lets you create styled text (like **bold**, _italics_, [links](http://bioconnector.org/markdown), etc.) using a very lightweight plain-text syntax: `(like **bold**, _italics_, [links](http://bioconnector.org/markdown), etc.)`. The resulting text file can be _rendered_ into many downstream formats, like PDF (for printing) or HTML (websites).
+
+1. _(30 seconds)_ Read the summary paragraph on the [Wikipedia page](https://en.wikipedia.org/wiki/Markdown). 
+1. _(5-10 minutes)_ Run through this in-browser markdown tutorial: <http://markdowntutorial.com/>.
+1. _(5-10 minutes)_ Go to <http://dillinger.io/>, an in-browser Markdown editor, and play around. Write a simple markdown document, and export it to HTML and/or PDF.
+1. _(5-10 minutes)_ Take a look at the Markdown/Rmarkdown reference for this course: <http://bioconnector.org/markdown>. Scroll through the Markdown reference, which you've already seen by this point, then click the RMarkdown link at the top and skim through this. 
+1. _(0 seconds)_ No need to look now, but don't forget that the course [help page](help.html) has some [useful resources on Markdown+RMarkdown](help.html#markdown__rmarkdown_resources).
+
+
 
 ## Who cares about reproducible research?
 
@@ -356,6 +366,10 @@ Here are a few examples of documents I've published:
 ## Further resources
 
 See [the (R)markdown section on this course's help page](help.html#markdown-rmarkdown-resources) for links to getting more help with reproducible research, Markdown, and RMarkdown.
+
+## Homework
+
+Looking for more practice? [Try this homework assignment](r-rmarkdown-homework.html).
 
 ----
 
