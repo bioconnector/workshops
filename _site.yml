@@ -63,4 +63,4 @@ output:
       in_header: _include/in_header.html
       after_body: _include/after_body.html
 
-exclude: ["LICENSE", "README.mkdn"]
+exclude: ["LICENSE", "README.markdown"]
