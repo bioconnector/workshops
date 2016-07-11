@@ -44,4 +44,10 @@ All data used in this repo is stored in the `data/` directory. All you should ha
 - I recommend setting `knitr::opts_chunk$set(cache=TRUE)` in the global options for each .Rmd file. Every little bit helps when rendering many files after cleaning.
 - Put any helpful resources in [help.md](help.md).
 - Put any setup instructions under the appropriate level 2 or level 3 heading in [setup.md](setup.md).
-
+- Headings: Use ## and ### for major and minor headings, respectively. Try to avoid long headings as much as possible to try to avoid word wrapping in the floating TOC.
+- If you create a page with no headings, you need to remove the toc from the page. See the source for [index.md](index.md):
+  ```
+  output:
+  html_document:
+    toc: false
+  ```
