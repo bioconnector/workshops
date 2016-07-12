@@ -19,25 +19,53 @@ navbar:
     - text: "Lessons"
       icon: fa-book
       menu:
-        - text: "R"
-        - text: "R basics"
+        - text: "--- R ---"
+        - text: "R Basics"
           href: r-basics.html
-        - text: "Data frames"
+        - text: "Data Frames"
           href: r-dataframes.html
-        - text: "Data manipulation"
+        - text: "Data Manipulation"
           href: r-dplyr-yeast.html
         - text: "Tidying data"
           href: r-tidy.html
-        - text: "Data visualization"
+        - text: "Data Visualization"
           href: r-viz-gapminder.html
-        - text: "----"
-        - text: "Reproducible research"
-        - text: "RMarkdown"
+        - text: "Reproducible Research & RMarkdown"
           href: r-rmarkdown.html
+        - text: "Essential Statistics with R"
+          href:
+        - text: "Survival Analysis with TCGA Data"
+          href:
+        - text: "Introduction to Bioconductor"
+          href:
+        - text: "Harvesting Data from NCBI"
+          href:
         - text: "----"
-        - text: "NGS analysis"
+        - text: "--- NGS DATA ANALYSIS ---"
         - text: "RNA-seq: airway"
           href: r-rnaseq-airway.html
+        - text: "ChIP-seq data analysis"
+          href:
+        - text: "----"
+        - text: "--- OTHER CLASSES ---"
+        - text: "Data Cleaning w/ OpenRefine"
+          href:
+        - text: "HPC & Parallel Computing"
+          href:
+        - text: "HPC at UVA Best Practices"
+          href:
+        - text: "Automated Image Analysis w/ ImageJ"
+          href:
+        - text: "Power & Sample Size Analysis"
+          href:
+        - text: "Intro to Categorical Data Analysis"
+          href:
+        - text: "Beginner Python"
+          href:
+        - text: "Advanced Python"
+          href:
+        - text: "Introduction to SPSS"
+          href:
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html

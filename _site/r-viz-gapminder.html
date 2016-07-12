@@ -328,32 +328,46 @@ div.tocify {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">R</li>
+    <li class="dropdown-header">--- R ---</li>
     <li>
-      <a href="r-basics.html">R basics</a>
+      <a href="r-basics.html">R Basics</a>
     </li>
     <li>
-      <a href="r-dataframes.html">Data frames</a>
+      <a href="r-dataframes.html">Data Frames</a>
     </li>
     <li>
-      <a href="r-dplyr-yeast.html">Data manipulation</a>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
     </li>
     <li>
       <a href="r-tidy.html">Tidying data</a>
     </li>
     <li>
-      <a href="r-viz-gapminder.html">Data visualization</a>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
     </li>
-    <li class="divider"></li>
-    <li class="dropdown-header">Reproducible research</li>
     <li>
-      <a href="r-rmarkdown.html">RMarkdown</a>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
     </li>
+    <li class="dropdown-header">Essential Statistics with R</li>
+    <li class="dropdown-header">Survival Analysis with TCGA Data</li>
+    <li class="dropdown-header">Introduction to Bioconductor</li>
+    <li class="dropdown-header">Harvesting Data from NCBI</li>
     <li class="divider"></li>
-    <li class="dropdown-header">NGS analysis</li>
+    <li class="dropdown-header">--- NGS DATA ANALYSIS ---</li>
     <li>
       <a href="r-rnaseq-airway.html">RNA-seq: airway</a>
     </li>
+    <li class="dropdown-header">ChIP-seq data analysis</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- OTHER CLASSES ---</li>
+    <li class="dropdown-header">Data Cleaning w/ OpenRefine</li>
+    <li class="dropdown-header">HPC &amp; Parallel Computing</li>
+    <li class="dropdown-header">HPC at UVA Best Practices</li>
+    <li class="dropdown-header">Automated Image Analysis w/ ImageJ</li>
+    <li class="dropdown-header">Power &amp; Sample Size Analysis</li>
+    <li class="dropdown-header">Intro to Categorical Data Analysis</li>
+    <li class="dropdown-header">Beginner Python</li>
+    <li class="dropdown-header">Advanced Python</li>
+    <li class="dropdown-header">Introduction to SPSS</li>
   </ul>
 </li>
       </ul>
@@ -755,16 +769,20 @@ ydat</code></pre>
 <ol style="list-style-type: decimal">
 <li>Plot a histogram of the expression variable, and set the bin number equal to 100.</li>
 </ol>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(ydat, aes(x = expression)) +
+    geom_histogram(bins = 100) </code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Check the distribution of each nutrient in the data set by adjusting the fill aesthetic. Use the same bin number for this histogram.</li>
 </ol>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
+    geom_histogram(bins = 100)</code></pre>
 <p>Wow. That’s ugly. Might be a candidate for <a href="http://accidental-art.tumblr.com/">accidental aRt</a> but not very helpful for our analysis.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Now split off the same histogram into a faceted display with 3 columns.</li>
 </ol>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
+    geom_histogram(bins = 100) +
+    facet_wrap(~ nutrient, ncol = 3)</code></pre>
 <p>The basic exploratory process above confirms that the overall distribution (as well each distribution by nutrient) is normal.</p>
 </div>
 <div id="part-2" class="section level4">
@@ -784,11 +802,6 @@ ydat</code></pre>
     summarise(meanexp = mean(expression)) %&gt;%
     arrange(desc(meanexp)) %&gt;%
     filter(row_number() == 1 | row_number() == n())</code></pre>
-<pre><code>## # A tibble: 2 x 2
-##   symbol meanexp
-##    &lt;chr&gt;   &lt;dbl&gt;
-## 1   HXT3    4.01
-## 2   HXT6   -2.68</code></pre>
 <p>The output tells us that the gene with the highest mean expression is <em>HXT3</em>, while the gene with the lowest mean expression is <em>HXT6</em>.</p>
 <ol start="4" style="list-style-type: decimal">
 <li>Subset the data to only include these genes, and create a stripplot that has expression values as “jittered” points on the y-axis and the gene symbols the x-axis.</li>
@@ -796,11 +809,17 @@ ydat</code></pre>
 <blockquote>
 <p><strong>HINT</strong> you can add a “jitter” position to <code>geom_point()</code> but it’s easier to control width of the effect if you use <code>geom_jitter()</code></p>
 </blockquote>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<pre class="r"><code>gene_exp &lt;- 
+    ydat %&gt;%
+    filter(symbol == &quot;HXT3&quot; | symbol == &quot;HXT6&quot;)
+
+ggplot(gene_exp, aes(x = symbol, y = expression)) +
+    geom_jitter(width = 0.1)</code></pre>
 <ol start="5" style="list-style-type: decimal">
 <li>Now map each observation to its nutrient by color and adjust the size of the points to be 2.</li>
 </ol>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(gene_exp, aes(x = symbol, y = expression)) +
+    geom_jitter(aes(col = nutrient), width = 0.1, size = 2)</code></pre>
 <p>Although these two genes are on opposite ends of the distribution of average expression values, they both seem to express similar amounts when Glucose is the restricted nutrient.</p>
 </div>
 <div id="part-3" class="section level4">
@@ -809,25 +828,40 @@ ydat</code></pre>
 <ol start="6" style="list-style-type: decimal">
 <li>Using <strong>dplyr</strong> logic, create a data frame that has the mean expression values for all combinations of rate and nutrient (<em>hint</em>: use <code>group_by()</code> and <code>summarize()</code>). Create a plot of this data with rate on the x-axis and mean expression on the y-axis and lines colored by nutrient.</li>
 </ol>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<pre class="r"><code>nutrient_rates &lt;-
+    ydat %&gt;%
+    group_by(rate, nutrient) %&gt;%
+    summarise(meanexp = mean(expression)) 
+
+ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + geom_line(aes(col=nutrient))</code></pre>
 <ol start="7" style="list-style-type: decimal">
 <li>Add black dotted line (lty=3) that represents the smoothed mean of expression across all combinations of nutrients and rates.</li>
 </ol>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, lty=3, se = FALSE) </code></pre>
 <ol start="8" style="list-style-type: decimal">
 <li>Change the scale to include breaks for <em>all</em> of the rates.</li>
 </ol>
 <blockquote>
 <p><strong>HINT</strong> The <code>read_csv()</code> function read in the rate variable as continuous rather than discrete. There are a few ways to remedy this, but first see if you can set the scale for the x axis variable without changing the dataframe.</p>
 </blockquote>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate)</code></pre>
 <ol start="9" style="list-style-type: decimal">
 <li>By default <code>ggplot()</code> will name the x and y axes with names of their respective variables. You might want to apply more meaningful labels. Change the name of the x-axis to “Rate”, the name of the y-axis to “Mean Expression” and the plot title to “Mean Expression By Rate (Brauer)”</li>
 </ol>
 <blockquote>
 <p><strong>HINT</strong> <code>?labs</code> will pull up the <strong>ggplot2</strong> documentation on axes labels and plot titles.</p>
 </blockquote>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;)</code></pre>
 <ol start="10" style="list-style-type: decimal">
 <li>Add a theme from the <strong>ggthemes</strong> package. The plot below is based on Edward Tufte’s book <em>The Visual Display of Quantitative Information</em>. Choose a theme that you like, but choose wisely – some of these themes will override other adjustments you’ve made to your plot above, including axis labels.</li>
 </ol>
@@ -837,7 +871,13 @@ ydat</code></pre>
 <blockquote>
 <p><strong>HINT 2</strong> You can either do this by trial-and-error or check out the package vignette to get an idea of what each theme looks like: <a href="https://github.com/jrnold/ggthemes" class="uri">https://github.com/jrnold/ggthemes</a></p>
 </blockquote>
-<p><img src="r-viz-gapminder_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;) + 
+  theme_tufte()</code></pre>
 <ol start="11" style="list-style-type: decimal">
 <li>The last step is to save the plot you’ve created. Write your plot to a 10 X 6 PDF using a <strong>ggplot2</strong> function.</li>
 </ol>
