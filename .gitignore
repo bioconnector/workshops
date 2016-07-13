@@ -23,7 +23,7 @@ _site/**/*.key
 Untitled*
 
 # development notes
-_dev/
+# _dev/
 
 # OSX Stuff
 .gitconfig.local
