@@ -10,6 +10,47 @@ library(ggplot2)
 theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 ```
 
+
+```{r makeData, include=FALSE, eval=FALSE}
+# # THIS CHUNK IS USED TO CREATE THE DATA THAT WILL BE USED FOR THE ANALYSIS.
+# 
+# # Create the count and metadata -------------------------------------------
+# 
+# library(dplyr)
+# library(readr)
+# library(stringr)
+# library(airway)
+# data(airway)
+# 
+# # Create metadata
+# metadata <- colData(airway) %>%
+#   data.frame(id=rownames(.), ., stringsAsFactors=FALSE) %>%
+#   tbl_df() %>%
+#   transmute(id, dex, celltype=cell, geo_id=SampleName) %>%
+#   mutate(dex=dex %>%
+#            as.character %>%
+#            str_replace("untrt", "control") %>%
+#            str_replace("trt", "treated"))
+# metadata
+# metadata %>% write_csv("data/airway_metadata.csv")
+# 
+# # Create countdata
+# countdata <- assay(airway) %>%
+#   data.frame(ensgene=rownames(.), ., stringsAsFactors=FALSE) %>%
+#   tbl_df()
+# countdata %>% write_csv("data/airway_rawcounts.csv")
+# 
+# # Test import with DESeq2
+# rm(list=ls(all=TRUE))
+# DESeq2::DESeqDataSetFromMatrix(
+#   countData=read.csv("data/airway_rawcounts.csv", row.names=1),
+#   colData=read.csv("data/airway_metadata.csv", row.names=1),
+#   design=~dex
+# )
+```
+
+
+
 This is an introduction to RNAseq analysis involving reading in count data from an RNAseq experiment, exploring the data using base R functions and then analysis with the DESeq2 package. This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html). See also the [_Bioconductor_ heading on the setup page](setup.html#bioconductor) -- you'll need a few additional packages that are available through Bioconductor, not CRAN (the installation process is slightly different).
 
 **Recommended reading prior to class:**
