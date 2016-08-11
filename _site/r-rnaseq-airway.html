@@ -22,7 +22,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 <!-- Google fonts -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
 
@@ -114,6 +113,7 @@ button.code-folding-btn:focus {
   outline: none;
 }
 </style>
+
 
 <style type="text/css">
 /* padding for bootstrap navbar */
@@ -345,7 +345,13 @@ div.tocify {
       <a href="r-viz-gapminder.html">Data Visualization</a>
     </li>
     <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
       <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
     </li>
     <li class="dropdown-header">Essential Statistics with R</li>
     <li class="dropdown-header">Survival Analysis with TCGA Data</li>
@@ -836,10 +842,10 @@ row.names(rawcountsRN)</code></pre>
 dds</code></pre>
 <pre><code>## class: DESeqDataSet 
 ## dim: 64102 8 
-## metadata(1): version
+## metadata(0):
 ## assays(1): counts
 ## rownames(64102): ENSG00000000003 ENSG00000000005 ... LRG_98 LRG_99
-## rowData names(0):
+## rowRanges metadata column names(0):
 ## colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 ## colData names(3): dex celltype geo_id</code></pre>
 </div>
@@ -869,16 +875,16 @@ res</code></pre>
 <pre><code>## # A tibble: 64,102 x 7
 ##                row baseMean log2FoldChange  lfcSE   stat pvalue  padj
 ##              &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
-## 1  ENSG00000000003  708.602        -0.3608 0.1648 -2.189 0.0286 0.139
+## 1  ENSG00000000003  708.602        -0.3610 0.1651 -2.186 0.0288 0.135
 ## 2  ENSG00000000005    0.000             NA     NA     NA     NA    NA
-## 3  ENSG00000000419  520.298         0.2004 0.0982  2.041 0.0413 0.178
-## 4  ENSG00000000457  237.163         0.0332 0.1222  0.272 0.7859 0.930
-## 5  ENSG00000000460   57.933        -0.1017 0.2612 -0.389 0.6970 0.895
-## 6  ENSG00000000938    0.318        -0.0898 0.1615 -0.556 0.5781    NA
-## 7  ENSG00000000971 5817.353         0.3963 0.2332  1.699 0.0893 0.300
-## 8  ENSG00000001036 1282.106        -0.2363 0.1165 -2.029 0.0424 0.181
-## 9  ENSG00000001084  609.892        -0.0272 0.2127 -0.128 0.8984 0.970
-## 10 ENSG00000001167  369.343        -0.4558 0.1963 -2.322 0.0202 0.107
+## 3  ENSG00000000419  520.298         0.2004 0.0991  2.022 0.0431 0.179
+## 4  ENSG00000000457  237.163         0.0332 0.1230  0.270 0.7874 0.927
+## 5  ENSG00000000460   57.933        -0.1020 0.2615 -0.390 0.6964 0.889
+## 6  ENSG00000000938    0.318        -0.1609 0.1774 -0.907 0.3645    NA
+## 7  ENSG00000000971 5817.353         0.3971 0.2335  1.701 0.0890 0.292
+## 8  ENSG00000001036 1282.106        -0.2364 0.1171 -2.018 0.0435 0.180
+## 9  ENSG00000001084  609.892        -0.0272 0.2129 -0.128 0.8983 0.969
+## 10 ENSG00000001167  369.343        -0.4563 0.1965 -2.322 0.0202 0.105
 ## # ... with 64,092 more rows</code></pre>
 <p>Either click on the <code>res</code> object in the environment pane or pass it to <code>View()</code> to bring it up in a data viewer. Why do you think so many of the adjusted p-values are missing (<code>NA</code>)? Try looking at the <code>baseMean</code> column, which tells you the average overall expression of this gene, and how that relates to whether or not the p-value was missing. Go to the <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf">DESeq2 vignette</a> and read the section about “Independent filtering and multiple testing.”</p>
 <hr />
@@ -890,27 +896,27 @@ res</code></pre>
 <pre><code>## # A tibble: 64,102 x 7
 ##                row baseMean log2FoldChange  lfcSE  stat    pvalue
 ##              &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
-## 1  ENSG00000152583      997           4.28 0.1957  21.9 4.86e-106
-## 2  ENSG00000148175    11194           1.43 0.0833  17.2  1.59e-66
-## 3  ENSG00000179094      777           2.98 0.1883  15.8  1.99e-56
-## 4  ENSG00000109906      385           5.10 0.3299  15.4  8.00e-54
-## 5  ENSG00000134686     2738           1.37 0.0897  15.2  1.79e-52
-## 6  ENSG00000125148     3656           2.13 0.1421  15.0  1.23e-50
-## 7  ENSG00000120129     3409           2.76 0.1889  14.6  2.18e-48
-## 8  ENSG00000189221     2342           3.04 0.2100  14.5  1.73e-47
-## 9  ENSG00000178695     2650          -2.37 0.1698 -14.0  2.23e-44
-## 10 ENSG00000101347    12703           3.41 0.2476  13.8  4.60e-43
+## 1  ENSG00000152583      997           4.29 0.1961  21.9 6.24e-106
+## 2  ENSG00000148175    11194           1.43 0.0841  17.1  3.30e-65
+## 3  ENSG00000179094      777           2.98 0.1886  15.8  2.28e-56
+## 4  ENSG00000109906      385           5.14 0.3308  15.5  2.17e-54
+## 5  ENSG00000134686     2738           1.37 0.0906  15.1  1.56e-51
+## 6  ENSG00000125148     3656           2.13 0.1426  14.9  2.39e-50
+## 7  ENSG00000120129     3409           2.76 0.1892  14.6  2.41e-48
+## 8  ENSG00000189221     2342           3.04 0.2102  14.5  1.63e-47
+## 9  ENSG00000178695     2650          -2.37 0.1702 -14.0  2.91e-44
+## 10 ENSG00000101347    12703           3.41 0.2479  13.8  3.53e-43
 ## # ... with 64,092 more rows, and 1 more variables: padj &lt;dbl&gt;</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li>Continue piping to <code>inner_join()</code>, joining the results to the <code>anno</code> object. See the help for <code>?inner_join</code>, specifically the <code>by=</code> argument. You’ll have to do something like <code>... %&gt;% inner_join(anno, by=c(&quot;row&quot;=&quot;ensgene&quot;))</code>. Once you’re happy with this result, reassign the result back to <code>res</code>. It’ll look like this.</li>
 </ol>
 <pre><code>##               row baseMean log2FoldChange  lfcSE stat    pvalue      padj
-## 1 ENSG00000152583      997           4.28 0.1957 21.9 4.86e-106 9.02e-102
-## 2 ENSG00000148175    11194           1.43 0.0833 17.2  1.59e-66  1.47e-62
-## 3 ENSG00000179094      777           2.98 0.1883 15.8  1.99e-56  1.23e-52
-## 4 ENSG00000179094      777           2.98 0.1883 15.8  1.99e-56  1.23e-52
-## 5 ENSG00000109906      385           5.10 0.3299 15.4  8.00e-54  3.71e-50
-## 6 ENSG00000134686     2738           1.37 0.0897 15.2  1.79e-52  6.64e-49
+## 1 ENSG00000152583      997           4.29 0.1961 21.9 6.24e-106 1.12e-101
+## 2 ENSG00000148175    11194           1.43 0.0841 17.1  3.30e-65  2.96e-61
+## 3 ENSG00000179094      777           2.98 0.1886 15.8  2.28e-56  1.36e-52
+## 4 ENSG00000179094      777           2.98 0.1886 15.8  2.28e-56  1.36e-52
+## 5 ENSG00000109906      385           5.14 0.3308 15.5  2.17e-54  9.74e-51
+## 6 ENSG00000134686     2738           1.37 0.0906 15.1  1.56e-51  5.59e-48
 ##      entrez  symbol chr     start       end strand        biotype
 ## 1      8404 SPARCL1   4  88394487  88452213     -1 protein_coding
 ## 2      2040    STOM   9 124101355 124132531     -1 protein_coding
@@ -928,20 +934,20 @@ res</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>How many are significant with an adjusted p-value &lt;0.05? (Pipe to <code>filter()</code>).</li>
 </ol>
-<pre><code>## # A tibble: 2,851 x 15
+<pre><code>## # A tibble: 2,852 x 15
 ##                row baseMean log2FoldChange  lfcSE  stat    pvalue
 ##              &lt;chr&gt;    &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;
-## 1  ENSG00000152583      997           4.28 0.1957  21.9 4.86e-106
-## 2  ENSG00000148175    11194           1.43 0.0833  17.2  1.59e-66
-## 3  ENSG00000179094      777           2.98 0.1883  15.8  1.99e-56
-## 4  ENSG00000179094      777           2.98 0.1883  15.8  1.99e-56
-## 5  ENSG00000109906      385           5.10 0.3299  15.4  8.00e-54
-## 6  ENSG00000134686     2738           1.37 0.0897  15.2  1.79e-52
-## 7  ENSG00000125148     3656           2.13 0.1421  15.0  1.23e-50
-## 8  ENSG00000120129     3409           2.76 0.1889  14.6  2.18e-48
-## 9  ENSG00000189221     2342           3.04 0.2100  14.5  1.73e-47
-## 10 ENSG00000178695     2650          -2.37 0.1698 -14.0  2.23e-44
-## # ... with 2,841 more rows, and 9 more variables: padj &lt;dbl&gt;,
+## 1  ENSG00000152583      997           4.29 0.1961  21.9 6.24e-106
+## 2  ENSG00000148175    11194           1.43 0.0841  17.1  3.30e-65
+## 3  ENSG00000179094      777           2.98 0.1886  15.8  2.28e-56
+## 4  ENSG00000179094      777           2.98 0.1886  15.8  2.28e-56
+## 5  ENSG00000109906      385           5.14 0.3308  15.5  2.17e-54
+## 6  ENSG00000134686     2738           1.37 0.0906  15.1  1.56e-51
+## 7  ENSG00000125148     3656           2.13 0.1426  14.9  2.39e-50
+## 8  ENSG00000120129     3409           2.76 0.1892  14.6  2.41e-48
+## 9  ENSG00000189221     2342           3.04 0.2102  14.5  1.63e-47
+## 10 ENSG00000178695     2650          -2.37 0.1702 -14.0  2.91e-44
+## # ... with 2,842 more rows, and 9 more variables: padj &lt;dbl&gt;,
 ## #   entrez &lt;int&gt;, symbol &lt;chr&gt;, chr &lt;chr&gt;, start &lt;int&gt;, end &lt;int&gt;,
 ## #   strand &lt;int&gt;, biotype &lt;chr&gt;, description &lt;chr&gt;</code></pre>
 <hr />
@@ -990,9 +996,9 @@ res %&gt;%
 <pre><code>## # A tibble: 3 x 2
 ##     sig     n
 ##   &lt;lgl&gt; &lt;int&gt;
-## 1 FALSE 16990
-## 2  TRUE  2851
-## 3    NA 47575</code></pre>
+## 1 FALSE 16283
+## 2  TRUE  2852
+## 3    NA 48281</code></pre>
 <hr />
 <div id="exercise-5" class="section level4">
 <h4><strong>EXERCISE 5</strong></h4>
@@ -1030,9 +1036,9 @@ res %&gt;%
 <h2>Record <code>sessionInfo()</code></h2>
 <p>The <code>sessionInfo()</code> prints version information about R and any attached packages. It’s a good practice to always run this command at the end of your R session and record it for the sake of reproducibility in the future.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
-<pre><code>## R version 3.3.0 (2016-05-03)
+<pre><code>## R version 3.2.2 (2015-08-14)
 ## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X 10.10.5 (Yosemite)
+## Running under: OS X 10.11.1 (El Capitan)
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -1042,36 +1048,45 @@ res %&gt;%
 ## [8] methods   base     
 ## 
 ## other attached packages:
-##  [1] DESeq2_1.12.3              SummarizedExperiment_1.2.3
-##  [3] Biobase_2.32.0             GenomicRanges_1.24.2      
-##  [5] GenomeInfoDb_1.8.1         IRanges_2.6.1             
-##  [7] S4Vectors_0.10.1           BiocGenerics_0.18.0       
-##  [9] tidyr_0.5.1                ggplot2_2.1.0             
-## [11] readr_0.2.2                dplyr_0.5.0               
-## [13] knitr_1.13                
+##  [1] DESeq2_1.10.1              RcppArmadillo_0.6.500.4.0 
+##  [3] Rcpp_0.12.5                SummarizedExperiment_1.0.2
+##  [5] Biobase_2.30.0             GenomicRanges_1.22.4      
+##  [7] GenomeInfoDb_1.6.3         IRanges_2.4.8             
+##  [9] S4Vectors_0.8.11           BiocGenerics_0.16.1       
+## [11] highcharter_0.4.0          jsonlite_1.0              
+## [13] visNetwork_1.0.1           leaflet_1.0.1             
+## [15] d3heatmap_0.6.1.1          magrittr_1.5              
+## [17] tidyr_0.4.1                ggplot2_2.1.0             
+## [19] readr_0.2.2                dplyr_0.4.3               
+## [21] knitr_1.13                
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.5          locfit_1.5-9.1       lattice_0.20-33     
-##  [4] assertthat_0.1       digest_0.6.9         foreach_1.4.3       
-##  [7] gridBase_0.4-7       R6_2.1.2             plyr_1.8.4          
-## [10] chron_2.3-47         acepack_1.3-3.3      RSQLite_1.0.0       
-## [13] evaluate_0.9         highr_0.6            zlibbioc_1.18.0     
-## [16] lazyeval_0.2.0       data.table_1.9.6     annotate_1.50.0     
-## [19] rpart_4.1-10         Matrix_1.2-6         rmarkdown_0.9.6.14  
-## [22] labeling_0.3         splines_3.3.0        BiocParallel_1.6.2  
-## [25] geneplotter_1.50.0   stringr_1.0.0        foreign_0.8-66      
-## [28] munsell_0.4.3        pkgmaker_0.22        htmltools_0.3.5     
-## [31] nnet_7.3-12          tibble_1.1           gridExtra_2.2.1     
-## [34] Hmisc_3.17-4         codetools_0.2-14     XML_3.98-1.4        
-## [37] grid_3.3.0           xtable_1.8-2         gtable_0.2.0        
-## [40] registry_0.3         DBI_0.4-1            magrittr_1.5        
-## [43] formatR_1.4          scales_0.4.0         stringi_1.1.1       
-## [46] reshape2_1.4.1       XVector_0.12.0       genefilter_1.54.2   
-## [49] doParallel_1.0.10    latticeExtra_0.6-28  Formula_1.2-1       
-## [52] RColorBrewer_1.1-2   NMF_0.20.6           iterators_1.0.8     
-## [55] tools_3.3.0          rngtools_1.2.4       survival_2.39-4     
-## [58] yaml_2.1.13          AnnotationDbi_1.34.3 colorspace_1.2-6    
-## [61] cluster_2.0.4</code></pre>
+##  [1] nlme_3.1-124         xts_0.9-7            lubridate_1.5.6     
+##  [4] doParallel_1.0.10    RColorBrewer_1.1-2   tools_3.2.2         
+##  [7] R6_2.1.2             rpart_4.1-10         Hmisc_3.17-4        
+## [10] DBI_0.3.1            lazyeval_0.1.10      colorspace_1.2-6    
+## [13] nnet_7.3-12          gridExtra_2.2.1      mnormt_1.5-3        
+## [16] curl_0.9.6           chron_2.3-47         formatR_1.4         
+## [19] pkgmaker_0.22        labeling_0.3         scales_0.4.0        
+## [22] psych_1.5.8          genefilter_1.52.1    NMF_0.20.6          
+## [25] stringr_1.0.0        digest_0.6.9         foreign_0.8-66      
+## [28] rmarkdown_1.0.9001   XVector_0.10.0       base64enc_0.1-3     
+## [31] htmltools_0.3.5      highr_0.6            htmlwidgets_0.6     
+## [34] TTR_0.23-1           quantmod_0.4-5       RSQLite_1.0.0       
+## [37] zoo_1.7-12           BiocParallel_1.4.3   acepack_1.3-3.3     
+## [40] rlist_0.4.6.1        Formula_1.2-1        futile.logger_1.4.1 
+## [43] munsell_0.4.3        stringi_1.1.1        yaml_2.1.13         
+## [46] zlibbioc_1.16.0      plyr_1.8.3           grid_3.2.2          
+## [49] lattice_0.20-33      splines_3.2.2        annotate_1.48.0     
+## [52] locfit_1.5-9.1       igraph_1.0.1         rngtools_1.2.4      
+## [55] geneplotter_1.48.0   reshape2_1.4.1       codetools_0.2-14    
+## [58] futile.options_1.0.0 XML_3.98-1.4         evaluate_0.9        
+## [61] latticeExtra_0.6-26  lambda.r_1.1.7       data.table_1.9.6    
+## [64] foreach_1.4.3        png_0.1-7            gtable_0.2.0        
+## [67] purrr_0.2.1          assertthat_0.1       gridBase_0.4-7      
+## [70] xtable_1.8-2         broom_0.4.0          survival_2.38-3     
+## [73] viridisLite_0.1.3    tibble_1.1           iterators_1.0.8     
+## [76] AnnotationDbi_1.32.3 registry_0.3         cluster_2.0.3</code></pre>
 </div>
 
 <div class="footer">
@@ -1096,6 +1111,7 @@ For more information, visit <a href="https://www.bioconnector.virginia.edu/" tar
 $(document).ready(function () {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 });
+
 
 </script>
 

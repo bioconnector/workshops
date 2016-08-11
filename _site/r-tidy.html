@@ -22,7 +22,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 <!-- Google fonts -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
 
@@ -114,6 +113,7 @@ button.code-folding-btn:focus {
   outline: none;
 }
 </style>
+
 
 <style type="text/css">
 /* padding for bootstrap navbar */
@@ -345,7 +345,13 @@ div.tocify {
       <a href="r-viz-gapminder.html">Data Visualization</a>
     </li>
     <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
       <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
     </li>
     <li class="dropdown-header">Essential Statistics with R</li>
     <li class="dropdown-header">Survival Analysis with TCGA Data</li>
@@ -520,7 +526,7 @@ hr</code></pre>
   separate(drugdose, into=c(&quot;drug&quot;, &quot;dose&quot;), sep=&quot;_&quot;)</code></pre>
 <pre><code>## # A tibble: 30 x 4
 ##     name  drug  dose    hr
-## *  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+##    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
 ## 1    jon     a    10    60
 ## 2    ann     a    10    65
 ## 3   bill     a    10    70
@@ -602,7 +608,7 @@ hrtidy %&gt;%
 ## Groups: drug [?]
 ## 
 ##    drug  dose meanhr
-##   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
+##   (chr) (chr)  (dbl)
 ## 1     a    10   67.5
 ## 2     a    20   62.5
 ## 3     b    10   72.5
@@ -685,7 +691,7 @@ yorig</code></pre>
   separate(NAME, into=c(&quot;symbol&quot;, &quot;systematic_name&quot;, &quot;somenumber&quot;), sep=&quot;::&quot;)</code></pre>
 <pre><code>## # A tibble: 5,536 x 42
 ##          GID       YORF symbol systematic_name somenumber GWEIGHT G0.05
-## *      &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
+##        &lt;chr&gt;      &lt;chr&gt;  &lt;chr&gt;           &lt;chr&gt;      &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;
 ## 1  GENE1331X A_06_P5820   SFB2         YNL049C    1082129       1 -0.24
 ## 2  GENE4924X A_06_P5866     NA         YNL095C    1086222       1  0.28
 ## 3  GENE4690X A_06_P1834   QRI7         YDL104C    1085955       1 -0.02
@@ -710,7 +716,7 @@ yorig</code></pre>
   select(-GID, -YORF, -somenumber, -GWEIGHT)</code></pre>
 <pre><code>## # A tibble: 5,536 x 38
 ##    symbol systematic_name G0.05  G0.1 G0.15  G0.2 G0.25  G0.3 N0.05  N0.1
-## *   &lt;chr&gt;           &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##     &lt;chr&gt;           &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1    SFB2         YNL049C -0.24 -0.13 -0.21 -0.15 -0.05 -0.05  0.20  0.24
 ## 2      NA         YNL095C  0.28  0.13 -0.40 -0.48 -0.11  0.17  0.31  0.00
 ## 3    QRI7         YDL104C -0.02 -0.27 -0.27 -0.02  0.24  0.25  0.23  0.06
@@ -799,13 +805,13 @@ yjoined</code></pre>
 glimpse(yjoined)</code></pre>
 <pre><code>## Observations: 199,296
 ## Variables: 7
-## $ symbol          &lt;chr&gt; &quot;SFB2&quot;, &quot;NA&quot;, &quot;QRI7&quot;, &quot;CFT2&quot;, &quot;SSO2&quot;, &quot;PSP2&quot;, ...
-## $ systematic_name &lt;chr&gt; &quot;YNL049C&quot;, &quot;YNL095C&quot;, &quot;YDL104C&quot;, &quot;YLR115W&quot;, &quot;Y...
-## $ nutrient        &lt;chr&gt; &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;...
-## $ rate            &lt;chr&gt; &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;...
-## $ expression      &lt;dbl&gt; -0.24, 0.28, -0.02, -0.33, 0.05, -0.69, -0.55,...
-## $ bp              &lt;chr&gt; &quot;ER to Golgi transport&quot;, &quot;biological process u...
-## $ mf              &lt;chr&gt; &quot;molecular function unknown&quot;, &quot;molecular funct...</code></pre>
+## $ symbol          (chr) &quot;SFB2&quot;, &quot;NA&quot;, &quot;QRI7&quot;, &quot;CFT2&quot;, &quot;SSO2&quot;, &quot;PSP2&quot;, ...
+## $ systematic_name (chr) &quot;YNL049C&quot;, &quot;YNL095C&quot;, &quot;YDL104C&quot;, &quot;YLR115W&quot;, &quot;Y...
+## $ nutrient        (chr) &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;G&quot;, &quot;...
+## $ rate            (chr) &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;, &quot;0.05&quot;...
+## $ expression      (dbl) -0.24, 0.28, -0.02, -0.33, 0.05, -0.69, -0.55,...
+## $ bp              (chr) &quot;ER to Golgi transport&quot;, &quot;biological process u...
+## $ mf              (chr) &quot;molecular function unknown&quot;, &quot;molecular funct...</code></pre>
 <p>Looks like that did it! There are many different kinds of two-table verbs/joins in dplyr. In this example, every systematic name in <code>ynogo</code> had a corresponding entry in <code>sn2go</code>, but if this weren’t the case, those un-annotated genes would have been removed entirely by the <code>inner_join</code>. A <code>left_join</code> would have returned all the rows in <code>ynogo</code>, but would have filled in <code>bp</code> and <code>mf</code> with missing values (<code>NA</code>) when there was no corresponding entry. See also: <code>right_join</code>, <code>semi_join</code>, and <code>anti_join</code>.</p>
 </div>
 </div>
@@ -832,6 +838,7 @@ For more information, visit <a href="https://www.bioconnector.virginia.edu/" tar
 $(document).ready(function () {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 });
+
 
 </script>
 

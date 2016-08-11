@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Interactive Visualization with JavaScript and R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/htmlwidgets-0.6/htmlwidgets.js"></script>
+<script src="site_libs/d3-3.5.3/./d3.min.js"></script>
+<link href="site_libs/d3heatmapcore-0.0.0/heatmapcore.css" rel="stylesheet" />
+<script src="site_libs/d3heatmapcore-0.0.0/heatmapcore.js"></script>
+<script src="site_libs/d3-tip-0.6.6/index.js"></script>
+<script src="site_libs/d3heatmap-binding-0.6.1.1/d3heatmap.js"></script>
+<link href="site_libs/leaflet-0.7.3/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-0.7.3/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-1.0.1/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-1.0.27/leaflet-providers.js"></script>
+<script src="site_libs/leaflet-providers-plugin-1.0.1/leaflet-providers-plugin.js"></script>
+<link href="site_libs/vis-4.16.1/vis.min.css" rel="stylesheet" />
+<script src="site_libs/vis-4.16.1/vis-network.min.js"></script>
+<script src="site_libs/visNetwork-binding-1.0.1/visNetwork.js"></script>
+<script src="site_libs/underscore-1.8.3/underscore-min.js"></script>
+<link href="site_libs/highcharts-4.2.4/css/motion.css" rel="stylesheet" />
+<script src="site_libs/highcharts-4.2.4/highstock.js"></script>
+<script src="site_libs/highcharts-4.2.4/highcharts-more.js"></script>
+<script src="site_libs/highcharts-4.2.4/highcharts-3d.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/exporting.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/drilldown.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/data.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/heatmap.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/map.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/treemap.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/funnel.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/solid-gauge.js"></script>
+<script src="site_libs/highcharts-4.2.4/modules/reset.js"></script>
+<script src="site_libs/highcharts-4.2.4/plugins/annotations.js"></script>
+<script src="site_libs/highcharts-4.2.4/plugins/motion.js"></script>
+<script src="site_libs/highcharts-4.2.4/plugins/draggable-points.js"></script>
+<script src="site_libs/highcharts-4.2.4/plugins/pattern-fill-v2.js"></script>
+<script src="site_libs/highcharts-4.2.4/plugins/text-symbols.js"></script>
+<script src="site_libs/highcharts-4.2.4/plugins/symbols-extra.js"></script>
+<link href="site_libs/fontawesome-4.5.0/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/htmlwdgtgrid-1/htmlwdgtgrid.css" rel="stylesheet" />
+<script src="site_libs/highchart-binding-0.4.0/highchart.js"></script>
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/default.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+  padding-left: 10px;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">--- R ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li class="dropdown-header">Essential Statistics with R</li>
+    <li class="dropdown-header">Survival Analysis with TCGA Data</li>
+    <li class="dropdown-header">Introduction to Bioconductor</li>
+    <li class="dropdown-header">Harvesting Data from NCBI</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- NGS DATA ANALYSIS ---</li>
+    <li>
+      <a href="r-rnaseq-airway.html">RNA-seq: airway</a>
+    </li>
+    <li class="dropdown-header">ChIP-seq data analysis</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- OTHER CLASSES ---</li>
+    <li class="dropdown-header">Data Cleaning w/ OpenRefine</li>
+    <li class="dropdown-header">HPC &amp; Parallel Computing</li>
+    <li class="dropdown-header">HPC at UVA Best Practices</li>
+    <li class="dropdown-header">Automated Image Analysis w/ ImageJ</li>
+    <li class="dropdown-header">Power &amp; Sample Size Analysis</li>
+    <li class="dropdown-header">Intro to Categorical Data Analysis</li>
+    <li class="dropdown-header">Beginner Python</li>
+    <li class="dropdown-header">Advanced Python</li>
+    <li class="dropdown-header">Introduction to SPSS</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Interactive Visualization with JavaScript and R</h1>
+
+</div>
+
+
+<p>There are a number of JavaScript libraries available that leverage web functionality to produce compelling, dynamic data visualizations. This workshop will introduce several of these tools, including D3, HighCharts and Leaflet, and will demonstrate how to implement them in the context of the R programming language. No JavaScript experience is required. Some familiarity with R will be helpful.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This tutorial will introduce several JavaScript libraries that are capable of producing interactive data visualizations. The goal is to demonstrate how to implement some of these tools in the context of the R programming language.</p>
+<div id="r" class="section level3">
+<h3>R</h3>
+<p>R is an open-source, statistical computing language. One of its strengths is its ability to produce clean, high dimensional data visualizations. The development of <strong>ggplot2</strong>, which is among the language’s most downloaded add-on packages, has strengthened R’s position as a “gold-standard” data visualization tool<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
+</div>
+<div id="javascript" class="section level3">
+<h3>JavaScript</h3>
+<p>JavaScript is a programming language that is widely used in web development. It may be worth stopping and pointing out that (despite its name) JavaScript bears no relation to Java<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. Java is a compiled langauge, while JavaScript (like R) is a scripting language that can be saved as a text file and run via an interpreter. Its name (among other features …) has been a source to confusion about what JavaScript is and how to use it<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>. For our purposes, we will focus on JavaScript as means for data visualization. There are number of libraries that can produce powerful, interactive plots. Below are a few examples of available frameworks:</p>
+<ul>
+<li>d3.js</li>
+<li>c3.js</li>
+<li>vis.js</li>
+<li>plotly.js</li>
+<li>sigma.js</li>
+<li>dygraphs.js</li>
+</ul>
+</div>
+<div id="htmlwidgets" class="section level3">
+<h3>htmlwidgets</h3>
+<p>R and JavaScript are both capable of data preparation and visualization on their own. But together they can make an efficient and impressive pipeline. The principal bridge between these two tools is <strong>htmlwidgets</strong><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. This package provides scaffolding to build connectors (or “bindings”) from JavaScript to R.</p>
+<p>The workflow is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>Data are read into R</li>
+<li>Data are processed (and potentially manipulated) by R</li>
+<li>Data are converted to JavaScript Object Notation (JSON) format</li>
+<li>Data are bound to JavaScript</li>
+<li>Data are processed (and potentially manipulated) by JavaScript</li>
+<li>Data are mapped to plotting features and rendered</li>
+</ol>
+<div class="figure">
+<img src="img/intvizgraphic.png" />
+
+</div>
+<blockquote>
+<p><strong>nb</strong> Many JavaScript / R bindings developed with <strong>htmlwidgets</strong> support piping with <strong>magrittr</strong>, and the examples that follow will make extensive use of the <code>%&gt;%</code> syntax. For more information on the pipe, refer to the <a href="http://bioconnector.org/workshops/r-dplyr-yeast.html#the_pipe:_%%"><strong>dplyr</strong> lesson</a> material.</p>
+</blockquote>
+<pre class="r"><code>library(magrittr)</code></pre>
+</div>
+</div>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<div id="d3heatmap" class="section level3">
+<h3>d3heatmap</h3>
+<p>D3 (Data Driven Documents) is one of the most well-known JavaScript visualization libraries. In use since 2011, D3 is a staple of many interactive graphs featured on media outlets like the New York Times. D3 can produce everything from choropleths<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> to scatter plots to dygraphs to network visualizations<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> … and beyond. So far, individual D3 plotting methods have been distributed across multiple R packages. For this tutorial we’ll focus on single D3 feature: interactive heatmapping<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>.</p>
+<p>The data of interest below is the <strong>gapminder</strong> data set, which includes life expectancy, GDP per capita, and population, every five years, from 1952 to 2007 for 142 countries as a data frame<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>. One question that this data could address is the “similarity” of countries. By aggregating on country, one calculate historical summary statistics about each nation and then visualize these side-by-side. But since there are 142 countries, this may be easier to visualize on a subset. For our purposes, we’ll look at current UN Security Council member nations<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> and their similarity based on life expectancy and GDP per capita. The code below reads in the raw data, identifies security council countries, filters the data to only include these countries, aggregates and calculates the mean and standard deviation of each variable of interest.</p>
+<blockquote>
+<p><strong>nb</strong> Russia is a member of the UN Security Council but does not appear in the gapminder data set</p>
+</blockquote>
+<pre class="r"><code>library(d3heatmap)
+library(dplyr)
+library(readr)
+
+# read data from github repository using readr read_csv() function
+gapminder &lt;- read_csv(&quot;https://raw.githubusercontent.com/bioconnector/workshops/master/data/gapminder.csv&quot;)
+
+# create a list of countries to filter *in*
+countrylist &lt;- c(&quot;China&quot;,&quot;France&quot;,&quot;United Kingdom&quot;, &quot;United States&quot;, &quot;Egypt&quot;, &quot;Japan&quot;, &quot;Senegal&quot;, &quot;Ukraine&quot;, &quot;Uruguay&quot;, &quot;Venezuela&quot;, &quot;Spain&quot;, &quot;Malaysia&quot;, &quot;New Zealand&quot;, &quot;Angola&quot;)
+
+# subset the original data and calculate summary statistics of interest
+gmun &lt;- 
+    gapminder %&gt;%
+    filter(country %in% countrylist) %&gt;%
+    group_by(country) %&gt;%
+    summarise(
+        meanlifexp = mean(lifeExp),
+        sdlifeexp = sd(lifeExp),
+        meangdppercap = mean(gdpPercap),
+        sdgdppercap = sd(gdpPercap)) </code></pre>
+<pre class="r"><code>gmun</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">country</th>
+<th align="right">meanlifexp</th>
+<th align="right">sdlifeexp</th>
+<th align="right">meangdppercap</th>
+<th align="right">sdgdppercap</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Angola</td>
+<td align="right">37.9</td>
+<td align="right">4.00</td>
+<td align="right">3607</td>
+<td align="right">1166</td>
+</tr>
+<tr class="even">
+<td align="left">China</td>
+<td align="right">61.8</td>
+<td align="right">10.25</td>
+<td align="right">1488</td>
+<td align="right">1371</td>
+</tr>
+<tr class="odd">
+<td align="left">Egypt</td>
+<td align="right">56.2</td>
+<td align="right">10.06</td>
+<td align="right">3074</td>
+<td align="right">1405</td>
+</tr>
+<tr class="even">
+<td align="left">France</td>
+<td align="right">74.3</td>
+<td align="right">4.30</td>
+<td align="right">18834</td>
+<td align="right">7903</td>
+</tr>
+<tr class="odd">
+<td align="left">Japan</td>
+<td align="right">74.8</td>
+<td align="right">6.50</td>
+<td align="right">17751</td>
+<td align="right">10132</td>
+</tr>
+<tr class="even">
+<td align="left">Malaysia</td>
+<td align="right">64.3</td>
+<td align="right">8.61</td>
+<td align="right">5406</td>
+<td align="right">3750</td>
+</tr>
+<tr class="odd">
+<td align="left">New Zealand</td>
+<td align="right">74.0</td>
+<td align="right">3.56</td>
+<td align="right">17263</td>
+<td align="right">4409</td>
+</tr>
+<tr class="even">
+<td align="left">Senegal</td>
+<td align="right">50.6</td>
+<td align="right">9.14</td>
+<td align="right">1533</td>
+<td align="right">105</td>
+</tr>
+<tr class="odd">
+<td align="left">Spain</td>
+<td align="right">74.2</td>
+<td align="right">5.16</td>
+<td align="right">14030</td>
+<td align="right">8047</td>
+</tr>
+<tr class="even">
+<td align="left">United Kingdom</td>
+<td align="right">73.9</td>
+<td align="right">3.38</td>
+<td align="right">19380</td>
+<td align="right">7388</td>
+</tr>
+<tr class="odd">
+<td align="left">United States</td>
+<td align="right">73.5</td>
+<td align="right">3.34</td>
+<td align="right">26261</td>
+<td align="right">9695</td>
+</tr>
+<tr class="even">
+<td align="left">Uruguay</td>
+<td align="right">70.8</td>
+<td align="right">3.34</td>
+<td align="right">7100</td>
+<td align="right">1612</td>
+</tr>
+<tr class="odd">
+<td align="left">Venezuela</td>
+<td align="right">66.6</td>
+<td align="right">6.11</td>
+<td align="right">10089</td>
+<td align="right">1476</td>
+</tr>
+</tbody>
+</table>
+<p><code>d3heatmap()</code> is essentially an interactive extension of base R’s <code>heatmap()</code>, and also accepts a matrix as its primary argument. In this case we’ll use the <code>dist()</code> function to create distance matrix between each country using the continuous variables calculated above.</p>
+<pre class="r"><code>gmdistmat &lt;- dist(select(gmun, -country))</code></pre>
+<p>With the matrix prepared, we can create the heatmap. The first argument (<code>x</code>) is the object to be plotted. The appearance can be further customized with arguments like <code>labRow</code> (row labels), <code>labCol</code> (column labels), <code>dendrogram</code> (clustering visualization), etc.</p>
+<p>The final product will include interactive elements like popus on hover and click-drag ‘brushing’ (click and drag to zoom). Some of these behaviors can be customized with further arguments to <code>d3heatmap()</code>.</p>
+<pre class="r"><code>d3heatmap(
+    # calculate distance matrix
+    gmdistmat,
+    # name the rows (top to bottom)
+    labRow = gmun$country, 
+    # name the columns (left to right)
+    labCol = gmun$country, 
+    # turn off dendrogram
+    dendrogram = &#39;none&#39;)</code></pre>
+<div id="htmlwidget-8131" style="width:672px;height:480px;" class="d3heatmap html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8131">{"x":{"rows":null,"cols":null,"matrix":{"data":["0","2128.804","584.455","16650.477","16746.092","3148.591","14035.396","2329.429","12489.157","16956.34","24206.483","3521.59","6488.912","2128.804","0","1586.1","18534.65","18472.303","4583.586","16064.276","1266.072","14207.707","18876.992","26134.079","5617.037","8600.861","584.455","1586.1","0","17046.809","17075.363","3307.226","14503.174","2015.628","12811.885","17369.569","24624.623","4031.478","7014.86","16650.477","18534.65","17046.809","0","2477.482","14055.228","3831.121","18976.626","4805.884","751.249","7640.654","13313.524","10852.666","16746.092","18472.303","17075.363","2477.482","0","13896.836","5743.395","19066.749","4265.36","3190.923","8521.472","13638.827","11559.611","3148.591","4583.586","3307.226","14055.228","13896.836","0","11874.899","5318.044","9634.952","14440.31","21685.975","2727.502","5205.206","14035.396","16064.276","14503.174","3831.121","5743.395","11874.899","0","16307.631","4866.548","3655.243","10436.275","10540.304","7750.362","2329.429","1266.072","2015.628","18976.626","19066.749","5318.044","16307.631","0","14806.465","19276.088","26522.397","5767.381","8664.563","12489.157","14207.707","12811.885","4805.884","4265.36","9634.952","4866.548","14806.465","0","5391.008","12341.905","9456.313","7661.729","16956.34","18876.992","17369.569","751.249","3190.923","14440.31","3655.243","19276.088","5391.008","0","7257.092","13570.856","11013.169","24206.483","26134.079","24624.623","7640.654","8521.472","21685.975","10436.275","26522.397","12341.905","7257.092","0","20796.064","18141.132","3521.59","5617.037","4031.478","13313.524","13638.827","2727.502","10540.304","5767.381","9456.313","13570.856","20796.064","0","2991.474","6488.912","8600.861","7014.86","10852.666","11559.611","5205.206","7750.362","8664.563","7661.729","11013.169","18141.132","2991.474","0"],"dim":[13,13],"rows":["Angola","China","Egypt","France","Japan","Malaysia","New Zealand","Senegal","Spain","United Kingdom","United States","Uruguay","Venezuela"],"cols":["Angola","China","Egypt","France","Japan","Malaysia","New Zealand","Senegal","Spain","United Kingdom","United States","Uruguay","Venezuela"]},"image":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAACaElEQVQokSXO20tTAQAH4N85Oi9pymazEJFE3byseRmSGCxwktZDRBEyKKPsISjzySCi9DV6CEroqR6SKVjgFXoQxIgMxiZzKG3GFJ2ONpfHtqNHd+b59dD3F3xwwURvjZkThSb64zJ9O0mG7BYqqo9LFjN5MElPNEFH7wQ3Ohp49OoaxeoaAYGfRJFBwOqffYQkBYVnCxFRzIjvAQe6CgR3ZCT8MZyyFkNXX4rMcIQoKxewuU5UFeaCIBJbSRizw9jNA04wjDJ9KfIr9fgbkpBVEQP8cZmfg1G6fyfogonLVjMV1cetqzYO+7cp9dg5bTAzPXqbGuephYcoaiQEQQBB1FsFLPkJUTiGoc4IjURKTqH2nA6ioQDHWjaEnJNAyG5hvPsC19qsVFQfj9JeumAipRHKvQ5ycYDJVJCPhj0MNFUz+bCNgqL6GFHMMGaHkbjphKHOiNwn3RjRD8Im+XC6vxPJSBKlb28Bogi6fchcbexCfA/YzQMCn+agkbjx4g5skg9efQMuH85idkXEkHMK3x3TyGmrAngwyX11mUx9odRjZ7SrhVwcoHTfzt3DDbpgotzXTsrj1NzPmB7tJjzRBF3LEX7b3uO0wczQRQuTqSA3rzTyvTdMua+dLpiofnAyrS1Q235HwdE7wYQ/hvxKPWbbpyAaCvA4dhdvWr/C5szB4lwJ0mNjGLvnRWBmHOdrioGNjgbu919i5HozNc5TPf7BQFM1tfXXPHja+b+kLfD5zApdMPFXay0zXj5oGcxuLUeuIQvimVxkqDJyQmvQZSrQ1ZZA245BLNJB0Tej3vMR7oU0/gGXlWl8oo2LzAAAAABJRU5ErkJggg==","theme":null,"options":{"xaxis_height":80,"yaxis_width":120,"xaxis_font_size":null,"yaxis_font_size":null,"brush_color":"#0000FF","show_grid":true,"anim_duration":500}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="leaflet" class="section level3">
+<h3>Leaflet</h3>
+<p>Leaflet is an open-source JavaScript library that is widely used in interactive GIS (mapping) applications. The R package supporting Leaflet is written and maintained by RStudio, and ports over the library’s (very extensive) list of features<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>. Leaflet enables developers to create maps that include markers (i.e. data points), popup text, custom zoom levels, a variety of tiles (i.e. types of maps), polygons (i.e. custom boundaries), panning, and more.</p>
+<p>The example below will use a list of academic research institutions in the United States. This data set has been previously geocoded with the <strong>ggmap</strong> package to calculate latitude and longitude.</p>
+<p>The code below reads in the data and makes sure we will we be using fully geocoded data, without any NAs in latitude or longitude fields.</p>
+<pre class="r"><code># read in institution data from github using readr read_csv() function
+inst &lt;- read_csv(&quot;https://raw.githubusercontent.com/vpnagraj/grupo/master/institutions.csv&quot;)
+
+# remove missing data
+inst &lt;- inst[complete.cases(inst),]</code></pre>
+<p>The first step is to invoke a “base map” with the <code>leaflet()</code> function. As mentioned above, this package uses the <strong>magrittr</strong> piping, which allows you to chain together this base invocation with a command to add “tiles” to the map. Leaflet tiles are essentially specifications for the map “style” to be used. Below is the default base map.</p>
+<pre class="r"><code>library(leaflet)
+leaflet() %&gt;%
+addTiles()</code></pre>
+<div id="htmlwidget-3410" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3410">{"x":{"calls":[{"method":"addTiles","args":["http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"maxNativeZoom":null,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"continuousWorld":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap\u003c/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA\u003c/a>"}]}]},"evals":[],"jsHooks":[]}</script>
+<p>In order to customize the appearance of this map, we can add special “provider” tiles<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>. These are third-party map styles that have been made available to use via Leaflet. For example, you could use a National Geographic style map like the one below:</p>
+<pre class="r"><code>leaflet() %&gt;%
+addProviderTiles(&quot;Esri.NatGeoWorldMap&quot;)</code></pre>
+<div id="htmlwidget-2574" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2574">{"x":{"calls":[{"method":"addProviderTiles","args":["Esri.NatGeoWorldMap",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]}]},"evals":[],"jsHooks":[]}</script>
+<p>Below is an example of the black-and-white verison of the OpenStreetMap provider tile, along with a new feature: markers.</p>
+<pre class="r"><code>leaflet() %&gt;%
+addProviderTiles(&quot;OpenStreetMap.BlackAndWhite&quot;) %&gt;%
+addMarkers(lng=inst$Longitude, lat=inst$Latitude)</code></pre>
+<div id="htmlwidget-8716" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8716">{"x":{"calls":[{"method":"addProviderTiles","args":["OpenStreetMap.BlackAndWhite",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]},{"method":"addMarkers","args":[[33.4232051,42.3400834,42.364384,41.8296768,40.4009205,40.5747751,40.8097368,42.436968,43.7037534,36.0074716,33.7931434,30.4011161,38.8991756,38.9100181,33.7784626,33.6748599,42.3733738,39.1670467,42.0277682,39.297644,30.4150115,42.3591,42.726655,33.4371594,45.6844986,40.731291,35.8031153,46.8113903,42.0522802,40.0749149,44.5684511,40.8147955,40.342088,40.4137374,29.7164461,40.7626225,40.4812498,37.413349,40.9098883,42.4036847,29.9407226,33.5046102,34.7371368,32.2468628,36.0569405,37.8708818,38.5400714,33.6635507,34.0400757,33.9671999,32.7464644,34.4456946,36.9924226,28.5417799,41.8639088,39.133181,40.0077396,41.8104735,39.6646804,28.0653439,33.9566656,29.7192497,41.8959962,40.092589,41.6598888,38.9379487,38.0156511,38.2189292,38.9886147,42.3951291,25.7216374,42.2783714,44.9731472,38.9033716,40.8229733,35.0250087,35.9025108,41.6973401,35.1924456,44.0433464,39.9667054,40.444331,43.1308971,33.9993292,28.0665864,34.0191997,35.9398478,30.2858682,40.7705,38.0356981,47.6698745,43.0447617,36.1434655,37.5451839,37.2079821,46.7255011,38.6846489,42.332507,41.3174276,40.8511337],[-111.8879509,-71.1669754,-71.258565,-71.4034856,-80.1036231,-105.0807072,-73.9608715,-76.47752,-72.2871034,-79.0408036,-84.3305423,-84.3369554,-77.0470916,-77.077537,-84.3988806,-84.434314,-71.1189549,-86.5269373,-93.6397354,-76.5929319,-91.1789031,-71.0934,-84.46993,-88.8031851,-111.0331311,-73.999529,-78.720695,-96.804434,-87.6889122,-83.0759246,-123.2782864,-77.8653126,-74.65887,-86.9337787,-95.3992521,-73.9559421,-74.4561341,-122.1708056,-73.1146681,-71.120482,-90.1232592,-86.8031372,-86.6525202,-110.9353659,-94.1836566,-122.2843842,-121.7715459,-117.8527552,-118.2551016,-117.38388,-117.1892039,-119.8048582,-122.0619497,-81.2523336,-87.6155372,-84.512204,-105.2555329,-72.2941114,-75.7592616,-82.3985345,-83.375192,-95.3452416,-87.6715667,-88.2163602,-91.5475035,-95.2404854,-84.505177,-85.7626595,-76.939248,-72.5312372,-80.2792843,-83.7371794,-93.2153631,-92.2785174,-96.6971801,-106.5967126,-79.0196995,-86.2377772,-97.4432884,-123.0744829,-75.1787524,-79.9531501,-77.625478,-81.0245958,-82.4593395,-118.286183,-83.9432552,-97.7356543,-111.8354722,-78.5035945,-122.3102213,-89.4245627,-86.8100188,-77.4508188,-80.410066,-117.1413373,-90.3308854,-83.0511744,-72.9599334,-73.9290202],null,null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},null,null,null]}],"limits":{"lat":[25.7216374,47.6698745],"lng":[-123.2782864,-71.0934]}},"evals":[],"jsHooks":[]}</script>
+<p>Markers essentially represent points on the map, and must be applied via latitude and longitude coordinates. In this example, each set of coordinates maps the location of a major American research university.</p>
+<p>The shape and style of markers can be further customized. <code>addCircleMarkers()</code> will use circles to represent points on the map, rather than the default icons. Within this function, one can specify other style options, like color, as well as data to use in the visualization as a “popup” text. The map below includes all institutions as red circles, with the names and city/state locations encoded in the popup text, which appears on click.</p>
+<pre class="r"><code>leaflet() %&gt;%
+addProviderTiles(&quot;OpenStreetMap.BlackAndWhite&quot;) %&gt;%
+addCircleMarkers(lng=inst$Longitude, lat=inst$Latitude, popup = paste0(inst$Institution, &quot;&lt;br&gt;&quot;, inst$Location), col = &quot;firebrick&quot;)</code></pre>
+<div id="htmlwidget-4990" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4990">{"x":{"calls":[{"method":"addProviderTiles","args":["OpenStreetMap.BlackAndWhite",null,null,{"errorTileUrl":"","noWrap":false,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false}]},{"method":"addCircleMarkers","args":[[33.4232051,42.3400834,42.364384,41.8296768,40.4009205,40.5747751,40.8097368,42.436968,43.7037534,36.0074716,33.7931434,30.4011161,38.8991756,38.9100181,33.7784626,33.6748599,42.3733738,39.1670467,42.0277682,39.297644,30.4150115,42.3591,42.726655,33.4371594,45.6844986,40.731291,35.8031153,46.8113903,42.0522802,40.0749149,44.5684511,40.8147955,40.342088,40.4137374,29.7164461,40.7626225,40.4812498,37.413349,40.9098883,42.4036847,29.9407226,33.5046102,34.7371368,32.2468628,36.0569405,37.8708818,38.5400714,33.6635507,34.0400757,33.9671999,32.7464644,34.4456946,36.9924226,28.5417799,41.8639088,39.133181,40.0077396,41.8104735,39.6646804,28.0653439,33.9566656,29.7192497,41.8959962,40.092589,41.6598888,38.9379487,38.0156511,38.2189292,38.9886147,42.3951291,25.7216374,42.2783714,44.9731472,38.9033716,40.8229733,35.0250087,35.9025108,41.6973401,35.1924456,44.0433464,39.9667054,40.444331,43.1308971,33.9993292,28.0665864,34.0191997,35.9398478,30.2858682,40.7705,38.0356981,47.6698745,43.0447617,36.1434655,37.5451839,37.2079821,46.7255011,38.6846489,42.332507,41.3174276,40.8511337],[-111.8879509,-71.1669754,-71.258565,-71.4034856,-80.1036231,-105.0807072,-73.9608715,-76.47752,-72.2871034,-79.0408036,-84.3305423,-84.3369554,-77.0470916,-77.077537,-84.3988806,-84.434314,-71.1189549,-86.5269373,-93.6397354,-76.5929319,-91.1789031,-71.0934,-84.46993,-88.8031851,-111.0331311,-73.999529,-78.720695,-96.804434,-87.6889122,-83.0759246,-123.2782864,-77.8653126,-74.65887,-86.9337787,-95.3992521,-73.9559421,-74.4561341,-122.1708056,-73.1146681,-71.120482,-90.1232592,-86.8031372,-86.6525202,-110.9353659,-94.1836566,-122.2843842,-121.7715459,-117.8527552,-118.2551016,-117.38388,-117.1892039,-119.8048582,-122.0619497,-81.2523336,-87.6155372,-84.512204,-105.2555329,-72.2941114,-75.7592616,-82.3985345,-83.375192,-95.3452416,-87.6715667,-88.2163602,-91.5475035,-95.2404854,-84.505177,-85.7626595,-76.939248,-72.5312372,-80.2792843,-83.7371794,-93.2153631,-92.2785174,-96.6971801,-106.5967126,-79.0196995,-86.2377772,-97.4432884,-123.0744829,-75.1787524,-79.9531501,-77.625478,-81.0245958,-82.4593395,-118.286183,-83.9432552,-97.7356543,-111.8354722,-78.5035945,-122.3102213,-89.4245627,-86.8100188,-77.4508188,-80.410066,-117.1413373,-90.3308854,-83.0511744,-72.9599334,-73.9290202],10,null,null,{"lineCap":null,"lineJoin":null,"clickable":true,"pointerEvents":null,"className":"","stroke":true,"color":"firebrick","weight":5,"opacity":0.5,"fill":true,"fillColor":"firebrick","fillOpacity":0.2,"dashArray":null},null,null,["Arizona State University<br>Tempe, AZ","Boston University<br>Boston, MA","Brandeis University<br>Waltham, MA","Brown University<br>Providence, RI","Carnegie Mellon<br>Pittsburgh, PA","Colorado State University<br>Fort Collins, CO","Columbia University<br>New York, NY","Cornell University<br>Ithaca, NY","Dartmouth<br>Hanover, NH","Duke University<br>Durham, NC","Emory<br>Druid Hills, GA","Florida State University<br>Tallahassee, FL","George Washington University<br>Washington, DC","Georgetown University<br>Washington, DC","Georgia Institute of Technology<br>Atlanta, GA","Georgia State University<br>Atlanta, GA","Harvard<br>Cambridge, MA","Indiana University-Bloomington<br>Bloomington, IN","Iowa State University<br>Ames, IA","Johns Hopkins<br>Baltimore, MD","Louisiana State University<br>Baton Rouge, LA","Massachusetts Institute of Technology<br>Cambridge, MA","Michigan State University<br>East Lansing, MI","Mississippi State University<br>Starkville, MS","Montana State University<br>Bozeman, MT","New York University<br>New York, NY","North Carolina State University<br>Raleigh, NC","North Dakota State University<br>Fargo, ND","Northwestern University<br>Evanston, IL","Ohio State University<br>Columbus, OH","Oregon State University<br>Corvallis, OR","Pennsylvania State University<br>University Park, PA","Princeton<br>Princeton, NJ","Purdue University<br>West Lafayette, IN","Rice University<br>Houston, TX","Rockefeller University<br>New York, NY","Rutgers<br>New Brunswick, NJ","Stanford University<br>Stanford, CA","Stony Brook University<br>Stony Brook, NY","Tufts University<br>Medford, MA","Tulane University<br>New Orleans, LA","University of Alabama-Birmingham<br>Birmingham, AL","University of Alabama-Huntsville<br>Huntsville, AL","University of Arizona<br>Tuscon, AZ","University of Arkansas<br>Fayatteville, AR","University of California-Berkeley<br>Berkeley, CA","University of California-Davis<br>Davis, CA","University of California-Irvine<br>Irvine, CA","University of California-Los Angeles<br>Los Angeles, CA","University of California-Riverside<br>Riverside, CA","University of California-San Diego<br>San Diego, CA","University of California-Santa Barbara<br>Santa Barbara, CA","University of California-Santa Cruz<br>Santa Cruz, CA","University of Central Florida<br>Orlando, FL","University of Chicago<br>Chicago, IL","University of Cincinnati<br>Cincinatti, OH","University of Colorado-Boulder<br>Boulder, CO","University of Connecticut<br>Storrs, CT","University of Delaware<br>Newark, DE","University of Florida<br>Gainesville, FL","University of Georgia<br>Athens, GA","University of Houston<br>Houston, TX","University of Illinois-Chicago<br>Chicago, IL","University of Illinois-Urbana Champaign<br>Urbana, IL","University of Iowa<br>Iowa City, IA","University of Kansas<br>Lawrence, KS","University of Kentucky<br>Lexington, KY","University of Louisville<br>Louisville, KY","University of Maryland<br>College Park, MD","University of Massachusetts-Amherst<br>Amherst, MA","University of Miami<br>Coral Gables, FL","University of Michigan<br>Ann Arbor, MI","University of Minnesota<br>Minneapolis, MN","University of Missouri<br>Columbia, MO","University of Nebraska-Lincoln<br>Lincoln, NE","University of New Mexico<br>Albuquerque, NM","University of North Carolina-Chapel Hill<br>Chapel Hill, NC","University of Notre Dame<br>Notre Dame, IN","University of Oklahoma<br>Norman, OK","University of Oregon<br>Eugene, OR","University of Pennsylvania<br>Philadelphia, PA","University of Pittsburgh<br>Pittsburgh, PA","University of Rochester<br>Rochester, NY","University of South Carolina<br>Columbia, SC","University of South Florida<br>Tampa, FL","University of Southern California<br>Los Angeles, CA","University of Tennessee<br>Knoxville, TN","University of Texas-Austin<br>Austin, TX","University of Utah<br>Salt Lake City, UT","University of Virginia<br>Charlottesville, VA","University of Washington-Seattle<br>Seattle, WA","University of Wisconsin<br>Madison, WI","Vanderbilt University<br>Nashville, TN","Virginia Commonwealth University<br>Richmond, VA","Virginia Tech<br>Blacksburg, VA","Washington State University<br>Pullman, WA","Washington University-St. Louis<br>Saint Louis, MO","Wayne State University<br>Detroit, MI","Yale<br>New Haven, CT","Yeshiva University<br>New York, NY"]]}],"limits":{"lat":[25.7216374,47.6698745],"lng":[-123.2782864,-71.0934]}},"evals":[],"jsHooks":[]}</script>
+<p>The example above is relatively simple, but it demonstrates the main workflow for creating an interactive Leaflet map in R. It’s worth noting a few other features:</p>
+<ul>
+<li><code>setView()</code>: focus the map on a specific point or zoom level</li>
+<li><code>addPolygons</code>: add custom boundaries onto the map as specified by something like a shapefile … this is necessary for making choropleth maps</li>
+<li><code>addLegend()</code>: add and customize a legend for the map</li>
+</ul>
+</div>
+<div id="visnetwork" class="section level3">
+<h3>visNetwork</h3>
+<p>Network visualization refers to the graphical representation of a collection of nodes (entities) and edges (connections between those entities). There are a number of JavaScript libraries that are capable of producing these kinds of plots, and vis.js<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> is one of the most robust. The associated R package for this library is <strong>visNetwork</strong><a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>.</p>
+<p>Data for network plots must be prepared with nodes and edges in mind. <strong>visNetwork</strong> in particular requires that these two should be separted into distinct data frames: one for the nodes (with an <em>id</em> column as well as any relevant attributes) and one for the edges (with a <em>from</em> and <em>to</em> as well as any associated attributes).</p>
+<p>For the example that follows we’ll use data describing the flow of patients from an outpatient orthopaedic clinic visit to surgery<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a>. This dataset is available on Github, and must be converted from JSON format to a data frame object using the <code>fromJSON()</code> function from the <strong>jsonlite</strong> package.</p>
+<pre class="r"><code>library(visNetwork)
+library(jsonlite)
+
+patients &lt;- fromJSON(&quot;https://raw.githubusercontent.com/micahstubbs/sankey-datasets/master/patient-flow-bos-2016/graph.json&quot;)
+
+patientnodes &lt;- patients$nodes
+patientlinks &lt;- patients$links
+
+names(patientnodes) &lt;- c(&quot;label&quot;,&quot;id&quot;)
+names(patientlinks) &lt;- c(&quot;from&quot;, &quot;to&quot;, &quot;value&quot;)</code></pre>
+<pre class="r"><code>patientnodes</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">label</th>
+<th align="right">id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">All referred patients</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">First consult outpatient clinic</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">No OR-receipt</td>
+<td align="right">2</td>
+</tr>
+<tr class="even">
+<td align="left">OR-receipt</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">No surgery</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Start surgery</td>
+<td align="right">5</td>
+</tr>
+<tr class="odd">
+<td align="left">Emergency</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">No emergency</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>patientlinks</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">from</th>
+<th align="right">to</th>
+<th align="right">value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1.00</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">0.64</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">0.36</td>
+</tr>
+<tr class="even">
+<td align="right">3</td>
+<td align="right">4</td>
+<td align="right">0.33</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">5</td>
+<td align="right">0.67</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="right">6</td>
+<td align="right">0.16</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">7</td>
+<td align="right">0.84</td>
+</tr>
+</tbody>
+</table>
+<p>The first invocation of the network visualization will simply call the node and edge data frames with <code>visNetwork()</code>. Because the columns are named appropriately (in the node data frame: <em>label</em> and <em>id</em> … in the edge data frame: <em>from</em>, <em>to</em> and <em>value</em>) the function knows how to map the attributes onto the plot. The nodes are labeled appropriately and connected via definitions of edges, which are in turn represented as specific widths based on their values.</p>
+<pre class="r"><code>visNetwork(patientnodes, patientlinks) </code></pre>
+<div id="htmlwidget-8889" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8889">{"x":{"nodes":{"label":["All referred patients","First consult outpatient clinic","No OR-receipt","OR-receipt","No surgery","Start surgery","Emergency","No emergency"],"id":[0,1,2,3,4,5,6,7]},"edges":{"from":[0,1,1,3,3,5,5],"to":[1,2,3,4,5,6,7],"value":[1,0.64,0.36,0.33,0.67,0.16,0.84]},"options":{"width":"100%","height":"100%","nodes":{"shape":"dot"},"manipulation":{"enabled":false}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null},"evals":[],"jsHooks":[]}</script>
+<p>To configure the appearance of the network’s nodes and edges you can include calls to <code>visNodes()</code> and <code>visEdges()</code>, respectively. The code below customizes the shape, color and highlight behavior. Passing parameters to customize the plot at this granular of a level will likely require reference to the vis.js API documentation, and arguments may have t be formatted as lists … or even lists of lists. The <code>visLayout()</code> fixes the position of the nodes via a random seed. Alternatively, the nodes will appear in different positions each time the plot is generated, which can be particularly problematic for large networks.</p>
+<pre class="r"><code>visNetwork(patientnodes, patientlinks) %&gt;%
+    visNodes(shape = &quot;triangle&quot;, 
+        color = list(background = &quot;lightblue&quot;, 
+            border = &quot;darkblue&quot;,
+            highlight = &quot;firebrick&quot;)) %&gt;%
+    # fix the layout to fall in the same position
+    visLayout(randomSeed = 1999)</code></pre>
+<div id="htmlwidget-7519" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7519">{"x":{"nodes":{"label":["All referred patients","First consult outpatient clinic","No OR-receipt","OR-receipt","No surgery","Start surgery","Emergency","No emergency"],"id":[0,1,2,3,4,5,6,7]},"edges":{"from":[0,1,1,3,3,5,5],"to":[1,2,3,4,5,6,7],"value":[1,0.64,0.36,0.33,0.67,0.16,0.84]},"options":{"width":"100%","height":"100%","nodes":{"shape":"triangle","color":{"background":"lightblue","border":"darkblue","highlight":"firebrick"}},"manipulation":{"enabled":false},"layout":{"randomSeed":1999}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null},"evals":[],"jsHooks":[]}</script>
+<p>The base layout above is helpful, but an even better depiction of the patient traffic might be a hierarchical layout, which can represent flow in a “directed” network. To convert the existing visualization to an alternate layout, pass it into an additional <code>visHierarchicalLayout()</code> function.</p>
+<pre class="r"><code>visNetwork(patientnodes,patientlinks) %&gt;%
+        visNodes(
+            shape = &quot;triangle&quot;, 
+            color = list(background = &quot;lightblue&quot;, 
+            border = &quot;darkblue&quot;,
+            highlight = &quot;firebrick&quot;),
+            shadow = list(enabled = TRUE, size = 10)) %&gt;%
+        visHierarchicalLayout(sortMethod = &quot;directed&quot;) %&gt;%
+        visLayout(randomSeed = 1999)</code></pre>
+<div id="htmlwidget-1838" style="width:672px;height:480px;" class="visNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1838">{"x":{"nodes":{"label":["All referred patients","First consult outpatient clinic","No OR-receipt","OR-receipt","No surgery","Start surgery","Emergency","No emergency"],"id":[0,1,2,3,4,5,6,7]},"edges":{"from":[0,1,1,3,3,5,5],"to":[1,2,3,4,5,6,7],"value":[1,0.64,0.36,0.33,0.67,0.16,0.84]},"options":{"width":"100%","height":"100%","nodes":{"shape":"triangle","color":{"background":"lightblue","border":"darkblue","highlight":"firebrick"},"shadow":{"enabled":true,"size":10}},"manipulation":{"enabled":false},"layout":{"hierarchical":{"enabled":true,"sortMethod":"directed"},"randomSeed":1999}},"groups":null,"width":null,"height":null,"idselection":{"enabled":false},"byselection":{"enabled":false},"main":null},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="highcharter" class="section level3">
+<h3>Highcharter</h3>
+<p>Like D3, Highcharts is a flexible JavaScript visualization tool that can produce a variety of different kinds of plots: line, spline, area, areaspline, column, bar, pie, scatter, angular gauges, arearange, areasplinerange, columnrange and polar chart<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a>. Unlike D3, the implementation of the library through the <strong>highcharter</strong> package condenses many of these types of plots into a single set of functions<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a>.</p>
+<p>Note that Highcharts is free for non-commerical use, but must be licensed for commercial applications<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a>.</p>
+<p>For the example that follows we’ll look at different methods for creating interactive scatterplots. The data are records describing movies in the Internet Movie Database (IMDB) as collected and made available via Hadley Wickham’s <strong>ggplot2movies</strong> package<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a>.</p>
+<p>First we need to load the packages and read the data directly from the package’s development repository on Github. In this case, we’ll assume we’re interested in a particular subset of the data: movies directed by Stanley Kubrick.</p>
+<pre class="r"><code>library(highcharter)
+library(dplyr)
+
+movies &lt;- read_csv(&quot;https://raw.githubusercontent.com/hadley/ggplot2movies/master/data-raw/movies.csv&quot;)
+
+
+kubrickdat &lt;- data.frame(
+    title = c(&quot;Fear and Desire&quot;,&quot;Killer&#39;s Kiss&quot;,&quot;Killing, The&quot;,&quot;Paths of Glory&quot;,&quot;Spartacus&quot;,&quot;Lolita&quot;,&quot;Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb&quot;, &quot;2001: A Space Odyssey&quot;,&quot;Clockwork Orange, A&quot;,&quot;Barry Lyndon&quot;,&quot;Shining, The&quot;, &quot;Full Metal Jacket&quot;,&quot;Eyes Wide Shut&quot;),
+    year = c(1953,1955,1956,1957,1960,1962,1964,1968,1971,1975,1980,1987,1999)
+)
+
+kubrick &lt;-
+    movies %&gt;%
+    filter(title %in% kubrickdat$title &amp; year %in% kubrickdat$year) %&gt;%
+    arrange(desc(year))</code></pre>
+<pre class="r"><code>kubrick</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">title</th>
+<th align="right">year</th>
+<th align="right">length</th>
+<th align="right">budget</th>
+<th align="right">rating</th>
+<th align="right">votes</th>
+<th align="right">r1</th>
+<th align="right">r2</th>
+<th align="right">r3</th>
+<th align="right">r4</th>
+<th align="right">r5</th>
+<th align="right">r6</th>
+<th align="right">r7</th>
+<th align="right">r8</th>
+<th align="right">r9</th>
+<th align="right">r10</th>
+<th align="left">mpaa</th>
+<th align="right">Action</th>
+<th align="right">Animation</th>
+<th align="right">Comedy</th>
+<th align="right">Drama</th>
+<th align="right">Documentary</th>
+<th align="right">Romance</th>
+<th align="right">Short</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Eyes Wide Shut</td>
+<td align="right">1999</td>
+<td align="right">159</td>
+<td align="right">65000000</td>
+<td align="right">7.0</td>
+<td align="right">37868</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="left">R</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Full Metal Jacket</td>
+<td align="right">1987</td>
+<td align="right">116</td>
+<td align="right">30000000</td>
+<td align="right">8.2</td>
+<td align="right">47757</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Shining, The</td>
+<td align="right">1980</td>
+<td align="right">146</td>
+<td align="right">19000000</td>
+<td align="right">8.3</td>
+<td align="right">50908</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Barry Lyndon</td>
+<td align="right">1975</td>
+<td align="right">184</td>
+<td align="right">11000000</td>
+<td align="right">8.0</td>
+<td align="right">12285</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">14.5</td>
+<td align="right">34.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Clockwork Orange, A</td>
+<td align="right">1971</td>
+<td align="right">137</td>
+<td align="right">2200000</td>
+<td align="right">8.3</td>
+<td align="right">65283</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">34.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">2001: A Space Odyssey</td>
+<td align="right">1968</td>
+<td align="right">156</td>
+<td align="right">10500000</td>
+<td align="right">8.3</td>
+<td align="right">64982</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="right">34.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb</td>
+<td align="right">1964</td>
+<td align="right">93</td>
+<td align="right">1800000</td>
+<td align="right">8.7</td>
+<td align="right">63471</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">44.5</td>
+<td align="left">PG</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Lolita</td>
+<td align="right">1962</td>
+<td align="right">152</td>
+<td align="right">2000000</td>
+<td align="right">7.6</td>
+<td align="right">9150</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="right">14.5</td>
+<td align="right">14.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Spartacus</td>
+<td align="right">1960</td>
+<td align="right">198</td>
+<td align="right">12000000</td>
+<td align="right">8.0</td>
+<td align="right">17084</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="right">14.5</td>
+<td align="left"></td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Paths of Glory</td>
+<td align="right">1957</td>
+<td align="right">87</td>
+<td align="right">935000</td>
+<td align="right">8.6</td>
+<td align="right">14391</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">34.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Killing, The</td>
+<td align="right">1956</td>
+<td align="right">85</td>
+<td align="right">320000</td>
+<td align="right">8.1</td>
+<td align="right">6980</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="right">24.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">Killer’s Kiss</td>
+<td align="right">1955</td>
+<td align="right">67</td>
+<td align="right">75000</td>
+<td align="right">6.6</td>
+<td align="right">1871</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">24.5</td>
+<td align="right">34.5</td>
+<td align="right">14.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left">Fear and Desire</td>
+<td align="right">1953</td>
+<td align="right">68</td>
+<td align="right">20000</td>
+<td align="right">6.3</td>
+<td align="right">225</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">4.5</td>
+<td align="right">14.5</td>
+<td align="right">4.5</td>
+<td align="right">4.5</td>
+<td align="right">34.5</td>
+<td align="left"></td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>highcharter</strong> provides a function for “quick and dirty” access to the Highchart library. <code>hchart()</code> will create a plot in a single function. For those familiar with <strong>ggplot2</strong>, this is similar to <code>qplot()</code>. The plot type can be specified within the function.</p>
+<p>In our example, we’re looking at records for Stanley Kubrick movies from IMDB. If we pass a single continuous variable (say, ‘budget’) into <code>hchart()</code>, the function will infer that we want a histogram.</p>
+<pre class="r"><code>hchart(kubrick$budget)</code></pre>
+<div id="htmlwidget-7255" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7255">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0}},"chart":{"zoomType":"x"},"tooltip":{"formatter":"function() { return  this.point.name + '<br/>' + this.y; }"},"series":[{"data":[{"x":5000000,"y":7,"name":"(0, 1e+07]"},{"x":15000000,"y":4,"name":"(1e+07, 2e+07]"},{"x":25000000,"y":1,"name":"(2e+07, 3e+07]"},{"x":35000000,"y":0,"name":"(3e+07, 4e+07]"},{"x":45000000,"y":0,"name":"(4e+07, 5e+07]"},{"x":55000000,"y":0,"name":"(5e+07, 6e+07]"},{"x":65000000,"y":1,"name":"(6e+07, 7e+07]"}],"type":"column","pointRange":10000000,"groupPadding":0,"pointPadding":0,"borderWidth":0}]},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":["hc_opts.tooltip.formatter"],"jsHooks":[]}</script>
+<p>Much like the base <code>plot()</code> function, <code>hchart()</code> can produce a variety of different kinds of plots depending on the data inputs and plot type specification. The following will produce a scatterplot of year versus rating for the Kubrick movies.</p>
+<pre class="r"><code>hchart(kubrick, &quot;scatter&quot;, x = year, y = rating)</code></pre>
+<div id="htmlwidget-411" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-411">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":"rating"},"type":"linear"},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0,"showInLegend":false,"marker":{"enabled":true}},"scatter":{"marker":{"symbol":"circle"}},"bubble":{"minSize":5,"maxSize":25},"treemap":{"layoutAlgorithm":"squarified"}},"series":[{"type":"scatter","data":[{"title":"Eyes Wide Shut","year":1999,"length":159,"budget":65000000,"rating":7,"votes":37868,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":14.5,"r7":14.5,"r8":14.5,"r9":14.5,"r10":14.5,"mpaa":"R","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1999,"y":7},{"title":"Full Metal Jacket","year":1987,"length":116,"budget":30000000,"rating":8.2,"votes":47757,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":14.5,"r8":24.5,"r9":24.5,"r10":24.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1987,"y":8.2},{"title":"Shining, The","year":1980,"length":146,"budget":19000000,"rating":8.3,"votes":50908,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":14.5,"r8":24.5,"r9":24.5,"r10":24.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":0,"Documentary":0,"Romance":0,"Short":0,"x":1980,"y":8.3},{"title":"Barry Lyndon","year":1975,"length":184,"budget":11000000,"rating":8,"votes":12285,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":14.5,"r8":24.5,"r9":14.5,"r10":34.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":1,"Short":0,"x":1975,"y":8},{"title":"Clockwork Orange, A","year":1971,"length":137,"budget":2200000,"rating":8.3,"votes":65283,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":14.5,"r8":14.5,"r9":24.5,"r10":34.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1971,"y":8.3},{"title":"2001: A Space Odyssey","year":1968,"length":156,"budget":10500000,"rating":8.3,"votes":64982,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":4.5,"r8":14.5,"r9":14.5,"r10":34.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":0,"Documentary":0,"Romance":0,"Short":0,"x":1968,"y":8.3},{"title":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb","year":1964,"length":93,"budget":1800000,"rating":8.7,"votes":63471,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":4.5,"r8":14.5,"r9":24.5,"r10":44.5,"mpaa":"PG","Action":0,"Animation":0,"Comedy":1,"Drama":0,"Documentary":0,"Romance":0,"Short":0,"x":1964,"y":8.7},{"title":"Lolita","year":1962,"length":152,"budget":2000000,"rating":7.6,"votes":9150,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":24.5,"r8":24.5,"r9":14.5,"r10":14.5,"mpaa":"","Action":0,"Animation":0,"Comedy":1,"Drama":1,"Documentary":0,"Romance":1,"Short":0,"x":1962,"y":7.6},{"title":"Spartacus","year":1960,"length":198,"budget":12000000,"rating":8,"votes":17084,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":14.5,"r8":24.5,"r9":24.5,"r10":14.5,"mpaa":"","Action":1,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":1,"Short":0,"x":1960,"y":8},{"title":"Paths of Glory","year":1957,"length":87,"budget":935000,"rating":8.6,"votes":14391,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":4.5,"r8":14.5,"r9":24.5,"r10":34.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1957,"y":8.6},{"title":"Killing, The","year":1956,"length":85,"budget":320000,"rating":8.1,"votes":6980,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":4.5,"r7":14.5,"r8":24.5,"r9":24.5,"r10":24.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1956,"y":8.1},{"title":"Killer's Kiss","year":1955,"length":67,"budget":75000,"rating":6.6,"votes":1871,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":4.5,"r6":24.5,"r7":34.5,"r8":14.5,"r9":4.5,"r10":4.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1955,"y":6.6},{"title":"Fear and Desire","year":1953,"length":68,"budget":20000,"rating":6.3,"votes":225,"r1":4.5,"r2":4.5,"r3":4.5,"r4":4.5,"r5":14.5,"r6":4.5,"r7":14.5,"r8":4.5,"r9":4.5,"r10":34.5,"mpaa":"","Action":0,"Animation":0,"Comedy":0,"Drama":1,"Documentary":0,"Romance":0,"Short":0,"x":1953,"y":6.3}]}],"xAxis":{"type":"linear","title":{"text":"year"},"categories":null}},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. While <code>hchart()</code> provides a quick way to implement this interactivity, to fully take advantage of Highhcarts features it may be necessary to use a different approach.</p>
+<p>The <code>highchart()</code> function provides a “canvas” from which you can invoke specific plot types, and can accept further customization as arguments. So the code below will create a “highcart” and then (using the <strong>magrittr</strong> piping syntax) pass that object along to another function that creates a scatter plot. This method allows for more customization of the scatter plot than <code>hchart()</code>, as you can easily specifiy attributes to be mapped on onto the size (z) and label.</p>
+<pre class="r"><code>highchart() %&gt;%
+    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title)</code></pre>
+<div id="htmlwidget-4652" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-4652">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0}},"series":[{"data":[{"x":1999,"y":7,"z":65000000,"label":"Eyes Wide Shut"},{"x":1987,"y":8.2,"z":30000000,"label":"Full Metal Jacket"},{"x":1980,"y":8.3,"z":19000000,"label":"Shining, The"},{"x":1975,"y":8,"z":11000000,"label":"Barry Lyndon"},{"x":1971,"y":8.3,"z":2200000,"label":"Clockwork Orange, A"},{"x":1968,"y":8.3,"z":10500000,"label":"2001: A Space Odyssey"},{"x":1964,"y":8.7,"z":1800000,"label":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb"},{"x":1962,"y":7.6,"z":2000000,"label":"Lolita"},{"x":1960,"y":8,"z":12000000,"label":"Spartacus"},{"x":1957,"y":8.6,"z":935000,"label":"Paths of Glory"},{"x":1956,"y":8.1,"z":320000,"label":"Killing, The"},{"x":1955,"y":6.6,"z":75000,"label":"Killer's Kiss"},{"x":1953,"y":6.3,"z":20000,"label":"Fear and Desire"}],"type":"bubble","showInLegend":false,"dataLabels":{"enabled":true,"format":"{point.label}"}}]},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+<p>The plot above provides much more information and interactivity than the previous visualizations. However, it can still be improved.</p>
+<p>For one thing, the plot should have a title. We can give it one with <code>hc_title()</code>. But another issue is that the individual movie titles aren’t all visible. It appears that overlapping labels are hidden. The solution to this issue is relatively obscure, but illustrates an important feature of using JavaScript libraries in R. Like many clients, the <strong>highcharter</strong> package makes it possible to pass arbitrary agruments to the original Highcarts API. Unfortunately, these options aren’t documented within the package. But by looking at the API documentation<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a>, it’s clear that you can control (and disable) the behavior in question. The key is that these options must be passed into the <code>highcharter()</code> function via the <code>hc_opts</code> argument, and must be defined as a named list that walks down through the HTML container for the visualization. This workflow can be tedious … but very useful. Plots can be fully customized based on these parameters.</p>
+<pre class="r"><code># specify options
+kubrickopts &lt;- list(plotOptions = list(series = list(dataLabels = list(allowOverlap = TRUE))))
+
+# create plot and pass in options to disable behavior
+highchart(hc_opts = kubrickopts) %&gt;%
+    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title) %&gt;%
+    hc_title(text = &quot;Stanley Kubrick IMDB Ratings By Year&quot;) </code></pre>
+<div id="htmlwidget-9001" style="width:100%;height:500px;" class="highchart html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9001">{"x":{"hc_opts":{"plotOptions":{"series":{"dataLabels":{"allowOverlap":true}}},"series":[{"data":[{"x":1999,"y":7,"z":65000000,"label":"Eyes Wide Shut"},{"x":1987,"y":8.2,"z":30000000,"label":"Full Metal Jacket"},{"x":1980,"y":8.3,"z":19000000,"label":"Shining, The"},{"x":1975,"y":8,"z":11000000,"label":"Barry Lyndon"},{"x":1971,"y":8.3,"z":2200000,"label":"Clockwork Orange, A"},{"x":1968,"y":8.3,"z":10500000,"label":"2001: A Space Odyssey"},{"x":1964,"y":8.7,"z":1800000,"label":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb"},{"x":1962,"y":7.6,"z":2000000,"label":"Lolita"},{"x":1960,"y":8,"z":12000000,"label":"Spartacus"},{"x":1957,"y":8.6,"z":935000,"label":"Paths of Glory"},{"x":1956,"y":8.1,"z":320000,"label":"Killing, The"},{"x":1955,"y":6.6,"z":75000,"label":"Killer's Kiss"},{"x":1953,"y":6.3,"z":20000,"label":"Fear and Desire"}],"type":"bubble","showInLegend":false,"dataLabels":{"enabled":true,"format":"{point.label}"}}],"title":{"text":"Stanley Kubrick IMDB Ratings By Year"}},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="shiny" class="section level2">
+<h2>Shiny</h2>
+<p>One of the principal advantages of JavaScript visualizations is that they are ready to insert directly into web applications. They can potentially be embedded in HTML content, and included in a variety of frameworks. One such framework, specific to R development, is Shiny<a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a>.</p>
+<p>Created and maintained by RStudio, Shiny is a web application framework developing interactive, web-based tools with R. JavaScript / R bindings developed with <strong>htmlwidgets</strong> include functions (<code>render*()</code> for server.R and <code>*Output()</code> for ui.R) to create and update these visualizations in a Shiny app.</p>
+</div>
+<div id="future-features" class="section level2">
+<h2>Future Features</h2>
+<p>The <strong>htmlwidgets</strong> package significantly cuts down on the complexity of integrating JavaScript libraries into R<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a>. As mentioned above, this package creates boilerplate outlines and provides a helpful structure for writing the pieces of R and JavaScript code that will communicate with one another. The end result of the binding is a package that includes functions to be called to create the visualization of interest. The relative ease of this workflow has resulted in a flood of new JavaScript / R visualization tools in the past year<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a> … and there will likely be many more released in the future. Another new tool in development is <strong>crosstalk</strong>, which aims to facilitate interaction <em>across</em> JavaScript frameworks via R<a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a>.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields" class="uri">https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://stackoverflow.com/a/245068" class="uri">http://stackoverflow.com/a/245068</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="http://www.crockford.com/javascript/javascript.html" class="uri">http://www.crockford.com/javascript/javascript.html</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><a href="http://www.htmlwidgets.org/" class="uri">http://www.htmlwidgets.org/</a><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p><a href="https://bl.ocks.org/mbostock/4060606" class="uri">https://bl.ocks.org/mbostock/4060606</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/" class="uri">http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p><a href="https://en.wikipedia.org/wiki/Heat_map" class="uri">https://en.wikipedia.org/wiki/Heat_map</a><a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p><a href="https://cran.r-project.org/web/packages/gapminder/index.html" class="uri">https://cran.r-project.org/web/packages/gapminder/index.html</a><a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p><a href="http://www.un.org/en/sc/members/" class="uri">http://www.un.org/en/sc/members/</a><a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p><a href="https://rstudio.github.io/leaflet/" class="uri">https://rstudio.github.io/leaflet/</a><a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p><a href="https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf" class="uri">https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf</a><a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p><a href="http://visjs.org/network_examples.html" class="uri">http://visjs.org/network_examples.html</a><a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p><a href="http://datastorm-open.github.io/visNetwork/" class="uri">http://datastorm-open.github.io/visNetwork/</a><a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p><a href="https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016" class="uri">https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016</a><a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p><a href="https://shop.highsoft.com/highcharts" class="uri">https://shop.highsoft.com/highcharts</a><a href="#fnref15">↩</a></p></li>
+<li id="fn16"><p><a href="http://jkunst.com/highcharter/" class="uri">http://jkunst.com/highcharter/</a><a href="#fnref16">↩</a></p></li>
+<li id="fn17"><p><a href="https://shop.highsoft.com/highcharts" class="uri">https://shop.highsoft.com/highcharts</a><a href="#fnref17">↩</a></p></li>
+<li id="fn18"><p><a href="http://leaflet-extras.github.io/leaflet-providers/preview/index.html" class="uri">http://leaflet-extras.github.io/leaflet-providers/preview/index.html</a><a href="#fnref18">↩</a></p></li>
+<li id="fn19"><p><a href="http://api.highcharts.com/highcharts" class="uri">http://api.highcharts.com/highcharts</a><a href="#fnref19">↩</a></p></li>
+<li id="fn20"><p><a href="http://shiny.rstudio.com/" class="uri">http://shiny.rstudio.com/</a><a href="#fnref20">↩</a></p></li>
+<li id="fn21"><p><a href="http://www.htmlwidgets.org/develop_intro.html" class="uri">http://www.htmlwidgets.org/develop_intro.html</a><a href="#fnref21">↩</a></p></li>
+<li id="fn22"><p><a href="http://www.buildingwidgets.com/" class="uri">http://www.buildingwidgets.com/</a><a href="#fnref22">↩</a></p></li>
+<li id="fn23"><p><a href="https://github.com/rstudio/crosstalk" class="uri">https://github.com/rstudio/crosstalk</a><a href="#fnref23">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
