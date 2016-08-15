@@ -22,6 +22,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<!-- Font Awesome -->
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
 <!-- Google fonts -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
 
@@ -438,12 +441,11 @@ library(dplyr)</code></pre>
 <p>Now, let’s actually load the data. You can get help for the import function with <code>?read_csv</code>. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we’re going to be referring to this data a lot, let’s give it a short easy name to type. I’m going to call it <code>ydat</code>. Once we’ve loaded it we can type the name of the object itself (<code>ydat</code>) to see it printed to the screen.</p>
 <pre class="r"><code>ydat &lt;- read_csv(file=&quot;data/brauer2007_tidy.csv&quot;)
 ydat</code></pre>
-<pre><code>## Source: local data frame [198,430 x 7]
-## 
+<pre><code>## # A tibble: 198,430 x 7
 ##    symbol systematic_name nutrient  rate expression
-##     (chr)           (chr)    (chr) (dbl)      (dbl)
+##     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
 ## 1    SFB2         YNL049C  Glucose  0.05      -0.24
-## 2      NA         YNL095C  Glucose  0.05       0.28
+## 2    &lt;NA&gt;         YNL095C  Glucose  0.05       0.28
 ## 3    QRI7         YDL104C  Glucose  0.05      -0.02
 ## 4    CFT2         YLR115W  Glucose  0.05      -0.33
 ## 5    SSO2         YMR183C  Glucose  0.05       0.05
@@ -452,8 +454,7 @@ ydat</code></pre>
 ## 8   VMA13         YPR036W  Glucose  0.05      -0.75
 ## 9    EDC3         YEL015W  Glucose  0.05      -0.24
 ## 10   VPS5         YOR069W  Glucose  0.05      -0.16
-## ..    ...             ...      ...   ...        ...
-## Variables not shown: bp (chr), mf (chr)</code></pre>
+## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
 <p>Take a look at that output. The nice thing about loading dplyr and reading in data with readr is that data frames are displayed in a much more friendly way. This dataset has nearly 200,000 rows and 7 columns. When you import data this way and try to display the object in the console, instead of trying to display all 200,000 rows, you’ll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you’ll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the <strong>Environment</strong> panel in RStudio. Or you could use the <code>View()</code> function (<em>with a capital V</em>).</p>
 <pre class="r"><code>View(ydat)</code></pre>
 </div>
@@ -481,29 +482,27 @@ ydat</code></pre>
 </ul></li>
 </ul>
 <pre class="r"><code>head(ydat)</code></pre>
-<pre><code>## Source: local data frame [6 x 7]
-## 
+<pre><code>## # A tibble: 6 x 7
 ##   symbol systematic_name nutrient  rate expression
-##    (chr)           (chr)    (chr) (dbl)      (dbl)
+##    &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
 ## 1   SFB2         YNL049C  Glucose  0.05      -0.24
-## 2     NA         YNL095C  Glucose  0.05       0.28
+## 2   &lt;NA&gt;         YNL095C  Glucose  0.05       0.28
 ## 3   QRI7         YDL104C  Glucose  0.05      -0.02
 ## 4   CFT2         YLR115W  Glucose  0.05      -0.33
 ## 5   SSO2         YMR183C  Glucose  0.05       0.05
 ## 6   PSP2         YML017W  Glucose  0.05      -0.69
-## Variables not shown: bp (chr), mf (chr)</code></pre>
+## # ... with 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
 <pre class="r"><code>tail(ydat)</code></pre>
-<pre><code>## Source: local data frame [6 x 7]
-## 
+<pre><code>## # A tibble: 6 x 7
 ##   symbol systematic_name nutrient  rate expression
-##    (chr)           (chr)    (chr) (dbl)      (dbl)
+##    &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
 ## 1   DOA1         YKL213C   Uracil   0.3       0.14
 ## 2   KRE1         YNL322C   Uracil   0.3       0.28
 ## 3   MTL1         YGR023W   Uracil   0.3       0.27
 ## 4   KRE9         YJL174W   Uracil   0.3       0.43
 ## 5   UTH1         YKR042W   Uracil   0.3       0.19
-## 6     NA         YOL111C   Uracil   0.3       0.04
-## Variables not shown: bp (chr), mf (chr)</code></pre>
+## 6   &lt;NA&gt;         YOL111C   Uracil   0.3       0.04
+## # ... with 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
 <pre class="r"><code>dim(ydat)</code></pre>
 <pre><code>## [1] 198430      7</code></pre>
 <pre class="r"><code>names(ydat)</code></pre>
