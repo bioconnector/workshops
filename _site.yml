@@ -30,8 +30,12 @@ navbar:
           href: r-tidy.html
         - text: "Data Visualization"
           href: r-viz-gapminder.html
+        - text: "Interactive Visualization with JavaScript and R"
+          href: r-interactive-viz.html
         - text: "Reproducible Research & RMarkdown"
           href: r-rmarkdown.html
+        - text: "Building Shiny Web Apps in R"
+          href: r-shiny.html
         - text: "Essential Statistics with R"
           href:
         - text: "Survival Analysis with TCGA Data"

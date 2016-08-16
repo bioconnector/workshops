@@ -22,7 +22,10 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
 <!-- Google fonts -->
 <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
 
@@ -114,6 +117,7 @@ button.code-folding-btn:focus {
   outline: none;
 }
 </style>
+
 
 <style type="text/css">
 /* padding for bootstrap navbar */
@@ -345,7 +349,13 @@ div.tocify {
       <a href="r-viz-gapminder.html">Data Visualization</a>
     </li>
     <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
       <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
     </li>
     <li class="dropdown-header">Essential Statistics with R</li>
     <li class="dropdown-header">Survival Analysis with TCGA Data</li>
@@ -1283,13 +1293,6 @@ gm</code></pre>
 <ol style="list-style-type: decimal">
 <li>How many unique countries are represented per continent?</li>
 </ol>
-<pre class="r"><code># gm %&gt;%
-#     distinct(country, .keep_all=TRUE) %&gt;%
-#     group_by(continent) %&gt;%
-#     summarise(n = n())
-gm %&gt;% 
-  group_by(continent) %&gt;% 
-  summarize(n=n_distinct(country))</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   continent     n
 ##       &lt;chr&gt; &lt;int&gt;
@@ -1301,10 +1304,6 @@ gm %&gt;%
 <ol start="2" style="list-style-type: decimal">
 <li>Which European nation had the lowest GDP per capita in 1997?</li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    filter(continent == &quot;Europe&quot; &amp; year == 1997) %&gt;%
-    arrange(gdpPercap) %&gt;%
-    head(1)</code></pre>
 <pre><code>## # A tibble: 1 x 6
 ##   country continent  year lifeExp     pop gdpPercap
 ##     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
@@ -1312,10 +1311,6 @@ gm %&gt;%
 <ol start="3" style="list-style-type: decimal">
 <li>According to the data available, what was the average life expectancy across each continent in the 1980s?</li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    filter(year == 1982 | year == 1987) %&gt;%
-    group_by(continent) %&gt;%
-    summarize(mean.lifeExp = mean(lifeExp))</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##   continent mean.lifeExp
 ##       &lt;chr&gt;        &lt;dbl&gt;
@@ -1327,12 +1322,6 @@ gm %&gt;%
 <ol start="4" style="list-style-type: decimal">
 <li>What 5 countries have the highest total GDP over all years combined?</li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    mutate(gdp = gdpPercap*pop) %&gt;%
-    group_by(country) %&gt;%
-    summarise(Total.GDP = sum(gdp)) %&gt;%
-    arrange(desc(Total.GDP)) %&gt;%
-    head(5)</code></pre>
 <pre><code>## # A tibble: 5 x 2
 ##          country Total.GDP
 ##            &lt;chr&gt;     &lt;dbl&gt;
@@ -1344,9 +1333,6 @@ gm %&gt;%
 <ol start="5" style="list-style-type: decimal">
 <li>What countries and years had life expectancies of <em>at least</em> 80 years? <em>N.b. only output the columns of interest: country, life expectancy and year (in that order).</em></li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    filter(lifeExp &gt;= 80) %&gt;%
-    select(country, lifeExp, year)</code></pre>
 <pre><code>## # A tibble: 22 x 3
 ##             country lifeExp  year
 ##               &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;
@@ -1364,11 +1350,6 @@ gm %&gt;%
 <ol start="6" style="list-style-type: decimal">
 <li>What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?</li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    group_by(country) %&gt;%
-    summarise(r = abs(cor(lifeExp, gdpPercap))) %&gt;%
-    arrange(desc(r)) %&gt;%
-    head(10)</code></pre>
 <pre><code>## # A tibble: 10 x 2
 ##           country     r
 ##             &lt;chr&gt; &lt;dbl&gt;
@@ -1385,12 +1366,6 @@ gm %&gt;%
 <ol start="7" style="list-style-type: decimal">
 <li>Which combinations of continent (besides Asia) and year have the highest average population across all countries? <em>N.b. your output should include all results sorted by highest average population</em>. With what you already know, this one may stump you. See <a href="http://stackoverflow.com/q/27207963/654296">this Q&amp;A</a> for how to <code>ungroup</code> before <code>arrange</code>ing. This also <a href="https://github.com/hadley/dplyr/releases/tag/v0.5.0">behaves differently in more recent versions of dplyr</a>.</li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    filter(continent != &quot;Asia&quot;) %&gt;%
-    group_by(continent, year) %&gt;%
-    summarise(mean.pop = mean(pop)) %&gt;%
-    ungroup() %&gt;%
-    arrange(desc(mean.pop)) </code></pre>
 <pre><code>## # A tibble: 48 x 3
 ##    continent  year mean.pop
 ##        &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;
@@ -1408,11 +1383,6 @@ gm %&gt;%
 <ol start="8" style="list-style-type: decimal">
 <li>Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?</li>
 </ol>
-<pre class="r"><code>gm %&gt;%
-    group_by(country) %&gt;%
-    summarize(sd.pop = sd(pop)) %&gt;%
-    arrange(sd.pop) %&gt;%
-    head(3)</code></pre>
 <pre><code>## # A tibble: 3 x 2
 ##                 country sd.pop
 ##                   &lt;chr&gt;  &lt;dbl&gt;
@@ -1422,17 +1392,10 @@ gm %&gt;%
 <ol start="9" style="list-style-type: decimal">
 <li>Subset <strong>gm</strong> to only include observations from 1992 and store the results as <strong>gm1992</strong>. What kind of object is this?</li>
 </ol>
-<pre class="r"><code>gm1992 &lt;-
-    gm %&gt;%
-    filter(year == 1992)
-
-gm1992 %&gt;% 
-    class()</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
 <ol start="10" style="list-style-type: decimal">
 <li><strong><em>Bonus!</em></strong> Which observations indicate that the population of a country has <em>decreased</em> from the previous year <strong>and</strong> the life expectancy has <em>increased</em> from the previous year? See <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html">the vignette on window functions</a>.</li>
 </ol>
-<pre class="r"><code>gm %&gt;% filter(pop &lt; lag(pop) &amp; lifeExp &gt; lag(lifeExp))</code></pre>
 <pre><code>## # A tibble: 53 x 6
 ##                   country continent  year lifeExp      pop gdpPercap
 ##                     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
@@ -1472,6 +1435,7 @@ For more information, visit <a href="https://www.bioconnector.virginia.edu/" tar
 $(document).ready(function () {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
 });
+
 
 </script>
 

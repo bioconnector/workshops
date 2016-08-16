@@ -1,0 +1,354 @@
+---
+title: "Interactive Visualization with JavaScript and R"
+---
+
+```{r init, include=F}
+library(knitr)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, fig.keep="none", cache=TRUE)
+options(digits=3)
+options(max.print=200)
+.ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
+
+# See http://rpubs.com/turnersd/embedding-rmarkdown-chunk-into-rmarkdown
+catn <- function(x="") cat("    ", x, "\n")
+```
+
+There are a number of JavaScript libraries available that leverage web functionality to produce compelling, dynamic data visualizations. This workshop will introduce several of these tools, including D3, HighCharts and Leaflet, and will demonstrate how to implement them in the context of the R programming language. No JavaScript experience is required. Some familiarity with R will be helpful.
+
+## Introduction
+
+This tutorial will introduce several JavaScript libraries that are capable of producing interactive data visualizations. The goal is to demonstrate how to implement some of these tools in the context of the R programming language. 
+
+### R
+
+R is an open-source, statistical computing language. One of its strengths is its ability to produce clean, high dimensional data visualizations. The development of **ggplot2**, which is among the language's most downloaded add-on packages, has strengthened R's position as a "gold-standard" data visualization tool[^1]. 
+
+### JavaScript
+
+JavaScript is a programming language that is widely used in web development. It may be worth stopping and pointing out that (despite its name) JavaScript bears no relation to Java[^2]. Java is a compiled langauge, while JavaScript (like R) is a scripting language that can be saved as a text file and run via an interpreter. Its name (among other features ...) has been a source to confusion about what JavaScript is and how to use it[^3]. For our purposes, we will focus on JavaScript as means for data visualization. There are number of libraries that can produce powerful, interactive plots. Below are a few examples of available frameworks:
+
+- d3.js
+- c3.js
+- vis.js
+- plotly.js
+- sigma.js
+- dygraphs.js
+
+### htmlwidgets
+
+R and JavaScript are both capable of data preparation and visualization on their own. But together they can make an efficient and impressive pipeline. The principal bridge between these two tools is **htmlwidgets**[^4]. This package provides scaffolding to build connectors (or "bindings") from JavaScript to R. 
+
+The workflow is as follows:
+
+1. Data are read into R
+2. Data are processed (and potentially manipulated) by R
+3. Data are converted to JavaScript Object Notation (JSON) format
+4. Data are bound to JavaScript
+5. Data are processed (and potentially manipulated) by JavaScript
+6. Data are mapped to plotting features and rendered
+
+![](img/intvizgraphic.png)
+
+> **nb** Many JavaScript / R bindings developed with **htmlwidgets** support piping with **magrittr**, and the examples that follow will make extensive use of the `%>%` syntax. For more information on the pipe, refer to the [**dplyr** lesson](http://bioconnector.org/workshops/r-dplyr-yeast.html#the_pipe:_%%) material. 
+
+```{r}
+library(magrittr)
+```
+
+## Examples
+
+### d3heatmap
+
+D3 (Data Driven Documents) is one of the most well-known JavaScript visualization libraries. In use since 2011, D3 is a staple of many interactive graphs featured on media outlets like the New York Times. D3 can produce everything from choropleths[^5] to scatter plots to dygraphs to network visualizations[^6] ... and beyond. So far, individual D3 plotting methods have been distributed across multiple R packages. For this tutorial we'll focus on single D3 feature: interactive heatmapping[^7].
+
+The data of interest below is the **gapminder** data set, which includes life expectancy, GDP per capita, and population, every five years, from 1952 to 2007 for 142 countries as a data frame[^8]. One question that this data could address is the "similarity" of countries. By aggregating on country, one calculate historical summary statistics about each nation and then visualize these side-by-side. But since there are 142 countries, this may be easier to visualize on a subset. For our purposes, we'll look at current UN Security Council member nations[^9] and their similarity based on life expectancy and GDP per capita. The code below reads in the raw data, identifies security council countries, filters the data to only include these countries, aggregates and calculates the mean and standard deviation of each variable of interest. 
+
+> **nb** Russia is a member of the UN Security Council but does not appear in the gapminder data set
+
+```{r}
+library(d3heatmap)
+library(dplyr)
+library(readr)
+
+# read data from github repository using readr read_csv() function
+gapminder <- read_csv("https://raw.githubusercontent.com/bioconnector/workshops/master/data/gapminder.csv")
+
+# create a list of countries to filter *in*
+countrylist <- c("China","France","United Kingdom", "United States", "Egypt", "Japan", "Senegal", "Ukraine", "Uruguay", "Venezuela", "Spain", "Malaysia", "New Zealand", "Angola")
+
+# subset the original data and calculate summary statistics of interest
+gmun <- 
+    gapminder %>%
+    filter(country %in% countrylist) %>%
+    group_by(country) %>%
+    summarise(
+        meanlifexp = mean(lifeExp),
+        sdlifeexp = sd(lifeExp),
+        meangdppercap = mean(gdpPercap),
+        sdgdppercap = sd(gdpPercap)) 
+```
+
+```{r, eval = FALSE}
+gmun
+```
+
+```{r, echo = FALSE}
+kable(gmun)
+```
+
+`d3heatmap()` is essentially an interactive extension of base R's `heatmap()`, and also accepts a matrix as its primary argument. In this case we'll use the `dist()` function to create distance matrix between each country using the continuous variables calculated above.
+
+```{r}
+gmdistmat <- dist(select(gmun, -country))
+```
+
+With the matrix prepared, we can create the heatmap. The first argument (`x`) is the object to be plotted. The appearance can be further customized with arguments like `labRow` (row labels), `labCol` (column labels), `dendrogram` (clustering visualization), etc.
+
+The final product will include interactive elements like popus on hover and click-drag 'brushing' (click and drag to zoom). Some of these behaviors can be customized with further arguments to `d3heatmap()`.
+
+```{r}
+d3heatmap(
+    # calculate distance matrix
+    gmdistmat,
+    # name the rows (top to bottom)
+    labRow = gmun$country, 
+    # name the columns (left to right)
+    labCol = gmun$country, 
+    # turn off dendrogram
+    dendrogram = 'none')
+```
+
+### Leaflet
+
+Leaflet is an open-source JavaScript library that is widely used in interactive GIS (mapping) applications. The R package supporting Leaflet is written and maintained by RStudio, and ports over the library's (very extensive) list of features[^10]. Leaflet enables developers to create maps that include markers (i.e. data points), popup text, custom zoom levels, a variety of tiles (i.e. types of maps), polygons (i.e. custom boundaries), panning, and more. 
+
+The example below will use a list of academic research institutions in the United States. This data set has been previously geocoded with the **ggmap** package to calculate latitude and longitude.
+
+The code below reads in the data and makes sure we will we be using fully geocoded data, without any NAs in latitude or longitude fields.
+
+```{r}
+# read in institution data from github using readr read_csv() function
+inst <- read_csv("https://raw.githubusercontent.com/vpnagraj/grupo/master/institutions.csv")
+
+# remove missing data
+inst <- inst[complete.cases(inst),]
+```
+
+The first step is to invoke a "base map" with the `leaflet()` function. As mentioned above, this package uses the **magrittr** piping, which allows you to chain together this base invocation with a command to add "tiles" to the map. Leaflet tiles are essentially specifications for the map "style" to be used. Below is the default base map.
+
+```{r, warning=FALSE, message = FALSE}
+library(leaflet)
+leaflet() %>%
+addTiles()
+```
+
+In order to customize the appearance of this map, we can add special "provider" tiles[^18]. These are third-party map styles that have been made available to use via Leaflet. For example, you could use a National Geographic style map like the one below:
+
+```{r}
+
+leaflet() %>%
+addProviderTiles("Esri.NatGeoWorldMap")
+
+```
+
+Below is an example of the black-and-white verison of the OpenStreetMap provider tile, along with a new feature: markers.
+
+```{r}
+leaflet() %>%
+addProviderTiles("OpenStreetMap.BlackAndWhite") %>%
+addMarkers(lng=inst$Longitude, lat=inst$Latitude)
+```
+
+Markers essentially represent points on the map, and must be applied via latitude and longitude coordinates. In this example, each set of coordinates maps the location of a major American research university. 
+
+The shape and style of markers can be further customized. `addCircleMarkers()` will use circles to represent points on the map, rather than the default icons. Within this function, one can specify other style options, like color, as well as data to use in the visualization as a "popup" text. The map below includes all institutions as red circles, with the names and city/state locations encoded in the popup text, which appears on click.
+
+```{r}
+leaflet() %>%
+addProviderTiles("OpenStreetMap.BlackAndWhite") %>%
+addCircleMarkers(lng=inst$Longitude, lat=inst$Latitude, popup = paste0(inst$Institution, "<br>", inst$Location), col = "firebrick")
+```
+
+The example above is relatively simple, but it demonstrates the main workflow for creating an interactive Leaflet map in R. It's worth noting a few other features:
+
+- `setView()`: focus the map on a specific point or zoom level
+- `addPolygons`: add custom boundaries onto the map as specified by something like a shapefile ... this is necessary for making choropleth maps
+- `addLegend()`: add and customize a legend for the map
+
+### visNetwork
+
+Network visualization refers to the graphical representation of a collection of nodes (entities) and edges (connections between those entities). There are a number of JavaScript libraries that are capable of producing these kinds of plots, and vis.js[^12] is one of the most robust. The associated R package for this library is **visNetwork**[^13].
+
+Data for network plots must be prepared with nodes and edges in mind. **visNetwork** in particular requires that these two should be separted into distinct data frames: one for the nodes (with an *id* column as well as any relevant attributes) and one for the edges (with a *from* and *to* as well as any associated attributes). 
+
+For the example that follows we'll use data describing the flow of patients from an outpatient orthopaedic clinic visit to surgery[^14]. This dataset is available on Github, and must be converted from JSON format to a data frame object using the `fromJSON()` function from the **jsonlite** package.
+
+```{r}
+library(visNetwork)
+library(jsonlite)
+
+patients <- fromJSON("https://raw.githubusercontent.com/micahstubbs/sankey-datasets/master/patient-flow-bos-2016/graph.json")
+
+patientnodes <- patients$nodes
+patientlinks <- patients$links
+
+names(patientnodes) <- c("label","id")
+names(patientlinks) <- c("from", "to", "value")
+```
+
+```{r, eval = FALSE}
+patientnodes
+```
+
+```{r, echo = FALSE}
+kable(patientnodes)
+```
+
+```{r, eval = FALSE}
+patientlinks
+```
+
+```{r, echo = FALSE}
+kable(patientlinks)
+```
+
+The first invocation of the network visualization will simply call the node and edge data frames with `visNetwork()`. Because the columns are named appropriately (in the node data frame: *label* and *id* ... in the edge data frame: *from*, *to* and *value*) the function knows how to map the attributes onto the plot. The nodes are labeled appropriately and connected via definitions of edges, which are in turn represented as specific widths based on their values.
+
+```{r}
+visNetwork(patientnodes, patientlinks) 
+```
+
+To configure the appearance of the network's nodes and edges you can include calls to `visNodes()` and `visEdges()`, respectively. The code below customizes the shape, color and highlight behavior. Passing parameters to customize the plot at this granular of a level will likely require reference to the vis.js API documentation, and arguments may have t be formatted as lists ... or even lists of lists. The `visLayout()` fixes the position of the nodes via a random seed. Alternatively, the nodes will appear in different positions each time the plot is generated, which can be particularly problematic for large networks.
+
+```{r}
+visNetwork(patientnodes, patientlinks) %>%
+    visNodes(shape = "triangle", 
+        color = list(background = "lightblue", 
+            border = "darkblue",
+            highlight = "firebrick")) %>%
+    # fix the layout to fall in the same position
+    visLayout(randomSeed = 1999)
+```
+
+The base layout above is helpful, but an even better depiction of the patient traffic might be a hierarchical layout, which can represent flow in a "directed" network. To convert the existing visualization to an alternate layout, pass it into an additional `visHierarchicalLayout()` function.
+
+```{r}
+visNetwork(patientnodes,patientlinks) %>%
+        visNodes(
+            shape = "triangle", 
+            color = list(background = "lightblue", 
+            border = "darkblue",
+            highlight = "firebrick"),
+            shadow = list(enabled = TRUE, size = 10)) %>%
+        visHierarchicalLayout(sortMethod = "directed") %>%
+        visLayout(randomSeed = 1999)
+```
+
+### Highcharter
+
+Like D3, Highcharts is a flexible JavaScript visualization tool that can produce a variety of different kinds of plots: line, spline, area, areaspline, column, bar, pie, scatter, angular gauges, arearange, areasplinerange, columnrange and polar chart[^15]. Unlike D3, the implementation of the library through the **highcharter** package condenses many of these types of plots into a single set of functions[^16]. 
+
+Note that Highcharts is free for non-commerical use, but must be licensed for commercial applications[^17].
+
+For the example that follows we'll look at different methods for creating interactive scatterplots. The data are records describing movies in the Internet Movie Database (IMDB) as collected and made available via Hadley Wickham's **ggplot2movies** package[^11].
+
+First we need to load the packages and read the data directly from the package's development repository on Github. In this case, we'll assume we're interested in a particular subset of the data: movies directed by Stanley Kubrick.
+
+```{r}
+library(highcharter)
+library(dplyr)
+
+movies <- read_csv("https://raw.githubusercontent.com/hadley/ggplot2movies/master/data-raw/movies.csv")
+
+
+kubrickdat <- data.frame(
+    title = c("Fear and Desire","Killer's Kiss","Killing, The","Paths of Glory","Spartacus","Lolita","Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb", "2001: A Space Odyssey","Clockwork Orange, A","Barry Lyndon","Shining, The", "Full Metal Jacket","Eyes Wide Shut"),
+    year = c(1953,1955,1956,1957,1960,1962,1964,1968,1971,1975,1980,1987,1999)
+)
+
+kubrick <-
+    movies %>%
+    filter(title %in% kubrickdat$title & year %in% kubrickdat$year) %>%
+    arrange(desc(year))
+```
+
+```{r, eval = FALSE}
+kubrick
+```
+
+```{r, echo = FALSE}
+kable(kubrick)
+```
+
+**highcharter** provides a function for "quick and dirty" access to the Highchart library. `hchart()` will create a plot in a single function. For those familiar with **ggplot2**, this is similar to `qplot()`. The plot type can be specified within the function.
+
+In our example, we're looking at records for Stanley Kubrick movies from IMDB. If we pass a single continuous variable (say, 'budget') into `hchart()`, the function will infer that we want a histogram. 
+
+```{r}
+hchart(kubrick$budget)
+```
+
+Much like the base `plot()` function, `hchart()` can produce a variety of different kinds of plots depending on the data inputs and plot type specification. The following will produce a scatterplot of year versus rating for the Kubrick movies.
+
+```{r}
+hchart(kubrick, "scatter", x = year, y = rating)
+```
+
+Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. While `hchart()` provides a quick way to implement this interactivity, to fully take advantage of Highhcarts features it may be necessary to use a different approach.
+
+The `highchart()` function provides a "canvas" from which you can invoke specific plot types, and can accept further customization as arguments. So the code below will create a "highcart" and then (using the **magrittr** piping syntax) pass that object along to another function that creates a scatter plot. This method allows for more customization of the scatter plot than `hchart()`, as you can easily specifiy attributes to be mapped on onto the size (z) and label.
+
+```{r}
+highchart() %>%
+    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title)
+```
+
+The plot above provides much more information and interactivity than the previous visualizations. However, it can still be improved. 
+
+For one thing, the plot should have a title. We can give it one with `hc_title()`. But another issue is that the individual movie titles aren't all visible. It appears that overlapping labels are hidden. The solution to this issue is relatively obscure, but illustrates an important feature of using JavaScript libraries in R. Like many clients, the **highcharter** package makes it possible to pass arbitrary agruments to the original Highcarts API. Unfortunately, these options aren't documented within the package. But by looking at the API documentation[^19], it's clear that you can control (and disable) the behavior in question. The key is that these options must be passed into the `highcharter()` function via the `hc_opts` argument, and must be defined as a named list that walks down through the HTML container for the visualization. This workflow can be tedious ... but very useful. Plots can be fully customized based on these parameters.
+
+```{r}
+# specify options
+kubrickopts <- list(plotOptions = list(series = list(dataLabels = list(allowOverlap = TRUE))))
+
+# create plot and pass in options to disable behavior
+highchart(hc_opts = kubrickopts) %>%
+    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title) %>%
+    hc_title(text = "Stanley Kubrick IMDB Ratings By Year") 
+```
+
+## Shiny 
+
+One of the principal advantages of JavaScript visualizations is that they are ready to insert directly into web applications. They can potentially be embedded in HTML content, and included in a variety of frameworks. One such framework, specific to R development, is Shiny[^20].
+
+Created and maintained by RStudio, Shiny is a web application framework developing interactive, web-based tools with R. JavaScript / R bindings developed with **htmlwidgets** include functions (`render*()` for server.R and `*Output()` for ui.R) to create and update these visualizations in a Shiny app.
+
+## Future Features
+
+The **htmlwidgets** package significantly cuts down on the complexity of integrating JavaScript libraries into R[^21]. As mentioned above, this package creates boilerplate outlines and provides a helpful structure for writing the pieces of R and JavaScript code that will communicate with one another. The end result of the binding is a package that includes functions to be called to create the visualization of interest. The relative ease of this workflow has resulted in a flood of new JavaScript / R visualization tools in the past year[^22] ... and there will likely be many more released in the future. Another new tool in development is **crosstalk**, which aims to facilitate interaction *across* JavaScript frameworks via R[^23]. 
+
+## References
+
+[^1]: https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields
+[^2]: http://stackoverflow.com/a/245068
+[^3]: http://www.crockford.com/javascript/javascript.html
+[^4]: http://www.htmlwidgets.org/
+[^5]: https://bl.ocks.org/mbostock/4060606
+[^6]: http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/
+[^7]: https://en.wikipedia.org/wiki/Heat_map
+[^8]: https://cran.r-project.org/web/packages/gapminder/index.html
+[^9]: http://www.un.org/en/sc/members/
+[^10]: https://rstudio.github.io/leaflet/
+[^11]: http://leaflet-extras.github.io/leaflet-providers/preview/index.html
+[^12]: http://visjs.org/network_examples.html
+[^13]: http://datastorm-open.github.io/visNetwork/
+[^14]: https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016
+[^15]: https://shop.highsoft.com/highcharts
+[^16]: http://jkunst.com/highcharter/
+[^17]: https://shop.highsoft.com/highcharts
+[^18]: https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf
+[^19]: http://api.highcharts.com/highcharts
+[^20]: http://shiny.rstudio.com/
+[^21]: http://www.htmlwidgets.org/develop_intro.html
+[^22]: http://www.buildingwidgets.com/
+[^23]: https://github.com/rstudio/crosstalk

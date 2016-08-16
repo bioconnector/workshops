@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Building Shiny Web Apps in R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<link rel="stylesheet"
+      href="site_libs/highlight/default.css"
+      type="text/css" />
+<script src="site_libs/highlight/highlight.js"></script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+  padding-left: 10px;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Lessons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">--- R ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li class="dropdown-header">Essential Statistics with R</li>
+    <li class="dropdown-header">Survival Analysis with TCGA Data</li>
+    <li class="dropdown-header">Introduction to Bioconductor</li>
+    <li class="dropdown-header">Harvesting Data from NCBI</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- NGS DATA ANALYSIS ---</li>
+    <li>
+      <a href="r-rnaseq-airway.html">RNA-seq: airway</a>
+    </li>
+    <li class="dropdown-header">ChIP-seq data analysis</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- OTHER CLASSES ---</li>
+    <li class="dropdown-header">Data Cleaning w/ OpenRefine</li>
+    <li class="dropdown-header">HPC &amp; Parallel Computing</li>
+    <li class="dropdown-header">HPC at UVA Best Practices</li>
+    <li class="dropdown-header">Automated Image Analysis w/ ImageJ</li>
+    <li class="dropdown-header">Power &amp; Sample Size Analysis</li>
+    <li class="dropdown-header">Intro to Categorical Data Analysis</li>
+    <li class="dropdown-header">Beginner Python</li>
+    <li class="dropdown-header">Advanced Python</li>
+    <li class="dropdown-header">Introduction to SPSS</li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="faq.html">FAQ</a>
+    </li>
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Building Shiny Web Apps in R</h1>
+
+</div>
+
+
+<p>Shiny is a framework for developing interactive, web-based tools with R. This workshop will cover how to create a basic user interface, add reactive widgets and publish a Shiny app. No web development experience is required. Some familiarity with R will be helpful.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Shiny is a light-weight web application framework for interactive data exploration.</p>
+<p>What does that mean?</p>
+<p>It means that Shiny was built to execute R code dynamically based on user input. That’s it.</p>
+<p>If you’re trying to create a “heavy” website (e.g. lots of users, complex database structure, etc.) or a native mobile app (like the kind you install on your iThing … ), then you should probably look elsewhere.</p>
+<p>Shiny is built to run code written in R, and it can showcase any of the computational power R is capable of.</p>
+<p>It’s maintained by RStudio, and there’s robust documentation and resources for both beginners and advanced Shiny developers:</p>
+<ul>
+<li>Tutorial for those new to Shiny<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
+<li>Collection of posts covering the basics of layout, reactivity and extensions for Shiny<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
+<li>RStudio ‘cheatsheet’ for Shiny<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></li>
+<li>R-Bloggers articles featuring Shiny apps<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></li>
+<li>RStudio webinar slides for getting started with Shiny<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></li>
+</ul>
+</div>
+<div id="bones-of-a-shiny-app" class="section level2">
+<h2>‘Bones’ of a Shiny App</h2>
+<p>At minimum, a Shiny app has two components:</p>
+<ul>
+<li>ui.R</li>
+<li>server.R</li>
+</ul>
+<p>You can think of these as holding the form (ui.R) and function (server.R) of the app. It is possible to create single file apps<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> but for the sake of clarity, we’ll keep the scripts separate. Note that you must name the scripts accordingly – in other words, you can’t have a ui script called my_ui.R or appui.R or youi.R … it has to be ui.R and ditto for server.R</p>
+<p>There are a couple ways to build out the skeleton of your first Shiny project. You could find the code for an app that you want to mimic and use that as a baseline for your ui.R and server.R scripts. But that copy-and-paste workflow can be tedious, error-prone and unnecessary if you’re using RStudio …</p>
+<p>Like we mentioned above, Shiny is developed by RStudio. So it’s no suprise that the RStudio IDE has some Shiny-related features. In particular, the Shiny project structure makes it really easy to spin up app templates. To use this feature:</p>
+<ol style="list-style-type: decimal">
+<li>Create a new project in RStudio (either in a new directory or existing directory)</li>
+<li>Select Shiny app and give it a name</li>
+</ol>
+<p>This will create a ui.R, server.R and .Rproj file (which is useful for maintaining a relative file structure when you’re working on your app …) all in the directory you’ve specified.</p>
+</div>
+<div id="scratch" class="section level2">
+<h2>Scratch</h2>
+<p>The server.R script does the “work” for your Shiny app. Functionally you can do anything in a server.R script that you can in a regular R script. The only difference is that the parameter(s) you pass into that R code can be set by a user via input widgets.</p>
+<p>So before you sink a bunch of time into creating an app that passes the parameters <em>dynamically</em>, you probably want to test that they work <em>statically</em>. One way to do this is to create a “scratch” script – this will be a place for you to get your code working with a single input. Once it’s working here, you can figure out which pieces you’d like to dynamically change within the ui.R script.</p>
+<p>And it’s worth pointing out that creating another file with a “.R” extension in the same directory as your ui.R and server.R files won’t cause any conflicts.</p>
+<pre class="r"><code>library(readr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+# read in the data from github
+moma &lt;- read_csv(&quot;https://raw.githubusercontent.com/MuseumofModernArt/collection/master/Artworks.csv&quot;)
+
+# take a look at the summary
+summary(moma)
+
+# let&#39;s assume we want to look at number of works by year ...
+
+# now do some dplyr magic to aggregate our data on year acquired
+moma_by_year &lt;- 
+    moma %&gt;%
+    filter(!is.na(DateAcquired)) %&gt;%
+    mutate(year.acquired = year(DateAcquired)) %&gt;%
+    group_by(year.acquired) %&gt;%
+    summarise(nworks = n())
+
+# plot what we have and see what it looks
+ggplot(moma_by_year, aes(year.acquired, nworks)) +
+    geom_line(stat = &quot;identity&quot;)</code></pre>
+</div>
+<div id="layouts" class="section level2">
+<h2>Layouts</h2>
+<p>The code you’ve written will be the basis of your server.R script. Before you can implement that, you need to make some decisions about layout. As a default, Shiny uses the Bootstrap grid system. You can customize this to include sidebars, navbars, columns and more. All of the layout is handled within the ui.R file.</p>
+<p>ui.R is a essentially a collection of nested functions … that’s why the code can be kind of hard to look at. The baseline function is <code>shinyUI()</code></p>
+<p>Within that you can specify if you want your layout to be a <code>fluidPage()</code> (the default if you’re using a template from RStudio), <code>navbarPage()</code> (as the name suggests, helpful for creating naviagtion) or <code>fixedPage()</code> (not recommended … “breaks” the bootstrap).</p>
+<p>Nested further, you can include sub layout regions like <code>sidebarLayout()</code> and <code>fluidRow</code>.</p>
+<p>And even <em>further</em> you can nest individual elements with <code>tabPanel()</code> or <code>sidebarPanel()</code> or <code>column()</code> functions.</p>
+<p>We’ll stick with default sidebar layout that RStudio gives us. But you can refer to the Shiny Application layout guide<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> for more advanced configurations.</p>
+<pre class="r"><code>library(shiny)
+
+shinyUI(fluidPage(
+
+  # Application title
+  titlePanel(&quot;Old Faithful Geyser Data&quot;),
+
+  # Sidebar with a slider input for number of bins
+  sidebarLayout(
+    sidebarPanel(
+
+    ),
+
+    # Show a plot of the generated distribution
+    mainPanel(
+    )
+  )
+))</code></pre>
+</div>
+<div id="input-output" class="section level2">
+<h2>Input / Output</h2>
+<p>You’ve got the “scratch” code doing what you want it to. And you’ve got the basic idea of what the layout will be.</p>
+<p>But now what?</p>
+<p>You need to decide what parameter you want to make dynamic – in other words, what variable do you want your users to be able to adjust to see how the results change. The class of this object will determine what kind of widget you’ll start with. For example, if you have a continuous (numeric) variable then you may want to use a slider input or input box. On the other hand, if you have a discrete (factor) variable then you might need to use a select input or checkbox. There are a lot of widgets<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> to choose from and a lot of ways you can use them.</p>
+<p>Once you’ve decided what input method use you’ll need to write the code for that widget in the ui.R script. Widgets can go inside any of the layout elements.</p>
+<p>Every widget needs a name – this is a semi-arbitrary distinction you can make with the first, inputId argument to the widget function. Although you can freely name the widget, it’s only semi-arbitrary because it the inputId must be unique (not used by another widget) and should be somewhat meaningful as you’ll be calling the widget in the server.R script as well.</p>
+<pre class="r"><code>library(shiny)
+
+shinyUI(fluidPage(
+
+  titlePanel(&quot;MOMA Acquistions Over Time&quot;),
+
+    sidebarLayout(
+    sidebarPanel(
+     selectInput(&quot;department&quot;, label = &quot;Department&quot;, choices = unique(moma$Department))
+    ),
+
+    mainPanel(
+      plotOutput(&quot;yearplot&quot;)
+    )
+  )
+))</code></pre>
+</div>
+<div id="syntax-punctuation" class="section level2">
+<h2>Syntax / Punctuation</h2>
+<p>This is as good a place as any to stop and make a few comments about Shiny’s syntax.</p>
+<p>If you’re not careful you can get mystified pretty easily while writing your app … and / or spend way too much time looking for a missing comma or extra parenthesis. Debugging these syntactic errors can be a bigger headache in a Shiny app than it is an regular R script.</p>
+<p>Fortunately, RStudio is pretty good about highlighting breaks in code syntax. With all the nested functions in the ui.R script, it’s important to look out for any open parentheses. Another tip is to remember that UI elements are each arguments to functions – as such, they’re separated by commas.</p>
+<p>The server.R script has a slightly different syntax. It always starts with something like <code>shinyServer(function(input, output) {</code> and ends with <code>})</code> to close out that outermost function. Because the code inside of that first <code>{</code> is being defined as part of a function (and not a series of arguments) you don’t need to use commas while separating objects. You will need to use the <code>({</code> while calling render functions for the output.</p>
+<p>These are just a few basic tips but they might save you a headache or two, especially at the beginning.</p>
+</div>
+<div id="server.r" class="section level2">
+<h2>server.R</h2>
+<p>The foundation for the server.R script is in the “scratch” file. For this code to work with ui.R, you need to add calls to the widget inputs / display outputs.</p>
+<p>Let’s start with the input mechanisms … after all, the output depends on the values that the users enter into these widgets.</p>
+<p>Accessing an input widget is easy. Use ‘input$’ followed by the name you gave the ‘id’ argument over in the ui.R file wherever you want to the input to be a control.</p>
+<p>Let’s say, for example, you wanted to create a histogram of random values while allowing the user to select sample size. If you had a numeric input called ‘samplesize’ then the syntax for the server.R portion of the code would include <code>hist(rand(input$samplesize))</code></p>
+<p>The code above would take care of the <em>input</em> portion of the histogram. To finish the thought and <em>output</em> the plot you need two more pieces …</p>
+<p>In the ui.R you have to specify a display output – like input widgets, these come in different flavors (e.g <code>plotOutput()</code> or <code>textOutput()</code> or <code>tableOutput()</code>), can live anywhere in the layout and must be given an arbitrary id.</p>
+<p>Within the server.R script you’ll need to call the UI output in the same way as the input – use ‘output$’ followed by the name you gave the ‘id’ argument.</p>
+<p>The last step is to assign the output in the server script to a render function (e.g. <code>{r}enderPlot()</code> or <code>{r}enderText()</code>) that contains the scratch script modified with the ‘input$’ call.</p>
+<pre class="r"><code>library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+shinyServer(function(input, output) {
+
+  output$yearplot &lt;- renderPlot({
+    
+      # read in the data from github
+      moma &lt;- read_csv(&quot;https://raw.githubusercontent.com/MuseumofModernArt/collection/master/Artworks.csv&quot;)
+      
+      moma_by_year &lt;- 
+          moma %&gt;%
+          filter(Department == input$department) %&gt;%
+          filter(!is.na(DateAcquired)) %&gt;%
+          mutate(year.acquired = year(DateAcquired)) %&gt;%
+          group_by(year.acquired) %&gt;%
+          summarise(nworks = n())
+      
+      ggplot(moma_by_year, aes(year.acquired, nworks)) +
+          geom_line(stat = &quot;identity&quot;)
+
+  })
+
+})</code></pre>
+</div>
+<div id="reactivity" class="section level2">
+<h2>Reactivity</h2>
+<p>By building ui.R and server.R in the manner described above, the output of the app will update every time the input is changed. This fact may sound simple and could easily be taken for granted. But it demonstrates one of the fundamental features of Shiny: <em>reactivity</em>.</p>
+<p>A reactive element will update output based on input.</p>
+<p>By default, all of the ‘render’ functions are reactive:</p>
+<ul>
+<li><code>renderPlot()</code></li>
+<li><code>renderText()</code></li>
+<li><code>renderTable()</code></li>
+<li><code>renderDataTable()</code></li>
+<li><code>renderImage()</code></li>
+<li><code>renderUI()</code></li>
+<li><code>renderPrint()</code></li>
+</ul>
+<p>Reactivity may not always be desireable. In some cases, you may want to only trigger a reaction after the user has input ‘signed off’ on the submission of the data … <code>actionButton()</code> and <code>observeEvent()</code> in combination will do just that.</p>
+<p>Shiny makes it possible to manage reactivity in different ways:</p>
+<ul>
+<li><p>You can <em>prevent</em> reactions with <code>isolate()</code></p></li>
+<li><p>You can <em>delay</em> reactions with <code>eventReactive()</code></p></li>
+<li><p>You can <em>modularize</em> reactions with <code>{r}eactive()</code></p></li>
+<li><p>You can <em>trigger</em> reactions with <code>observeEvent()</code></p></li>
+</ul>
+<p>Reactivity is a beast.</p>
+<p>Credit is due to the RStudio group that put together the Shiny webinar series … their material<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> makes it much easier to understand the concept.</p>
+<pre class="r"><code>library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+options(shiny.reactlog=TRUE)
+
+shinyServer(function(input, output) {
+  
+  dat &lt;- reactive({
+      
+      moma &lt;- read_csv(&quot;https://raw.githubusercontent.com/MuseumofModernArt/collection/master/Artworks.csv&quot;)
+      
+      moma_by_year &lt;- 
+          moma %&gt;%
+          filter(Department == input$department) %&gt;%
+          filter(!is.na(DateAcquired)) %&gt;%
+          mutate(year.acquired = year(DateAcquired)) %&gt;%
+          group_by(year.acquired) %&gt;%
+          summarise(nworks = n())
+      
+  })
+  
+  output$yearplot &lt;- renderPlot({
+    
+      ggplot(dat(), aes(year.acquired, nworks)) +
+          geom_line(stat = &quot;identity&quot;)
+
+  })
+   
+  output$yeartable &lt;- renderDataTable({
+      
+      arrange(dat(), desc(nworks))
+      
+  })
+
+})</code></pre>
+<pre class="r"><code>library(shiny)
+
+shinyUI(fluidPage(
+
+  titlePanel(&quot;MOMA Acquistions Over Time&quot;),
+
+    sidebarLayout(
+    sidebarPanel(
+     selectInput(&quot;department&quot;, label = &quot;Department&quot;, choices = unique(moma$Department))
+    ),
+
+    mainPanel(
+      plotOutput(&quot;yearplot&quot;),
+      dataTableOutput(&quot;yeartable&quot;)
+    )
+  )
+))</code></pre>
+</div>
+<div id="loading-data" class="section level2">
+<h2>Loading Data</h2>
+<p>In some cases, it makes sense to create objects before any of the reactive stuff kicks off.</p>
+<p>For example, you might want to load a dataset to be filtered and analyzed by the server.R code.</p>
+<p>Anything before the <code>shinyUI()</code> or <code>shinyServer()</code> functions is only run once (when the server is started) and is available for use in the environment.</p>
+<pre class="r"><code>save(moma, file = &quot;moma.rda&quot;)</code></pre>
+<pre class="r"><code>library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+options(shiny.reactlog=TRUE)
+
+load(&quot;moma.rda&quot;)
+
+shinyServer(function(input, output) {
+  
+  dat &lt;- reactive({
+      
+      moma_by_year &lt;- 
+          moma %&gt;%
+          filter(Department == input$department) %&gt;%
+          filter(!is.na(DateAcquired)) %&gt;%
+          mutate(year.acquired = year(DateAcquired)) %&gt;%
+          group_by(year.acquired) %&gt;%
+          summarise(nworks = n())
+      
+  })
+  
+  output$yearplot &lt;- renderPlot({
+    
+      ggplot(dat(), aes(year.acquired, nworks)) +
+          geom_line(stat = &quot;identity&quot;)
+
+  })
+   
+  output$yeartable &lt;- renderDataTable({
+      
+      arrange(dat(), desc(nworks))
+      
+  })
+
+})</code></pre>
+</div>
+<div id="theming" class="section level2">
+<h2>Theming</h2>
+<p>This will be brief.</p>
+<p>But yes you can totally “make the font bigger … oh no not that big … yeah that’s perfect … actually maybe it was better before …”</p>
+<p>The tags syntax allows you to access individual HTML elements. For example, <code>tags$b(textOutput(&quot;example&quot;))</code> in the ui.R script would make all of the text output for “example” bold.</p>
+<p>By creating a “www” directory in the root your app file structure (i.e. next to your ui.R and server.R scripts) you can insert style-sheet (CSS) files. The CSS is used to control how individual HTML elements display on the page(s) of your Shiny app. Note that these <em>must</em> go in a directory called “www”.</p>
+<p>If you’re really into pixel pushing with CSS, try checking out this tutorial<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>.</p>
+<p>And if you just want to try out some different theming options (for font size, button style, etc.) you can use the <strong>shinythemes</strong> package. RStudio has written some helpful documentation<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> for that library.</p>
+<pre class="r"><code>library(shiny)
+library(shinythemes)
+
+shinyUI(fluidPage(theme = shinytheme(&quot;flatly&quot;),
+
+  titlePanel(&quot;MOMA Acquistions Over Time&quot;),
+
+    sidebarLayout(
+    sidebarPanel(
+     selectInput(&quot;department&quot;, label = &quot;Department&quot;, choices = unique(moma$Department))
+    ),
+
+    mainPanel(
+      plotOutput(&quot;yearplot&quot;),
+      dataTableOutput(&quot;yeartable&quot;)
+    )
+  )
+))</code></pre>
+</div>
+<div id="runapp" class="section level2">
+<h2>runApp()</h2>
+<p>If you’re using RStudio and are looking at either the ui.R or server.R scripts in the source viewer, you’ll see a button with a green arrow that says “Run App” in the upper right corner of the panel. Pressing that button will open your app in an external RStudio window.</p>
+<p>Your console pane in RStudio will tell you that your R session is busy listening on a local port. You can halt the app in the console with the stop sign button.</p>
+<p>And if you’re not using RStudio (or if you want to customize <em>how</em> the app is running) it’s possible to start the app with <code>{r}unApp()</code></p>
+<p><code>runApp(display.mode=&quot;showcase&quot;)</code></p>
+<p><code>{r}unGithub()</code> is another option. Somewhere in between <code>{r}unApp()</code> and hosting, this method of running an app goes to a Github repository that contains an app and then runs it from your computer locally. It is worth mentioning that for this to work you’ll need all of the packages that the app uses installed in your version of R. Try it out:</p>
+<pre class="r"><code>install.packages(&quot;shiny&quot;)
+install.packages(&quot;ggplot2&quot;)
+install.packages(&quot;ggthemes&quot;)
+install.packages(&quot;babynames&quot;)
+install.packages(&quot;scales&quot;)
+
+shiny::runGitHub(&#39;names&#39;, &#39;vpnagraj&#39;) </code></pre>
+</div>
+<div id="hosting" class="section level2">
+<h2>Hosting</h2>
+<p>Running your app locally is a great way to prototype. But it’s local. That means only on your computer.</p>
+<p>To host the app so other people can view it on the internet, you’ll need a system with a Shiny server that’s running and configured.</p>
+<p>There are a few avenues you could pursue:</p>
+<ul>
+<li>shinyapps.io<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> (mix of free and fee-based options depending on up-time, number of apps and authentication)</li>
+<li>Shiny Server<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> (free but must be configured and installed on your hardware)</li>
+<li>Shiny Server Pro<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> (fee-based but is professionally configured and maintained)</li>
+</ul>
+<blockquote>
+<p><strong>nb</strong> Each of these solutions has advantages and disadvantages. If you’re intereseted in hosting an app, think long and hard about the budget you have for your app, the longevity of the project and any security concerns you have for the data involved.</p>
+</blockquote>
+<pre class="r"><code># http://shiny.rstudio.com/articles/shinyapps.html
+# install.packages(&quot;devtools&quot;) 
+# devtools::install_github(&#39;rstudio/rsconnect&#39;)
+# devtools::install_github(&quot;rstudio/shinyapps&quot;)
+library(shinyapps)
+deployApp()</code></pre>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://shiny.rstudio.com/tutorial/" class="uri">http://shiny.rstudio.com/tutorial/</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://shiny.rstudio.com/articles/" class="uri">http://shiny.rstudio.com/articles/</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/shiny-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/shiny-cheatsheet.pdf</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><a href="http://www.r-bloggers.com/?s=shiny" class="uri">http://www.r-bloggers.com/?s=shiny</a><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p><a href="https://github.com/rstudio/webinars" class="uri">https://github.com/rstudio/webinars</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="http://shiny.rstudio.com/articles/single-file.html" class="uri">http://shiny.rstudio.com/articles/single-file.html</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p><a href="http://shiny.rstudio.com/articles/layout-guide.html" class="uri">http://shiny.rstudio.com/articles/layout-guide.html</a><a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p><a href="http://shiny.rstudio.com/gallery/widget-gallery.html" class="uri">http://shiny.rstudio.com/gallery/widget-gallery.html</a><a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p><a href="https://github.com/rstudio/webinars/blob/master/09-How-to-start-with-Shiny-Part-2/02-How-to-start-2.pdf" class="uri">https://github.com/rstudio/webinars/blob/master/09-How-to-start-with-Shiny-Part-2/02-How-to-start-2.pdf</a><a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p><a href="http://shiny.rstudio.com/articles/css.html" class="uri">http://shiny.rstudio.com/articles/css.html</a><a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p><a href="http://rstudio.github.io/shinythemes/" class="uri">http://rstudio.github.io/shinythemes/</a><a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p><a href="https://www.shinyapps.io/" class="uri">https://www.shinyapps.io/</a><a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p><a href="https://www.rstudio.com/products/shiny/shiny-server/" class="uri">https://www.rstudio.com/products/shiny/shiny-server/</a><a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p><a href="https://www.rstudio.com/products/shiny-server-pro/" class="uri">https://www.rstudio.com/products/shiny-server-pro/</a><a href="#fnref14">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="https://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
