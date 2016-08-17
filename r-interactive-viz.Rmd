@@ -15,6 +15,8 @@ catn <- function(x="") cat("    ", x, "\n")
 
 There are a number of JavaScript libraries available that leverage web functionality to produce compelling, dynamic data visualizations. This workshop will introduce several of these tools, including D3, HighCharts and Leaflet, and will demonstrate how to implement them in the context of the R programming language. No JavaScript experience is required. Some familiarity with R will be helpful.
 
+**Make sure you [complete the setup here](setup.html) prior to the class.**
+
 ## Introduction
 
 This tutorial will introduce several JavaScript libraries that are capable of producing interactive data visualizations. The goal is to demonstrate how to implement some of these tools in the context of the R programming language. 
@@ -269,6 +271,7 @@ kubrickdat <- data.frame(
 kubrick <-
     movies %>%
     filter(title %in% kubrickdat$title & year %in% kubrickdat$year) %>%
+    select(title, year, budget, rating, length) %>%
     arrange(desc(year))
 ```
 

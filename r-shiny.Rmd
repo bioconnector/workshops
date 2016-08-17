@@ -15,7 +15,7 @@ catn <- function(x="") cat("    ", x, "\n")
 
 Shiny is a framework for developing interactive, web-based tools with R. This workshop will cover how to create a basic user interface, add reactive widgets and publish a Shiny app. No web development experience is required. Some familiarity with R will be helpful.
 
-
+**Make sure you [complete the setup here](setup.html) prior to the class.**
 
 ## Introduction
 
@@ -401,13 +401,13 @@ If you're using RStudio and are looking at either the ui.R or server.R scripts i
 
 Your console pane in RStudio will tell you that your R session is busy listening on a local port. You can halt the app in the console with the stop sign button. 
 
-And if you're not using RStudio (or if you want to customize _how_ the app is running) it's possible to start the app with ```{r}unApp()```
+And if you're not using RStudio (or if you want to customize _how_ the app is running) it's possible to start the app with `runApp()`
 
 `
 runApp(display.mode="showcase")
 `
 
-```{r}unGithub()``` is another option. Somewhere in between ```{r}unApp()``` and hosting, this method of running an app goes to a Github repository that contains an app and then runs it from your computer locally. It is worth mentioning that for this to work you'll need all of the packages that the app uses installed in your version of R. Try it out:
+`runGithub` is another option. Somewhere in between `runApp()` and hosting, this method of running an app goes to a Github repository that contains an app and then runs it from your computer locally. It is worth mentioning that for this to work you'll need all of the packages that the app uses installed in your version of R. Try it out:
 
 ```{r}
 install.packages("shiny")

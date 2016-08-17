@@ -484,6 +484,34 @@ biocLite(&quot;DESeq2&quot;)</code></pre>
 </ul></li>
 </ol>
 </div>
+<div id="interactive-visualization" class="section level3">
+<h3>Interactive Visualization</h3>
+<p>The <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a> lesson requires installation of several R packages in addition to those mentioned above:</p>
+<pre class="r"><code>install.packages(&quot;highcharter&quot;)
+install.packages(&quot;d3heatmap&quot;)
+install.packages(&quot;leaflet&quot;)
+install.packages(&quot;visNetwork&quot;)
+install.packages(&quot;jsonlite&quot;)</code></pre>
+<p>To check that these are correctly installed, first close RStudio and then reopen it and run the following:</p>
+<pre class="r"><code>library(highcharter)
+library(d3heatmap)
+library(leaflet)
+library(visNetwork)
+library(jsonlite)</code></pre>
+<p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email me</a> <em>prior to the course</em> if you are still having difficulty.</p>
+</div>
+<div id="shiny" class="section level3">
+<h3>Shiny</h3>
+<p>The <a href="r-shiny.html">Building Shiny Web Apps in R</a> lesson requires installation of several R packages in addition to those mentioned above:</p>
+<pre class="r"><code>install.packages(&quot;shiny&quot;)
+install.packages(&quot;shinythemes&quot;)
+install.packages(&quot;lubridate&quot;)</code></pre>
+<p>To check that these are correctly installed, first close RStudio and then reopen it and run the following:</p>
+<pre class="r"><code>library(shiny)
+library(shinythemes)
+library(lubridate)</code></pre>
+<p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email me</a> <em>prior to the course</em> if you are still having difficulty.</p>
+</div>
 </div>
 <div id="get-data" class="section level2">
 <h2><a href="data.html">Get Data</a></h2>

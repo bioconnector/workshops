@@ -55,3 +55,24 @@ All data used in this repo is stored in the `data/` directory. All you should ha
         toc: false
     ---
     ```
+- The material on the site covers a variety of topics and lessons, many of which require specific R packages. To properly build and deploy the site you'll need all packages installed:
+    ```r
+    install.packages("dplyr")
+    install.packages("ggplot2")
+    install.packages("tidyr")
+    install.packages("readr")
+    install.packages("stringr")
+    install.packages("knitr")
+    install.packages("rmarkdown")
+    install.packages("highcharter")
+    install.packages("d3heatmap")
+    install.packages("leaflet")
+    install.packages("visNetwork")
+    install.packages("jsonlite")
+    install.packages("shiny")
+    install.packages("shinythemes")
+    install.packages("lubridate")
+    source("http://bioconductor.org/biocLite.R")
+    biocLite()
+    biocLite("DESeq2")
+    ```

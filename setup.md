@@ -77,6 +77,49 @@ First, install R and RStudio as described above. Several additional setup steps 
         1. Download the installer .pkg file [using this link](http://tug.org/cgi-bin/mactex-download/MacTeX.pkg). This is a very large download (>2 gigabytes). It can take a while depending on your network speed.
         1. Run the installer package. 
 
+### Interactive Visualization
+
+The [Interactive Visualization with JavaScript and R](r-interactive-viz.html) lesson requires installation of several R packages in addition to those mentioned above:
+
+```r
+install.packages("highcharter")
+install.packages("d3heatmap")
+install.packages("leaflet")
+install.packages("visNetwork")
+install.packages("jsonlite")
+```
+
+To check that these are correctly installed, first close RStudio and then reopen it and run the following:
+
+```r
+library(highcharter)
+library(d3heatmap)
+library(leaflet)
+library(visNetwork)
+library(jsonlite)
+```
+
+These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
+
+### Shiny
+
+The [Building Shiny Web Apps in R](r-shiny.html) lesson requires installation of several R packages in addition to those mentioned above:
+
+```r
+install.packages("shiny")
+install.packages("shinythemes")
+install.packages("lubridate")
+```
+
+To check that these are correctly installed, first close RStudio and then reopen it and run the following:
+
+```r
+library(shiny)
+library(shinythemes)
+library(lubridate)
+```
+
+These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
 
 ## [Get Data](data.html)
 

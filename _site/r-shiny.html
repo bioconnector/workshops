@@ -415,6 +415,7 @@ div.tocify {
 
 
 <p>Shiny is a framework for developing interactive, web-based tools with R. This workshop will cover how to create a basic user interface, add reactive widgets and publish a Shiny app. No web development experience is required. Some familiarity with R will be helpful.</p>
+<p><strong>Make sure you <a href="setup.html">complete the setup here</a> prior to the class.</strong></p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Shiny is a light-weight web application framework for interactive data exploration.</p>
@@ -728,9 +729,9 @@ shinyUI(fluidPage(theme = shinytheme(&quot;flatly&quot;),
 <h2>runApp()</h2>
 <p>If you’re using RStudio and are looking at either the ui.R or server.R scripts in the source viewer, you’ll see a button with a green arrow that says “Run App” in the upper right corner of the panel. Pressing that button will open your app in an external RStudio window.</p>
 <p>Your console pane in RStudio will tell you that your R session is busy listening on a local port. You can halt the app in the console with the stop sign button.</p>
-<p>And if you’re not using RStudio (or if you want to customize <em>how</em> the app is running) it’s possible to start the app with <code>{r}unApp()</code></p>
+<p>And if you’re not using RStudio (or if you want to customize <em>how</em> the app is running) it’s possible to start the app with <code>runApp()</code></p>
 <p><code>runApp(display.mode=&quot;showcase&quot;)</code></p>
-<p><code>{r}unGithub()</code> is another option. Somewhere in between <code>{r}unApp()</code> and hosting, this method of running an app goes to a Github repository that contains an app and then runs it from your computer locally. It is worth mentioning that for this to work you’ll need all of the packages that the app uses installed in your version of R. Try it out:</p>
+<p><code>runGithub</code> is another option. Somewhere in between <code>runApp()</code> and hosting, this method of running an app goes to a Github repository that contains an app and then runs it from your computer locally. It is worth mentioning that for this to work you’ll need all of the packages that the app uses installed in your version of R. Try it out:</p>
 <pre class="r"><code>install.packages(&quot;shiny&quot;)
 install.packages(&quot;ggplot2&quot;)
 install.packages(&quot;ggthemes&quot;)
