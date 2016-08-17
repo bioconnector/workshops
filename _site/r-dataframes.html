@@ -440,15 +440,8 @@ library(dplyr)</code></pre>
 <div id="read_csv" class="section level3">
 <h3><code>read_csv()</code></h3>
 <p>Now, let’s actually load the data. You can get help for the import function with <code>?read_csv</code>. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we’re going to be referring to this data a lot, let’s give it a short easy name to type. I’m going to call it <code>ydat</code>. Once we’ve loaded it we can type the name of the object itself (<code>ydat</code>) to see it printed to the screen.</p>
-<pre class="r"><code>ydat &lt;- read_csv(file=&quot;data/brauer2007_tidy.csv&quot;)</code></pre>
-<pre><code>## 
-|==============                                                                 |  17%    3 MB
-|============================                                                   |  35%    6 MB
-|===========================================                                    |  54%    9 MB
-|=========================================================                      |  72%   12 MB
-|========================================================================       |  90%   15 MB
-|================================================================================| 100%   16 MB</code></pre>
-<pre class="r"><code>ydat</code></pre>
+<pre class="r"><code>ydat &lt;- read_csv(file=&quot;data/brauer2007_tidy.csv&quot;)
+ydat</code></pre>
 <pre><code>## # A tibble: 198,430 x 7
 ##    symbol systematic_name nutrient  rate expression
 ##     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
@@ -524,7 +517,26 @@ library(dplyr)</code></pre>
 ##  $ rate           : num  0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 0.05 ...
 ##  $ expression     : num  -0.24 0.28 -0.02 -0.33 0.05 -0.69 -0.55 -0.75 -0.24 -0.16 ...
 ##  $ bp             : chr  &quot;ER to Golgi transport&quot; &quot;biological process unknown&quot; &quot;proteolysis and peptidolysis&quot; &quot;mRNA polyadenylylation*&quot; ...
-##  $ mf             : chr  &quot;molecular function unknown&quot; &quot;molecular function unknown&quot; &quot;metalloendopeptidase activity&quot; &quot;RNA binding&quot; ...</code></pre>
+##  $ mf             : chr  &quot;molecular function unknown&quot; &quot;molecular function unknown&quot; &quot;metalloendopeptidase activity&quot; &quot;RNA binding&quot; ...
+##  - attr(*, &quot;spec&quot;)=List of 2
+##   ..$ cols   :List of 7
+##   .. ..$ symbol         : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ systematic_name: list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ nutrient       : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ rate           : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_double&quot; &quot;collector&quot;
+##   .. ..$ expression     : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_double&quot; &quot;collector&quot;
+##   .. ..$ bp             : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   .. ..$ mf             : list()
+##   .. .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_character&quot; &quot;collector&quot;
+##   ..$ default: list()
+##   .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_guess&quot; &quot;collector&quot;
+##   ..- attr(*, &quot;class&quot;)= chr &quot;col_spec&quot;</code></pre>
 <pre class="r"><code>summary(ydat)</code></pre>
 <pre><code>##     symbol          systematic_name      nutrient              rate      
 ##  Length:198430      Length:198430      Length:198430      Min.   :0.050  
