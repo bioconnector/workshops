@@ -1,6 +1,6 @@
 # Remove later. See:
 # https://gist.github.com/cobyism/4730490
-# _site/
+_site/
 
 # R project, history, etc.
 .Rproj.user
@@ -13,11 +13,11 @@
 # be ignored in the rendered output.
 *_cache/
 *_files/
-!_site/*_files
+# !_site/*_files
 
 # ignore image sources that make it into _site
-_site/**/*.psd
-_site/**/*.key
+# _site/**/*.psd
+# _site/**/*.key
 
 # Unfinished lessons
 Untitled*
