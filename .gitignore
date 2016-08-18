@@ -1,5 +1,4 @@
-# Remove later. See:
-# https://gist.github.com/cobyism/4730490
+# Ignore build _site/ directory, and use https://github.com/davisp/ghp-import
 _site/
 
 # R project, history, etc.
@@ -8,16 +7,9 @@ _site/
 .RData
 .Rprofile
 
-# knitr caches will always be ignored.
-# cached _files/ directories in the project root will be ignored, but will NOT
-# be ignored in the rendered output.
+# knitr caches and files.
 *_cache/
 *_files/
-# !_site/*_files
-
-# ignore image sources that make it into _site
-# _site/**/*.psd
-# _site/**/*.key
 
 # Unfinished lessons
 Untitled*
