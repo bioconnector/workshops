@@ -1,0 +1,18 @@
+---
+title: 'Essential Statistics with R'
+---
+
+```{r, echo=FALSE, message=FALSE, eval=TRUE}
+library(knitr)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, results="hide", cache=TRUE)
+options(digits=3)
+options(max.print=200)
+.ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
+```
+
+This workshop will provide hands-on instruction and exercises covering basic statistical analysis in R. This will cover descriptive statistics, _t_-tests, linear models, chi-square, clustering, dimensionality reduction, and resampling strategies. We will also cover methods for "tidying" model results for downstream visualization and summarization. 
+
+**Prerequisites: [Familiarity with R](r-basics.html) is _required_** (including working with [data frames](r-dataframes.html), installing/using packages, importing data, and saving results); familiarity with [dplyr](r-dplyr-yeast.html) and [ggplot2](r-viz-gapminder.html) packages is highly recommended. 
+
+**You must [complete the basic R setup here](setup.html#R) _prior to class_.** This includes installing R, RStudio, and the required packages. Please [contact one of the instructors](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
+
