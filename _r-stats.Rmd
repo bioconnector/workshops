@@ -32,49 +32,43 @@ nhhiq <-  Hmisc::sasxport.get("http://wwwn.cdc.gov/nchs/nhanes/2011-2012/HIQ_G.X
 
 nh <- NHANES::NHANES %>% filter(SurveyYr=="2011_12") %>% select(-SurveyYr) %>% inner_join(nhhiq, by="ID")
 
-transmute(nh, 
-          id=ID,
-          Gender, 
-          Age,
-          Race=Race3, 
-          Education, 
-          MaritalStatus, 
-          RelationshipStatus=ifelse(MaritalStatus %in% c("Married", "LivePartner"), "Committed", "Single"),
-          Insured,
-          Income=HHIncomeMid,
-          Poverty, 
-          HomeRooms, 
-          HomeOwn, 
-          Work, 
-          Weight, 
-          Height, 
-          BMI,
-          Pulse,
-          BPSys=BPSysAve, 
-          BPDia=BPDiaAve, 
-          Testosterone, 
-          HDLChol=DirectChol, 
-          TotChol,
-          Diabetes,
-          DiabetesAge,
-          nPregnancies,
-          nBabies,
-          SleepHrsNight,
-          PhysActive,
-          PhysActiveDays,
-          AlcoholDay,
-          AlcoholYear,
-          SmokingStatus = mosaic::derivedFactor(
-            Current = SmokeNow == "Yes",
-            Former = SmokeNow == "No",
-            Never  = Smoke100 == "No"
-          ),
-          SexEver,
-          SexAge,
-          SexNumPartnLife,
-          SameSex,
-          SexOrientation
-) -> nh
+nh <- transmute(nh, 
+                id=ID,
+                Gender, 
+                Age,
+                Race=Race3, 
+                Education, 
+                MaritalStatus, 
+                RelationshipStatus=ifelse(MaritalStatus %in% c("Married", "LivePartner"), "Committed", "Single"),
+                Insured,
+                Income=HHIncomeMid,
+                Poverty, 
+                HomeRooms, 
+                HomeOwn, 
+                Work, 
+                Weight, 
+                Height, 
+                BMI,
+                Pulse,
+                BPSys=BPSysAve, 
+                BPDia=BPDiaAve, 
+                Testosterone, 
+                HDLChol=DirectChol, 
+                TotChol,
+                Diabetes,
+                DiabetesAge,
+                nPregnancies,
+                nBabies,
+                SleepHrsNight,
+                PhysActive,
+                PhysActiveDays,
+                AlcoholDay,
+                AlcoholYear,
+                SmokingStatus = mosaic::derivedFactor(
+                  Current = SmokeNow == "Yes",
+                  Former = SmokeNow == "No",
+                  Never  = Smoke100 == "No"
+                ))
 
 nh %>% readr::write_csv("data/nhanes.csv")
 nh <- readr::read_csv("data/nhanes.csv")
@@ -83,6 +77,36 @@ nhad <- nh %>% filter(Age >=18, BMI>1)
 
 ```
 
+
+## Our data: NHANES
+
+The data we're going to work with comes from the National Health and Nutrition Examination Survey (NHANES) program at the CDC. You can read a lot more about NHANES on the [CDC's website](http://www.cdc.gov/nchs/nhanes/) or [Wikipedia](https://en.wikipedia.org/wiki/National_Health_and_Nutrition_Examination_Survey). NHANES is a research program designed to assess the health and nutritional status of adults and children in the United States. The survey is one of the only to combine both survey questions and physical examinations. It began in the 1960s and since 1999 examines a nationally representative sample of about 5,000 people each year. The NHANES interview includes demographic, socioeconomic, dietary, and health-related questions. The physical exam includes medical, dental, and physiological measurements, as well as several standard laboratory tests. NHANES is used to determine the prevalence of major diseases and risk factors for those diseases. NHANES data are also the basis for national standards for measurements like height, weight, and blood pressure. Data from this survey is used in epidemiology studies and health sciences research, which help develop public health policy, direct and design health programs and services, and expand the health knowledge for the Nation.
+
+We are using a small slice of this data. We're only using a handful of variables from the 2011-2012 survey years on about 5,000 individuals. The CDC uses a [sampling strategy](http://www.cdc.gov/nchs/data/series/sr_02/sr02_162.pdf) to purposefully oversample certain subpopulations like racial minorities. Naive analysis of the original NHANES data can lead to mistaken conclusions because the percentages of people from each racial group in the data are different from general population. The 5,000 individuals here are resampled from the larger NHANES study population to undo these oversampling effects, so you can treat this as if it were a simple random sample from the American population.
+
+You can download the data at [the link above](data.html). The file is called [**nhanes.csv**](data/nhanes.csv). There's also a [data dictionary (filename **nhanes_dd.csv**)](data/nhanes_dd.csv) that lists and describes each variable in our NHANES dataset. This table is copied below.
+
+```{r, echo=FALSE}
+# library(dplyr)
+# read.csv("data/nhanes_dd.csv", header=TRUE) %>% 
+#   mutate(Variable=paste0("<strong>", Variable, "</strong>")) %>% 
+#   # DT::datatable(rownames=FALSE, caption="NHANES Data Dictionary", escape=FALSE)
+#   kable()
+# haven't loaded libraries yet, keep it this way.
+kable(transform(read.csv("data/nhanes_dd.csv", header=TRUE), Variable=paste0("<strong>", Variable, "</strong>")))
+```
+
+
+## Descriptive stats & EDA
+
+- Mean, median
+- summary
+- missing data, anyNA
+- range
+- na.rm
+- xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins
+
+<!--
 
 ----
 
@@ -137,14 +161,6 @@ ggplot(nhad, aes(x=bmxht, y=bmxwt, group=gender, color=gender)) +
 ```
 
 
-## Descriptives
-
-- Mean, median
-- summary
-- missing data, anyNA
-- range
-- na.rm
-- xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins
 
 ## t-tests
 
@@ -307,3 +323,4 @@ ggplot(adults, aes(x=bmxht, y=bmxwt, group=gender, color=gender)) +
 With many continuous and categorical variables, the data can be used for both standard statistical regression (e.g., linear, logistic, etc.) or machine learning predictive modeling (e.g., LASSO, support vector machines, regression trees).
 
 
+-->
