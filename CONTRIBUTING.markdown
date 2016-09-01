@@ -88,3 +88,20 @@ source("http://bioconductor.org/biocLite.R")
 biocLite()
 biocLite("DESeq2")
 ```
+
+If you want to optionally demonstrate something without strictly requiring the package to build the site, you could duplicate a chunk, echoing but not evaluating the first, and evaluating but not echoing the second, where you check to see if the package is installed in the second. For example, as used in the intro stats lesson, optionally show how _if_ you have Tmisc installed, you can plot and tabulate missing data, but if you don't have Tmisc, the site build won't fail (you just won't see the output):
+
+
+    ```{r tmisc_noeval, eval=FALSE}
+    # Install if you don't have it already
+    # install.packages("Tmisc")
+    library(Tmisc)
+    gg_na(nh)
+    propmiss(nh)
+    ```
+
+    ```{r tmisc_noecho, echo=FALSE, results="markup"}
+    if (requireNamespace("Tmisc", quietly = TRUE)) Tmisc::gg_na(nh)
+    if (requireNamespace("Tmisc", quietly = TRUE)) Tmisc::propmiss(nh)
+    ```
+
