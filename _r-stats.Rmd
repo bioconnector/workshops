@@ -11,7 +11,7 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 
 ```{r, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE, results="hide")
 options(digits=3)
 options(max.print=200)
 .ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
@@ -71,14 +71,16 @@ nh <- transmute(nh,
                 ))
 
 nh %>% readr::write_csv("data/nhanes.csv")
-nh <- readr::read_csv("data/nhanes.csv")
-nh <- nh %>% mutate_if(is.factor, funs(as.character))
-nhad <- nh %>% filter(Age >=18, BMI>1)
+# nh <- readr::read_csv("data/nhanes.csv")
+# nh <- nh %>% mutate_if(is.factor, funs(as.character))
+# nhad <- nh %>% filter(Age >=18, BMI>1)
 
 ```
 
 
 ## Our data: NHANES
+
+### About NHANES
 
 The data we're going to work with comes from the National Health and Nutrition Examination Survey (NHANES) program at the CDC. You can read a lot more about NHANES on the [CDC's website](http://www.cdc.gov/nchs/nhanes/) or [Wikipedia](https://en.wikipedia.org/wiki/National_Health_and_Nutrition_Examination_Survey). NHANES is a research program designed to assess the health and nutritional status of adults and children in the United States. The survey is one of the only to combine both survey questions and physical examinations. It began in the 1960s and since 1999 examines a nationally representative sample of about 5,000 people each year. The NHANES interview includes demographic, socioeconomic, dietary, and health-related questions. The physical exam includes medical, dental, and physiological measurements, as well as several standard laboratory tests. NHANES is used to determine the prevalence of major diseases and risk factors for those diseases. NHANES data are also the basis for national standards for measurements like height, weight, and blood pressure. Data from this survey is used in epidemiology studies and health sciences research, which help develop public health policy, direct and design health programs and services, and expand the health knowledge for the Nation.
 
@@ -97,14 +99,155 @@ kable(transform(read.csv("data/nhanes_dd.csv", header=TRUE), Variable=paste0("<s
 ```
 
 
-## Descriptive stats & EDA
+### Import & inspect
 
-- Mean, median
-- summary
-- missing data, anyNA
-- range
-- na.rm
+There are some built-in functions for reading in data in text files. These functions are _read-dot-something_ -- for example, `read.csv()` reads in comma-delimited text data; `read.delim()` reads in tab-delimited text, etc. We're going to read in data a little bit differently here using the [readr](https://github.com/hadley/readr) package. When you load the readr package, you'll have access to very similar looking functions, named _read-underscore-something_ -- e.g., `read_csv()`. You have to have the readr package installed to access these functions. Compared to the base functions, they're _much_ faster, they're good at guessing the types of data in the columns, they don't do some of the other silly things that the base functions do. We're going to use another package later on called [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html), and if you have the dplyr package loaded as well, and you read in the data with readr, the data will display nicely. 
+
+First let's load those packages.
+
+```{r loadpkgs}
+library(readr)
+library(dplyr)
+```
+
+If you see a warning that looks like this: `Error in library(packageName) : there is no package called 'packageName'`, then you don't have the package installed correctly. See the [setup page](setup.html). 
+
+Now, let's actually load the data. You can get help for the import function with `?read_csv`. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we're going to be referring to this data a lot, let's give it a short easy name to type. I'm going to call it `nh`. Once we've loaded it we can type the name of the object itself (`nh`) to see it printed to the screen. 
+
+```{r loaddata, results="markup"}
+nh <- read_csv(file="data/nhanes.csv")
+nh
+```
+
+Take a look at that output. The nice thing about loading dplyr and reading in data with readr is that data frames are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
+
+```{r view, eval=FALSE}
+View(nh)
+```
+
+Recall several built-in functions that are useful for working with data frames.
+
+- Content:
+    - `head()`: shows the first few rows
+    - `tail()`: shows the last few rows
+- Size:
+    - `dim()`: returns a 2-element vector with the number of rows in the first element, and the number of columns as the second element (the dimensions of the object)
+    - `nrow()`: returns the number of rows
+    - `ncol()`: returns the number of columns
+- Summary:
+    - `colnames()` (or just `names()`): returns the column names
+    - `glimpse()` (from **dplyr**): Returns a glimpse of your data, telling you the structure of the dataset and information about the class, length and content of each column
+
+
+```{r data_frame_functions}
+head(nh)
+tail(nh)
+dim(nh)
+names(nh)
+glimpse(nh)
+```
+
+
+## Descriptive statistics
+
+### Continuous variables
+
+We can access individual variables within a data frame using the `$` operator, e.g., `mydataframe$specificVariable`. Let's print out all the **`Race`** values in the data. Let's then see what are the `unique` values of each. Then let's calculate the `mean`, `median`, and `range` of the **`Age`** variable.
+
+```{r}
+# Display all Race values
+nh$Race
+
+# Get the unique values of Race
+unique(nh$Race)
+length(unique(nh$Race))
+# Do the same thing the dplyr way
+nh$Race %>% unique()
+nh$Race %>% unique() %>% length()
+
+# Age mean, median, range
+mean(nh$Age)
+median(nh$Age)
+range(nh$Age)
+```
+
+
+### Missing data
+
+Let's try taking the mean of a different variable.
+
+```{r, results="markup"}
+mean(nh$Income)
+```
+
+What happened there? `NA` indicates _missing data_. Take a look at the Income variable.
+
+```{r}
+# Look at just the Income variable
+nh$Income
+
+# Or view the dataset
+# View(nh)
+```
+
+Notice that there are lots of missing values for Income. Trying to get the mean a bunch of observations with some missing data returns a missing value by default. This is almost universally the case with all summary statistics -- a single `NA` will cause the summary to return `NA`. Now look at the help for `?mean`. Notice the `na.rm` argument. This is a logical (i.e., `TRUE` or `FALSE`) value indicating whether or not missing values should be removed prior to computing the mean. By default, it's set to `FALSE`. Now try it again.
+
+```{r, results="markup"}
+mean(nh$Income, na.rm=TRUE)
+```
+
+The `is.na()` function tells you if a value is missing. Get the `sum()` of that vector, which adds up all the `TRUE`s to tell you how many of the values are missing. 
+
+```{r}
+is.na(nh$Income)
+sum(is.na(nh$Income))
+```
+
+There are a few handy functions in the [**Tmisc** package](https://cran.r-project.org/web/packages/Tmisc/index.html) for summarizing missingness in a data frame. You can graphically display missingness in a data frame as holes on a black canvas with **`gg_na()`** (use ggplot2 to plot `NA` values), or show a table of all the variables and the missingness level with **`propmiss()`**.
+
+```{r tmisc_noeval, eval=FALSE}
+# Install if you don't have it already
+# install.packages("Tmisc")
+library(Tmisc)
+gg_na(nh)
+propmiss(nh)
+```
+
+```{r tmisc_noecho, echo=FALSE, results="markup"}
+if (requireNamespace("Tmisc", quietly = TRUE)) Tmisc::gg_na(nh)
+if (requireNamespace("Tmisc", quietly = TRUE)) Tmisc::propmiss(nh)
+```
+
+
+----
+
+<mark>**EXERCISE `r .ex``r .ex=.ex+1`**</mark>
+
+Descriptive statistics functions for continuous variables:
+
+- `mean()`
+- `median()`
+- `min()` and `max()`
+- `range()`
+- `quantile()`
+- `sd()` and `var()`
+
+1. fixme! Need to write these exercises!
+
+----
+
+
+### Discrete variables
+
 - xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins
+
+`summary()`: works differently depending on what kind of object you pass to it. Passing a data frame to the `summary()` function prints out useful summary statistics about numeric column (min, max, median, mean, etc.)
+
+
+### EDA
+
+https://en.wikipedia.org/wiki/Exploratory_data_analysis
+
 
 <!--
 
