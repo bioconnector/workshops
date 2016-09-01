@@ -43,7 +43,7 @@ All data used in this repo is stored in the `data/` directory. All you should ha
 ### Other info/tips/gotchas
 
 - The site's configuration is controlled by `_site.yml`. See the [RMarkdown websites documentation](http://rmarkdown.rstudio.com/rmarkdown_websites.html) for more information. The navigation bar is controlled by this file, as well as various output parameters. I'm using icons from [Font Awesome](http://fontawesome.io/) reading in the CSS from a CDN.
-- Note that the `exclude` list in `_site.yml` will _not_ stop .md or .Rmd files from being rendered. You can disable rendering of a .md/.Rmd by renaming it with a preceding `_`.
+- Note that the `exclude` list in `_site.yml` will _not_ stop .md or .Rmd files from being rendered. You can disable rendering of a .md/.Rmd by renaming it with a preceding `_`. This is handy for in-development lessons you won't want to render just yet.
 - I wanted README and CONTRIBUTING files in the repo, using markdown formatting such that they're rendered nicely on GitHub, but I didn't want these files to be rendered as HTML to the resulting output directory. GitHub will render files ending in `.markdown`, but these files are not rendered by RMarkdown/RStudio. These files are also excluded in the `_site.yml` config.
 - I recommend setting `knitr::opts_chunk$set(cache=TRUE)` in the global options for each .Rmd file. Every little bit helps when rendering many files after cleaning.
 - Put any helpful resources in [help.md](help.md).
