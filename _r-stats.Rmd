@@ -326,9 +326,7 @@ wilcox.test(AlcoholYear~RelationshipStatus, data=nha)
 The results are still significant, but much less than the p-value reported for the (incorrect) t-test above.
 
 
-### ANOVA / linear models
-
-#### T-tests, again
+### Linear models
 
 > Analysis of variance and linear modeling are complex topics that deserve an entire semester dedicated to theory, design, and interpretation. A very good resource is [_An Introduction to Statistical Learning: with Applications in R_](https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370/ref=sr_1_1?ie=UTF8&qid=1473087847&sr=8-1&keywords=introduction+statistical+learning&tag=gettgenedone-20) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The [PDF](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf) of the book and all the R code used throughout are [available **free** on the author's website](http://www-bcf.usc.edu/~gareth/ISL/). What follows is a necessary over-simplification with more focus on implementation, and less on theory and design.
 
@@ -368,7 +366,7 @@ Go back and re-run the t-test assuming equal variances as we did before. Now not
 1-pf(2.347, df1=1, df2=3552)
 ```
 
-#### ANOVA: More than two groups
+### ANOVA
 
 Let's look at the relationship between smoking status (Never, Former, or Current), and BMI.
 
@@ -401,7 +399,7 @@ Notice that the p-value on the ANOVA/regression didn't change, but the coefficie
 ggplot(nha, aes(SmokingStatus, BMI)) + geom_boxplot() + theme_classic()
 ```
 
-#### Simple and multiple linear regression
+### Linear regression
 
 Linear models are mathematical representations of the process that (_we think_) gave rise to our data. The model seeks to explain the relationship between a variable of interest, our _Y_, _outcome_, _response_, or _dependent_ variable, and one or more _X_, _predictor_, or _independent_ variables. Previously we talked about t-tests or ANOVA in the context of a simple linear regression model with only a single predictor variable, $X$:
 
@@ -441,8 +439,9 @@ ggplot(nha, aes(x=Height, y=Weight)) +
   ggtitle("Friends don't let friends extrapolate.")
 ```
 
+### Multiple regression
 
-Finally, let's do a multiple regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let's look at the effect of physical activity on testosterone levels. Let's do this with a t-test and linear regression, showing that you get the same results.
+Finally, let's do a multiple linear regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let's look at the effect of physical activity on testosterone levels. Let's do this with a t-test and linear regression, showing that you get the same results.
 
 ```{r}
 t.test(Testosterone~PhysActive, data=nha)
