@@ -11,7 +11,7 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 
 ```{r, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE, results="hide")
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE)
 options(digits=3)
 options(max.print=200)
 .ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
@@ -114,7 +114,7 @@ If you see a warning that looks like this: `Error in library(packageName) : ther
 
 Now, let's actually load the data. You can get help for the import function with `?read_csv`. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we're going to be referring to this data a lot, let's give it a short easy name to type. I'm going to call it `nh`. Once we've loaded it we can type the name of the object itself (`nh`) to see it printed to the screen. 
 
-```{r loaddata, results="markup"}
+```{r loaddata}
 nh <- read_csv(file="data/nhanes.csv")
 nh
 ```
@@ -139,7 +139,7 @@ Recall several built-in functions that are useful for working with data frames.
     - `glimpse()` (from **dplyr**): Returns a glimpse of your data, telling you the structure of the dataset and information about the class, length and content of each column
 
 
-```{r data_frame_functions}
+```{r data_frame_functions, results="hide"}
 head(nh)
 tail(nh)
 dim(nh)
@@ -154,7 +154,7 @@ glimpse(nh)
 
 We can access individual variables within a data frame using the `$` operator, e.g., `mydataframe$specificVariable`. Let's print out all the **`Race`** values in the data. Let's then see what are the `unique` values of each. Then let's calculate the `mean`, `median`, and `range` of the **`Age`** variable.
 
-```{r}
+```{r, results="hide"}
 # Display all Race values
 nh$Race
 
@@ -176,13 +176,13 @@ range(nh$Age)
 
 Let's try taking the mean of a different variable.
 
-```{r, results="markup"}
+```{r}
 mean(nh$Income)
 ```
 
 What happened there? `NA` indicates _missing data_. Take a look at the Income variable.
 
-```{r}
+```{r, results="hide"}
 # Look at just the Income variable
 nh$Income
 
@@ -192,13 +192,13 @@ nh$Income
 
 Notice that there are lots of missing values for Income. Trying to get the mean a bunch of observations with some missing data returns a missing value by default. This is almost universally the case with all summary statistics -- a single `NA` will cause the summary to return `NA`. Now look at the help for `?mean`. Notice the `na.rm` argument. This is a logical (i.e., `TRUE` or `FALSE`) value indicating whether or not missing values should be removed prior to computing the mean. By default, it's set to `FALSE`. Now try it again.
 
-```{r, results="markup"}
+```{r}
 mean(nh$Income, na.rm=TRUE)
 ```
 
 The `is.na()` function tells you if a value is missing. Get the `sum()` of that vector, which adds up all the `TRUE`s to tell you how many of the values are missing. 
 
-```{r}
+```{r, results="hide"}
 is.na(nh$Income)
 sum(is.na(nh$Income))
 ```
@@ -213,11 +213,11 @@ There are a few handy functions in the [**Tmisc** package](https://cran.r-projec
 library(Tmisc)
 ```
 
-```{r, ggna, cache=TRUE}
+```{r ggna}
 gg_na(nh)
 ```
 
-```{r propmiss, results="markup"}
+```{r}
 propmiss(nh)
 ```
 
@@ -253,7 +253,7 @@ library(ggplot2)
 theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 ```
 
-```{r, cache=TRUE}
+```{r histograms}
 library(ggplot2)
 ggplot(nh, aes(BMI)) + geom_histogram()
 ggplot(nh, aes(Weight)) + geom_histogram()
@@ -267,15 +267,15 @@ ggplot(nh, aes(Age)) + geom_histogram()
 
 Let's look at how a few different variables relate to each other. E.g., height and weight:
 
-```{r, cache=TRUE}
+```{r scatter_heightweight}
 ggplot(nh, aes(Height, Weight, col=Gender)) + geom_point()
 ```
 
 Let's filter out all the kids, draw trend lines using a linear model:
 
-```{r, cache=TRUE}
+```{r scatter_heightweight_colgender}
 nh %>% 
-  filter(Age>18) %>% 
+  filter(Age>=18) %>% 
   ggplot(aes(Height, Weight, col=Gender)) + 
     geom_point() + 
     geom_smooth(method="lm")
@@ -289,24 +289,188 @@ Check out the [data visualization lesson](r-viz-gapminder.html) for much more on
 
 ### T-tests
 
+First let's create a new dataset from `nh` called `nha` that only has adults.
+
+```{r}
+nha <- filter(nh, Age>=18)
+```
+
+Let's do a few two-sample t-tests to test for _differences in means between two groups_. The function for a t-test is `t.test()`. See the help for `?t.test`. We'll be using the _forumla_ method. The usage is **`t.test(response~group, data=myDataFrame)`**.
+
+1. Are there differences in age for males versus females in this dataset?
+2. Does BMI differ between diabetics and non-diabetics?
+3. Do single or married/cohabitating people drink more alcohol? Is this relationship significant?
+
+```{r}
+t.test(Age~Gender, data=nha)
+t.test(BMI~Diabetes, data=nha)
+t.test(AlcoholYear~RelationshipStatus, data=nha)
+```
+
+See the heading, _Welch Two Sample t-test_, and notice that the degrees of freedom might not be what we expected based on our sample size. Now look at the help for `?t.test` again, and look at the `var.equal` argument, which is by default set to `FALSE`. One of the assumptions of the t-test is [homoscedasticity](https://en.wikipedia.org/wiki/Homoscedasticity), or homogeneity of variance. This assumes that the variance in the outcome (e.g., BMI) is identical across both levels of the predictor (diabetic vs non-diabetic). Since this is rarely the case, the t-test defaults to using the [Welch correction](https://en.wikipedia.org/wiki/Welch%27s_t-test), which is a more reliable version of the t-test when the homoscedasticity assumption is violated.
 
 ### Wilcoxon test
 
+Another assumption of the t-test is that data is normally distributed. Looking at the histogram for AlcoholYear shows that this data clearly isn't.
+
+```{r alcoholhist}
+ggplot(nha, aes(AlcoholYear)) + geom_histogram()
+```
+
+The [Wilcoxon rank-sum test (a.k.a. Mann-Whitney _U_ test)](https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test) is a nonparametric test of differences in mean that does not require normally distributed data. When data is perfectly normal, the t-test is uniformly more powerful. But when this assumption is violated, the t-test is unreliable. This test is called in a similar way as the t-test.
+
+```{r wilcoxtest}
+wilcox.test(AlcoholYear~RelationshipStatus, data=nha)
+```
+
+The results are still significant, but much less than the p-value reported for the (incorrect) t-test above.
 
 
-### ANOVA / Linear models
+### ANOVA / linear models
+
+#### T-tests, again
+
+> Analysis of variance and linear modeling are complex topics that deserve an entire semester dedicated to theory, design, and interpretation. A very good resource is [_An Introduction to Statistical Learning: with Applications in R_](https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370/ref=sr_1_1?ie=UTF8&qid=1473087847&sr=8-1&keywords=introduction+statistical+learning&tag=gettgenedone-20) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The [PDF](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf) of the book and all the R code used throughout are [available **free** on the author's website](http://www-bcf.usc.edu/~gareth/ISL/). What follows is a necessary over-simplification with more focus on implementation, and less on theory and design.
+
+Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you're trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). 
+
+Let's examine the relationship between BMI and relationship status (`RelationshipStatus` was derived from `MaritalStatus`, coded as _Committed_ if MaritalStatus is Married or LivePartner, and _Single_ otherwise). Let's first do this with a t-test, and for now, let's assume that the variances between groups _are_ equal.
+
+```{r}
+t.test(BMI~RelationshipStatus, data=nha, var.equal=TRUE)
+```
+
+It looks like single people have a very slightly higher BMI than those in a committed relationship, but the magnitude of the difference is trivial, and the difference is not significant. Now, let's do the same test in a linear modeling framework. First, let's create the fitted model and store it in an object called `fit`. 
+
+```{r}
+fit <- lm(BMI~RelationshipStatus, data=nha)
+```
+
+You can display the object itself, but that isn't too interesting. You can get the more familiar ANOVA table by calling the `anova()` function on the `fit` object. More generally, the `summary()` function on a linear model object will tell you much more. 
+
+```{r}
+fit
+anova(fit)
+summary(fit)
+```
+
+Go back and re-run the t-test assuming equal variances as we did before. Now notice a few things:
+
+1. The p-values from all three tests (t-test, ANOVA, and linear regression) are all identical (p=0.1256). This is because they're all identical: a t-test is a specific case of ANOVA, which is a specific case of linear regression. 
+1. The test statistics are all related. The _t_ statistic from the t-test is **1.532**, which is the same as the t-statistic from the linear regression. If you square that, you get **2.347**, the _F_ statistic from the ANOVA. 
+1. The `t.test()` output shows you the means for the two groups, Committed and Single. Just displaying the `fit` object itself or running `summary(fit)` shows you the coefficients for a linear model. Here, the model assumes the "baseline" RelationshipStatus level is _Committed_, and that the _intercept_ in a regression model (e.g., $\beta_{0}$ in the model $Y = \beta_{0} +  \beta_{1}X$) is the mean of the baseline group. Being _Single_ results in an increase in BMI of 0.3413. This is the $\beta_{1}$ coefficient in the model. You can easily change the ordering of the levels. See the help for `?factor`, and check out the new [**forcats** package](https://hadley.github.io/forcats/), which provides tools for manipulating **cat**egorical variables.
+
+```{r}
+# P-value computed on a t-statistic with 3552 degrees of freedom
+# (multiply times 2 because t-test is assuming two-tailed)
+2*(1-pt(1.532, df=3552))
+# P-value computed on an F-test with 1 and 3552 degrees of freedom
+1-pf(2.347, df1=1, df2=3552)
+```
+
+#### ANOVA: More than two groups
+
+Let's look at the relationship between smoking status (Never, Former, or Current), and BMI.
+
+```{r}
+fit <- lm(BMI~SmokingStatus, data=nha)
+anova(fit)
+summary(fit)
+```
+
+This tells us that there _is_ a significant difference in means between current, former, and never smokers (p=$4.54 \times 10^{-8}$). However, the linear model output might not have been what we wanted. Because the default handling of categorical variables is to treat the alphabetical first level as the baseline, "Current" smokers are treated as baseline, and this mean becomes the intercept, and the coefficients on "Former" and "Never" describe how those groups' means differ from current smokers. What if we wanted "Never" smokers to be the baseline, followed by Former, then Current? Have a look at `?factor` to relevel the factor levels.
+
+```{r}
+# Re-level the SmokingStatus variable
+nha$SmokingStatus <- factor(nha$SmokingStatus, 
+                            levels=c("Never", "Former", "Current"))
+
+# Re-fit the model
+fit <- lm(BMI~SmokingStatus, data=nha)
+
+# Show the ANOVA table
+anova(fit)
+
+# Print the full model statistics
+summary(fit)
+```
+
+Notice that the p-value on the ANOVA/regression didn't change, but the coefficients did. _Never_ smokers are now treated as baseline. The intercept coefficient (28.856) is now the mean for _Never_ smokers. The `SmokingStatusFormer` coefficient of .309 shows the apparent increase in BMI that former smokers have when compared to never smokers, but that difference is not significant (p=.24). The `SmokingStatusCurrent` coefficient of -1.464 shows that current smokers actually have a lower BMI than never smokers, and that this decrease is highly significant.
+
+```{r smoking_boxplots}
+ggplot(nha, aes(SmokingStatus, BMI)) + geom_boxplot() + theme_classic()
+```
+
+#### Simple and multiple linear regression
+
+Linear models are mathematical representations of the process that (_we think_) gave rise to our data. The model seeks to explain the relationship between a variable of interest, our _Y_, _outcome_, _response_, or _dependent_ variable, and one or more _X_, _predictor_, or _independent_ variables. Previously we talked about t-tests or ANOVA in the context of a simple linear regression model with only a single predictor variable, $X$:
+
+$$Y = \beta_{0} +  \beta_{1}X$$
+
+But you can have multiple predictors in a linear model that are all additive, accounting for the effects of the others:
+
+$$Y = \beta_{0} +  \beta_{1}X_{1} + \beta_{2}X_{2} + \epsilon$$
+
+- $Y$ is the response 
+- $X_{1}$ and $X_{2}$ are the predictors
+- $\beta_{0}, \beta_{1}, \beta_{2}$ are coefficients that describe what 1-unit changes in $X_{1}$ and $X_{2}$ do to the outcome variable $Y$.
+- $\epsilon$ is random error. Our model will not perfectly predict $Y$. It will be off by some random amount. We assume this amount is a random draw from a Normal distribution with mean 0 and standard deviation $\sigma$.
+
+_Building a linear model_ means we propose a linear model and then estimate the coefficients and the variance of the error term. Above, this means estimating $\beta_{0}, \beta_{1}, \beta_{2}$ and $\sigma$. This is what we do in R.
+
+Let's look at the relationship between height and weight.
+
+```{r}
+fit <- lm(Weight~Height, data=nha)
+summary(fit)
+```
+
+The relationship is highly significant (P<$2.2 \times 10^{-16}$). The intercept term is not very useful most of the time. Here it shows us what the value of Weight would be when Height=0, which could never happen. The Height coefficient is meaningful -- each one unit increase in height results in a 0.92 increase in the corresponding unit of weight. Let's visualize that relationship:
+
+```{r scatter_height_weight_lm}
+ggplot(nha, aes(x=Height, y=Weight)) + geom_point() + geom_smooth(method="lm")
+```
+
+By default, this is only going to show the prediction over the range of the data. This is important! You never want to try to extrapolate response variables outside of the range of your predictor(s). For example, the linear model tells us that weight is -73.7kg when height is zero. We can extend the predicted model / regression line past the lowest value of the data down to height=0. The bands on the confidence interval tell us that the model is apparently confident within the regions defined by the gray boundary. But this is silly -- we would never see a height of zero, and predicting past the range of the available training data is never a good idea.
+
+```{r scatter_height_weight_extrapolate}
+ggplot(nha, aes(x=Height, y=Weight)) + 
+  geom_point() + 
+  geom_smooth(method="lm", fullrange=TRUE) + 
+  xlim(0, NA) + 
+  ggtitle("Friends don't let friends extrapolate.")
+```
 
 
+Finally, let's do a multiple regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let's look at the effect of physical activity on testosterone levels. Let's do this with a t-test and linear regression, showing that you get the same results.
 
-### Power & sample size
+```{r}
+t.test(Testosterone~PhysActive, data=nha)
+summary(lm(Testosterone~PhysActive, data=nha))
+```
+
+In both cases, the p-value is significant (p=0.01516), and the result suggest that increased physical activity is associated with increased testosterone levels. Does increasing your physical activity increase your testosterone levels? Or is it the other way -- will increased testosterone encourage more physical activity? Or is it none of the above -- is the apparent relationship between physical activity and testosterone levels only apparent because both are correlated with yet a third, unaccounted for variable? Let's throw Age into the model as well.
+
+```{r}
+summary(lm(Testosterone~PhysActive+Age, data=nha))
+```
+
+This shows us that after accounting for age that the testosterone / physical activity link is no longer significant. Every 1-year increase in age results in a highly significant decrease in testosterone, and since increasing age is also likely associated with decreased physical activity, perhaps age is the third confounder that makes this relationship apparent.
+
+Adding other predictors can also swing things the other way. We know that men have much higher testosterone levels than females. Sex is probably the single best predictor of testosterone levels in our dataset. By not accounting for this effect, our unaccounted-for variation remains very high. By accounting for Gender, we now reduce the residual error in the model, and the physical activity effect once again becomes significant. Also notice that our model fits much better (higher R-squared), and is much more significant overall.
+
+```{r}
+summary(lm(Testosterone~PhysActive+Age+Gender, data=nha))
+```
+
 
 ## Discrete variables
 
 ### table/xtabs
 
-- xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins
+<!-- - xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins -->
 
-`summary()`: works differently depending on what kind of object you pass to it. Passing a data frame to the `summary()` function prints out useful summary statistics about numeric column (min, max, median, mean, etc.)
+<!-- `summary()`: works differently depending on what kind of object you pass to it. Passing a data frame to the `summary()` function prints out useful summary statistics about numeric column (min, max, median, mean, etc.) -->
 
 ### Chi-square
 
@@ -314,8 +478,20 @@ Check out the [data visualization lesson](r-viz-gapminder.html) for much more on
 ### Logistic regression
 
 
+
+## Power & sample size
+
+```{r}
+power.t.test(n=20, delta=2, sd=2.3)
+power.t.test(power=.80, delta=.8, sd=1.5)
+power.prop.test(n=5, p1=0.8, p2=0.1)
+power.prop.test(power=0.8, p1=0.5, p2=0.2)
+```
+
+
 ## Advanced topics
 
+- Tidying models with **broom**
 - Empirical Bayes
 - Negative binomial
 - Resampling/permutation
