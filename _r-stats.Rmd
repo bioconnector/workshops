@@ -205,19 +205,23 @@ sum(is.na(nh$Income))
 
 There are a few handy functions in the [**Tmisc** package](https://cran.r-project.org/web/packages/Tmisc/index.html) for summarizing missingness in a data frame. You can graphically display missingness in a data frame as holes on a black canvas with **`gg_na()`** (use ggplot2 to plot `NA` values), or show a table of all the variables and the missingness level with **`propmiss()`**.
 
-```{r tmisc_noeval, eval=FALSE}
+```{r TmiscLoad}
 # Install if you don't have it already
 # install.packages("Tmisc")
+
+# Load Tmisc
 library(Tmisc)
+```
+
+```{r, ggna, cache=TRUE}
 gg_na(nh)
+```
+
+```{r propmiss, results="markup"}
 propmiss(nh)
 ```
 
-```{r tmisc_noecho, echo=FALSE, results="markup"}
-if (requireNamespace("Tmisc", quietly = TRUE)) Tmisc::gg_na(nh)
-if (requireNamespace("Tmisc", quietly = TRUE)) Tmisc::propmiss(nh)
-```
-
+Now, let's practice.
 
 ----
 
@@ -236,18 +240,85 @@ Descriptive statistics functions for continuous variables:
 
 ----
 
+### EDA
 
-### Discrete variables
+It's always worth examining your data visually before you start any statistical analysis or hypothesis testing. We could spend an entire day on **[exploratory data analysis](https://en.wikipedia.org/wiki/Exploratory_data_analysis)**. The [data visualization lesson](r-viz-gapminder.html) covers this in much broader detail. Here we'll just mention a few of the big ones: **histograms** and **scatterplots**.
+
+#### Histograms
+
+We can learn a lot from the data just looking at the value distributions of particular variables. Let's make some histgrams with ggplot2. Looking at BMI shows a few extreme outliers. Looking at weight initially shows us that the units are probably in kg. Replotting that in lbs with more bins shows a clear bimodal distribution. Are there kids in this data? The age distribution shows us the answer is _yes_. 
+
+```{r, include=FALSE}
+library(ggplot2)
+theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
+```
+
+```{r, cache=TRUE}
+library(ggplot2)
+ggplot(nh, aes(BMI)) + geom_histogram()
+ggplot(nh, aes(Weight)) + geom_histogram()
+# In pounds, more bins
+ggplot(nh, aes(Weight*2.2)) + geom_histogram(bins=80)
+ggplot(nh, aes(Age)) + geom_histogram()
+```
+
+
+#### Scatterplots
+
+Let's look at how a few different variables relate to each other. E.g., height and weight:
+
+```{r, cache=TRUE}
+ggplot(nh, aes(Height, Weight, col=Gender)) + geom_point()
+```
+
+Let's filter out all the kids, draw trend lines using a linear model:
+
+```{r, cache=TRUE}
+nh %>% 
+  filter(Age>18) %>% 
+  ggplot(aes(Height, Weight, col=Gender)) + 
+    geom_point() + 
+    geom_smooth(method="lm")
+```
+
+
+Check out the [data visualization lesson](r-viz-gapminder.html) for much more on this topic.
+
+
+## Continuous variables
+
+### T-tests
+
+
+### Wilcoxon test
+
+
+
+### ANOVA / Linear models
+
+
+
+### Power & sample size
+
+## Discrete variables
+
+### table/xtabs
 
 - xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins
 
 `summary()`: works differently depending on what kind of object you pass to it. Passing a data frame to the `summary()` function prints out useful summary statistics about numeric column (min, max, median, mean, etc.)
 
+### Chi-square
 
-### EDA
 
-https://en.wikipedia.org/wiki/Exploratory_data_analysis
+### Logistic regression
 
+
+## Advanced topics
+
+- Empirical Bayes
+- Negative binomial
+- Resampling/permutation
 
 <!--
 
