@@ -669,6 +669,19 @@ How many samples would we need for 90% power?
 power.prop.test(power=0.9, p1=0.8, p2=0.2)
 ```
 
+Also check out the [**pwr** package](https://cran.r-project.org/web/packages/pwr/) which has power calculation functions for other statistical tests.
+
+| Function | Power calculations for |
+| --- | --- |
+| `pwr.2p.test()` | Two proportions (equal n) |
+| `pwr.2p2n.test()` | Two proportions (unequal n) |
+| `pwr.anova.test()` | Balanced one way ANOVA |
+| `pwr.chisq.test()` | Chi-square test |
+| `pwr.f2.test()` | General linear model |
+| `pwr.p.test()` | Proportion (one sample) |
+| `pwr.r.test()` | Correlation |
+| `pwr.t.test()` | T-tests (one sample, 2 sample, paired) |
+| `pwr.t2n.test()` | T-test (two samples with unequal n) |
 
 ## Advanced topics
 
