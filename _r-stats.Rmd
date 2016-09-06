@@ -101,25 +101,35 @@ kable(transform(read.csv("data/nhanes_dd.csv", header=TRUE), Variable=paste0("<s
 
 ### Import & inspect
 
-There are some built-in functions for reading in data in text files. These functions are _read-dot-something_ -- for example, `read.csv()` reads in comma-delimited text data; `read.delim()` reads in tab-delimited text, etc. We're going to read in data a little bit differently here using the [readr](https://github.com/hadley/readr) package. When you load the readr package, you'll have access to very similar looking functions, named _read-underscore-something_ -- e.g., `read_csv()`. You have to have the readr package installed to access these functions. Compared to the base functions, they're _much_ faster, they're good at guessing the types of data in the columns, they don't do some of the other silly things that the base functions do. We're going to use another package later on called [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html), and if you have the dplyr package loaded as well, and you read in the data with readr, the data will display nicely. 
+There are some built-in functions for reading in data in text files. These functions are _read-dot-something_ -- for example, `read.csv()` reads in comma-delimited text data; `read.delim()` reads in tab-delimited text, etc. Normally I would use instead use the _read-underscore-something_ functions like `read_csv()` or `read_tsv()` from the [readr](https://github.com/hadley/readr) package. Compared to the base functions, they're _much_ faster, they're good at guessing the types of data in the columns, and they have more sensible defaults than the equivalent base functions do. If you have the [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html) package loaded as well, and you read in the data with readr, the data will display nicely. 
 
-First let's load those packages.
+We're going to be working with _factors_ throughout this lesson. Factors are R's way of representing categorical variables that can take on a _discrete_, distinct set of values, e.g., "Yes/No", "Mutant/WT", "Case/Control", etc. The readr package's `read_*` functions don't allow you to convert strings like "Yes/No" to factors automatically. But the base `read.*` functions do this automatically (not always the desired behavior).
+
+We'll want to use the **dplyr** package throughout, so let's go ahead and load it.
 
 ```{r loadpkgs}
-library(readr)
 library(dplyr)
 ```
 
-If you see a warning that looks like this: `Error in library(packageName) : there is no package called 'packageName'`, then you don't have the package installed correctly. See the [setup page](setup.html). 
+If you see a warning that looks like this: `Error in library(dplyr) : there is no package called 'dplyr'`, then you don't have the package installed correctly. See the [setup page](setup.html). 
 
-Now, let's actually load the data. You can get help for the import function with `?read_csv`. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we're going to be referring to this data a lot, let's give it a short easy name to type. I'm going to call it `nh`. Once we've loaded it we can type the name of the object itself (`nh`) to see it printed to the screen. 
+Now, let's actually load the data. You can get help for the import function with `?read.csv`. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we're going to be referring to this data a lot, let's give it a short easy name to type. I'm going to call it `nh`. Once we've loaded it we can type the name of the object itself (`nh`) to see it printed to the screen. However, **dplyr** can convert your "regular" data frame to a "tibble," which prints more nicely.
 
 ```{r loaddata}
-nh <- read_csv(file="data/nhanes.csv")
+nh <- read.csv(file="data/nhanes.csv")
+nh <- tbl_df(nh)
 nh
 ```
 
-Take a look at that output. The nice thing about loading dplyr and reading in data with readr is that data frames are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
+Alternatively, you _could_ still read in the data with **readr**'s `read_csv()`, but you'll want to convert the character variables to factors for the remainder of the lesson.
+
+```{r loadreadr, eval=FALSE}
+library(readr)
+nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, factor)
+nh
+```
+
+Take a look at that output. The nice thing about loading dplyr and wrapping the object with `tbl_df()` is that data frames are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
 
 ```{r view, eval=FALSE}
 View(nh)
@@ -250,7 +260,7 @@ It's always worth examining your data visually before you start any statistical 
 
 #### Histograms
 
-We can learn a lot from the data just looking at the value distributions of particular variables. Let's make some histgrams with ggplot2. Looking at BMI shows a few extreme outliers. Looking at weight initially shows us that the units are probably in kg. Replotting that in lbs with more bins shows a clear bimodal distribution. Are there kids in this data? The age distribution shows us the answer is _yes_. 
+We can learn a lot from the data just looking at the value distributions of particular variables. Let's make some histograms with ggplot2. Looking at BMI shows a few extreme outliers. Looking at weight initially shows us that the units are probably in kg. Replotting that in lbs with more bins shows a clear bimodal distribution. Are there kids in this data? The age distribution shows us the answer is _yes_. 
 
 ```{r, include=FALSE}
 library(ggplot2)
@@ -293,10 +303,11 @@ Check out the [data visualization lesson](r-viz-gapminder.html) for much more on
 
 ### T-tests
 
-First let's create a new dataset from `nh` called `nha` that only has adults.
+First let's create a new dataset from `nh` called `nha` that only has adults. To prevent us from making any mistakes downstream, let's remove the `nh` object.
 
-```{r}
+```{r filterAdults}
 nha <- filter(nh, Age>=18)
+rm(nh)
 ```
 
 Let's do a few two-sample t-tests to test for _differences in means between two groups_. The function for a t-test is `t.test()`. See the help for `?t.test`. We'll be using the _forumla_ method. The usage is **`t.test(response~group, data=myDataFrame)`**.
@@ -305,7 +316,7 @@ Let's do a few two-sample t-tests to test for _differences in means between two 
 2. Does BMI differ between diabetics and non-diabetics?
 3. Do single or married/cohabitating people drink more alcohol? Is this relationship significant?
 
-```{r}
+```{r ttests}
 t.test(Age~Gender, data=nha)
 t.test(BMI~Diabetes, data=nha)
 t.test(AlcoholYear~RelationshipStatus, data=nha)
@@ -334,7 +345,7 @@ The results are still significant, but much less than the p-value reported for t
 
 > Analysis of variance and linear modeling are complex topics that deserve an entire semester dedicated to theory, design, and interpretation. A very good resource is [_An Introduction to Statistical Learning: with Applications in R_](https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370/ref=sr_1_1?ie=UTF8&qid=1473087847&sr=8-1&keywords=introduction+statistical+learning&tag=gettgenedone-20) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The [PDF](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf) of the book and all the R code used throughout are [available **free** on the author's website](http://www-bcf.usc.edu/~gareth/ISL/). What follows is a necessary over-simplification with more focus on implementation, and less on theory and design.
 
-Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you're trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). The distinction is largely semantic -- witha linear model you're asking, "do levels of a categorical variable affect the response?" where with ANOVA or t-tests you're asking, "does the mean response differ between levels of a categorical variable?"
+Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you're trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). The distinction is largely semantic -- with a linear model you're asking, "do levels of a categorical variable affect the response?" where with ANOVA or t-tests you're asking, "does the mean response differ between levels of a categorical variable?"
 
 Let's examine the relationship between BMI and relationship status (`RelationshipStatus` was derived from `MaritalStatus`, coded as _Committed_ if MaritalStatus is Married or LivePartner, and _Single_ otherwise). Let's first do this with a t-test, and for now, let's assume that the variances between groups _are_ equal.
 
@@ -592,12 +603,9 @@ mod <- glm(y ~ x, data=yourdata, family='binomial')
 summary(mod)
 ```
 
-We need to do a few things first before we fit a logistic regression model. When we load in data with `read_csv()` from the **readr** package, by default it does not convert strings to **factors**. Factors are like a special kind of string or character variable, where the values take on a limited number of _discrete_, distinct values. You can see what each type of variable is by running `glimpse(nha)`. You can specifically see what kind of object a variable is by calling `class(nha$Insured)`, for example. 
-
-We need to convert our outcome variable (Insured) and the Race variable, which we'll use for modeling, into factor variables. While we're at it, let's _relevel_ the Race variable so that "White" is the baseline. We saw above that people who identify as "White" have the highest rates of being insured. When we run the logistic regression, we'll get a separate coefficient (effect) for each level of the factor variable(s) in the model, telling you the increased odds that that level has, _as compared to the baseline group_.
+Before we fit a logistic regression model let's _relevel_ the Race variable so that "White" is the baseline. We saw above that people who identify as "White" have the highest rates of being insured. When we run the logistic regression, we'll get a separate coefficient (effect) for each level of the factor variable(s) in the model, telling you the increased odds that that level has, _as compared to the baseline group_.
 
 ```{r}
-nha$Insured <- factor(nha$Insured)
 nha$Race <- relevel(factor(nha$Race), ref="White")
 ```
 
