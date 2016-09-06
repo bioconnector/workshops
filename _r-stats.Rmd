@@ -507,7 +507,7 @@ xt <- xtabs(~Gender+Diabetes, data=nha)
 xt
 ```
 
-There are two useful funcitons, `addmargins()` and `prop.table()` that add more information or manipulate how the data is displayed. By default, `prop.table()` will divide the number of observations in each cell by the total. But you may want to specify _which margin_ you want to get proportions over. Let's do this for the first (row) margin.
+There are two useful functions, `addmargins()` and `prop.table()` that add more information or manipulate how the data is displayed. By default, `prop.table()` will divide the number of observations in each cell by the total. But you may want to specify _which margin_ you want to get proportions over. Let's do this for the first (row) margin.
 
 ```{r}
 # Add marginal totals
@@ -586,7 +586,7 @@ assocplot(xt)
 
 ### Logistic regression
 
-What if we wanted to model the discrete outcome, e.g., whether someone is insured, against several other variables, similar to how we did with multiple linear regression? We can't use linear regression because the outcome isn't continuous -- it's binary, either _Yes_ or _No_. For this we'll use _logistic regression_ to model the _log odds_ of binary response. That is, intead of modeling the outcome variable, $Y$, directly against the inputs, we'll model the _log odds_ of the outcome variable.
+What if we wanted to model the discrete outcome, e.g., whether someone is insured, against several other variables, similar to how we did with multiple linear regression? We can't use linear regression because the outcome isn't continuous -- it's binary, either _Yes_ or _No_. For this we'll use _logistic regression_ to model the _log odds_ of binary response. That is, instead of modeling the outcome variable, $Y$, directly against the inputs, we'll model the _log odds_ of the outcome variable.
 
 If $p$ is the probability that the individual is insured, then $\frac{p}{1-p}$ is the [_odds_](https://en.wikipedia.org/wiki/Odds) that person is insured. Then it follows that the linear model is expressed as:
 
