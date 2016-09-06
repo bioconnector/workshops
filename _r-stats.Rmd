@@ -150,8 +150,6 @@ glimpse(nh)
 
 ## Descriptive statistics
 
-### Continuous variables
-
 We can access individual variables within a data frame using the `$` operator, e.g., `mydataframe$specificVariable`. Let's print out all the **`Race`** values in the data. Let's then see what are the `unique` values of each. Then let's calculate the `mean`, `median`, and `range` of the **`Age`** variable.
 
 ```{r, results="hide"}
@@ -169,6 +167,12 @@ nh$Race %>% unique() %>% length()
 mean(nh$Age)
 median(nh$Age)
 range(nh$Age)
+```
+
+The `summary()` function (note, this is different from **dplyr**'s `summarize()`) works differently depending on which kind of object you pass to it. If you run `summary()` on a data frame, you get some very basic summary statistics on each variable in the data.
+
+```{r, results="hide"}
+summary(nh)
 ```
 
 
