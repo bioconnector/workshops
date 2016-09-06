@@ -462,8 +462,16 @@ Adding other predictors can also swing things the other way. We know that men ha
 summary(lm(Testosterone~PhysActive+Age+Gender, data=nha))
 ```
 
+We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/summary.lm.html) and [`anova()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/anova.lm.html) functions for extracting information from an [`lm` class object](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/lm.html). There are several other accessor functions that can be used on a linear model object. Check out the help page for each one of these to learn more.
+
+- [`coefficients()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/coef.html)
+- [`predict.lm()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/predict.lm.html)
+- [`fitted.values()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/fitted.values.html)
+- [`residuals()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/residuals.html)
 
 ## Discrete variables
+
+Until now we've only discussed analyzing _continuous_ outcomes / dependent variables. We've tested for differences in means between groups
 
 ### table/xtabs
 
