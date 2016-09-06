@@ -571,14 +571,54 @@ assocplot(xt)
 
 ### Logistic regression
 
-```{r}
-nha$Race <- relevel(factor(nha$Race), ref="White")
-nha$Insured <- factor(nha$Insured)
-fit <- glm(Insured~Race+Age+Income, data=nha, family='binomial')
-summary(fit)
-with(fit, pchisq(null.deviance - deviance, df.null - df.residual, lower.tail = FALSE))
+What if we wanted to model the discrete outcome, e.g., whether someone is insured, against several other variables, similar to how we did with multiple linear regression? We can't use linear regression because the outcome isn't continuous -- it's binary, either _Yes_ or _No_. For this we'll use _logistic regression_ to model the _log odds_ of binary response. That is, intead of modeling the outcome variable, $Y$, directly against the inputs, we'll model the _log odds_ of the outcome variable.
+
+If $p$ is the probability that the individual is insured, then $\frac{p}{1-p}$ is the [_odds_](https://en.wikipedia.org/wiki/Odds) that person is insured. Then it follows that the linear model is expressed as:
+
+$$log(\frac{p}{1-p}) = \beta_0 + \beta_1 x_1 + \cdots + \beta_k x_k$$
+
+Where $\beta_0$ is the intercept, $\beta_1$ is the increase in the odds of the outcome for every unit increase in $x_1$, and so on.
+
+Logistic regression is a type of _generalized linear model_ (GLM). We fit GLM models in R using the `glm()` function. It works like the `lm()` function except we specify which GLM to fit using the `family` argument. Logistic regression requires `family=binomial`.
+
+The typical use looks like this:
+
+```r
+mod <- glm(y ~ x, data=yourdata, family='binomial')
+summary(mod)
 ```
 
+We need to do a few things first before we fit a logistic regression model. When we load in data with `read_csv()` from the **readr** package, by default it does not convert strings to **factors**. Factors are like a special kind of string or character variable, where the values take on a limited number of _discrete_, distinct values. You can see what each type of variable is by running `glimpse(nha)`. You can specifically see what kind of object a variable is by calling `class(nha$Insured)`, for example. 
+
+We need to convert our outcome variable (Insured) and the Race variable, which we'll use for modeling, into factor variables. While we're at it, let's _relevel_ the Race variable so that "White" is the baseline. We saw above that people who identify as "White" have the highest rates of being insured. When we run the logistic regression, we'll get a separate coefficient (effect) for each level of the factor variable(s) in the model, telling you the increased odds that that level has, _as compared to the baseline group_.
+
+```{r}
+nha$Insured <- factor(nha$Insured)
+nha$Race <- relevel(factor(nha$Race), ref="White")
+```
+
+Now, let's fit a logistic regression model assessing how the odds of being insured change with different levels of race.
+
+```{r}
+fit <- glm(Insured~Race, data=nha, family=binomial)
+summary(fit)
+```
+
+The `Estimate` column shows the log of the odds ratio -- how the log odds of having health insurance changes at each level of race compared to White. The P-value for each coefficient is on the far right. This shows that _every_ other race has _significantly less_ rates of health insurance coverage. But, as in our multiple linear regression analysis above, are there other important variables that we're leaving out that could alter our conclusions? Lets add a few more variables into the model to see if something else can explain the apparent Race-Insured association. Let's add a few things likely to be involved (Age and Income), and something that's probably irrelevant (hours slept at night).
+
+```{r}
+fit <- glm(Insured~Race+Age+Income+SleepHrsNight, data=nha, family=binomial)
+summary(fit)
+```
+
+A few things become apparent:
+
+1. Age and income are both highly associated with whether someone is insured. Both of these variables are highly significant ($P<2.2 \times 10^{-16}$), and the coefficient (the `Estimate` column) is positive, meaning that for each unit increase in one of these variables, the odds of being insured increases by the corresponding amount.
+1. Hours slept per night is not meaningful at all.
+1. After accounting for age and income, several of the race-specific differences are no longer statistically significant, but others remain so.
+1. The absolute value of the test statistic (column called `z value`) can roughly be taken as an estimate of the "importance" of that variable to the overall model. So, age and income are the most important influences in this model; self-identifying as Hispanic or Mexican are also very highly important, hours slept per night isn't important at all, and the other race categories fall somewhere in between.
+
+There is _much_ more to go into with logistic regression. This lesson only scratches the surface. Missing from this lesson are things like regression diagnostics, model comparison approaches, penalization, interpretation of model coefficients, fitting interaction effects, and much more. Alan Agresti's [_Categorical Data Analysis_](https://www.amazon.com/Categorical-Data-Analysis-Alan-Agresti/dp/0470463635/ref=sr_1_1?ie=UTF8&qid=1473180895&sr=8-1&keywords=categorical+data+analysis&tag=gettgenedone-20) has long been considered the definitive text on this topic. I also recommend Agresti's [_Introduction to Categorical Data Analysis_](https://www.amazon.com/Introduction-Categorical-Data-Analysis/dp/0471226181/ref=sr_1_3?ie=UTF8&qid=1473180895&sr=8-3&keywords=categorical+data+analysis&tag=gettgenedone-20) (a.k.a. "Agresti lite") for a gentler introduction.
 
 ## Power & sample size
 
