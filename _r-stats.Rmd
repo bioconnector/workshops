@@ -330,7 +330,7 @@ The results are still significant, but much less than the p-value reported for t
 
 > Analysis of variance and linear modeling are complex topics that deserve an entire semester dedicated to theory, design, and interpretation. A very good resource is [_An Introduction to Statistical Learning: with Applications in R_](https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370/ref=sr_1_1?ie=UTF8&qid=1473087847&sr=8-1&keywords=introduction+statistical+learning&tag=gettgenedone-20) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The [PDF](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf) of the book and all the R code used throughout are [available **free** on the author's website](http://www-bcf.usc.edu/~gareth/ISL/). What follows is a necessary over-simplification with more focus on implementation, and less on theory and design.
 
-Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you're trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). 
+Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you're trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). The distinction is largely semantic -- witha linear model you're asking, "do levels of a categorical variable affect the response?" where with ANOVA or t-tests you're asking, "does the mean response differ between levels of a categorical variable?"
 
 Let's examine the relationship between BMI and relationship status (`RelationshipStatus` was derived from `MaritalStatus`, coded as _Committed_ if MaritalStatus is Married or LivePartner, and _Single_ otherwise). Let's first do this with a t-test, and for now, let's assume that the variances between groups _are_ equal.
 
@@ -394,6 +394,16 @@ summary(fit)
 ```
 
 Notice that the p-value on the ANOVA/regression didn't change, but the coefficients did. _Never_ smokers are now treated as baseline. The intercept coefficient (28.856) is now the mean for _Never_ smokers. The `SmokingStatusFormer` coefficient of .309 shows the apparent increase in BMI that former smokers have when compared to never smokers, but that difference is not significant (p=.24). The `SmokingStatusCurrent` coefficient of -1.464 shows that current smokers actually have a lower BMI than never smokers, and that this decrease is highly significant.
+
+Finally, you can do the typical post-hoc ANOVA procedures on the fit object. For example, the `TukeyHSD()` function will run [_Tukey's test_](https://en.wikipedia.org/wiki/Tukey%27s_range_test) (also known as _Tukey's range test_, the _Tukey method_, _Tukey's honest significance test_, _Tukey's HSD test_ (honest significant difference), or the _Tukey-Kramer method_). Tukey's test computes all pairwise mean difference calculation, comparing each group to each other group, identifying any difference between two groups that's greater than the standard error, while controlling the type I error for all multiple comparisons. First run `aov()` (**not** `anova()`) on the fitted linear model object, then run `TukeyHSD()` on the resulting analysis of variance fit.
+
+```{r}
+TukeyHSD(aov(fit))
+```
+
+This shows that there isn't much of a difference between former and never smokers, but that both of these differ significantly from current smokers, who have significantly lower BMI. 
+
+Finally, let's visualize the differences in means between these groups. The **NA** category, which is omitted from the ANOVA, contains all the observations who have missing or non-recorded Smoking Status. 
 
 ```{r smoking_boxplots}
 ggplot(nha, aes(SmokingStatus, BMI)) + geom_boxplot() + theme_classic()
