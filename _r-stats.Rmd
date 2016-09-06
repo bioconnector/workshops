@@ -622,11 +622,39 @@ There is _much_ more to go into with logistic regression. This lesson only scrat
 
 ## Power & sample size
 
+This is a necessarily short introduction to the concept of power and sample size calculations. [Statistical power](https://en.wikipedia.org/wiki/Statistical_power), also sometimes called sensitivity, is defined as the probability that your test correctly rejects the null hypothesis when the alternative hypothesis is true. That is, if there really is an effect (difference in means, association between categorical variables, etc.), how likely are you to be able to _detect_ that effect at a given statistical significance level, given certain assumptions. 
+Generally there are a few moving pieces, and if you know all but one of them, you can calculate what that last one is. 
+
+1. Power: How likely are you to detect the effect? (Usually like to see 80% or greater).
+1. N: What is the sample size you have (or require)?
+1. Effect size: How big is the difference in means, odds ratio, etc?
+
+If we know we want 80% power to detect a certain magnitude of difference between groups, we can calculate our required sample size. Or, if we know we can only collect 5 samples, we can calculate how likely we are to detect a particular effect. Or, we can work to solve the last one - if we want 80% power and we have 5 samples, what's the smallest effect we can hope to detect?
+
+All of these questions require certain assumptions about the data and the testing procedure. Which kind of test is being performed? What's the true effect size (often unknown, or estimated from preliminary data), what's the standard deviation of samples that will be collected (often unknown, or estimated from preliminary data), what's the level of statistical significance needed (traditionally p<0.05, but must consider multiple testing corrections).
+
+The `power.t.test()` empirically estimates power or sample size of a t-test for differences in means. If we have 20 samples in each of two groups (e.g., control versus treatment), and the standard deviation for whatever we're measuring is **2.3**, and we're expecting a true difference in means between the groups of **2**, what's the power to detect this effect?
+
 ```{r}
 power.t.test(n=20, delta=2, sd=2.3)
+```
+
+What's the sample size we'd need to detect a difference of 0.8 given a standard deviation of 1.5, assuming we want 80% power?
+
+```{r}
 power.t.test(power=.80, delta=.8, sd=1.5)
-power.prop.test(n=5, p1=0.8, p2=0.1)
-power.prop.test(power=0.8, p1=0.5, p2=0.2)
+```
+
+What about a two-sample proportion test (e.g., chi-square test)? If we have two groups (control and treatment), and we're measuring some outcome (e.g., infected yes/no), and we know that the proportion of infected controls is 80% but 20% in treated, what's the power to detect this effect in 5 samples per group?
+
+```{r}
+power.prop.test(n=5, p1=0.8, p2=0.2)
+```
+
+How many samples would we need for 90% power?
+
+```{r}
+power.prop.test(power=0.9, p1=0.8, p2=0.2)
 ```
 
 
