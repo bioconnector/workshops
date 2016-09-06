@@ -213,7 +213,7 @@ There are a few handy functions in the [**Tmisc** package](https://cran.r-projec
 library(Tmisc)
 ```
 
-```{r ggna}
+```{r ggna, fig.width=8}
 gg_na(nh)
 ```
 
@@ -471,19 +471,103 @@ We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/li
 
 ## Discrete variables
 
-Until now we've only discussed analyzing _continuous_ outcomes / dependent variables. We've tested for differences in means between groups
+Until now we've only discussed analyzing _continuous_ outcomes / dependent variables. We've tested for differences in means between two groups with t-tests, differences among means between _n_ groups with ANOVA, and more general relationships using linear regression. In all of these cases, the dependent variable, i.e., the outcome, or $Y$ variable, was _continuous_, and usually normally distributed. What if our outcome variable is _discrete_, e.g., "Yes/No", "Mutant/WT", "Case/Control", etc.? Here we use a different set of procedures for assessing significant associations.
 
-### table/xtabs
+### Contingency tables
+
+The [`xtabs()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/xtabs.html) function is useful for creating contingency tables from categorical variables. Let's create a gender by diabetes status contingency table, and assign it to an object called **`xt`**. After making the assignment, type the name of the object to view it.
+
+```{r}
+xt <- xtabs(~Gender+Diabetes, data=nha)
+xt
+```
+
+There are two useful funcitons, `addmargins()` and `prop.table()` that add more information or manipulate how the data is displayed. By default, `prop.table()` will divide the number of observations in each cell by the total. But you may want to specify _which margin_ you want to get proportions over. Let's do this for the first (row) margin.
+
+```{r}
+# Add marginal totals
+addmargins(xt)
+
+# Get the proportional table
+prop.table(xt)
+
+# That wasn't really what we wanted. 
+# Do this over the first (row) margin only.
+prop.table(xt, margin=1)
+```
+
+The chi-square test is used to assess the independence of these two factors. That is, if the null hypothesis that gender and diabetes are independent is true, the we would expect a proportionally equal number of diabetics across each sex. Males seem to be at slightly higher risk than females, but the difference is just short of statistically significant.
+
+```{r}
+chisq.test(xt)
+```
+
+An alternative to the chi-square test is [Fisher's exact test](https://en.wikipedia.org/wiki/Fisher%27s_exact_test). Rather than relying on a critical value from a theoretical chi-square distribution, Fisher's exact test calculates the _exact_ probability of observing the contingency table as is. It's especially useful when there are very small _n_'s in one or more of the contingency table cells. Both the chi-square and Fisher's exact test give us p-values of approximately 0.06.
+
+```{r}
+fisher.test(xt)
+```
+
+There's a useful plot for visualizing contingency table data called a _mosaic_ plot. Call the `mosaicplot()` function on the contingency table object.
+
+```{r}
+mosaicplot(xt, main=NA)
+```
+
+Let's create a different contingency table, this time looking at the relationship between race and whether the person had health insurance. Display the table with marginal totals.
+
+```{r}
+xt <- xtabs(~Race+Insured, data=nha)
+addmargins(xt)
+```
+
+Let's do the same thing as above, this time showing the proportion of people in each race category having health insurance.
+
+```{r}
+prop.table(xt, margin=1)
+```
+
+Now, let's run a chi-square test for independence.
+
+```{r}
+chisq.test(xt)
+```
+
+The result is _highly_ significant. In fact, so significant, that the display rounds off the p-value to something like $<2.2 \times 10^{-16}$. If you look at the help for [`?chisq.test`](https://stat.ethz.ch/R-manual/R-patched/library/stats/html/chisq.test.html) you'll see that displaying the test only shows you summary information, but other components can be accessed. For example, we can easily get the actual p-value, or the expected counts under the null hypothesis of independence.
+
+```{r}
+chisq.test(xt)$p.value
+chisq.test(xt)$expected
+```
+
+We can also make a mosaic plot similar to above:
+
+```{r, fig.width=8}
+mosaicplot(xt, main=NA)
+```
+
+Finally, there's an _association plot_ that shows deviations from independence of rows and columns in a 2-dimensional contingency table. Each cell is represented by a rectangle that has (signed) height proportional to the deviation of the observed from expected counts and width proportional to the expected counts, so that the area of the box is proportional to the difference in observed and expected frequencies. The rectangles in each row are positioned relative to a baseline indicating independence. If the observed frequency of a cell is greater than the expected one, the box rises above the baseline and is shaded black; otherwise, the box falls below the baseline and is shaded red. See the help for [`?assocplot`](https://stat.ethz.ch/R-manual/R-patched/library/graphics/html/assocplot.html).
+
+
+```{r, fig.width=8, fig.height=8}
+assocplot(xt)
+```
 
 <!-- - xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins -->
 
 <!-- `summary()`: works differently depending on what kind of object you pass to it. Passing a data frame to the `summary()` function prints out useful summary statistics about numeric column (min, max, median, mean, etc.) -->
 
-### Chi-square
 
 
 ### Logistic regression
 
+```{r}
+nha$Race <- relevel(factor(nha$Race), ref="White")
+nha$Insured <- factor(nha$Insured)
+fit <- glm(Insured~Race+Age+Income, data=nha, family='binomial')
+summary(fit)
+with(fit, pchisq(null.deviance - deviance, df.null - df.residual, lower.tail = FALSE))
+```
 
 
 ## Power & sample size
