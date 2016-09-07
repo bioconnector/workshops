@@ -235,24 +235,7 @@ gg_na(nh)
 propmiss(nh)
 ```
 
-Now, let's practice.
-
-----
-
-<mark>**EXERCISE `r .ex``r .ex=.ex+1`**</mark>
-
-Descriptive statistics functions for continuous variables:
-
-- `mean()`
-- `median()`
-- `min()` and `max()`
-- `range()`
-- `quantile()`
-- `sd()` and `var()`
-
-1. fixme! Need to write these exercises!
-
-----
+Now, let's talk about exploratory data analysis (EDA).
 
 ### EDA
 
@@ -297,6 +280,19 @@ nh %>%
 
 
 Check out the [data visualization lesson](r-viz-gapminder.html) for much more on this topic.
+
+### Exercise set `r .ex``r .ex=.ex+1`
+
+<!-- FIXME! Need to write these exercises! -->
+
+<!-- Descriptive statistics functions for continuous variables: -->
+
+<!-- - `mean()` -->
+<!-- - `median()` -->
+<!-- - `min()` and `max()` -->
+<!-- - `range()` -->
+<!-- - `quantile()` -->
+<!-- - `sd()` and `var()` -->
 
 
 ## Continuous variables
@@ -494,6 +490,9 @@ We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/li
 - [`fitted.values()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/fitted.values.html)
 - [`residuals()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/residuals.html)
 
+### Exercise set `r .ex``r .ex=.ex+1`
+
+
 ## Discrete variables
 
 Until now we've only discussed analyzing _continuous_ outcomes / dependent variables. We've tested for differences in means between two groups with t-tests, differences among means between _n_ groups with ANOVA, and more general relationships using linear regression. In all of these cases, the dependent variable, i.e., the outcome, or $Y$ variable, was _continuous_, and usually normally distributed. What if our outcome variable is _discrete_, e.g., "Yes/No", "Mutant/WT", "Case/Control", etc.? Here we use a different set of procedures for assessing significant associations.
@@ -632,6 +631,11 @@ A few things become apparent:
 
 There is _much_ more to go into with logistic regression. This lesson only scratches the surface. Missing from this lesson are things like regression diagnostics, model comparison approaches, penalization, interpretation of model coefficients, fitting interaction effects, and much more. Alan Agresti's [_Categorical Data Analysis_](https://www.amazon.com/Categorical-Data-Analysis-Alan-Agresti/dp/0470463635/ref=sr_1_1?ie=UTF8&qid=1473180895&sr=8-1&keywords=categorical+data+analysis&tag=gettgenedone-20) has long been considered the definitive text on this topic. I also recommend Agresti's [_Introduction to Categorical Data Analysis_](https://www.amazon.com/Introduction-Categorical-Data-Analysis/dp/0471226181/ref=sr_1_3?ie=UTF8&qid=1473180895&sr=8-3&keywords=categorical+data+analysis&tag=gettgenedone-20) (a.k.a. "Agresti lite") for a gentler introduction.
 
+
+### Exercise set `r .ex``r .ex=.ex+1`
+
+
+
 ## Power & sample size
 
 This is a necessarily short introduction to the concept of power and sample size calculations. [Statistical power](https://en.wikipedia.org/wiki/Statistical_power), also sometimes called sensitivity, is defined as the probability that your test correctly rejects the null hypothesis when the alternative hypothesis is true. That is, if there really is an effect (difference in means, association between categorical variables, etc.), how likely are you to be able to _detect_ that effect at a given statistical significance level, given certain assumptions. 
@@ -645,6 +649,7 @@ If we know we want 80% power to detect a certain magnitude of difference between
 
 All of these questions require certain assumptions about the data and the testing procedure. Which kind of test is being performed? What's the true effect size (often unknown, or estimated from preliminary data), what's the standard deviation of samples that will be collected (often unknown, or estimated from preliminary data), what's the level of statistical significance needed (traditionally p<0.05, but must consider multiple testing corrections).
 
+### T-test power/N
 The `power.t.test()` empirically estimates power or sample size of a t-test for differences in means. If we have 20 samples in each of two groups (e.g., control versus treatment), and the standard deviation for whatever we're measuring is **2.3**, and we're expecting a true difference in means between the groups of **2**, what's the power to detect this effect?
 
 ```{r}
@@ -656,6 +661,8 @@ What's the sample size we'd need to detect a difference of 0.8 given a standard 
 ```{r}
 power.t.test(power=.80, delta=.8, sd=1.5)
 ```
+
+### Proportions power/N
 
 What about a two-sample proportion test (e.g., chi-square test)? If we have two groups (control and treatment), and we're measuring some outcome (e.g., infected yes/no), and we know that the proportion of infected controls is 80% but 20% in treated, what's the power to detect this effect in 5 samples per group?
 
@@ -682,6 +689,10 @@ Also check out the [**pwr** package](https://cran.r-project.org/web/packages/pwr
 | `pwr.r.test()` | Correlation |
 | `pwr.t.test()` | T-tests (one sample, 2 sample, paired) |
 | `pwr.t2n.test()` | T-test (two samples with unequal n) |
+
+
+### Exercise set `r .ex``r .ex=.ex+1`
+
 
 
 ## Tidying models
@@ -786,11 +797,4 @@ tidy(glmfit) %>%
 ```
 
 Check out some of the other [**broom** vignettes on CRAN](https://cran.r-project.org/web/packages/broom/index.html), and also check out the [**biobroom** package](http://bioconductor.org/packages/release/bioc/html/biobroom.html) on bioconductor for turning bioconductor objects and analytical results into tidy data frames.
-
-<!-- ## Advanced topics -->
-
-<!-- - Tidying models with **broom** -->
-<!-- - Empirical Bayes -->
-<!-- - Negative binomial -->
-<!-- - Resampling/permutation -->
 
