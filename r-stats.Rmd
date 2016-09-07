@@ -11,7 +11,7 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 
 ```{r, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
 options(digits=3)
 options(max.print=200)
 .ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
