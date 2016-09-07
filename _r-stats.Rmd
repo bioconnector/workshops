@@ -683,10 +683,114 @@ Also check out the [**pwr** package](https://cran.r-project.org/web/packages/pwr
 | `pwr.t.test()` | T-tests (one sample, 2 sample, paired) |
 | `pwr.t2n.test()` | T-test (two samples with unequal n) |
 
-## Advanced topics
 
-- Tidying models with **broom**
-- Empirical Bayes
-- Negative binomial
-- Resampling/permutation
+## Tidying models
+
+We spent a lot of time in [other lessons](r-tidy.html) on _tidy **data**_, where each column is a variable and each row is an observation. Tidy data is easy to filter observations based on values in a column (e.g., we could get just adult males with `filter(nha, Gender=="male" & Age>=18)`, and easy to select particular variables/features of interest by their column name. 
+
+Even when we start with tidy _data_, we don't end up with tidy _models_. The output from tests like `t.test` or `lm` are not data.frames, and it's difficult to get the information out of the model object that we want. The [**broom** package](https://github.com/dgrtwo/broom) bridges this gap.
+
+![](img/broom.jpg)
+
+Depending on the type of model object you're using, broom provides three methods that do different kinds of tidying:
+
+1. `tidy`: constructs a data frame that summarizes the model's statistical findings like coefficients and p-values.
+2. `augment`: add columns to the original data that was modeled, like predictions and residuals.
+3. `glance`: construct a concise _one-row_ summary of the model with information like $R^2$ that are computed once for the entire model.
+
+Let's go back to our linear model example.
+
+```{r}
+# Try modeling Testosterone against Physical Activity, Age, and Gender.
+fit <- lm(Testosterone~PhysActive+Age+Gender, data=nha)
+
+# See what that model looks like:
+summary(fit)
+```
+
+What if we wanted to pull out the coefficient for Age, or the P-value for PhysActive? It gets pretty gross. We first have to `coef(summary(lmfit))` to get a matrix of coefficients, the terms are still stored in row names, and the column names are inconsistent with other packages (e.g. `Pr(>|t|)` compared to `p.value`). Yuck!
+
+```{r}
+coef(summary(fit))["Age", "Estimate"]
+coef(summary(fit))["PhysActiveYes", "Pr(>|t|)"]
+```
+
+Instead, you can use the `tidy` function, from the broom package, on the fit:
+
+```{r}
+library(broom)
+tidy(fit)
+```
+
+This gives you a data.frame with all your model results. The row names have been moved into a column called `term`, and the column names are simple and consistent (and can be accessed using `$`). These can be manipulated with dplyr just like any other data frame.
+
+```{r}
+tidy(fit) %>% filter(term!="(Intercept)") %>% select(term, p.value)
+```
+
+Instead of viewing the coefficients, you might be interested in the fitted values and residuals for each of the original points in the regression. For this, use `augment`, which augments the original data with information from the model. New columns begins with a `.` (to avoid overwriting any of the original columns).
+
+```{r}
+# Augment the original data
+augment(fit) %>% head
+
+# Plot residuals vs fitted values for males, 
+# colored by Physical Activity, size scaled by age
+augment(fit) %>% 
+  filter(Gender=="male") %>% 
+  ggplot(aes(.fitted, .resid, col=PhysActive, size=Age)) + geom_point()
+```
+
+Finally, several summary statistics are computed for the entire regression, such as $R^2$ and the F-statistic. These can be accessed with `glance`:
+
+```{r}
+glance(fit)
+```
+
+The **broom** functions work on a pipe, so you can `%>%` your model directly to any of the functions like `tidy()`. Let's tidy up our t-test:
+
+```{r}
+t.test(AlcoholYear~RelationshipStatus, data=nha)
+t.test(AlcoholYear~RelationshipStatus, data=nha) %>% tidy()
+```
+
+...and our Mann-Whitney _U_ test / Wilcoxon rank-sum test:
+
+```{r}
+wilcox.test(AlcoholYear~RelationshipStatus, data=nha)
+wilcox.test(AlcoholYear~RelationshipStatus, data=nha) %>% tidy()
+```
+
+...and our Fisher's exact test on the cross-tabulated data:
+
+```{r}
+xtabs(~Gender+Diabetes, data=nha) %>% fisher.test()
+xtabs(~Gender+Diabetes, data=nha) %>% fisher.test() %>% tidy()
+```
+
+...and finally, a logistic regression model:
+
+```{r}
+# fit the model and summarize it the usual way
+glmfit <- glm(Insured~Race, data=nha, family=binomial)
+summary(glmfit)
+
+# tidy it up!
+tidy(glmfit)
+
+# do whatever you want now
+tidy(glmfit) %>% 
+  filter(term!="(Intercept)") %>% 
+  mutate(logp=-1*log10(p.value)) %>% 
+  ggplot(aes(term, logp)) + geom_bar(stat="identity") + coord_flip()
+```
+
+Check out some of the other [**broom** vignettes on CRAN](https://cran.r-project.org/web/packages/broom/index.html), and also check out the [**biobroom** package](http://bioconductor.org/packages/release/bioc/html/biobroom.html) on bioconductor for turning bioconductor objects and analytical results into tidy data frames.
+
+<!-- ## Advanced topics -->
+
+<!-- - Tidying models with **broom** -->
+<!-- - Empirical Bayes -->
+<!-- - Negative binomial -->
+<!-- - Resampling/permutation -->
 
