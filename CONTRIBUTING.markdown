@@ -83,6 +83,7 @@ install.packages("shiny")
 install.packages("shinythemes")
 install.packages("lubridate")
 install.packages("Tmisc")
+install.packages("broom")
 
 # Bioconductor
 source("http://bioconductor.org/biocLite.R")
