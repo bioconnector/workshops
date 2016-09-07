@@ -1,0 +1,22 @@
+---
+title: "Handouts"
+output: 
+  html_document:
+    toc: false
+---
+
+```{r, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=FALSE)
+suppressPackageStartupMessages(library(dplyr))
+```
+
+```{r, results='asis'}
+dir <- "handouts/"
+list.files(dir) %>%
+  sort %>% 
+  grep("\\.pdf$", ., value=TRUE, invert=FALSE) %>% 
+  paste0("- [", ., "](", paste0(dir, .), ")") %>% 
+  cat(sep="\n")
+```
+
