@@ -5,9 +5,9 @@ output:
     toc: false
 ---
 
-These workshops introduce methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data using the R statistical computing environment.
+These workshops introduce methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data using the R statistical computing environment. Visit [bioconnector.virginia.edu](https://www.bioconnector.virginia.edu/workshops-and-events) to register.
 
-**_IMPORTANT_: [Click here for instructions on setting up your computer for any of these workshops](setup.html).** Each workshop involves lots of hands-on practice coding, and you'll need to download and install some free software **_prior to our first class_**. This may take up to an hour or so, and please do not hesitate to [email me](people.html) _prior to the workshop_ if you are having difficulty.
+**_IMPORTANT_: [Click here for instructions on setting up your computer for any of these workshops](setup.html).** Each workshop involves lots of hands-on practice coding, and you'll need to download and install some free software **_prior to our first class_**. This may take up to an hour or so, and please do not hesitate to [email us](people.html) _prior to the workshop_ if you are having difficulty.
 
 ----
 
