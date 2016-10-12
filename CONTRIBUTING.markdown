@@ -67,11 +67,7 @@ The material on the site covers a variety of topics and lessons, many of which r
 
 ```r
 # CRAN packages
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("tidyr")
-install.packages("readr")
-install.packages("stringr")
+install.packages("tidyverse")
 install.packages("knitr")
 install.packages("rmarkdown")
 install.packages("highcharter")
@@ -81,9 +77,7 @@ install.packages("visNetwork")
 install.packages("jsonlite")
 install.packages("shiny")
 install.packages("shinythemes")
-install.packages("lubridate")
 install.packages("Tmisc")
-install.packages("broom")
 
 # Bioconductor
 source("http://bioconductor.org/biocLite.R")

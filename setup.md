@@ -19,23 +19,15 @@ title: 'Setup Instructions'
     - If you're using a Windows machine you might get some errors about not having permission to modify the existing libraries -- don't worry about this message. You can avoid this error altogether by running RStudio as an administrator (right click the RStudio icon, then click "run as administrator").
 
 ```r
-install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("tidyr")
-install.packages("readr")
-install.packages("stringr")
+install.packages("tidyverse")
 install.packages("knitr")
 install.packages("rmarkdown")
 ```
 
-You can check that you've installed everything correctly by closing and reopening RStudio and entering the following commands at the console window:
+You can check that you've installed everything correctly by closing and reopening RStudio and entering the following commands at the console window (don't worry about the _Conflicts with tidy packages_ warning):
 
 ```r
-library(dplyr)
-library(ggplot2)
-library(tidyr)
-library(readr)
-library(stringr)
+library(tidyverse)
 library(knitr)
 library(rmarkdown)
 ```
