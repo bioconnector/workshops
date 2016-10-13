@@ -516,13 +516,11 @@ We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/li
 ### Exercise set `r .ex``r .ex=.ex+1`
 
 1. Is the average BMI different in single people versus those in a committed relationship? Perform a t-test.
-
 2. The `Work` variable is coded "Looking" (n=159), "NotWorking" (n=1317), and "Working" (n=2230).
     - Fit a linear model. Assign this to an object called `fit`. What does the `fit` object tell you when you display it directly?
     - Run an `anova()` to get the ANOVA table. Is the model significant?
     - Run a Tukey test to get the pairwise contrasts. (Hint: `TukeyHSD()` on `aov()` on the fit). What do you conclude?
     - Instead of thinking of this as ANOVA, think of it as a linear model. After you've thought about it, get some `summary()` statistics on the fit. Do these results jive with the ANOVA model?
-
 3. Examine the relationship between HDL cholesterol levels (`HDLChol`) and whether someone has diabetes or not (`Diabetes`).
     - Is there a difference in means between diabetics and nondiabetics? Perform a t-test _without_ a Welch correction (that is, assuming equal variances -- see `?t.test` for help).
     - Do the same analysis in a linear modeling framework.
@@ -690,7 +688,6 @@ There is _much_ more to go into with logistic regression. This lesson only scrat
     - Show the proportions of diabetics and nondiabetics, separately, who are physically active or not.
     - Is this relationship significant?
     - Create two different visualizations showing the relationship.
-
 2. Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor.
     - Fit a model with just physical activity as a predictor, and display a model summary.
     - Add gender to the model, and show a summary.
