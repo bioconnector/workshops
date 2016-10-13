@@ -515,6 +515,41 @@ We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/li
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
+1. Is the average BMI different in single people versus those in a committed relationship? Perform a t-test.
+
+
+
+2. The `Work` variable is coded "Looking" (n=159), "NotWorking" (n=1317), and "Working" (n=2230).
+    - Fit a linear model. Assign this to an object called `fit`. What does the `fit` object tell you when you display it directly?
+    - Run an `anova()` to get the ANOVA table. Is the model significant?
+    - Run a Tukey test to get the pairwise contrasts. (Hint: `TukeyHSD()` on `aov()` on the fit). What do you conclude?
+    - Instead of thinking of this as ANOVA, think of it as a linear model. After you've thought about it, get some `summary()` statistics on the fit. Do these results jive with the ANOVA model?
+
+
+
+3. 
+
+
+
+4. 
+
+
+
+
+```{r}
+t.test(BMI~RelationshipStatus, data=nha)
+
+fit <- lm(Income~Work, data=nha)
+fit
+anova(fit)
+TukeyHSD(aov(fit))
+summary(fit)
+fit
+anova(fit)
+TukeyHSD(aov(fit))
+```
+
+
 
 ## Discrete variables
 
