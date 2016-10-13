@@ -284,16 +284,30 @@ Check out the [data visualization lesson](r-viz-gapminder.html) for much more on
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
-<!-- FIXME! Need to write these exercises! -->
+1. What's the mean 60-second pulse rate for all participants in the data?
 
-<!-- Descriptive statistics functions for continuous variables: -->
+```{r, echo=FALSE}
+mean(nh$Pulse, na.rm=TRUE)
+```
 
-<!-- - `mean()` -->
-<!-- - `median()` -->
-<!-- - `min()` and `max()` -->
-<!-- - `range()` -->
-<!-- - `quantile()` -->
-<!-- - `sd()` and `var()` -->
+2. What's the range of values for diastolic blood pressure in all participants? (Hint: see help for `min()`, `max()`, and `range()` functions, e.g., enter `?range` without the parentheses to get help).
+
+```{r, echo=FALSE}
+range(nh$BPDia, na.rm=TRUE)
+```
+
+3. What are the median, lower, and upper quartiles for the age of all participants? (Hint: see help for `median`, or better yet, `quantile`).
+
+```{r, echo=FALSE}
+quantile(nh$Age, na.rm=TRUE)
+```
+
+4. What's the variance and standard deviation for income among all participants?
+
+```{r, echo=FALSE}
+var(nh$Income, na.rm=TRUE)
+sd(nh$Income, na.rm=TRUE)
+```
 
 
 ## Continuous variables
