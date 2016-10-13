@@ -8,7 +8,10 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 
 **You must [complete the basic R setup here](setup.html#R) _prior to class_.** This includes installing R, RStudio, and the required packages. Please [contact one of the instructors](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
 
-**Cheat sheet**: Download and print out [this handout/cheatsheet](handouts/r-stats-cheatsheet.pdf) and bring it with you to class.
+**Handouts**: Download and print out these handouts and bring them to class:
+
+- [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
+- [Exercises handout](handouts/r-stats-exercises.pdf)
 
 ```{r, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
