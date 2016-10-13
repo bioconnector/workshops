@@ -529,7 +529,7 @@ We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/li
     - Does the relationship hold when adjusting for `Weight`?
     - What about when adjusting for `Weight`, `Age`, `Gender`, `PhysActive` (whether someone participates in moderate or vigorous-intensity sports, fitness or recreational activities, coded as yes/no). What is the effect of each of these explanatory variables?
 
-```{r, include=FALSE}
+```{r, include=FALSE, eval=FALSE}
 t.test(BMI~RelationshipStatus, data=nha)
 
 fit <- lm(Income~Work, data=nha)
@@ -572,6 +572,8 @@ prop.table(xt)
 # Do this over the first (row) margin only.
 prop.table(xt, margin=1)
 ```
+
+Looks like men have slightly higher rates of diabetes than women. But is this significant?
 
 The chi-square test is used to assess the independence of these two factors. That is, if the null hypothesis that gender and diabetes are independent is true, the we would expect a proportionally equal number of diabetics across each sex. Males seem to be at slightly higher risk than females, but the difference is just short of statistically significant.
 
@@ -630,11 +632,6 @@ Finally, there's an _association plot_ that shows deviations from independence o
 assocplot(xt)
 ```
 
-<!-- - xtabs eg. `xtabs(~Gender+Diabetes, data=nh)`, addmargins -->
-
-<!-- `summary()`: works differently depending on what kind of object you pass to it. Passing a data frame to the `summary()` function prints out useful summary statistics about numeric column (min, max, median, mean, etc.) -->
-
-
 
 ### Logistic regression
 
@@ -687,6 +684,33 @@ There is _much_ more to go into with logistic regression. This lesson only scrat
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
+1. What's the relationship between diabetes and participating in rigorous physical activity or sports?
+    - Create a contingency table with Diabetes status in rows and physical activity status in columns.
+    - Display that table with margins.
+    - Show the proportions of diabetics and nondiabetics, separately, who are physically active or not.
+    - Is this relationship significant?
+    - Create two different visualizations showing the relationship.
+
+2. Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor.
+    - Fit a model with just physical activity as a predictor, and display a model summary.
+    - Add gender to the model, and show a summary.
+    - Continue adding weight and age to the model. What happens to the gender association?
+    - Continue and add income to the model. What happens to the original association with physical activity?
+
+
+```{r, include=FALSE, eval=FALSE}
+xt <- xtabs(~Diabetes+PhysActive, data=nha)
+addmargins(xt)
+prop.table(xt, margin=1)
+chisq.test(xt)
+# mosaicplot(xt)
+# assocplot(xt)
+
+summary(glm(Diabetes~PhysActive, data=nha, family="binomial"))
+summary(glm(Diabetes~PhysActive+Gender, data=nha, family="binomial"))
+summary(glm(Diabetes~PhysActive+Gender+Age+Weight, data=nha, family="binomial"))
+summary(glm(Diabetes~PhysActive+Gender+Age+Weight+Income, data=nha, family="binomial"))
+```
 
 
 ## Power & sample size
