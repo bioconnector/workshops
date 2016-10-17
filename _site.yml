@@ -37,7 +37,7 @@ navbar:
         - text: "Building Shiny Web Apps in R"
           href: r-shiny.html
         - text: "Essential Statistics with R"
-          href:
+          href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
           href:
         - text: "Introduction to Bioconductor"
