@@ -145,7 +145,7 @@ If we look at our metadata, we see that the control samples are SRR1039508, SRR1
 
 ```{r exMakeMeancounts}
 meancounts <- rawcounts %>% 
-  mutate(controlmean = SRR1039508+SRR1039512+SRR1039516+SRR1039520) %>% 
+  mutate(controlmean = (SRR1039508+SRR1039512+SRR1039516+SRR1039520)/4) %>% 
   select(ensgene, controlmean)
 meancounts
 ```
@@ -154,13 +154,13 @@ meancounts
 
 ```{r exMakeMeancounts2, echo=FALSE}
 meancounts <- rawcounts %>% 
-  mutate(controlmean=SRR1039508+SRR1039512+SRR1039516+SRR1039520) %>% 
-  mutate(treatedmean=SRR1039509+SRR1039513+SRR1039517+SRR1039521) %>% 
+  mutate(controlmean=(SRR1039508+SRR1039512+SRR1039516+SRR1039520)/4) %>% 
+  mutate(treatedmean=(SRR1039509+SRR1039513+SRR1039517+SRR1039521)/4) %>% 
   select(ensgene, controlmean, treatedmean)
 meancounts
 ```
 
-2. Directly comparing the raw counts is going to be problematic if we just happened to sequence one group at a higher depth than another. Later on we'll do this analysis properly, normalizing by sequencing depth. But for now, `summarize()` the data to show the `sum` of the mean counts across all genes for each group. Your answer should look like this:
+2. Directly comparing the raw counts is going to be problematic if we just happened to sequence one group at a higher depth than another. Later on we'll do this analysis properly, normalizing by sequencing depth per sample using a better approach. But for now, `summarize()` the data to show the `sum` of the mean counts across all genes for each group. Your answer should look like this:
 
 ```{r exSummarizeMeancounts, echo=F}
 meancounts %>% summarize(sum(controlmean), sum(treatedmean))
