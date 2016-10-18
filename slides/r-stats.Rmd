@@ -130,7 +130,7 @@ power.prop.test(power, n, p1, p2, sig.level=0.05)
 
 ## Model tidying {.smaller}
 
-We put a lot of emphasis on [_tidy **data**_](../r-tidy.html), where each column is a variable and each row is an observation. But even when we start with tidy _data_, we don't end up with tidy _models_. The output from tests like `t.test` or `lm` are not data.frames, and it's hard to get the information out of the model object that we want. The [**broom** package](https://github.com/dgrtwo/broom) bridges this gap.
+We put a lot of emphasis on _tidy **data**_, where each column is a variable and each row is an observation. But even when we start with tidy _data_, we don't end up with tidy _models_. The output from tests like `t.test` or `lm` are not data.frames, and it's hard to get the information out of the model object that we want. The [**broom** package](https://github.com/dgrtwo/broom) bridges this gap.
 
 ![](../img/broom.jpg)
 
