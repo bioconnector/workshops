@@ -13,6 +13,7 @@ _site/
 
 # Rendered HTML slides
 slides/*.html
+!slides/index.html
 
 # Unfinished lessons
 Untitled*
