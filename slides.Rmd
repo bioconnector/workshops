@@ -16,6 +16,7 @@ dir <- "slides/"
 list.files(dir) %>%
   sort %>% 
   grep("\\.html$", ., value=TRUE) %>% 
+  grep("^index\\.html$", ., value=TRUE, invert=TRUE) %>% 
   paste0("- [", ., "](", paste0(dir, .), ")") %>% 
   cat(sep="\n")
 ```
