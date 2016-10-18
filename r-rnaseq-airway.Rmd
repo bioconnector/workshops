@@ -74,6 +74,7 @@ This is an introduction to RNAseq analysis involving reading in count data from 
 
 - Count matrix (i.e., `countData`): [airway_rawcounts.csv](data/airway_rawcounts.csv)
 - Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
+- Gene Annotation data: [annotables_grch37.csv](data/annotables_grch37.csv)
 
 ## Background
 
