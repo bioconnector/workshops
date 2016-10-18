@@ -13,7 +13,7 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 - [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
 - [Exercises handout](handouts/r-stats-exercises.pdf)
 
-**Slides**: [click here](../slides/r-stats.html).
+**Slides**: [click here](slides/r-stats.html).
 
 ```{r, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
