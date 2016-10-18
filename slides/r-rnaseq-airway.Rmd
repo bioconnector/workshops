@@ -1,0 +1,91 @@
+---
+title: "Count-Based Differential Expression Analysis of RNA-seq Data"
+author: "Sign in and pick up handouts in the back"
+date: "`r format(Sys.time(), '%m/%d/%Y')`"
+output: 
+  slidy_presentation:
+    footer: "bioconnector.org | Count-Based Differential Expression Analysis of RNA-seq Data"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```
+
+## RNA-seq workshop: Agenda
+
+1. Our data: source, pre-processing, structure
+1. Importing & exploring
+1. Processing and analysis with [DESeq2](http://bioconductor.org/packages/DESeq2)
+    - Structuring the count data and metadata
+    - Running the analysis (normalization, dispersion estimation, model fitting)
+    - Extracting results
+1. Data visualization
+1. Alternative approaches
+
+## What this class is _not_
+
+- This is _not_ an introductory R class. Pre-requisites: 
+    - Basic R skills: data frames, installing/using packages, importing data, saving results
+    - Manipulating data with dplyr and %>%
+    - Tidy data & advanced manipulation
+    - Data Visualization with ggplot2
+- This is _not_ a statistics course.
+- This workshop does _not_ cover upstream pre-processing (alignment & quantitation from FASTQ files). 
+- This is _not_ a comprehensive RNA-seq theory/practice course. Refer to the Conesa 2016 and Soneseson 2015 references on the workshop website.
+
+## Course website: **[bioconnector.org](http://bioconnector.org)** {.bigger}
+
+- Data
+- Setup instructions
+- Lessons dropdown: _RNA-seq: airway_
+- **`?`** dropdown: FAQs, resources, etc.
+
+## Our data: Background
+
+**Himes _et al_. "RNA-Seq Transcriptome Profiling Identifies CRISPLD2 as a Glucocorticoid Responsive Gene that Modulates Cytokine Function in Airway Smooth Muscle Cells." _PLoS ONE_. [2014 Jun 13;9(6):e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625). PMID: [24926665](http://www.ncbi.nlm.nih.gov/pubmed/24926665).**
+
+- Glucocorticoids inhibit inflammatory processes, used to treat asthma because of anti-inflammatory effects on airway smooth muscle (ASM) cells.
+- RNA-seq to profile gene expression changes in 4 ASM cell lines treated w/ dexamethasone (synthetic glucocorticoid). 
+- Results: many differentially expressed genes. Focus on CRISPLD2
+    - Encodes a secreted protein involved in lung development
+    - SNPs in CRISPLD2 in previous GWAS associated w/ inhaled corticosteroid resistance and bronchodilator response in asthma patients. 
+    - Confirmed the upregulated CRISPLD2 w/ qPCR and increased protein expression w/ Western blotting.
+
+**They analyzed with [Tophat and Cufflinks](http://rdcu.be/gk0S). We're taking a different approach with  [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). See recommended reading and [resources page](help.html#rna-seq-resources) for more info.**
+
+## Data pre-processing
+
+- Analyzing an RNAseq experiment begins with sequencing reads. 
+- Many different approaches, see references on workshop website. This workflow was chosen because of its widespread use, robustness, and simplicity.
+- Our workflow (previously done):
+    1. Reads downloaded from GEO ([GSE:GSE52778](http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778))
+    1. Align reads to genome
+    1. Count the number of reads that mapped to each gene region. 
+- Our starting point is a **count matrix**: each cell indicates the number of reads mapping to a particular gene (in rows) for each sample (in columns). 
+
+## Workflow
+
+<img width='1000', src="../img/aligncount.png">
+
+## Data structure
+
+<img width='1000', src="../img/countdatacoldata.png">
+
+## Getting started
+
+Go to **[bioconnector.org](http://bioconnector.org)**. Hit the data link. Download the following files, save them somewhere on your computer you can easily find. E.g., create a new folder on your desktop called **`airway`** and save it there.
+
+- **`airway_rawcounts.csv`**
+- **`airway_metadata.csv`**
+- **`annotables_grch37.csv`**
+
+Open RStudio. **File** -- **New file** -- **R script**. Save this file as **`airway_analysis.R`** in the same **`airway`** folder above.
+
+Quit RStudio, then double-click the R script to open R running in the `rstats` folder. You can also do this through the menu with **Session** -- **Set working directory** -- **To Source File Location**. Then load the data:
+
+```r
+library(tidyverse)
+rawcounts <- read_csv("airway_rawcounts.csv")
+metadata <-  read_csv("airway_metadata.csv")
+```
+
