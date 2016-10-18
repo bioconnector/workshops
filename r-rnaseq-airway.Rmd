@@ -113,12 +113,10 @@ That is, we have **two tables**:
 
 ## Import data
 
-First, let's load the **readr**, **dplyr**, and **ggplot2** libraries, and import our data [like we've always done](r-dataframes.html) with `read_csv()` (_note_: not `read.csv()`). Let's read in the actual count data and the experimental metadata.
+First, let's load the **tidyverse** library. (This loads **readr**, **dplyr**, **ggplot2**, and several other needed packages). Then let's import our data [with **readr**'s `read_csv()` function](r-dataframes.html) (_note_: not `read.csv()`). Let's read in the actual count data and the experimental metadata.
 
 ```{r libs_importdata}
-library(readr)
-library(dplyr)
-library(ggplot2)
+library(tidyverse)
 
 rawcounts <- read_csv("data/airway_rawcounts.csv")
 metadata <-  read_csv("data/airway_metadata.csv")
