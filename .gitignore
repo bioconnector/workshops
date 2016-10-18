@@ -11,6 +11,9 @@ _site/
 *_cache/
 *_files/
 
+# Rendered HTML slides
+slides/*.html
+
 # Unfinished lessons
 Untitled*
 

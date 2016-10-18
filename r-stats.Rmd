@@ -13,6 +13,8 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 - [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
 - [Exercises handout](handouts/r-stats-exercises.pdf)
 
+**Slides**: [click here](../slides/r-stats.html).
+
 ```{r, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
 opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
@@ -458,7 +460,7 @@ $$Y = \beta_{0} +  \beta_{1}X_{1} + \beta_{2}X_{2} + \epsilon$$
 
 - $Y$ is the response 
 - $X_{1}$ and $X_{2}$ are the predictors
-- $\beta_{0}, \beta_{1}, \beta_{2}$ are coefficients that describe what 1-unit changes in $X_{1}$ and $X_{2}$ do to the outcome variable $Y$.
+- $\beta_{0}$ is the intercept, and $\beta_{1}$, $\beta_{2}$ etc are _coefficients_ that describe what 1-unit changes in $X_{1}$ and $X_{2}$ do to the outcome variable $Y$.
 - $\epsilon$ is random error. Our model will not perfectly predict $Y$. It will be off by some random amount. We assume this amount is a random draw from a Normal distribution with mean 0 and standard deviation $\sigma$.
 
 _Building a linear model_ means we propose a linear model and then estimate the coefficients and the variance of the error term. Above, this means estimating $\beta_{0}, \beta_{1}, \beta_{2}$ and $\sigma$. This is what we do in R.

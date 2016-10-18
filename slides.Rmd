@@ -1,0 +1,22 @@
+---
+title: "Slides"
+output: 
+  html_document:
+    toc: false
+---
+
+```{r, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=FALSE)
+suppressPackageStartupMessages(library(dplyr))
+```
+
+```{r, results='asis'}
+dir <- "slides/"
+list.files(dir) %>%
+  sort %>% 
+  grep("\\.html$", ., value=TRUE) %>% 
+  paste0("- [", ., "](", paste0(dir, .), ")") %>% 
+  cat(sep="\n")
+```
+
