@@ -41,8 +41,8 @@ output: pdf_document
 # Exercise set 2
 
 1. Is the average BMI different in single people versus those in a committed relationship? Perform a t-test.
-2. The `Work` variable is coded "Looking" (n=159), "NotWorking" (n=1317), and "Working" (n=2230).
-    a. Fit a linear model. Assign this to an object called `fit`. What does the `fit` object tell you when you display it directly?
+2. The `Work` variable is coded "Looking" (n=159), "NotWorking" (n=1317), and "Working" (n=2230). Examine how this variable is related to `Income`.
+    a. Fit a linear model of `Income` against `Work`. Assign this to an object called `fit`. What does the `fit` object tell you when you display it directly?
     b. Run an `anova()` to get the ANOVA table. Is the model significant?
     c. Run a Tukey test to get the pairwise contrasts. (Hint: `TukeyHSD()` on `aov()` on the fit). What do you conclude?
     d. Instead of thinking of this as ANOVA, think of it as a linear model. After you've thought about it, get some `summary()` statistics on the fit. Do these results jive with the ANOVA model?
