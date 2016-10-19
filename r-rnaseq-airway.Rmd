@@ -253,7 +253,7 @@ Bioconductor packages usually have great documentation in the form of _vignettes
 
 Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup.html#bioconductor)), then load them every time you start a new R session. 
 
-```{r loadDESeq2_without_junk}
+```{r loadDESeq2_without_junk, echo=FALSE}
 suppressPackageStartupMessages(suppressWarnings(library(DESeq2)))
 ```
 
