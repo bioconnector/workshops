@@ -253,7 +253,11 @@ Bioconductor packages usually have great documentation in the form of _vignettes
 
 Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup.html#bioconductor)), then load them every time you start a new R session. 
 
-```{r loadDESeq2}
+```{r loadDESeq2_without_junk}
+suppressPackageStartupMessages(suppressWarnings(library(DESeq2)))
+```
+
+```{r loadDESeq2, eval=FALSE}
 library(DESeq2)
 citation("DESeq2")
 ```
@@ -427,15 +431,24 @@ Look up the Wikipedia articles on [MA plots](https://en.wikipedia.org/wiki/MA_pl
 
 1. Make an MA plot. Use a $log_{10}$-scaled x-axis, color-code by whether the gene is significant, and give your plot a title. It should look like this. What's the deal with the gray points?
 
-```{r maplot}
-res %>% ggplot(aes(baseMean, log2FoldChange, col=sig)) + geom_point() + scale_x_log10() + ggtitle("MA plot")
+```{r maplot, echo=FALSE}
+res %>% 
+  filter(!is.na(log2FoldChange)) %>% 
+  ggplot(aes(baseMean, log2FoldChange, col=sig)) + 
+    geom_point() + 
+    scale_x_log10() + 
+    ggtitle("MA plot")
 ```
 
 
 2. Make a volcano plot. Similarly, color-code by whether it's significant or not.
 
-```{r volcanoplot}
-res %>% ggplot(aes(log2FoldChange, -1*log10(pvalue), col=sig)) + geom_point() + ggtitle("Volcano plot")
+```{r volcanoplot, echo=FALSE}
+res %>% 
+  filter(!is.na(log2FoldChange) & !is.na(pvalue)) %>% 
+  ggplot(aes(log2FoldChange, -1*log10(pvalue), col=sig)) + 
+    geom_point() + 
+    ggtitle("Volcano plot")
 ```
 
 
