@@ -115,6 +115,43 @@ library(lubridate)
 
 These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
 
+## RNA-seq
+
+**Software setup:** Follow instructions above for [R+RStudio+Packages](#r+rstudio+packages) and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips, but in summary, after installing R+RStudio, you'll need the tidyverse, Bioconductor core, and DESeq2 packages. 
+
+```r
+# tidyverse pkg installs dplyr, tibble, tidyr, ggplot2, readr, etc.
+install.packages("tidyverse")
+# Install Bioconductor core packages and DESeq2
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("DESeq2")
+```
+
+**Download data we'll use in class.** Create a new folder somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. Download the 3 data files below, saving them to the new `bioconnector/data` folder you just made.
+
+1. Count matrix (i.e., `countData`): [airway_rawcounts.csv](data/airway_rawcounts.csv)
+1. Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
+1. Gene Annotation data: [annotables_grch37.csv](data/annotables_grch37.csv)
+
+**Prerequisites!** This is _not_ an introductory R class. This class assumes you're comfortable working in R, using ggplot2 for visualization, and using dplyr verbs and the **`%>%`** for chaining together multiple operations. Work through the workshop materials below if you need a refresher.
+
+- [R basics](r-basics.html)
+- [Data frames](r-dataframes.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
+- [Tidy data & advanced manipulation](r-tidy.html)
+- [Data Visualization with ggplot2](r-viz-gapminder.html)
+
+**Recommended reading** prior to class:
+
+1. Conesa et al. A survey of best practices for RNA-seq data analysis. [Genome Biology 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8).  
+    - _This is a good all-purpose review on RNA-seq analysis_.
+1. Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." [PLoS ONE 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625). 
+    - _The data we'll use comes from this publication_.
+1. Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." [F1000Research 4 (2015)](http://f1000research.com/articles/4-1521/v1). 
+    - _This paper describes more recently developed approaches for gene-level analysis using transcript-level quantification, which is probably more accurate than the approach we're using here_.
+
+
 ## [Get Data](data.html)
 
 1. **Create a new folder** somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. 
