@@ -139,7 +139,7 @@ Let's start with an exercise.
 
 ---- 
 
-### **Exercise `r .ex``r .ex=.ex+1`**
+### Exercise `r .ex``r .ex=.ex+1`
 
 If we look at our metadata, we see that the control samples are SRR1039508, SRR1039512, SRR1039516, and SRR1039520. This bit of code will take the rawcounts data, `mutate()` it to add a column called `controlmean`, then `select()` only the gene name and this newly created column, and assigning the result to a new object called `meancounts`. (_Hint_: `rawcounts %>% mutate(...) %>% select(...)`)
 
@@ -173,7 +173,7 @@ How about another?
 
 ---- 
 
-### **Exercise `r .ex``r .ex=.ex+1`**
+### Exercise `r .ex``r .ex=.ex+1`
 
 1. Create a scatter plot showing the mean of the treated samples against the mean of the control samples.
 
@@ -218,7 +218,7 @@ In total, we've got `r sum(abs(meancounts$log2fc)>2)` differentially expressed g
 
 ---- 
 
-### **Exercise `r .ex``r .ex=.ex+1`**
+### Exercise `r .ex``r .ex=.ex+1`
 
 Look up help on `?inner_join` or Google around for help for using **dplyr**'s `inner_join()` to join two tables by a common column/key. You downloaded [annotables_grch37.csv](data/annotables_grch37.csv) from [the data downloads page](data.html) on bioconnector.org. Load this data with `read_csv()` into an object called `anno`. Pipe it to `View()` or click on the object in the Environment pane to view the entire dataset. This table links the unambiguous Ensembl gene ID to things like the gene symbol, full gene name, location, Entrez gene ID, etc.
 
@@ -348,7 +348,7 @@ Either click on the `res` object in the environment pane or pass it to `View()` 
 
 ---- 
 
-### **Exercise `r .ex``r .ex=.ex+1`**
+### Exercise `r .ex``r .ex=.ex+1`
 
 1. Using a `%>%`, `arrange` the results by the adjusted p-value.
 
@@ -393,7 +393,6 @@ DESeq2 offers a function called `plotCounts()` that takes a DESeqDataSet that ha
 plotCounts(dds, gene="ENSG00000103196", intgroup="dex")
 ```
 
-
 That's just okay. Keep looking at the help for `?plotCounts`. Notice that we could have actually returned the data instead of plotting. We could then pipe this to ggplot and make our own figure. Let's make a boxplot.
 
 ```{r plotCounts2}
@@ -422,8 +421,7 @@ res %>%
 
 ----
 
-#### **EXERCISE `r .ex``r .ex=.ex+1`**
-
+### Exercise `r .ex``r .ex=.ex+1`
 
 Look up the Wikipedia articles on [MA plots](https://en.wikipedia.org/wiki/MA_plot) and [volcano plots](https://en.wikipedia.org/wiki/Volcano_plot_(statistics)). An MA plot shows the average expression on the X-axis and the log fold change on the y-axis. A volcano plot shows the log fold change on the X-axis, and the $-log_{10}$ of the p-value on the Y-axis (the more significant the p-value, the larger the $-log_{10}$ of that value will be).
 
