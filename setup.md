@@ -124,6 +124,12 @@ library(lubridate)
 
 These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
 
+
+## Get Data
+
+The data used in any of these classes can be found at the [data](data.html) link on the navbar at the top. Create a new folder somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. Download datasets as needed by [clicking here](data.html) or using the link at the top. Save these data files to the new `bioconnector/data` folder you just made.
+
+
 ## RNA-seq
 
 **Software setup:** Follow instructions above for [R+RStudio+Packages](#r+rstudio+packages) and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips, but in summary, after installing R+RStudio, you'll need the tidyverse, Bioconductor core, and DESeq2 packages. 
@@ -160,11 +166,10 @@ biocLite("DESeq2")
 1. Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." [F1000Research 4 (2015)](http://f1000research.com/articles/4-1521/v1). 
     - _This paper describes more recently developed approaches for gene-level analysis using transcript-level quantification, which is probably more accurate than the approach we're using here_.
 
+## Survival Analysis
 
-## Get Data
-
-The data used in any of these classes can be found at the [data](data.html) link on the navbar at the top. Create a new folder somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. Download datasets as needed by [clicking here](data.html) or using the link at the top. Save these data files to the new `bioconnector/data` folder you just made.
+_Stay tuned..._
 
 ----
 
-Footnotes:
+----
