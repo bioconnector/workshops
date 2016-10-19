@@ -59,6 +59,7 @@ This is an introduction to RNAseq analysis involving reading in count data from 
 1. Abstract and introduction sections of [Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." _PLoS ONE_ 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625).
 1. [Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." _F1000Research_ 4 (2015)](http://f1000research.com/articles/4-1521/v1).
 
+**Slides**: [click here](slides/r-rnaseq-airway.html).
 
 ## Review
 
