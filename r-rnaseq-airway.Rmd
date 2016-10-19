@@ -441,6 +441,16 @@ res %>% ggplot(aes(log2FoldChange, -1*log10(pvalue), col=sig)) + geom_point() + 
 
 ----
 
+### Transformation
+
+To test for differential expression we operate on raw counts. But for other downstream analyses like heatmaps, PCA, or clustering, we need to work with transformed versions of the data, because it's not clear how to best compute a distance metric on untransformed counts. The go-to choice might be a log transformation. But because many samples have a zero count (and $log(0)=-\infty$, you might try using pseudocounts, i. e. $y = log(n + 1)$ or more generally, $y = log(n + n_0)$, where $n$ represents the count values and $n_0$ is some positive constant.
+
+But there are other approaches that offer better theoretical justification and a rational way of choosing the parameter equivalent to $n_0$, and they produce transformed data on the log scale that's normalized to library size. One is called a _variance stabilizing transformation_ (VST), and it also removes the dependence of the variance on the mean, particularly the high variance of the log counts when the mean is low. 
+
+```{r vst}
+vsdata <- vst(dds, blind=FALSE)
+```
+
 
 ### PCA
 
