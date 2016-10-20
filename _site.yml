@@ -47,7 +47,7 @@ navbar:
         - text: "----"
         - text: "--- NGS DATA ANALYSIS ---"
         - text: "RNA-seq: airway"
-          href: r-rnaseq-airway.html
+          href: # r-rnaseq-airway.html
         - text: "ChIP-seq data analysis"
           href:
         - text: "----"
