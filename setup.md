@@ -132,7 +132,7 @@ The data used in any of these classes can be found at the [data](data.html) link
 
 ## RNA-seq
 
-**Software setup:** Follow instructions above for [R+RStudio+Packages](#r+rstudio+packages) and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips, but in summary, after installing R+RStudio, you'll need the tidyverse, Bioconductor core, and DESeq2 packages. 
+**Software setup:** Follow instructions above for [R+RStudio+Packages](#r) and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips, but in summary, after installing R+RStudio, you'll need the tidyverse, Bioconductor core, and DESeq2 packages. 
 
 ```r
 # tidyverse pkg installs dplyr, tibble, tidyr, ggplot2, readr, etc.
