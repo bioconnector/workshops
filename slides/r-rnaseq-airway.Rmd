@@ -1,7 +1,9 @@
 ---
 title: "Count-Based Differential Expression Analysis of RNA-seq Data"
-author: "Sign in and pick up handouts in the back"
-date: 10/24/2016
+author: 
+- "October 24 2016"
+- "1:00 - 4:00pm"
+date: "_Please sign in and pick up handouts in the back._"
 output: 
   slidy_presentation:
     footer: "bioconnector.org | Count-Based Differential Expression Analysis of RNA-seq Data"
@@ -30,8 +32,27 @@ knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
     - Tidy data & advanced manipulation
     - Data Visualization with ggplot2
 - This is _not_ a statistics course.
-- This workshop does _not_ cover upstream pre-processing (alignment & quantitation from FASTQ files). 
 - This is _not_ a comprehensive RNA-seq theory/practice course. Refer to the Conesa 2016 and Soneseson 2015 references on the workshop website.
+    - We only discuss a simple 2-group design (treated vs. control). 
+    - Omit complex designs, multifactorial experiments, interactions, batch effects, etc.
+    - Omit transcriptome assembly & reference-free approaches
+    - Upstream analysis...
+
+## What this class is _not_
+
+**This workshop does _not_ cover upstream pre-processing.**
+
+- Sequence read QA/QC
+- Quantitation path 1 (STAR + featureCounts): 
+    - Spliced alignment to genome
+    - Counting reads overlapping exons
+- Quantitation path 2 (Kallisto/Salmon + txImport):
+    - "Alignment-free" transcript abundance estimation
+    - Gene-level abundance summarization
+- Quantitation path 3 (Tophat + Cufflinks):
+    - Spliced alignment to genome
+    - Transcriptome assembly
+    - Transcript abundance estimation
 
 ## Course website: **[bioconnector.org](http://bioconnector.org)** {.bigger}
 
