@@ -110,7 +110,9 @@ We'll come back to this again later, but the data at our starting point looks li
 That is, we have **two tables**:
 
 1. The "count matrix" (called the `countData` in DESeq-speak) -- where _genes_ are in _rows_ and _samples_ are in _columns_, and the number in each cell is the number of reads that mapped to exons in that gene for that sample: **[airway_rawcounts.csv](data/airway_rawcounts.csv)**.
-1. The sample metadata (called the `colData` in DESeq-speak) -- where _samples_ are in _rows_ and _metadata_ about those samples are in _columns_: **[airway_metadata.csv](data/airway_metadata.csv)**. It's called the `colData` because this table supplies metadata/information about the columns of the `countData` matrix. Notice that the column names of the `countData` must match the row names of the `colData`. A bit later we'll revisit this, because there's special syntax in R for specifying row names and column names of data frames.
+1. The sample metadata (called the `colData` in DESeq-speak) -- where _samples_ are in _rows_ and _metadata_ about those samples are in _columns_: **[airway_metadata.csv](data/airway_metadata.csv)**. It's called the `colData` because this table supplies metadata/information about the columns of the `countData` matrix. Notice that the first column of `colData` must match the column names of `countData` (except the first, which is the gene ID column).[^tidy]
+
+[^tidy]: This only works when using the argument `tidy=TRUE` when creating the `DESeqDataSetFromMatrix()`.
 
 ## Import data
 
@@ -270,7 +272,7 @@ Take a second and read through all the stuff that flies by the screen when you l
 
 DESeq works on a particular type of object called a DESeqDataSet. The DESeqDataSet is a single object that contains input values, intermediate calculations like how things are normalized, and all results of a differential expression analysis. You can construct a DESeqDataSet from a count matrix, a metadata file, and a formula indicating the design of the experiment. See the help for `?DESeqDataSetFromMatrix`. If you read through the [DESeq2 vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf) you'll read about the structure of the data that you need to construct a DESeqDataSet object.
 
-`DESeqDataSetFromMatrix` requires the count matrix (`countData` argument) to be a matrix or numeric data frame. either the row names or the first column of the `countData` must be the identifier you'll use for each gene. The column names of `countData` are the sample IDs, and they must match the row names of `colData` (or the first column when `tidy=TRUE`). `colData` is an additional dataframe describing sample metadata.
+`DESeqDataSetFromMatrix` requires the count matrix (`countData` argument) to be a matrix or numeric data frame. either the row names or the first column of the `countData` must be the identifier you'll use for each gene. The column names of `countData` are the sample IDs, and they must match the row names of `colData` (or the first column when `tidy=TRUE`). `colData` is an additional dataframe describing sample metadata. Both `colData` and `countData` must be regular `data.frame` objects -- they can't have the special `tbl_df` class wrapper created when importing with `readr::read_*`.
 
 ![](img/countdatacoldata.png)
 
@@ -300,12 +302,16 @@ Let's check that the column names of our count data (except the first, which is 
 names(rawcounts)[-1]
 metadata$id
 names(rawcounts)[-1]==metadata$id
+all(names(rawcounts)[-1]==metadata$id)
 ```
 
 Now we can move on to constructing the actual DESeqDataSet object. The last thing we'll need to specify is a _design_ -- a _formula_ which expresses how the counts for each gene depend on the variables in colData. Take a look at `metadata` again. The thing we're interested in is the `dex` column, which tells us which samples are treated with dexamethasone versus which samples are untreated controls. We'll specify the design with a tilde, like this: `design=~dex`. (The tilde is the shifted key to the left of the number 1 key on my keyboard. It looks like a little squiggly line). So let's contruct the object and call it `dds`, short for our DESeqDataSet. If you get a warning about "some variables in design formula are characters, converting to factors" don't worry about it. Take a look at the `dds` object once you create it.
 
 ```{r constructDDS_phony, eval=FALSE}
-dds <- DESeqDataSetFromMatrix(countData=rawcounts, colData=metadata, design=~dex, tidy=TRUE)
+dds <- DESeqDataSetFromMatrix(countData=rawcounts, 
+                              colData=metadata, 
+                              design=~dex, 
+                              tidy=TRUE)
 dds
 ```
 
@@ -499,3 +505,4 @@ The `sessionInfo()` prints version information about R and any attached packages
 sessionInfo()
 ```
 
+----
