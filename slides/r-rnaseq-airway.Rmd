@@ -72,7 +72,7 @@ knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
     - SNPs in CRISPLD2 in previous GWAS associated w/ inhaled corticosteroid resistance and bronchodilator response in asthma patients. 
     - Confirmed the upregulated CRISPLD2 w/ qPCR and increased protein expression w/ Western blotting.
 
-**They analyzed with [Tophat and Cufflinks](http://rdcu.be/gk0S). We're taking a different approach with  [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). See recommended reading and [resources page](help.html#rna-seq-resources) for more info.**
+**They analyzed with [Tophat and Cufflinks](http://rdcu.be/gk0S). We're taking a different approach with  [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html). See recommended reading and [resources page](../help.html#rna-seq-resources) for more info.**
 
 ## Data pre-processing
 
