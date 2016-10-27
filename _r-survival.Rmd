@@ -15,9 +15,9 @@ This workshop will provide hands-on instruction and exercises covering survival 
 - [Exercises handout](handouts/r-stats-exercises.pdf)
 -->
 
-```{r, echo=FALSE, message=FALSE, eval=TRUE}
+```{r init, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE, results="hide")
 # options(digits=3)
 options(max.print=200)
 .ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
@@ -76,24 +76,204 @@ $$ HR(t) = \frac{h_0(t) e^{\beta_1}}{h_0(t)} = e^{\beta_1} $$
 
 This model shows that **the hazard ratio is $e^{\beta_1}$,** and remains constant over time _t_ (hence the name _proportional hazards regression_). The $\beta$ values are the regression coefficients that are estimated from the model, and represent the $log hazard ratio$ for each unit increase in the corresponding predictor variable. The interpretation of the hazards ratio depends on the measurement scale of the predictor variable, but in simple terms, a positive coefficient indicates worse survival and a negative coefficient indicates better survival for the variable in question.
 
-## R
+## Survival analysis in R
 
-Use the **survival** package. Built in, must load. 
+The core survival analysis functions are in the **[survival](https://cran.r-project.org/web/packages/survival/)** package. The survival package is one of the few "core" packages that comes bundled with your basic R installation, so you probably didn't need to `install.packages()` it. But, you'll need to load it like any other library when you want to use it. We'll also be using several of the **[tidyverse](https://github.com/tidyverse/tidyverse#readme)** packages, so let's load that too. Finally, we'll also want to load the **[survminer](https://cran.rstudio.com/web/packages/survminer/index.html)** package, which provides much nicer Kaplan-Meier plots out-of-the-box than what you get out of base graphics.
+
+```{r loadPkgs}
+library(tidyverse)
+library(survival)
+library(survminer)
+```
+
+The core functions we'll use out of the survival package include:
 
 - `Surv()`: Creates a survival object.
 - `survfit()`: Fits a survival curve using either a formula, of from a previously fitted Cox model.
 - `coxph()`: Fits a Cox proportional hazards regression model.
-- `cox.zph()`: Tests the proportional hazards assumption of a Cox regression model.
 
-`Surv()` creates the response variable, and typical usage takes the time to event[^time2], and whether or not the event occured (death vs censored). Models specified the same way as in regular linear models, but using the `coxph()` function.
+Other optional functions you might use include: 
+
+- `cox.zph()`: Tests the proportional hazards assumption of a Cox regression model.
+- `survdiff()`: Tests for differences in survival between two groups using a log-rank / Mantel-Haenszel test.[^survdiff]
+
+[^survdiff]: Cox regression and the logrank test from `survdiff` are going to give you similar results most of the time. The log-rank test is asking if survival curves differ significantly between two groups. Cox regression is asking which of many categorical or continuous variables significantly affect survival. 
+
+`Surv()` creates the response variable, and typical usage takes the time to event,[^time2] and whether or not the event occured (i.e., death vs censored). `survfit()` creates a survival curve that you could then display or plot. `coxph()` implements the regression analysis, and models specified the same way as in regular linear models, but using the `coxph()` function.
 
 [^time2]: `Surv()` can also take start and stop times, to account for left censoring. See the help for `?Surv`.
 
-## Cox Regression
+### Getting started
 
-The response variable you create with `Surv()` goes on the left hand side of the formula, specified with a `~`. Explanatory variables go on the right side. Uses the same syntax as `lm()`, `glm()`, etc.
+We're going to be using the built-in lung cancer dataset[^lungcite] that ships with the survival package. You can get some more information about the dataset by running `?lung`. The help tells us there are 10 variables in this data:
 
-### Interpreting the output
+```{r eval=FALSE}
+?lung
+```
+
+1. `inst`: Institution code
+1. **`time`: Survival time in days**
+1. **`status`: censoring status 1=censored, 2=dead**
+1. `age`: Age in years
+1. **`sex`: Male=1 Female=2**
+1. `ph.ecog`: ECOG performance score (0=good 5=dead)
+1. `ph.karno`: Karnofsky performance score as rated by physician
+1. `pat.karno`: Karnofsky performance score as rated by patient
+1. `meal.cal`: Calories consumed at meals
+1. `wt.loss`: Weight loss in last six months
+
+[^lungcite]: Loprinzi et al. Prospective evaluation of prognostic variables from patient-completed questionnaires. North Central Cancer Treatment Group. _Journal of Clinical Oncology_. 12(3):601-7, 1994.
+
+You can access the data just by running `lung`, as if you had read in a dataset and called it `lung`. You can operate on it just like any other data frame.
+
+```{r, eval=FALSE}
+head(lung)
+class(lung)
+dim(lung)
+View(lung)
+```
+
+### Survival Curves
+
+Check out the help for `?Surv`. This is the main function we'll use to create the survival object. You can play fast and loose with how you specify the arguments to `Surv`. The help tells you that when there are two unnamed arguments, they will match `time` and `event` in that order. This is the common shorthand you'll often see for right-censored data. The alternative lets you specify interval data, where you give it the start and end times (`time` and `time2`). If you keep reading you'll see how `Surv` tries to guess how you're coding the status variable. It will try to guess whether you're using 0/1 or 1/2 to represent censored vs "dead", respectively.[^deadevent]
+
+[^deadevent]: Where "dead" really refers to the occurance of the event (any event), not necessarily death.
+
+Try creating a survival object called `s`, then display it. If you go back and `head(lung)` the data, you can see how these are related. It's a special type of vector that tells you both how long the subject was tracked for, and whether or not the event occured or the sample was censored (shown by the `+`).
+
+```{r createSurvObject}
+s <- Surv(lung$time, lung$status)
+class(s)
+s
+head(lung)
+```
+
+Now, let's **fit a survival curve** with the `survfit()` function. See the help for `?survfit`. Here we'll create a simple survival curve that doesn't consider any different groupings, so we'll specify just an intercept (e.g., `~1`) in the formula that `survfit` expects. We can do what we just did by "modeling" the survival object `s` we just created against an intercept only, but from here out, we'll just do this in one step by nesting the `Surv()` call within the `survfit()` call, and similar to how we specify data for linear models with `lm()`, we'll use the `data=` argument to specify which data we're using. Similarly, we can assign that to another object called `sfit` (or whatever we wanted to call it). 
+
+```{r survfit}
+survfit(s~1)
+survfit(Surv(time, status)~1, data=lung)
+sfit <- survfit(Surv(time, status)~1, data=lung)
+sfit
+```
+
+Now, that object itself isn't very interesting. It's more interesting to run `summary` on what it creates. This will show a life table.
+
+```{r survfitSummary}
+summary(sfit)
+```
+
+These tables show a row for each time point where either the event occured or a sample was censored. It shows the number at risk (number still remaining), and the cumulative survival at that instant. 
+
+What's more interesting though is if we model something besides just an intercept. Let's fit survival curves separately by sex. 
+
+```{r survfitSex}
+sfit <- survfit(Surv(time, status)~sex, data=lung)
+sfit
+summary(sfit)
+```
+
+Now, check out the help for `?summary.survfit`. You can give the `summary()` function an option for what times you want to show in the results. Look at the range of followup times in the lung dataset with `range()`. You can create a sequence of numbers going from one number to another number by increments of yet another number with the `seq()` function.
+
+```{r rangeSeq}
+# ?summary.survfit
+range(lung$time)
+seq(0, 1100, 100)
+```
+
+And we can use that sequence vector with a summary call on sfit to get life tables at those intervals separately for both males (1) and females (2). From these tables we can start to see that males tend to have worse survival than females.
+
+```{r survfitSummaryOptions, results="markup"}
+summary(sfit, times=seq(0, 1000, 100))
+```
+
+### Kaplan-Meier Plots
+
+Now that we've fit a survival curve to the data it's pretty easy to visualize it with a **Kaplan-Meier** plot. Create the survival object if you don't have it yet, and instead of using `summary()`, use `plot()` instead.
+
+```{r sfitPlot}
+sfit <- survfit(Surv(time, status)~sex, data=lung)
+plot(sfit)
+```
+
+There are lots of ways to modify the plot produced by base R's `plot()` function. You can see more options with the help for `?plot.survfit`. We're not going to go into any more detail here, because there's another package called **survminer** that provides a function called **`ggsurvplot()`** that makes it much easier to produce publication-ready survival plots, and if you're familiar with ggplot2 syntax it's pretty easy to modify. So, let's load the package and try it out.
+
+```{r survminer}
+library(survminer)
+ggsurvplot(sfit)
+```
+
+This plot is substantially more informative by default, just because it automatically color codes the different groups, adds axis labels, and creates and automatic legend. But there's a lot more you can do pretty easily here. Let's add confidence intervals, show the p-value for the log-rank test, show a risk table below the plot, and change the colors and the group labels. 
+
+```{r survminerOptions, fig.height=8}
+ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
+           legend.labs=c("Male", "Female"), legend.title="Sex",  
+           palette=c("dodgerblue2", "orchid2"), 
+           main="Kaplan-Meier Curve for Lung Cancer Survival", 
+           risk.table.height=.15)
+```
+
+----
+
+### Exercise set `r .ex``r .ex=.ex+1`
+
+Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- etype=1 indicates that row corresponds to death; etype=2 indicates recurrence. 
+
+First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`.
+
+```{r}
+colondeath <- filter(colon, etype==1)
+head(colondeath)
+```
+
+1. Look at the help for `?colon` again. How are `sex` and `status` coded? How is this different from the lung data?
+
+2. Using `survfit(Surv(..., ...,)~..., data=colondeath)`, create a survival curve separately for males versus females. Call the resulting object `sfit`. Run a `summary()` on this object, showing time points 0, 500, 1000, 1500, and 2000. Do males or females appear to fair better over this time period?
+
+```{r, results='markup', echo=FALSE}
+sfit <- survfit(Surv(time, status)~sex, data=colondeath)
+sfit$call <- NULL
+summary(sfit, times=seq(0, 2000, 500))
+```
+
+3. Using the survminer package, plot a Kaplan-Meier curve for this analysis with confidence intervals and showing the p-value. See `?ggsurvplot` for help. Is there a significant difference between males and females?
+
+```{r, echo=FALSE}
+sfit <- survfit(Surv(time, status)~sex, data=colondeath)
+ggsurvplot(sfit, conf.int=TRUE, pval=TRUE)
+```
+
+4. Create Kaplan-Meier plot stratifying by:
+    a. The extent of differentiation (well, moderate, poor), showing the p-value.
+    b. Whether or not there was detectable cancer in >=4 lymph nodes, showing the p-value and confidence bands.
+    
+```{r, echo=FALSE}
+survfit(Surv(time, status)~differ, data=colondeath) %>% 
+  ggsurvplot(pval=TRUE, main="Survival by tumor differentiation")
+survfit(Surv(time, status)~node4, data=colondeath) %>% 
+  ggsurvplot(conf.int=TRUE, pval=TRUE, main="Survival by involvement in >=4 lymph nodes")
+```
+
+----
+
+### Cox Regression
+
+Kaplan-Meier curves are good for visualizing differences in survival between two categorical groups, and the log-rank test you get when you ask for `pval=TRUE` is useful for asking if there are differences in survival between different groups. But this doesn't generalize well for assessing the effect of _quantitative_ variables. Just try creating a K-M plot for the `nodes` variable, which has values that range from 0-33. What a mess! Don't do this.
+
+```{r}
+ggsurvplot(survfit(Surv(time, status)~nodes, data=colondeath))
+```
+
+At some point using a categorical grouping for K-M plots breaks down, and further, you might want to assess how _multiple_ variables work together to influence survival. For example, you might want to simultaneously examine the effect of race and socioeconomic status, so as to adjust for factors like income, access to care, etc., before concluding that ethnicity influences some outcome. 
+
+Cox PH regression can assess the effect of both categorical and continuous variables, and can model the effect of multiple variables at once. The `coxph()` function uses the same syntax as `lm()`, `glm()`, etc. The response variable you create with `Surv()` goes on the left hand side of the formula, specified with a `~`. Explanatory variables go on the right side.
+
+Let's go back to the lung cancer data and run a Cox regression on sex.
+
+```{r}
+fit <- coxph(Surv(time, status)~sex, data=lung)
+fit
+```
 
 The `exp(coef)` column contains $e^{\beta_1}$ (see [background](#background) section above for more info). This is the **hazard ratio** -- the multiplicative effect of that variable on the hazard rate (for each unit increase in that variable). So, for a categorical variable like sex, going from male (baseline) to female results in approximately 43% reduction in hazard. You could also flip the sign on the `coef` column, and take `exp(0.551)`, which you can interpret as being male resulting in a 1.73-fold increase in hazard, or that males die ad approximately 1.73x the rate per unit time as females (females die at 0.551x the rate per unit time as males). 
 
@@ -103,72 +283,37 @@ Just remember:
 - HR>1: Increase in hazard
 - HR<1: Reduction in hazard (protective)
 
-```{r scratch, eval=FALSE, include=FALSE}
-library(tidyverse)
-library(survival)
-library(survminer)
-aml
-lung
+You'll also notice there's a p-value on the `sex` term, and a p-value on the overall model. That 0.00111 p-value is really close to the p=0.00131 p-value we saw on the Kaplan-Meier plot. That's because the KM plot is showing the log-rank test p-value. You can get this out of the Cox model with a call to `summary(fit)`. You can directly calculate the log-rank test p-value using `survdiff()`. 
 
-# https://plot.ly/ipython-notebooks/survival-analysis-r-vs-python/
-
-# ?lung
-
-# setting up the response variable
-s <- Surv(time=lung$time, event=lung$status)
-survfit(s~1)
-survfit(Surv(time, status)~1, data=lung)
-survfit(Surv(time, status)~1, data=lung) %>% summary
-survfit(s~1)        %>% summary
-# ?summary.survfit
-range(lung$time)
-seq(0, 1100, 100)
-survfit(Surv(time, status)~1, data=lung)   %>% summary(times=seq(0, 1100, 100))
-survfit(Surv(time, status)~sex, data=lung) %>% summary(times=seq(0, 1100, 100))
-
-# optional - set factor labels
-lung$sex
-factor(lung$sex, levels=c(1,2), labels=c("male", "female"))
-lung$sex <- factor(lung$sex, levels=c(1,2), labels=c("male", "female"))
-head(lung, 10)
-
-
-sfit <- survfit(Surv(time, status)~sex, data=lung)
-plot(sfit)
-ggsurvplot(sfit)
-ggsurvplot(sfit)
-ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE)
-ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
-           palette=c("dodgerblue", "orchid"), risk.table.height=.15)
+```{r}
+summary(fit)
 survdiff(Surv(time, status)~sex, data=lung)
+```
 
-#####
-# exercises using built-in colon data
-?colon #(click on the chemotherapy data)
-colond <- filter(colon, etype==1)
-survfit(Surv(time, status)~sex,      data=colond) %>% ggsurvplot(conf.int=TRUE, pval=TRUE)
-survfit(Surv(time, status)~rx,       data=colond) %>% ggsurvplot(conf.int=TRUE, pval=TRUE)
-survfit(Surv(time, status)~adhere,   data=colond) %>% ggsurvplot(conf.int=TRUE, pval=TRUE)
-survfit(Surv(time, status)~differ,   data=colond) %>% ggsurvplot(conf.int=TRUE, pval=TRUE)
-survfit(Surv(time, status)~extent,   data=colond) %>% ggsurvplot(conf.int=TRUE, pval=TRUE)
-survfit(Surv(time, status)~node4,    data=colond) %>% ggsurvplot(conf.int=TRUE, pval=TRUE)
-range(colond$time)
-survfit(Surv(time, status)~node4,    data=colond %>% filter(etype==1)) %>% summary(times=seq(0,3500, 500))
-#####
+Let's create another model where we analyze all the variables in the dataset! This shows us how all the variables, when considered together, act to influence survival. Some are very strong predictors (sex, ECOG score). Interestingly, the Karnofsky performance score as rated by the physician was marginally significant, while the same score as rated by the patient was not.
 
-# cox ph models
-fit <- coxph(Surv(time, status)~sex, data=lung)
-fit
+```{r, results="markup"}
 fit <- coxph(Surv(time, status)~sex+age+ph.ecog+ph.karno+pat.karno+meal.cal+wt.loss, data=lung)
 fit
+```
 
+----
+
+### Exercise set `r .ex``r .ex=.ex+1`
+
+```
 #####
 # exercises using built-in colon data
 colond <- filter(colon, etype==1)
 coxph(Surv(time, status)~rx, data=colond)
 coxph(Surv(time, status)~rx+age+sex+nodes, data=colond)
 #####
+```
 
+----
+
+
+```{r scratch, eval=FALSE, include=FALSE}
 # Cox ph, and KM curves
 # looks like age is significant when not looking at others. Let's make a categorical variable 
 # choice of cut point is meaningful!
@@ -184,6 +329,24 @@ lung$agecat <- cut(lung$age, breaks=c(0, 62, Inf), labels=c("young", "old"))
 survfit(Surv(time, status)~agecat, data=lung) %>% ggsurvplot(pval=TRUE)
 lung$agecat <- cut(lung$age, breaks=c(0, 70, Inf), labels=c("young", "old"))
 survfit(Surv(time, status)~agecat, data=lung) %>% ggsurvplot(pval=TRUE)
+
+# optional - set factor labels
+lung$sex
+factor(lung$sex, levels=c(1,2), labels=c("male", "female"))
+lung$sex <- factor(lung$sex, levels=c(1,2), labels=c("male", "female"))
+head(lung, 10)
+
 ```
 
 ## TCGA
+
+```{r tcga_scratch, include=FALSE, eval=FALSE}
+# http://r-addict.com/2016/05/23/Informative-Survival-Plots.html
+library(tidyverse)
+library(survminer)
+library(survival)
+```
+
+----
+
+----
