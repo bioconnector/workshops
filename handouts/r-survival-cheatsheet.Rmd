@@ -1,0 +1,28 @@
+---
+title: "Survival Analysis with R: Cheat Sheet"
+output: pdf_document
+fontsize: 8pt
+geometry: margin=.35in
+---
+
+\pagenumbering{gobble}
+
+## Important libraries to load
+
+If you don't have a particular package installed already: `install.packages(tidyverse)`. The **tidyverse**, **survival**, and **survminer** packages are required for this lesson.
+
+```r
+library(tidyverse)   # loads dplyr, ggplot2, readr, etc.
+library(survival)    # core survival analysis functions
+library(survminer)   # recommended for visualizing survival curves
+```
+
+## The pipe: **`%>%`**
+
+When you load the **dplyr** or **tidyverse* library you can use **`%>%`**, the _pipe_. Running **`x %>% f(args)`** is the same as **`f(x, args)`**. If you wanted to run function `f()` on data `x`, then run function `g()` on that, then run function `h()` on that result: instead of nesting multiple functions, **`h(g(f(x)))`**, it's preferable and more readable to create a chain or pipeline of functions: **`x %>% f %>% g %>% h`**. Pipelines can be spread across multiple lines, with each line ending in `%>%` until the pipeline terminates. The keyboard shortcut for inserting `%>%` is Cmd+Shift+M on Mac, Ctrl+Shift+M on Windows.
+
+## Functions
+
+```{r, echo=FALSE, results="asis"}
+knitr::kable(read.csv("r-survival-cheatsheet.csv", check.names=FALSE))
+```
