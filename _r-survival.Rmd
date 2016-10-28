@@ -270,7 +270,7 @@ Cox PH regression can assess the effect of both categorical and continuous varia
 
 Let's go back to the lung cancer data and run a Cox regression on sex.
 
-```{r}
+```{r, results="markup"}
 fit <- coxph(Surv(time, status)~sex, data=lung)
 fit
 ```
@@ -301,35 +301,90 @@ fit
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
+Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath` object in the first exercise that only includes survival, not recurrence data points. See `?colon` for more information about this dataset. 
+
+1. Take a look at `levels(colondeath$rs)`. This tells you that the `rx` variable is the type of treatment the patient was on, which is either nothing (coded `Obs`, short for Observation), Levamisole (coded `Lev`), or Levamisole + 5-fluorouracil (coded `Lev+5FU`). This is a factor variable coded with these levels, in that order. This means that `Obs` is treated as the baseline group, and other groups are dummy-coded to represent.
+
+```{r, echo=FALSE, results='asis'}
+tribble(
+  ~rx, ~Lev, ~`Lev+5FU`,
+  "Obs", 0, 0,
+  "Lev", 1, 0,
+  "Lev+5FU", 0, 1
+) %>% knitr::kable(caption="With _k_ levels of a categorical factor variable, you get _k-1_ dummy variables created, each 0/1, indicating that the sample is a particular non-reference category. Having value 0 for all dummy variables indicates that the sample is baseline.")
 ```
-#####
-# exercises using built-in colon data
-colond <- filter(colon, etype==1)
-coxph(Surv(time, status)~rx, data=colond)
-coxph(Surv(time, status)~rx+age+sex+nodes, data=colond)
-#####
+
+2. Run a Cox proportional hazards regression model against this `rx` variable. How do you interpret the result? Which treatment seems to be significantly different from the control (`Obs`ervation)?
+
+```{r, echo=FALSE, results="markup"}
+fit <- coxph(Surv(time, status)~rx, data=colondeath)
+fit$call <- NULL
+fit
+```
+
+3. Show the results using a Kaplan-Meier plot, with confidence intervals and the p-value.
+
+```{r, echo=FALSE}
+ggsurvplot(survfit(Surv(time, status)~rx, data=colondeath), pval=TRUE, conf.int=TRUE)
+```
+
+4. Fit another Cox regression model accounting for age, sex, and the number of nodes with detectable cancer. Notice the test statistic on the likelihood ratio test becomes much larger, and the overall model becomes more significant. What do you think accounted for this increase in our ability to model survival?
+
+```{r, echo=FALSE, results="markup"}
+fit <- coxph(Surv(time, status)~rx+age+sex+nodes, data=colondeath)
+fit$call <- NULL
+fit
 ```
 
 ----
 
+### Categorizing for KM plots
 
-```{r scratch, eval=FALSE, include=FALSE}
-# Cox ph, and KM curves
-# looks like age is significant when not looking at others. Let's make a categorical variable 
-# choice of cut point is meaningful!
+Let's go back to the lung data and look at a Cox model for age. Looks like age is very slightly significant when modeled as a continuous variable.
+
+```{r}
 coxph(Surv(time, status)~age, data=lung)
-# can't make a KM curve on a continuous variable.
-survfit(Surv(time, status)~age, data=lung) %>% ggsurvplot()
-hist(lung$age)
+```
+
+Now that your regression analysis shows you that age is marginally significant, let's make a Kaplan-Meier plot. But, as we saw before, we can't just do this, because we'll get a separate curve for every unique value of age!
+
+```{r, eval=FALSE}
+ggsurvplot(survfit(Surv(time, status)~age, data=lung))
+```
+
+One thing you might see here is an attempt to categorize a continuous variable into different groups -- tertiles, upper quartile vs lower quartile, a median split, etc -- so you can make the KM plot. But, how you make that cut is meaningful! Check out the help for `?cut`. `cut()` takes a continuous variable and some breakpoints and creats a categorical variable from that. Let's get the average age in the dataset, and plot a histogram showing the distribution of age.
+
+```{r, eval=FALSE}
 mean(lung$age)
-lung$age
+hist(lung$age)
+```
+
+Now, let's try creating a categorical variable on `lung$age` with cut pounts at 0, 62 (the mean), and +Infinity (no upper limit). We could continue adding a `labels=` option here to label the groupings we create, for instance, as "young" and "old". Finally, we could assign the result of this to a new object in the lung dataset.
+
+```{r}
 cut(lung$age, breaks=c(0, 62, Inf))
 cut(lung$age, breaks=c(0, 62, Inf), labels=c("young", "old"))
 lung$agecat <- cut(lung$age, breaks=c(0, 62, Inf), labels=c("young", "old"))
-survfit(Surv(time, status)~agecat, data=lung) %>% ggsurvplot(pval=TRUE)
-lung$agecat <- cut(lung$age, breaks=c(0, 70, Inf), labels=c("young", "old"))
-survfit(Surv(time, status)~agecat, data=lung) %>% ggsurvplot(pval=TRUE)
+head(lung)
+```
 
+Now, what happens when we make a KM plot with this new categorization? It looks like there's some differences in the curves between "old" and "young" patients, with older patients having slightly worse survival odds. But at p=.39, the difference in survival between those younger than 62 and older than 62 are not significant.
+
+```{r}
+ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
+```
+
+But, what if we chose a different cut point, say, 70 years old, which is roughly the cutoff for the upper quartile of the age distribution (see `?quantile`). The result is now marginally significant!
+
+```{r}
+lung$agecat <- cut(lung$age, breaks=c(0, 70, Inf), labels=c("young", "old"))
+ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
+```
+
+Remember, the Cox regression analyzes the continuous variable over the whole range of its distribution, where the log-rank test on the Kaplan-Meier plot can change depending on how you categorize your continuous variable. They're answering a similar question in a different way: the regression model is asking, _"what is the effect of age on survival?"_, while the log-rank test and the KM plot is asking, _"are there differences in survival between those less than 70 and those greater than 70 years old?"_.
+
+
+```{r, include=FALSE, eval=FALSE}
 # optional - set factor labels
 lung$sex
 factor(lung$sex, levels=c(1,2), labels=c("male", "female"))
@@ -337,6 +392,11 @@ lung$sex <- factor(lung$sex, levels=c(1,2), labels=c("male", "female"))
 head(lung, 10)
 
 ```
+
+```{r cleanupPreTCGA, include=FALSE}
+rm(colondeath, lung, fit, s, sfit)
+```
+
 
 ## TCGA
 
@@ -346,7 +406,5 @@ library(tidyverse)
 library(survminer)
 library(survival)
 ```
-
-----
 
 ----
