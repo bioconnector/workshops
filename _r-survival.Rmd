@@ -400,11 +400,181 @@ rm(colondeath, lung, fit, s, sfit)
 
 ## TCGA
 
-```{r tcga_scratch, include=FALSE, eval=FALSE}
-# http://r-addict.com/2016/05/23/Informative-Survival-Plots.html
-library(tidyverse)
-library(survminer)
-library(survival)
+The Cancer Genome Atlas (TCGA) is a collaboration between the National Cancer Institute (NCI) and the National Human Genome Research Institute (NHGRI) that collected lots of clinical and genomic data across 33 cancer types. The entire TCGA dataset is over 2 petabytes worth of gene expression, CNV profiling, SNP genotyping, DNA methylation, miRNA profiling, exome sequencing, and other types of data. You can learn more about TCGA at [cancergenome.nih.gov](https://cancergenome.nih.gov). The data is now housed at the [Genomic Data Commons Portal](https://gdc-portal.nci.nih.gov/). There are lots of ways to access TCGA data without actually downloading and parsing through the data from GDC. We'll cover more of these below. But first, let's look at an R package that provides convenient, direct access to TCGA data.
+
+### RTCGA
+
+The RTCGA package ([bioconductor.org/packages/RTCGA](http://bioconductor.org/packages/RTCGA)) and all the associated data packages provide convenient access to clinical and genomic data in TCGA. Each of the data packages is a separate package, and must be installed (once) individually.
+
+```r
+# Load the bioconductor installer. 
+# Try http:// if https:// doesn't work.
+source("https://bioconductor.org/biocLite.R")
+
+# Install the main RTCGA package
+biocLite("RTCGA")
+
+# Install the clinical and mRNA gene expression data packages
+biocLite("RTCGA.clinical")
+biocLite("RTCGA.mRNA")
 ```
+
+Let's load the RTCGA package, and use the `infoTCGA()` function to get some information about the kind of data available for each cancer type.
+
+```{r loadRTCGA, include=FALSE}
+library(RTCGA)
+library(RTCGA.clinical)
+library(RTCGA.mRNA)
+```
+
+
+```{r, eval=FALSE}
+library(RTCGA)
+infoTCGA()
+```
+
+#### Survival Analysis with RTCGA Clinical Data
+
+Next, let's load the `RTCGA.clinical` package and get a little help about what's available there.
+
+```{r, eval=FALSE}
+library(RTCGA.clinical)
+?clinical
+```
+
+This tells us all the clinical datasets available for each cancer type. If we just focus on breast cancer, look at how big the data is! There are `r nrow(BRCA.clinical)` rows by `r ncol(BRCA.clinical)` columns in this data alone. Let's look at some of the variable names, and `View()` the data. 
+
+```{r, eval=FALSE}
+dim(BRCA.clinical)
+names(BRCA.clinical)
+View(BRCA.clinical)
+```
+
+We're going to use the `survivalTCGA()` function from the RTCGA package to pull out survival information from the clinical data. It does this by looking at vital status (dead or alive) and creating a `times` variable that's either the days to death or the days followed up before being censored. Look at the help for `?survivalTCGA` for more info. You give it a list of clinical datasets to pull from, and a character vector of variables to extract. Let's look at breast cancer, ovarian cancer, and glioblastoma multiforme. Let's just extract the cancer type (`admin.disease_code`).
+
+
+```{r clinData, results="markup"}
+# Create the clinical data
+clin <- survivalTCGA(BRCA.clinical, OV.clinical, GBM.clinical, 
+                     extract.cols="admin.disease_code")
+# Show the first few lines
+head(clin)
+# How many samples of each type?
+table(clin$admin.disease_code)
+```
+
+Now let's run a Cox PH model against the disease code. By default it's going to treat breast cancer as the baseline, because alphabetically it's first. But you can reorder this if you want with `factor()`.
+
+```{r, tcgaCoxph, results="markup"}
+coxph(Surv(times, patient.vital_status)~admin.disease_code, data=clin)
+```
+
+This tells us that compared to the baseline `brca` group, GBM patients have a ~18x increase in hazards, and ovarian cancer patients have ~5x worse survival. Let's create a survival curve, visualize it with a Kaplan-Meier plot, and show a table for the first 5 years survival rates. 
+
+```{r, results="markup"}
+sfit <- survfit(Surv(times, patient.vital_status)~admin.disease_code, data=clin)
+summary(sfit, times=seq(0,365*5,365))
+ggsurvplot(sfit, conf.int=TRUE, pval=TRUE)
+```
+
+
+#### Gene Expression Data
+
+Let's load the gene expression data.
+
+```{r, eval=FALSE}
+library(RTCGA.mRNA)
+?mRNA
+```
+
+Take a look at the size of the `BRCA.mRNA` dataset, show a few rows and columns.
+
+```{r, eval=FALSE}
+dim(BRCA.mRNA)
+BRCA.mRNA[1:5, 1:5]
+```
+
+> **Extra credit assignment**: Take a look at the [advanced data manipulation]() and [tidy data]() workshops, and see if you can figure out how to join the gene expression data to the clinical data for any particular cancer type.
+
+Similar to how `survivalTCGA()` was a nice helper function to pull out survival information from multiple different clinical datasets, `expressionsTCGA()` can pull out specific gene expression measurements across different cancer types. See the help for `?expressionsTCGA`. Let's pull out data for PAX8, GATA-3, and the estrogen receptor genes from breast, ovarian, and endometrial cancer, and plot the expression of each with a box plot.
+
+```{r include=FALSE}
+library(ggplot2)
+theme_set(theme_bw())
+```
+
+
+```{r geneExprBoxplots, results="markup"}
+expr <- expressionsTCGA(BRCA.mRNA, OV.mRNA, UCEC.mRNA,
+                        extract.cols = c("PAX8", "GATA3", "ESR1"))
+head(expr)
+table(expr$dataset)
+ggplot(expr, aes(dataset, PAX8, fill=dataset)) + geom_boxplot()
+ggplot(expr, aes(dataset, GATA3, fill=dataset)) + geom_boxplot()
+ggplot(expr, aes(dataset, ESR1, fill=dataset)) + geom_boxplot()
+ggplot(expr, aes(dataset, ESR1, fill=dataset)) + geom_violin()
+```
+
+### Exercise set `r .ex``r .ex=.ex+1`
+
+The "KIPAN" cohort (in `KIPAN.clinical`) is the pan-kidney cohort, consisting of KICH (chromaphobe renal cell carcinoma), KIRC (renal clear cell carcinoma), and KIPR (papillary cell carcinoma). The `KIPAN.clinical` has `KICH.clinical`, `KIRC.clinical`, and `KIPR.clinical` all combined. 
+
+1. Using `survivalTCGA()`, create a new object called `clinkid` using the `KIPAN.clinical` cohort. For the columns to extract, get both the disease code and the patient's gender (`extract.cols=c("admin.disease_code", "patient.gender")`). The first few rows will look like this. 
+
+```{r, echo=FALSE, results="markup"}
+clinkid <- survivalTCGA(KIPAN.clinical, 
+                     extract.cols=c("admin.disease_code", "patient.gender"))
+head(clinkid)
+```
+
+2. The `xtabs()` command will produce tables of counts for categorical variables. Here's an example for how to use `xtabs()` for the built-in colon cancer dataset, which will tell you the number of samples split by sex and by treatment.
+
+```{r, results="markup"}
+xtabs(~rx+sex, data=colon)
+```
+
+Use the same command to examine how many samples you have for each kidney sample type, separately by sex. 
+
+```{r, echo=FALSE, results="markup"}
+xtabs(~admin.disease_code + patient.gender, data=clinkid)
+```
+
+3. Run a Cox PH regression on the cancer type and gender. What's the effect of gender? Is it significant? How does survival differ by each type? Which has the worst prognosis?
+
+```{r, echo=FALSE, results="markup"}
+fit <- coxph(Surv(times, patient.vital_status)~admin.disease_code+patient.gender, data=clinkid)
+fit$call <- NULL
+fit
+```
+
+4. Create survival curves for each different subtype. 
+    a. Produce a Kaplan-Meier plot. 
+    b. Show survival tables each year for the first 5 years.
+
+```{r, echo=FALSE, results="markup"}
+sfit <- survfit(Surv(times, patient.vital_status)~admin.disease_code, data=clinkid)
+ggsurvplot(sfit, pval=TRUE)
+summary(sfit, times=seq(0,365*5, 365))
+```
+
+### Other TCGA Resources
+
+RTCGA isn't the only resource providing easy access to TCGA data. In fact, it isn't even the only R/Bioconductor package. Take a look at some of the other resources shown below.
+
+- **[TCGAbiolinks](https://bioconductor.org/packages/TCGAbiolinks)**: another R package that allows direct query and analysis from the NCI GDC.
+    - R package: [bioconductor.org/packages/TCGAbiolinks](https://bioconductor.org/packages/TCGAbiolinks)
+    - Paper: _Nucleic Acids Research_ 2015 DOI: [10.1093/nar/gkv1507](http://nar.oxfordjournals.org/content/44/8/e71).
+- **[cBioPortal](http://www.cbioportal.org/)**: [cbioportal.org](http://www.cbioportal.org/)
+    - Nice graphical user interface
+    - Quick/easy summary info on patients, demographics, mutations, copy number alterations, etc.
+    - Query individual genes, find coexpressed genes
+    - Survival analysis against different subtypes, expression, CNAs, etc.
+- **[OncoLnc](http://www.oncolnc.org/)**: [oncolnc.org](http://www.oncolnc.org/)
+    - Focus on survival analysis and RNA-seq data.
+    - Simple query interface across all cancers for any mRNA, miRNA, or lncRNA gene (try SERPINA1)
+    - Precomputed Cox PH regression for every gene, for every cancer
+    - Kaplan-Meier plots produced on demand
+- [TANRIC](http://ibl.mdanderson.org/tanric/_design/basic/index.html): focus on noncoding RNA
+- [MEXPRESS](http://mexpress.be/): focus on methylation and gene expression
 
 ----
