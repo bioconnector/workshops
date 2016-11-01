@@ -9,7 +9,7 @@ title: 'Setup Instructions'
 **Note:** R and RStudio are separate downloads and installations. **R** is the underlying statistical computing environment, but using R alone is no fun. **RStudio** is a graphical integrated development environment that makes using R much easier. You need R installed before you install RStudio.
 
 1. **Install R.** You'll need R version **3.1.2** or higher.[^rversion] Download and install R for [Windows](http://cran.r-project.org/bin/windows/base/) or [Mac OS X](http://cran.r-project.org/bin/macosx/) (download the latest R-3.x.x.pkg file for your appropriate version of OS X).
-1. **Install RStudio.** Download and install [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/).
+1. **Install RStudio.** Download and install [RStudio Desktop](https://www.rstudio.com/products/rstudio/download/). RStudio version 1.0 was released November 1 2016, and contains many improvements over the 0.99 release. Please download version 1.0+.
 1. **Install R packages.** Launch RStudio (RStudio, *not R itself*). Ensure that you have internet access, then enter the following commands into the **Console** panel (usually the lower-left panel, by default). _A few notes_:
     - Commands are case-sensitive. 
     - You must be connected to the internet.
@@ -168,7 +168,31 @@ biocLite("DESeq2")
 
 ## Survival Analysis
 
-_Stay tuned..._
+**Software setup:** Follow instructions at the top for [R+RStudio+Packages](#r). Next, install the additional packages listed below from CRAN and Bioconductor by typing the commands below into your RStudio console window.
+
+```r
+# Install from CRAN
+install.packages("tidyverse")
+install.packages("survminer")
+
+# Install from Bioconductor
+# Install Bioconductor core packages
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+# Install RTCGA and RTCGA data packages
+biocLite("RTCGA")
+biocLite("RTCGA.clinical")
+biocLite("RTCGA.mRNA")
+```
+
+**Prerequisites!** This is _not_ an introductory R class. Work through the workshop materials below if you need a refresher on R, data frames, data manipulation and visualization.
+
+- [R basics](r-basics.html)
+- [Data frames](r-dataframes.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
+- [Tidy data & advanced manipulation](r-tidy.html)
+- [Data Visualization with ggplot2](r-viz-gapminder.html)
+
 
 ----
 
