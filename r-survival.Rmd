@@ -6,7 +6,7 @@ This workshop will provide hands-on instruction and exercises covering survival 
 
 **Prerequisites: [Familiarity with R](r-basics.html) is _required_** (including working with [data frames](r-dataframes.html), installing/using packages, importing data, and saving results); familiarity with [dplyr](r-dplyr-yeast.html) and [ggplot2](r-viz-gapminder.html) packages is highly recommended. 
 
-**You must [complete the basic R setup here](setup.html#R) _prior to class_.** This includes installing R, RStudio, and the required packages. Please [contact one of the instructors](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
+**You must [complete the setup here](setup.html#survival_analysis) _prior to class_.** This includes installing R, RStudio, and the required packages under the ["Survival Analysis" heading](setup.html#survival_analysis). Please [contact one of the instructors](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
 
 **Handouts**: Download and print out these handouts and bring them to class:
 
