@@ -8,16 +8,17 @@ This workshop will provide hands-on instruction and exercises covering survival 
 
 **You must [complete the basic R setup here](setup.html#R) _prior to class_.** This includes installing R, RStudio, and the required packages. Please [contact one of the instructors](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
 
-<!--
 **Handouts**: Download and print out these handouts and bring them to class:
 
-- [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
-- [Exercises handout](handouts/r-stats-exercises.pdf)
--->
+- [Cheat sheet](handouts/r-survival-cheatsheet.pdf)
+- [Exercises handout](handouts/r-survival-exercises.pdf)
+
+**Slides**: [click here](slides/r-survival.html).
+
 
 ```{r init, echo=FALSE, message=FALSE, eval=TRUE}
 library(knitr)
-opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=FALSE, results="hide")
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE, results="hide")
 # options(digits=3)
 options(max.print=200)
 .ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
@@ -219,9 +220,10 @@ ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE,
 
 Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- etype=1 indicates that row corresponds to death; etype=2 indicates recurrence. 
 
-First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`.
+First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`.
 
 ```{r}
+library(tidyverse)
 colondeath <- filter(colon, etype==1)
 head(colondeath)
 ```
@@ -421,7 +423,7 @@ biocLite("RTCGA.mRNA")
 
 Let's load the RTCGA package, and use the `infoTCGA()` function to get some information about the kind of data available for each cancer type.
 
-```{r loadRTCGA, include=FALSE}
+```{r loadRTCGA, include=FALSE, cache=FALSE}
 library(RTCGA)
 library(RTCGA.clinical)
 library(RTCGA.mRNA)
