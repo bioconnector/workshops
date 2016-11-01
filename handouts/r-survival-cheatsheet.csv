@@ -8,3 +8,5 @@
 "`survdiff(Surv(time, status)~x, data=df)`",Log-rank test of differential survival by groups in `x`
 "`coxph(Surv(time, status)~x1+x2, data=df)`",Run a Cox PH model on variables `x1` and `x2`
 `tidy()` ; `augment()` ; `glance()`,Model tidying functions in the broom package
+"`survivalTCGA(..., extract.cols=...)`",Extract survival data from 1+ (R)TCGA clinical datasets
+"`expressionsTCGA(..., extract.cols=...)`",Extract gene expression data (R)TCGA mRNA datasets
