@@ -5,6 +5,7 @@ date: "_Please sign in and pick up handouts in the back._"
 output: 
   slidy_presentation:
     footer: "bioconnector.org | Survival Analysis"
+    font_adjustment: +3
 ---
 
 ```{r setup, include=FALSE}
@@ -32,7 +33,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 **This is _not_ a statistics course.**
 
-## Course website: **[bioconnector.org](http://bioconnector.org)** {.bigger}
+## Course website: **[bioconnector.org](http://bioconnector.org)**
 
 - Setup instructions
 - Lessons dropdown: _Survival Analysis with TCGA data_
