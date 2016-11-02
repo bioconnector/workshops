@@ -1,5 +1,5 @@
 ---
-title: "Survival Analysis with R"
+title: "Survival Analysis with R: Exercises"
 output: 
   pdf_document: 
     fig_caption: no
