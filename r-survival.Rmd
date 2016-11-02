@@ -11,9 +11,10 @@ This workshop will provide hands-on instruction and exercises covering survival 
 **Handouts**: Download and print out these handouts and bring them to class:
 
 - [Cheat sheet](handouts/r-survival-cheatsheet.pdf)
+- [Background handout](handouts/r-survival-handout.pdf)
 - [Exercises handout](handouts/r-survival-exercises.pdf)
 
-**Slides**: [click here](slides/r-survival.html).
+<!-- **Slides**: [click here](slides/r-survival.html). -->
 
 
 ```{r init, echo=FALSE, message=FALSE, eval=TRUE}
