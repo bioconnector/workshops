@@ -58,7 +58,7 @@ head(colondeath)
 
 Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath` object in the first exercise that only includes survival, not recurrence data points. See `?colon` for more information about this dataset. 
 
-1. Take a look at `levels(colondeath$rs)`. This tells you that the `rx` variable is the type of treatment the patient was on, which is either nothing (coded `Obs`, short for Observation), Levamisole (coded `Lev`), or Levamisole + 5-fluorouracil (coded `Lev+5FU`). This is a factor variable coded with these levels, in that order. This means that `Obs` is treated as the baseline group, and other groups are dummy-coded to represent.
+1. Take a look at `levels(colondeath$rs)`. This tells you that the `rx` variable is the type of treatment the patient was on, which is either nothing (coded `Obs`, short for Observation), Levamisole (coded `Lev`), or Levamisole + 5-fluorouracil (coded `Lev+5FU`). This is a factor variable coded with these levels, in that order. This means that `Obs` is treated as the baseline group, and other groups are dummy-coded to represent the respective group.
 
 
 |rx      | Lev| Lev+5FU|
