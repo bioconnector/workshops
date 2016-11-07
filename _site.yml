@@ -39,7 +39,7 @@ navbar:
         - text: "Essential Statistics with R"
           href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
-          href:
+          href: r-survival.html
         - text: "Introduction to Bioconductor"
           href:
         - text: "Harvesting Data from NCBI"
