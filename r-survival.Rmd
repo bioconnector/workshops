@@ -110,6 +110,7 @@ Other optional functions you might use include:
 We're going to be using the built-in lung cancer dataset[^lungcite] that ships with the survival package. You can get some more information about the dataset by running `?lung`. The help tells us there are 10 variables in this data:
 
 ```{r eval=FALSE}
+library(survival)
 ?lung
 ```
 
