@@ -68,4 +68,4 @@ The core survival analysis functions are in the **[survival](https://cran.r-proj
 
 `Surv()` creates the response variable, and typical usage takes the time to event,[^time2] and whether or not the event occured (i.e., death vs censored). `survfit()` creates a survival curve that you could then display or plot. `coxph()` implements the regression analysis, and models specified the same way as in regular linear models, but using the `coxph()` function.
 
-
+[^time2]: `Surv()` can also take start and stop times, to account for left censoring. See the help for `?Surv`.
