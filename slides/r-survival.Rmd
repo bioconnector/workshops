@@ -1,5 +1,5 @@
 ---
-title: "**Survival Analysis**"
+title: "**Survival Analysis with R**"
 author: "<small>November 7 2016<br>2:00-5:00pm</small>"
 date: "_Please sign in and pick up handouts in the back._"
 output: 
