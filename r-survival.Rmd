@@ -498,7 +498,7 @@ dim(BRCA.mRNA)
 BRCA.mRNA[1:5, 1:5]
 ```
 
-> **Extra credit assignment**: Take a look at the [advanced data manipulation]() and [tidy data]() workshops, and see if you can figure out how to join the gene expression data to the clinical data for any particular cancer type.
+> **Extra credit assignment**: Take a look at the [advanced data manipulation](r-dplyr-yeast.html) and [tidy data](r-tidy.html) workshops, and see if you can figure out how to join the gene expression data to the clinical data for any particular cancer type.
 
 Similar to how `survivalTCGA()` was a nice helper function to pull out survival information from multiple different clinical datasets, `expressionsTCGA()` can pull out specific gene expression measurements across different cancer types. See the help for `?expressionsTCGA`. Let's pull out data for PAX8, GATA-3, and the estrogen receptor genes from breast, ovarian, and endometrial cancer, and plot the expression of each with a box plot.
 

@@ -18,7 +18,7 @@ opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
 
 - [R basics](r-basics.html)
 - [Data frames](r-dataframes.html)
-- [Manipulating data with dplyr and `%>%`](r-dplyr.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr-yeast.html)
 
 ### Data needed
 

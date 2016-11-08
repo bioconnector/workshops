@@ -153,7 +153,7 @@ biocLite("DESeq2")
 
 - [R basics](r-basics.html)
 - [Data frames](r-dataframes.html)
-- [Manipulating data with dplyr and `%>%`](r-dplyr.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
+- [Manipulating data with dplyr and `%>%`](r-dplyr-yeast.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
 - [Tidy data & advanced manipulation](r-tidy.html)
 - [Data Visualization with ggplot2](r-viz-gapminder.html)
 
@@ -189,7 +189,7 @@ biocLite("RTCGA.mRNA")
 
 - [R basics](r-basics.html)
 - [Data frames](r-dataframes.html)
-- [Manipulating data with dplyr and `%>%`](r-dplyr.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
+- [Manipulating data with dplyr and `%>%`](r-dplyr-yeast.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
 - [Tidy data & advanced manipulation](r-tidy.html)
 - [Data Visualization with ggplot2](r-viz-gapminder.html)
 
