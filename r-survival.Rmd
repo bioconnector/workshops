@@ -220,13 +220,18 @@ ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE,
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
-Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- etype=1 indicates that row corresponds to death; etype=2 indicates recurrence. 
+Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- `etype==1` indicates that row corresponds to recurrence; `etype==2` indicates death. 
 
-First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`.
+First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`. If you don't have dplyr or tidyverse, you can use the base `subset()` function instead.
 
 ```{r}
+# using tidyverse/dplyr::filter
 library(tidyverse)
-colondeath <- filter(colon, etype==1)
+colondeath <- filter(colon, etype==2)
+
+# Or, using base subset()
+# colondeath <- subset(colon, etype==2)
+
 head(colondeath)
 ```
 
@@ -305,7 +310,7 @@ fit
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
-Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath` object in the first exercise that only includes survival, not recurrence data points. See `?colon` for more information about this dataset. 
+Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath` object in the first exercise that only includes survival (`etype==2`), not recurrence data points. See `?colon` for more information about this dataset. 
 
 1. Take a look at `levels(colondeath$rx)`. This tells you that the `rx` variable is the type of treatment the patient was on, which is either nothing (coded `Obs`, short for Observation), Levamisole (coded `Lev`), or Levamisole + 5-fluorouracil (coded `Lev+5FU`). This is a factor variable coded with these levels, in that order. This means that `Obs` is treated as the baseline group, and other groups are dummy-coded to represent the respective group.
 
