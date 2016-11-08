@@ -7,14 +7,19 @@ output:
 
 # Exercise set 1
 
-Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- etype=1 indicates that row corresponds to death; etype=2 indicates recurrence. 
+Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- `etype==1` indicates that row corresponds to recurrence; `etype==2` indicates death. 
 
-First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`.
+First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`. If you don't have dplyr or tidyverse, you can use the base `subset()` function instead.
 
 
 ```r
+# using tidyverse/dplyr::filter
 library(tidyverse)
-colondeath <- filter(colon, etype==1)
+colondeath <- filter(colon, etype==2)
+
+# Or, using base subset()
+# colondeath <- subset(colon, etype==2)
+
 head(colondeath)
 ```
 
@@ -27,18 +32,18 @@ head(colondeath)
 ##                 sex=0 
 ##  time n.risk n.event survival std.err lower 95% CI upper 95% CI
 ##     0    445       0    1.000  0.0000        1.000        1.000
-##   500    295     146    0.670  0.0224        0.627        0.715
-##  1000    242      50    0.556  0.0237        0.512        0.604
-##  1500    222      18    0.515  0.0238        0.470        0.564
-##  2000    183      12    0.486  0.0239        0.442        0.535
+##   500    381      64    0.856  0.0166        0.824        0.889
+##  1000    306      75    0.688  0.0220        0.646        0.732
+##  1500    265      40    0.598  0.0232        0.554        0.645
+##  2000    218      22    0.547  0.0236        0.503        0.596
 ## 
 ##                 sex=1 
 ##  time n.risk n.event survival std.err lower 95% CI upper 95% CI
 ##     0    484       0    1.000  0.0000        1.000        1.000
-##   500    338     138    0.713  0.0206        0.674        0.754
-##  1000    274      59    0.588  0.0226        0.545        0.634
-##  1500    246      23    0.538  0.0229        0.495        0.585
-##  2000    211      10    0.516  0.0230        0.472        0.563
+##   500    418      65    0.866  0.0155        0.836        0.897
+##  1000    335      83    0.694  0.0210        0.654        0.736
+##  1500    287      46    0.598  0.0223        0.556        0.644
+##  2000    238      25    0.545  0.0227        0.503        0.592
 ```
 
 3. Using the survminer package, plot a Kaplan-Meier curve for this analysis with confidence intervals and showing the p-value. See `?ggsurvplot` for help. Is there a significant difference between males and females?
@@ -53,12 +58,11 @@ head(colondeath)
 
 ![](../_site/r-survival_files/figure-html/unnamed-chunk-6-2.png){width=5in}
 
-
 # Exercise set 2
 
-Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath` object in the first exercise that only includes survival, not recurrence data points. See `?colon` for more information about this dataset. 
+Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath` object in the first exercise that only includes survival (`etype==2`), not recurrence data points. See `?colon` for more information about this dataset. 
 
-1. Take a look at `levels(colondeath$rs)`. This tells you that the `rx` variable is the type of treatment the patient was on, which is either nothing (coded `Obs`, short for Observation), Levamisole (coded `Lev`), or Levamisole + 5-fluorouracil (coded `Lev+5FU`). This is a factor variable coded with these levels, in that order. This means that `Obs` is treated as the baseline group, and other groups are dummy-coded to represent the respective group.
+1. Take a look at `levels(colondeath$rx)`. This tells you that the `rx` variable is the type of treatment the patient was on, which is either nothing (coded `Obs`, short for Observation), Levamisole (coded `Lev`), or Levamisole + 5-fluorouracil (coded `Lev+5FU`). This is a factor variable coded with these levels, in that order. This means that `Obs` is treated as the baseline group, and other groups are dummy-coded to represent the respective group.
 
 
 |rx      | Lev| Lev+5FU|
@@ -71,12 +75,12 @@ Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath
 
 
 ```
-##              coef exp(coef) se(coef)     z       p
-## rxLev     -0.0151    0.9850   0.1071 -0.14    0.89
-## rxLev+5FU -0.5121    0.5992   0.1186 -4.32 1.6e-05
+##              coef exp(coef) se(coef)     z      p
+## rxLev     -0.0266    0.9737   0.1103 -0.24 0.8092
+## rxLev+5FU -0.3717    0.6896   0.1188 -3.13 0.0017
 ## 
-## Likelihood ratio test=24.3  on 2 df, p=5.17e-06
-## n= 929, number of events= 468
+## Likelihood ratio test=12.2  on 2 df, p=0.0023
+## n= 929, number of events= 452
 ```
 
 3. Show the results using a Kaplan-Meier plot, with confidence intervals and the p-value.
@@ -87,15 +91,15 @@ Let's go back to the `colon` cancer dataset. Remember, you created a `colondeath
 
 
 ```
-##               coef exp(coef) se(coef)     z      p
-## rxLev     -0.06906   0.93327  0.10876 -0.64   0.53
-## rxLev+5FU -0.54193   0.58163  0.12056 -4.50  7e-06
-## age       -0.00359   0.99642  0.00395 -0.91   0.36
-## sex       -0.15147   0.85945  0.09420 -1.61   0.11
-## nodes      0.08276   1.08628  0.00886  9.34 <2e-16
+##               coef exp(coef) se(coef)     z       p
+## rxLev     -0.08007   0.92305  0.11161 -0.72 0.47312
+## rxLev+5FU -0.40253   0.66863  0.12054 -3.34 0.00084
+## age        0.00533   1.00535  0.00405  1.32 0.18739
+## sex       -0.02826   0.97214  0.09573 -0.30 0.76786
+## nodes      0.09275   1.09719  0.00887 10.46 < 2e-16
 ## 
-## Likelihood ratio test=90.3  on 5 df, p=0
-## n= 911, number of events= 456 
+## Likelihood ratio test=87.8  on 5 df, p=0
+## n= 911, number of events= 441 
 ##    (18 observations deleted due to missingness)
 ```
 
