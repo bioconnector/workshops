@@ -1,0 +1,305 @@
+---
+title: "List Manipulation"
+---
+
+```{r init, include=F}
+library(knitr)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
+.ex <- 1
+# library(ggplot2)
+# theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
+```
+
+Formatting data as a list is sometimes necessary. However, retrieving this kind of non-tabular information for analysis can be challenging. This workshop will introduce students to the motivations and techniques for storing and parsing list objects in R. Some familiarity with R will be helpful.
+
+## Introduction 
+
+Compared to the data frame, vector and matrix, the list is under-represented in many introductory R tutorials. This likely has less do with the relative importance of lists, and more to do with their potential complexity. However, an understanding of how to create, curate and manipulate objects of this type can prove immensely useful.
+
+The list is one of the most versatile data types in R thanks to its ability to accommodate heterogenous elements. A single list can contain multiple elements, regardless of their types or whether these elements contain further nested data. So you can have a list of a list of a list of a list of a list ... 
+
+Garrett Grolemund and Hadley Wickham's **R For Data Science** includes a section on lists. They use a helpful simile for the list as a shaker filled with packets of pepper[^1]. To retrieve individual "grains" of pepper, you'd have to first access the shaker ... then the packet inside the shaker ... then the pepper inside the packet.
+
+Still confused? Here's another way of thinking about it: the list is like a movie. Each movie has a cast, crew, budget, script, etc. These elements may have different dimensions (more cast members than crew) and be of different types (budget is a number, script is a series of characters), yet they are all part of the same movie.
+
+We'll use a brief review of R basics as a vehicle to get started with lists.
+
+## R Basics
+
+To do anything interesting in R, you must assign *values* (or experessions that produce values) to *objects*. The syntax for assignment is the name of the object followed by a `<-` operator and the expression to be evaluated.
+
+```{r}
+x <- 3
+y <- 2 + x
+```
+
+Although the two are mostly equivalent, the `<-` should be used in place of the `=` to improve code legibility and reduce potential mistakes ... we'll see why this is important when we start creating "named" lists.
+
+Every object has a *class*, which can be accessed using the `class()` function. Certain functions are specific to a given class. Other functions can behave differently depending on the class of the input. The "list" class is what we are interested in for this tutorial.
+
+One of the most fundamental types of objects is the *vector*. A vector is a series of elements from 1 to n. Each element can be accessed by an identifier ("index") using square brackets `y[1]`. We will make extensive use of a modifed version of this syntax in order to manipulate list items. 
+
+## Creating Lists
+
+The most direct way to create a list is with the `list()` function. 
+
+```{r, eval = TRUE}
+slamwins <- list(17,14,14,12,11)
+```
+
+To confirm that the object we've created is indeed a "list" we can use `class()` as described above.
+
+```{r, eval = TRUE}
+class(slamwins)
+```
+
+OK. Let's see what a list looks like as printed output ...
+
+```{r, eval = TRUE}
+slamwins
+```
+
+## Indexing Lists
+
+The printed output above isn't pretty, but it does include some hints as to how we can isolate specific elements of the list. In this case there are *double* square brackets (e.g. [[1]])  as well as *single* square brackets (e.g. [1]). As with vectors, data frames and matrices, the bracket notation is used for indexing. However, a list can have mulitple levels of indices. The value in the *double* brackets represents the number of the parent element in the list. The value in the *single* brackets represents the number of the element *in that parent element* of the list. We can chain this notation together to access granular parts of our list. 
+
+```{r, eval = TRUE}
+slamwins[[2]][1]
+```
+
+If we'd prefer a more explicit way to access elements of a list, then we can give them names. When given a list as an argument, the `names()` function can let you assign a character vector of the same length as the list as the names for each corresponding element.
+
+```{r, eval = TRUE}
+names(slamwins) <- c("Federer", "Sampras", "Nadal", "Djokovic", "Borg")
+slamwins
+```
+
+Another way to set names to is to do so while creating the list.
+
+```{r, eval = TRUE}
+slamwins <- list(Federer = 17, Sampras = 14, Nadal = 14, Djokovic = 12, Borg = 11)
+slamwins
+```
+
+With our list named now we can use the `$` operator to extract specific values by key.
+
+```{r, eval = TRUE}
+slamwins$Federer
+
+# federer has ? more titles than borg
+slamwins$Federer - slamwins$Borg
+```
+
+The example above could be consider a minimal viable list ... there's a single level of named elements, which just as easily could have been stored as a vector. Let's add another layer of data nested into our list object.
+
+```{r, eval = TRUE}
+slamwins <- 
+    list(
+        Federer = 
+            list(
+                AUS = 4, 
+                FR = 1,
+                WIM = 7,
+                US = 5),
+        Sampras = 
+            list(
+                AUS = 2,
+                FR = 0,
+                WIM = 7,
+                US = 5),
+        Nadal = 
+            list(
+                AUS = 1,
+                FR = 9,
+                WIM = 2,
+                US = 2),
+        Djokovic = 
+            list(
+                AUS = 6,
+                FR = 1,
+                WIM = 3,
+                US = 2),
+        Borg = 
+            list(
+                AUS = 0,
+                FR = 6,
+                WIM = 5,
+                US = 0)
+    )
+```
+
+In this case we have created a named list of `r length(slamwins)` named lists with `r length(slamwins)[[1]]` named list each of `r length(slamwins)[[1]][[1]]` named values.
+
+But wait ... we're missing something ... we have the number of slam wins by event but what about the total number of wins per player?
+
+## Editing Lists
+
+One way to solve the problem we're encountering would be to use the indexing syntax discussed earlier to match our "totals" with the appropriate list item. That would basically amount to using a *for loop*:
+
+```{r, eval = TRUE}
+
+totals <- c(17, 14, 14, 12, 11)
+
+for (i in 1:length(slamwins)) {
+    
+    slamwins[[i]]$Total <- totals[i]
+
+}
+
+slamwins
+
+```
+
+There are a couple of potential issues with this code. The main thing is that we need to know what the totals are ahead of time. It would be a lot better to calculate those *dynamically* in case our underlying data changes ... or in case we're performing a calculation that's not as simple as a sum. Another problem with this approach is that it's implemented with a for loop, which is a construct that works when programming R but can be problematic[^2]. 
+
+Enter the "apply" functions ...
+
+For this lesson, the two most relevant members of this family of functions are `lapply()` and `sapply()`, both of which allow you to pass *other* functions to each element of a list. 
+
+Before we start working with these functions, we need to restore our list the state it was in before we ran the loop to add the sums for each element. Assigning an element as `NULL` effectively deletes that element from the list.
+
+```{r, eval = TRUE}
+for (i in 1:length(slamwins)) {
+    
+    slamwins[[i]]$Total <- NULL
+    
+}
+```
+
+And because he have nested data (lists within lists within lists ...)  we also need to understand how to use `unlist()` in order to *apply* our functions appropriately. Unlist is simply returns a "flat" version of all of the elements in the list as a vector. You can specify this to be recursive (i.e. flatten out all lists of lists) and to either retain or discard any named identifiers you have for your list.
+
+In this context, we'll use `unlist()` in conjunction with `lapply()` to reduce the complexity of our original list.
+
+```{r}
+lapply(slamwins, unlist)
+```
+
+The `lapply()` function will go to each element in the highest level of the list, and perform an arbitrary action. In this case, we've "unlisted" each of the player lists in our `slamwins` object. It is important to understand that *`lapply()` always returns a list*. So essentially we've just created another list, which we could then use within another `lapply()` call.
+
+```{r}
+lapply(lapply(slamwins, unlist), sum)
+```
+
+Now that we've figured out how to calculate the values we're interested in, we just need to append them to the original list. One of the keys here is appreciating that `lapply()` can take any function (including one that we write ... an "anonymous function"[^3]) and use that operation on each element in the list. Another point worth noting is that the `c()` function works on lists. Most introduction to R tutorials include examples of using `c()` to create a vector, and it works very similarly for lists. Essentially it appends either a single item or a list of items onto the list.
+
+```{r}
+slamwins <- lapply(lapply(slamwins, unlist), function(x) c(x, Total = sum(x)))
+slamwins
+```
+
+## Converting Lists
+
+Using the subsetting and manipulation features above we can perform a wide variety of manipulations on our list object. But ultimately (especially if you're familiar with the "Tidyverse" approach to using R) it may be helpful to cast list data in a tabular format ... a data frame.
+
+```{r}
+as.data.frame(slamwins)
+```
+
+```{r}
+datmat <- do.call(rbind, slamwins)
+datdf <- as.data.frame(datmat, row.names = FALSE)
+datdf$player <- row.names(datmat)
+datdf
+```
+
+## Lists "In The Wild"
+
+The above is a contrived example. In practice, you're much more likely to encounter lists written by other people (or applications) than to code out a list of your own. The example data we'll use will be pulled from an Application Programming Interface (API) for the [github.com](http://www.github.com) website[^4]. Like many other wep APIs, the data comes out in JavaScript Object Notation (JSON). JSON is a format for storing and transmitting "semi-structured" data[^5]. Keys and values are paired together to facilitate parsing[^6]. When read into R, JSON is interpreted as a list.
+
+### Example
+
+Github is a platform for sharing, storing and managing code. Projects can be defined in a "repository" structure. The example that follows will look at repositories for a single user: Hadley Wickham. 
+
+To read the data into R, we can use the `fromJSON()` function the **jsonlite** package. For this example, we can pull each page of results (in this case, we know *a priori* that there are two pages) and make sure to pass the `simplifyVector = FALSE` argument after the url.
+
+```{r}
+library(jsonlite)
+had1 <- fromJSON("https://api.github.com/users/hadley/repos?page=1&per_page=100", simplifyVector = FALSE)
+had2 <- fromJSON("https://api.github.com/users/hadley/repos?page=2&per_page=100", simplifyVector = FALSE)
+```
+
+The data are stored in two separte lists, so we need to combine them with the `c()` function. Since the original objects are no longer necessary (and may be large), it's probably a good idea to remove them.
+
+```{r, eval = TRUE}
+had <- c(had1,had2)
+rm(had1, had2)
+```
+
+The first item of interest is to know how many elements are in this list:
+
+```{r, eval = TRUE}
+length(had)
+```
+
+It's also helpful to take a peek at data structure:
+
+```{r, eval = TRUE}
+had[[1]]
+```
+
+Some of the elements and sub-elements of this particular list are nested (lists of lists) ... but overall this data is formatted in a friendly, parseable format. Each parent element has the same number of children, which are named and defined as "key : value" pairs. 
+
+So if we wanted to extract a specific child element from one of its parents, we could use something like the following:
+
+```{r, eval = TRUE}
+had[[5]]$language
+```
+
+We mentioned `sapply()` above, and now we can put it into action. This function will be useful in extracting the same child elements from different parents. To do so, we'll to define an anonymous function to apply across the list. Note that *`sapply()` is similar to `lapply()` but always returns a vector, matrix or array rather than a list*. 
+
+```{r, eval = TRUE}
+sapply(had, function(x) x$watchers)
+```
+
+We've successfully extracted the child element for interest from each of the parent elements in the list. However, this vector could be hard to interpret since the elements are divorced from the larger context. One solution might be to assign names to the original list, which will give `sapply()` a named vector output.
+
+```{r}
+names(had) <- sapply(had, function(x) x$name)
+sapply(had, function(x) x$watchers)
+```
+
+### Exercise
+
+- How many times are these repositories forked on average? 
+- Is Hadley a "site_admin" on any of these repositories?
+- Try reading the data from Github again. Make sure to use the `simplifyVector = TRUE` argument instead. What happened?
+
+## Other Methods
+
+There are many, many ways to work with lists. What follows is a very brief demonstration of a few features from packages that help address list complexity. 
+
+#### rlist
+
+**rlist** includes a set of very useful tools for list manipulation[^7].
+
+Some highlights:
+
+- `list.map()`
+- `list.sort()`
+- `list.filter()`
+- `list.group()`
+- `list.table()`
+
+```{r, eval = FALSE}
+library(rlist)
+list.map(had, created_at)
+list.sort(had, forks_count)
+list.filter(had, size > 50000)
+list.group(had, language)
+list.table(had, fork)
+```
+
+#### purrr
+
+According to its author, Hadley Wickham, the **purrr** package, "... fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr"[^8]. This is most useful for working with lists when doing *programmatic* rather than *interactive* manipulation of list objects.
+
+## References
+
+[^1]: http://r4ds.had.co.nz/lists.html
+[^2]: http://yihui.name/en/2010/10/on-the-gory-loops-in-r/
+[^3]: http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions
+[^4]: https://developer.github.com/v3/
+[^5]: https://en.wikipedia.org/wiki/Semi-structured_data
+[^6]: http://developers.squarespace.com/what-is-json/
+[^7]: https://renkun.me/rlist-tutorial/
+[^8]: https://blog.rstudio.org/2015/09/29/purrr-0-1-0/
