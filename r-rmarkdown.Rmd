@@ -15,7 +15,7 @@ catn <- function(x="") cat("    ", x, "\n")
 
 Contemporary life science is plagued by reproducibility issues. This workshop covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this workshop we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents.
 
-This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), [manipulating data with dplyr and `%>%`](r-dplyr.html), and [plotting with ggplot2](r-ggplot2.html). It also assumes that you've successfully installed all packages on the [R setup page](setup.html), including the [additional steps](setup.html#rmarkdown) needed specifically for this class.
+This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html), and [plotting with ggplot2](r-viz-gapminder.html). It also assumes that you've successfully installed all packages on the [R setup page](setup.html), including the [additional steps](setup.html#rmarkdown) needed specifically for this class.
 
 ## Before class
 
