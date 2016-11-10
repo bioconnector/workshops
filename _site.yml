@@ -28,6 +28,8 @@ navbar:
           href: r-dplyr-yeast.html
         - text: "Tidying data"
           href: r-tidy.html
+        - text: "List Manipulation"
+          href: r-lists.html
         - text: "Data Visualization"
           href: r-viz-gapminder.html
         - text: "Interactive Visualization with JavaScript and R"
@@ -40,36 +42,36 @@ navbar:
           href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
           href: r-survival.html
-        - text: "Introduction to Bioconductor"
-          href:
+#        - text: "Introduction to Bioconductor"
+#          href:
         - text: "Harvesting Data from NCBI"
           href:
         - text: "----"
         - text: "--- NGS DATA ANALYSIS ---"
         - text: "RNA-seq: airway"
           href: r-rnaseq-airway.html
-        - text: "ChIP-seq data analysis"
-          href:
-        - text: "----"
-        - text: "--- OTHER CLASSES ---"
-        - text: "Data Cleaning w/ OpenRefine"
-          href:
-        - text: "HPC & Parallel Computing"
-          href:
-        - text: "HPC at UVA Best Practices"
-          href:
-        - text: "Automated Image Analysis w/ ImageJ"
-          href:
-        - text: "Power & Sample Size Analysis"
-          href:
-        - text: "Intro to Categorical Data Analysis"
-          href:
-        - text: "Beginner Python"
-          href:
-        - text: "Advanced Python"
-          href:
-        - text: "Introduction to SPSS"
-          href:
+#        - text: "ChIP-seq data analysis"
+#          href:
+#        - text: "----"
+#        - text: "--- OTHER CLASSES ---"
+#        - text: "Data Cleaning w/ OpenRefine"
+#          href:
+#        - text: "HPC & Parallel Computing"
+#          href:
+#        - text: "HPC at UVA Best Practices"
+#          href:
+#        - text: "Automated Image Analysis w/ ImageJ"
+#          href:
+#        - text: "Power & Sample Size Analysis"
+#          href:
+#        - text: "Intro to Categorical Data Analysis"
+#          href:
+#        - text: "Beginner Python"
+#          href:
+#        - text: "Advanced Python"
+#          href:
+#        - text: "Introduction to SPSS"
+#          href:
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
