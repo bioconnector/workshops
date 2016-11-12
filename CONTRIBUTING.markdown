@@ -80,6 +80,8 @@ install.packages("shinythemes")
 install.packages("Tmisc")
 install.packages("rlist")
 install.pacakges("purrr")
+install.packages("rentrez")
+install.packages("XML")
 
 # Bioconductor
 source("http://bioconductor.org/biocLite.R")
