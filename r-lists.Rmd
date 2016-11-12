@@ -128,7 +128,7 @@ slamwins <-
     )
 ```
 
-In this case we have created a named list of `r length(slamwins)` named lists with `r length(slamwins)[[1]]` named list each of `r length(slamwins)[[1]][[1]]` named values.
+In this case we have created a named list of `r length(slamwins)` named lists each of which has `r length(slamwins)[[1]][[1]]` named values.
 
 But wait ... we're missing something ... we have the number of slam wins by event but what about the total number of wins per player?
 
@@ -218,7 +218,7 @@ had1 <- fromJSON("https://api.github.com/users/hadley/repos?page=1&per_page=100"
 had2 <- fromJSON("https://api.github.com/users/hadley/repos?page=2&per_page=100", simplifyVector = FALSE)
 ```
 
-The data are stored in two separte lists, so we need to combine them with the `c()` function. Since the original objects are no longer necessary (and may be large), it's probably a good idea to remove them.
+The data are stored in two separate lists, so we need to combine them with the `c()` function. Since the original objects are no longer necessary (and may be large), it's probably a good idea to remove them.
 
 ```{r, eval = TRUE}
 had <- c(had1,had2)
@@ -231,7 +231,7 @@ The first item of interest is to know how many elements are in this list:
 length(had)
 ```
 
-It's also helpful to take a peek at data structure:
+It's also helpful to take a peek at the data structure:
 
 ```{r, eval = TRUE}
 had[[1]]
@@ -245,13 +245,13 @@ So if we wanted to extract a specific child element from one of its parents, we 
 had[[5]]$language
 ```
 
-We mentioned `sapply()` above, and now we can put it into action. This function will be useful in extracting the same child elements from different parents. To do so, we'll to define an anonymous function to apply across the list. Note that *`sapply()` is similar to `lapply()` but always returns a vector, matrix or array rather than a list*. 
+We mentioned `sapply()` above, and now we can put it into action. This function will be useful in extracting the same child elements from different parents. To do so, we'll need to define an anonymous function to apply across the list. Note that *`sapply()` is similar to `lapply()` but always returns a vector, matrix or array rather than a list*. 
 
 ```{r, eval = TRUE}
 sapply(had, function(x) x$watchers)
 ```
 
-We've successfully extracted the child element for interest from each of the parent elements in the list. However, this vector could be hard to interpret since the elements are divorced from the larger context. One solution might be to assign names to the original list, which will give `sapply()` a named vector output.
+We've successfully extracted the child element of interest from each of the parent elements in the list. However, this vector could be hard to interpret since the elements are divorced from the larger context. One solution might be to assign names to the original list, which will give `sapply()` a named vector output.
 
 ```{r}
 names(had) <- sapply(had, function(x) x$name)
@@ -266,7 +266,7 @@ sapply(had, function(x) x$watchers)
 
 ## Other Methods
 
-There are many, many ways to work with lists. What follows is a very brief demonstration of a few features from packages that help address list complexity. 
+There are many, many ways to work with lists. What follows is a very brief nod to a few features from packages that help address list complexity. 
 
 #### rlist
 
@@ -291,7 +291,11 @@ list.table(had, fork)
 
 #### purrr
 
-According to its author, Hadley Wickham, the **purrr** package, "... fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr"[^8]. This is most useful for working with lists when doing *programmatic* rather than *interactive* manipulation of list objects.
+According to its author, Hadley Wickham, the **purrr** package, "... fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr"[^8]. This is especially useful for working with lists when using lists for *programmatic* purposes, like writing functions or packages. But there are applications for *interactive* list manipulation with **purrr** as well. The following are particularly helpful:
+
+- `map()`: allows functions to be passed to each element of the list (roughly analogous to `sapply()` or `lapply()`)
+- `flatten()`: simplifies a list to a vector (roughly analogous to `unlist()`)
+- `transpose()`: turns a list inside out (`transpose()` *then* `transpose()` will revert the list back to original state)
 
 ## References
 
