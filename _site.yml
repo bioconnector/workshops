@@ -45,7 +45,7 @@ navbar:
 #        - text: "Introduction to Bioconductor"
 #          href:
         - text: "Harvesting Data from NCBI"
-          href:
+          href: r-ncbi.html
         - text: "----"
         - text: "--- NGS DATA ANALYSIS ---"
         - text: "RNA-seq: airway"
