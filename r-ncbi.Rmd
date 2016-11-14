@@ -1,0 +1,291 @@
+---
+title: "Harvesting Data From NCBI"
+---
+
+```{r init, include=F}
+library(knitr)
+opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, fig.keep="none", cache=TRUE)
+options(digits=3)
+options(max.print=200)
+.ex <- 1 # Track ex numbers w/ hidden var. Increment each ex: `r .ex``r .ex=.ex+1`
+
+# See http://rpubs.com/turnersd/embedding-rmarkdown-chunk-into-rmarkdown
+catn <- function(x="") cat("    ", x, "\n")
+```
+
+The National Center for Biotechnology Information (NCBI) maintains biological and bibliographic databases including PubMed, GenBank, among many others. Although the data are hosted on NCBI servers, they are accesible through an application programming interface (API). This workshop will introduce a package called **rentrez**, which facilitates API calls for NCBI data via the R programming language. By the end of the class, students will be familiar with the syntax for retrieving, linking and analyzing records from NCBI databases.
+
+## Introduction 
+
+NCBI houses a tremendous variety of biomedical data. From publication abstracts and keywords ... to raw sequence data ... to taxanomic names and lineages[^1]. These records are stored in disparate databases but can be searched, retrieved and even linked together with a common set of tools. The application programming interface (API) for NCBI is the conduit that provides this access. The API is sometimes referred to as *Entrez*, which is techincally the name of the global search system (including the web interface), or as *eUtils*.
+
+It's probably worth noting that API tools can offer services at different levels of software development. More specifically, eUtils is a "Web API"[^2]. So from a computer connected to a network, you can execute a script that sends a "request" to the NCBI servers with a series of parameters in a pre-defined "endpoint" syntax. The "response" from this query can be returned in a variety of formats, but in this case will typically be in Extensible Markup Language (XML) structure[^3].
+
+XML is organized as a set of nodes, each of which usually has a individual fields. 
+
+Let's take a look at an example:
+
+~~~~
+<playlist>
+    <song>
+        <artist>Prince</artist>
+        <title>Kiss</title>
+        <album>Parade</album>
+        <length>3:38</length>
+    </song>
+    <song>
+        <artist>David Bowie</artist>
+        <title>Modern Love</title>
+        <album>Let's Dance</album>
+        <length>4:48</length>
+    </song>
+    <song>
+        <artist>Talking Heads</artist>
+        <title>Heaven</title>
+        <album>Fear of Music</album>
+        <length>4:03</length>
+    </song>
+</playlist>
+~~~~
+
+The value of the data housed in NCBI databases has driven the development of numerous API "clients" written and executed in various programming languages:
+
+- Entrez Direct (EDirect)[^4]
+- Bio.Entrez[^5]
+- bionode[^6]
+
+As mentioned above, this tutorial will use **rentrez**, which is a package developed and maintained by David Winter[^7]. Because it's written in R, it's possible to incorporate any of the language's data manipulation or statistical analysis functionality.
+
+The package is available on the Comprehensive R Archive Network (CRAN). A stable release is available there. For the most recent development release (may include newer functions  or versions of existing functions) you can install the package via Github:
+
+```{r, eval = FALSE}
+# install via CRAN
+install.packages("rentrez")
+
+# install via Github
+# nb you first need to install devtools
+# install.pacakges("devtools")
+devtools::install_github("ropensci/rentrez")
+```
+
+```{r}
+library(rentrez)
+```
+
+## `entrez_dbs()`
+
+One of the requirements for performing programmatic searches via **rentrez** is specification of the NCBI database to be searched. This is defined in the value passed to the "db" argument to `entrez_search()`, which we'll introduce in the next section. But note that the "db" must be an exact match to one of the searchable databases in NCBI. To view a full list and their respective abbreviations use `entrez_dbs()`.
+
+```{r}
+entrez_dbs()
+```
+
+Each of these databases is configured to receive complex queries based on specific fields. You can view a given databases "searchable fields" with `entrez_db_searchable()`. 
+
+```{r}
+entrez_db_searchable(db = "snp")
+entrez_db_searchable(db = "clinvar")
+```
+
+**nb** in order to construct thorough, complex queries to these databases, you may be best served starting in a web browser and using the graphical "Advanced Search Builder" for the database of choice[^8].
+
+## `entrez_search()`
+
+For this example, let's assume we want to use PubMed to find records for articles published in *PLoS Neglected Tropical Diseases* in 2015. The two fields of interest in this case will be publication date (PDAT) and journal (JOUR).
+
+The fundamental unit to retrieving data from any of the NCBI databases is the record ID. In fact, this is one of the first items returned in the query process. We'll use `entrez_search()` to begin searching NCBI. At minimum, this function takes two arguments:
+
+1. The database to search
+2. The search term(s)
+
+The search function goes out to an NCBI database (in this example "pubmed") and returns the "hits" as IDs. The record itself is not contained in this identifier, but rather will be accessed later using `entrez_fetch()`. 
+
+**nb** we have to store the results of the search as an object in order to access the IDs later. This object is a named *list*, so we can access pieces of the results with the `$` operator followed by the name of the attribute.
+
+```{r}
+res <- entrez_search(db = "pubmed", term = "(PLoS Neglected Tropical Diseases[JOUR] AND 2015[PDAT])")
+```
+
+The "count" indicates the number of total results.
+
+```{r}
+res$count
+```
+
+The "ids" are identifiers for records and will be useful when fetching the individual XML content for the articles in this case.
+
+```{r}
+res$ids
+```
+
+By default, `entrez_search()` only returns 20 identifiers at a time. To change this, we can modify the "retmax" argument. It may be worth setting this to a high value to make sure as many IDs as possible are returned.
+
+```{r}
+res <- entrez_search(db = "pubmed", term = "(PLoS Neglected Tropical Diseases[JOUR] AND 2015[PDAT])", retmax = 9999, use_history = TRUE)
+```
+
+Note that the count doesn't change ... but there are many more IDs.
+
+Have we returned identifiers for all of the articles in which we're interested?
+
+```{r}
+length(res$ids) == res$count
+```
+
+## `entrez_fetch()`
+
+With the IDs for the articles, we can now access their full records. As its name suggests, `entrez_fetch()` will *fetch* the data. We'll define this to be returned in XML format so we can parse the results. 
+
+Note that NCBI does place restricitons on the size of queries. We'll address how to get around this issue by using `web_history` (see [web_history](#web_history)) ... but for now we can just use a subset of the IDs. 
+
+```{r}
+recs <- entrez_fetch(db = "pubmed", id = res$ids[1:25], rettype = "xml", parsed = TRUE)
+```
+
+Because we've set the "rettype" and asked the results to be parsed, if we were to print this object we'd see nicely formatted XML. From here we can use the **XML** R package to parse out individual features.
+
+```{r}
+library(XML)
+```
+
+Two functions that could be particularly useful when working with this XML are `xpathSApply()` and `xmlToList()`:
+
+```{r, eval = FALSE}
+?xpathSApply
+?xmlToList
+```
+
+XML documents are arranged as "trees" or "document object models (DOM)" ... these must be traversed in order to find the information of interest. We need to define a starting point in that structure using XPath[^9]. The `//` and `/` syntax helps point the query to the appropriate context in the document.
+
+`xpathSApply()` uses base R's `sapply()` to iterate over a list and return a vector. 
+
+```{r}
+xpathSApply(recs, "//MedlineCitation/Article/ArticleTitle", xmlValue)
+```
+
+Antoher workflow for parsing these results is to use `entrez_summary()` and `extract_from_esummary()`.
+
+```{r}
+esums <- entrez_summary(db = "pubmed", id = res$ids[1:25])
+```
+
+Again, we've used just a subset of the PubMed IDs retrieved from our original `entrez_search()`. Printing `esums` will show all of the elements that could be extracted. 
+
+```{r}
+esums
+```
+
+`extract_from_esummary()` will give us a vector named with the associated PubMed ID:
+
+```{r}
+extract_from_esummary(esums, "title")
+```
+
+## `entrez_link()`
+
+One of the most fundamental advantages to using NCBI databases is the ability to connect data across repositories. This idea of "linking" is available in **rentrez** via the `entrez_link()` function. 
+
+To demonstrate how this works, let's say we want to retrieve sequence data for *Aedes aegypti*, which is the mosquito vector for Zika, Dengue fever and yellow fever. The first step is to retrieve the correct organism ID for the "yellow fever mosquito":
+
+```{r}
+yfm <- entrez_search(db = "taxonomy", term = "yellow fever mosquito")
+yfm$ids
+```
+
+If we were interested in the taxonomic record for this species of mosquito, then we could run `entrez_fetch()` on the "taxonomy" database with this ID. However, since the goal is to retrieve sequences, we have to fetch from NCBI's "nuccore" nucleotide database. But that will require a linkage of first taxonomy to genome, then genome to nuccore:
+
+```{r}
+yfmlinks <- entrez_link(dbfrom = "taxonomy", id = yfm$ids, db = "genome")
+genlinkid <- yfmlinks$links$taxonomy_genome
+
+yfmlinks2 <- entrez_link(dbfrom = "genome", id = genlinkid, db = "nuccore")
+nuclinkid <- yfmlinks2$links$genome_nuccore
+```
+
+**nb** the `entrez_link()` function requires a single "dbfrom" argument. However, for the "db" argument you can pass either pass a single database or specify "all" to retrieve link IDs from all databases that share links with the record(s) of interest.
+
+If you want to see which databases could possibly have links from a specific database, use `entrez_db_links()`:
+
+```{r}
+entrez_db_links(db = "taxonomy")
+```
+
+There are `r length(nuclinkid)` records for *Aedes aegypti* in NCBI's nucleotide database ... `entrez_fetch()` can pull down each in fasta format:
+
+```{r}
+yfmfasta <- entrez_fetch(db = "nuccore", id = nuclinkid, rettype = "fasta")
+```
+
+Let's take a look at one of the sequences:
+
+```{r, eval = FALSE}
+strsplit(yfmfasta, ">")[[1]][1]
+```
+
+```{r, echo = FALSE}
+stringr::str_trunc(strsplit(yfmfasta, ">")[[1]][4], width = 400)
+```
+
+## Other Features
+
+**rentrez** includes a number of features that extend the **search -> link -> fetch** workflow. 
+
+### web_history
+
+As mentioned above, NCBI places limits on large queries to its databases. However, the servers allow users to store long lists of IDs as "web history" objects. When we ran our original `entrez_search()` we toggled "use_history" to TRUE. Because we did that, our original search object contains a "web_history" element. 
+
+```{r}
+res$web_history
+```
+
+So if we wanted to retrieve all records from our original search, regardless of how many there are, we can pass the web history object in the "web_history" argument to `entrez_fetch()` rather than a list of IDs. 
+
+```{r}
+recs <- entrez_fetch(db = "pubmed", web_history = res$web_history, rettype = "xml", parsed = TRUE)
+```
+
+Did we get all of the titles?
+
+```{r}
+plosidtitles <- xpathSApply(recs, "//MedlineCitation/Article/ArticleTitle", xmlValue)
+
+length(plosidtitles) == res$count
+```
+
+### `entrez_post()`
+
+Another way to store IDs on NCBI servers is with the `entrez_post()` function. This feature effectively also creats a web history object, but does so by explicitly using a POST protocol[^10].
+
+```{r}
+res <- entrez_search(db = "clinvar", term= "atherosclerosis[Disease/Phenotype]")
+postids <- entrez_post(db = "clinvar", res$ids)
+postids
+```
+
+### `entrez_info()`
+
+For metadata about a specific database use `entrez_info()`:
+
+```{r}
+entrez_info(db = "mesh")
+```
+
+**nb** this information comes back as XML, so you'll have to use XPATH parsing to extract specific fields.
+
+## Acknowledgments
+
+Many of the examples and workflows presented in this lesson are heavily inspired by the developer of **rentrez**, David Winter, and his awesome vignette for the package[^11].
+
+## References
+
+[^1]: http://www.ncbi.nlm.nih.gov/guide/all/
+[^2]: https://en.wikipedia.org/wiki/Web_API
+[^3]: https://en.wikipedia.org/wiki/XML
+[^4]: http://www.ncbi.nlm.nih.gov/books/NBK179288/
+[^5]: http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html
+[^6]: https://github.com/bionode/bionode-ncbi
+[^7]: https://cran.r-project.org/web/packages/rentrez/index.html
+[^8]: https://www.ncbi.nlm.nih.gov/gquery/?term=
+[^9]: http://www.w3schools.com/xml/xml_xpath.asp
+[^10]: https://en.wikipedia.org/wiki/POST_(HTTP)
+[^11]: https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html
