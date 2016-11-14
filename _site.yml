@@ -42,16 +42,16 @@ navbar:
           href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
           href: r-survival.html
-#        - text: "Introduction to Bioconductor"
-#          href:
         - text: "Harvesting Data from NCBI"
           href: r-ncbi.html
         - text: "----"
         - text: "--- NGS DATA ANALYSIS ---"
-        - text: "RNA-seq: airway"
+        - text: "RNA-seq (airway data)"
           href: r-rnaseq-airway.html
-#        - text: "ChIP-seq data analysis"
-#          href:
+        - text: "----"
+        - text: "--- FUTURE COURSES ---"
+        - text: "ChIP-seq data analysis"
+        - text: "Introduction to Bioconductor"
 #        - text: "----"
 #        - text: "--- OTHER CLASSES ---"
 #        - text: "Data Cleaning w/ OpenRefine"
