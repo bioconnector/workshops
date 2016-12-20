@@ -16,7 +16,7 @@ navbar:
     - text: "Data"
       icon: fa-download
       href: "data.html"
-    - text: "Lessons"
+    - text: "Workshops"
       icon: fa-book
       menu:
         - text: "--- R ---"
