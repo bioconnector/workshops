@@ -1,13 +1,19 @@
 ---
-title: "Biomedical Data Science Workshops"
+title: "Bioconnector Workshops & Courses"
 output: 
   html_document:
     toc: false
 ---
 
+### Workshops
+
 These workshops introduce methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data using the R statistical computing environment. Visit [bioconnector.virginia.edu](https://www.bioconnector.virginia.edu/workshops-and-events) to register.
 
 **_IMPORTANT_: [Click here for instructions on setting up your computer for any of these workshops](setup.html).** Each workshop involves lots of hands-on practice coding, and you'll need to download and install some free software **_prior to our first class_**. This may take up to an hour or so, and please do not hesitate to [email us](people.html) _prior to the workshop_ if you are having difficulty.
+
+### BIMS 8382
+
+[BIMS 8382](bims8382.html) is a graduate class built in part on the workshop material here. Please see the [BIMS 8382 syllabus](bims8382.html) for more information.
 
 ----
 
