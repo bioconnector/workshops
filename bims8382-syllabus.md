@@ -1,0 +1,92 @@
+---
+title: "BIMS8382"
+---
+
+## General Information
+
+**Lead Instructor:** Stephen Turner, PhD
+
+**Co-instructor:** VP Nagraj
+
+**When:**  
+Spring 2017 Module S1  
+Feb 13 - Mar 27, 2016  
+2:00pm - 5:00pm  
+
+**Where:** BIMS Education Center (McKim Hall)
+
+## Course Schedule
+
+### Week 1: Intro to R
+
+This novice-level introduction is directed toward life scientists with little to no experience with statistical computing or bioinformatics. This interactive introduction will introduce the R statistical computing environment. The first part of this workshop will demonstrate very basic functionality in R, including functions, functions, vectors, creating variables, getting help, filtering, data frames, plotting, and reading/writing files.
+
+### Week 2: Advanced Data Manipulation with R
+
+Data analysis involves a large amount of janitor work -- munging and cleaning data to facilitate downstream data analysis. This session assumes a basic familiarity with R and covers tools and techniques for advanced data manipulation. It will cover data cleaning and "tidy data," and will introduce R packages that enable data manipulation, analysis, and visualization using split-apply-combine strategies. Upon completing this lesson, students will be able to use the _dplyr_ package in R to effectively manipulate and conditionally compute summary statistics over subsets of a "big" dataset containing many observations.
+
+### Week 3: Advanced Data Visualization with R and ggplot2
+
+This session will cover fundamental concepts for creating effective data visualization and will introduce tools and techniques for visualizing large, high-dimensional data using R. We will review fundamental concepts for visually displaying quantitative information, such as using series of small multiples, avoiding "chart-junk," and maximizing the data-ink ratio. After briefly covering data visualization using base R graphics, we will introduce the _ggplot2_ package for advanced high-dimensional visualization. We will cover the grammar of graphics (geoms, aesthetics, stats, and faceting), and using ggplot2 to create plots layer-by-layer. Upon completing this lesson, students will be able to use R to explore a high-dimensional dataset by faceting and scaling arbitrarily complex plots in small multiples.
+
+### Week 4: Reproducible Research & Dynamic Documents
+
+Contemporary life sciences research is plagued by reproducibility issues. This session covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this session we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents.
+
+### Week 5: Essential Statistics
+
+This session will provide hands-on instruction and exercises covering basic statistical analysis in R. This will cover descriptive statistics, t-tests, linear models, chi-square, clustering, dimensionality reduction, and resampling strategies. We will also cover methods for "tidying" model results for downstream visualization and summarization.
+
+### Week 6: Survival Analysis
+
+This session will provide hands-on instruction and exercises covering survival analysis using R. The data for parts of this session will come from The Cancer Genome Atlas (TCGA), where we will also cover programmatic access to TCGA through Bioconductor.
+
+### Week 7: Introduction to RNA-seq Data Analysis
+
+This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results.
+
+
+## FAQ
+
+### What's this class all about? 
+
+This class introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, essential statistics and survival analysis, and culminates with analysis of data from a real RNA-seq experiment using R and Bioconductor packages.
+
+### What are the pre-requisites?
+
+_There are none!_ This class doesn't assume any knowledge of programming or using a command-line interface, but if you've ever had any experience here, the content won't come as so much of a shock. But _don't panic._ Command-line interfaces and programming languages like R are _incredibly powerful_ and will be utterly transformative on your research. There's a learning curve, and it's near-vertical in the beginning, but it's surmountable and the payoff is worth it! Some general knowledge of statistics and study design is helpful, but isn't strictly required.
+
+### Can I audit?
+
+Yes! However, **_you will be expected to attend every class meeting, participate in coding exercises during class, and complete any and all assignments_**, just as if you are taking the course for credit. 
+
+Please [email Stephen Turner](people.html) if you'd like to audit. Instructions for signing up to audit will be forthcoming.
+
+<!-- 
+**_UPDATE Feb 9 2016_**: The class is currently full.
+
+[Click here to register to request to audit](https://docs.google.com/forms/d/1tHO-X4DupnHgIEsUei0K3kX5_UfLRK-y2KfxmxC6Ux0/viewform). The first day of the course is Monday, Feb 15, 2016. One week prior to the course starting, I will allow anyone who's requested to audit into the course, giving priority to people registering for credit. There are still plenty of seats open, so good chances you'll be able to get in.
+-->
+
+### Where do I get additional help?
+
+Glad you asked! [See here](help.html).
+
+### Do I need a laptop?
+
+**YES.** You must have access to a computer on which you can install software. The class will be a mix of lecture, discussion, but primarily live coding. You must bring your laptop to the course every day. Bring your charging cable also.
+
+## Software requirements
+
+All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have time for troubleshooting software installation issues during class. See the [setup instructions](setup.html), and follow all instructions under the major headings for:
+
+- [R](setup.html#r)
+- [R+RStudio+Packages](setup.html#r+rstudio+packages)
+- [Bioconductor](setup.html#bioconductor)
+- [RMarkdown](setup.html#rmarkdown)
+- [RNA-seq](setup.html#rna-seq)
+- [Survival Analysis](setup.html#survival_analysis)
+- [Getting data](setup.html#get_data)
+
+You'll need to download _all_ the data. As [described in the setup page](setup.html#get_data), navigate to the [data page](data.html) and download _all_ the relevant datasets, saving them to a folder that's easy to find.
+
