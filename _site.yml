@@ -78,7 +78,7 @@ navbar:
       menu:
         - text: "Syllabus"
           icon: fa-graduation-cap
-          href: bims8382-syllabus.html
+          href: bims8382.html
         - text: "----"
         - text: "--- Lessons ---"
         - text: "R Basics"
