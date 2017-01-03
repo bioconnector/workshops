@@ -1,6 +1,5 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Advanced Data Manipulation Homework"
 ---
 
 (_Refer back to the [Advanced Data Manipulation lesson](r-dplyr-yeast.html))._
