@@ -99,6 +99,16 @@ navbar:
           href: r-survival.html
         - text: "RNA-Seq Data Analysis"
           href: r-rnaseq-airway.html
+        - text: "----"
+        - text: "--- Homework ---"
+        - text: "Data Manipulation"
+          href: r-dplyr-homework.html
+        - text: "Data Visualization"
+          href: r-dataviz-homework.html
+        - text: "Reproducible Research & RMarkdown"
+          href: r-rmarkdown-homework.html
+        - text: "Essential Statistics"
+          href:
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
