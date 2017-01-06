@@ -108,7 +108,7 @@ navbar:
         - text: "Reproducible Research & RMarkdown"
           href: r-rmarkdown-homework.html
         - text: "Essential Statistics"
-          href:
+          href: r-stat-homework.html
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
