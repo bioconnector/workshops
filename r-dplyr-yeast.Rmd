@@ -690,5 +690,8 @@ gm1992 %>%
 10) **_Bonus!_** Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 
 ```{r problem9}
-gm %>% filter(pop < lag(pop) & lifeExp > lag(lifeExp))
+gm %>% 
+  arrange(country, year) %>% 
+  group_by(country) %>% 
+  filter(pop < lag(pop) & lifeExp > lag(lifeExp))
 ```
