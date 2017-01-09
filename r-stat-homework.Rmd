@@ -13,18 +13,16 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = TRUE)
 > 
 - descriptive statistics
 - hypothesis testing
-- single linear regression
-- multiple linear regression
-- model summaries
-- power calculations
-
-## About the Data
+- normality assumptions
+- cross tabulation
+- logistic regression
+- interpreting model summaries
 
 The datasets we'll be using for this assignment are both curated and hosted by the [Vanderbilt Department of Biostatistics](http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets).
 
 ## Stress Tests
 
-Dobutamine is a drug is used during echocardiograms (aka stress tests), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a [study published in 1999](https://www.ncbi.nlm.nih.gov/pubmed/10080472).
+Dobutamine is a drug that is used during echocardiograms (aka stress tests), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a [study published in 1999](https://www.ncbi.nlm.nih.gov/pubmed/10080472).
 
 We'll be using the data behind this paper to answer the questions that follow. 
 
@@ -34,7 +32,7 @@ Use the following to read and store the data:
 stress <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.csv")
 ```
 
-Note that in addition measuring Dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced a cardiac event. 
+Note that in addition measuring Dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.
 
 *Before answering the questions, make sure to review the data dictionary*: 
 
@@ -61,11 +59,8 @@ library(ggplot2)
 ggplot(stress, aes(dpmaxdo)) +
   geom_histogram()
 ```
-```{r}
 
-```
-
-4. The results above indicate that the distribution is normal, with the except of a few outliers at the right tail. With the normality assumption satisfied, perform a two sample t-test to compare the mean double product max heart values between those who did or did not experience any cardiac event (*any.event*). Assume equal variances between these groups.
+4. The plot above indicates that the distribution is approximately normal, with the except of a few outliers at the right tail. With the normality assumption satisfied, perform a two sample t-test to compare the mean double product max heart values between those who did or did not experience any cardiac event (*any.event*). Assume equal variances between these groups.
 
 ```{r}
 t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)
@@ -84,22 +79,29 @@ xt <- xtabs(~ hxofCig + any.event, data = stress)
 addmargins(xt)
 ```
 
-8. Explore that same table visually with a mosaic plot.
+8. Create a mosaic plot to explore the tabulated counts visually.
 
 ```{r}
 mosaicplot(xt)
 ```
 
-9. Now using a chi-squared test for the independence of smoking history and cardiac event. While doing so, load the **broom** package and "tidy" the model output.
+9. Now use a chi-squared test for the independence of smoking history and cardiac event.
+
+```{r}
+chisq.test(xt)
+```
+
+10. Load the **broom** package and "tidy" the model output above.
 
 ```{r}
 library(broom)
 tidy(chisq.test(xt))
 ```
 
+
 ## Muscular Dystrophy Genetics
 
-The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specifgic kind of muscular dystrophy (DMD). The data were analyzed and results reported in a [1985 paper](https://www.ncbi.nlm.nih.gov/pubmed/7137219). In particular, the authors were interested in the capability of values for creatine kinase (*ck*), hemopexin (*h*), pyruvate kinase (*pk*) and lactate dehydroginase (*ld*) markers as predictors for status of a woman as being a carrier for DMD (*carrier*). 
+The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a [1985 paper](https://www.ncbi.nlm.nih.gov/pubmed/7137219). In particular, the authors were interested in the capability of values for creatine kinase (*ck*), hemopexin (*h*), pyruvate kinase (*pk*) and lactate dehydroginase (*ld*) markers as predictors for status of a woman as being a carrier for DMD (*carrier*). 
 
 Use the following to read and store the data:
 
@@ -146,7 +148,7 @@ fit <- glm(carrier ~ log(ck) + h + pk + ld, data = dmd, family= "binomial")
 summary(fit)
 ```
 
-6. The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Try exponentiating the estimate values to make this more interpretable.
+6. The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Exponentiate the estimates to make them more interpretable (i.e. the odds).
 
 ```{r}
 exp(fit$coefficients)
