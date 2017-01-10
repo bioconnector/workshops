@@ -147,7 +147,7 @@ gm %>%
 
 9) Subset **gm** to only include observations from 1992 and store the results as **gm1992**. What kind of object is this?
 
-```{r problem10}
+```{r problem9}
 gm1992 <-
     gm %>%
     filter(year == 1992)
@@ -159,6 +159,9 @@ gm1992 %>%
 
 10) **_Bonus!_** Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 
-```{r problem9}
-gm %>% filter(pop < lag(pop) & lifeExp > lag(lifeExp))
+```{r problem10}
+gm %>% 
+  arrange(country, year) %>% 
+  group_by(country) %>% 
+  filter(pop < lag(pop) & lifeExp > lag(lifeExp))
 ```
