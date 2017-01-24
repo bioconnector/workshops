@@ -38,6 +38,8 @@ Note that in addition measuring Dobutamine dosages during each stress test, the 
 
 http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html
 
+*Note that the data were originally coded by the authors of the study but were then partially recoded when curated. Pay particular attention to the any.event variable (did the subject experience any cardiac event over 12 months following the stress test), which should be interpeted as 0=NO, 1=YES.*
+
 1. What is the highest maximum heart rate double product with Dobutamine (*dpmaxdo*)?
 
 ```{r}

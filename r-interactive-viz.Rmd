@@ -294,7 +294,7 @@ hchart(kubrick$budget)
 Much like the base `plot()` function, `hchart()` can produce a variety of different kinds of plots depending on the data inputs and plot type specification. The following will produce a scatterplot of year versus rating for the Kubrick movies.
 
 ```{r}
-hchart(kubrick, "scatter", x = year, y = rating)
+hchart(kubrick, "scatter",  hcaes(x = year, y = rating))
 ```
 
 Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. While `hchart()` provides a quick way to implement this interactivity, to fully take advantage of Highhcarts features it may be necessary to use a different approach.
