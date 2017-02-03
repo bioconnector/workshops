@@ -1,0 +1,9 @@
+{
+	"n_targets": 176241,
+	"n_bootstraps": 0,
+	"n_processed": 34298260,
+	"kallisto_version": "0.43.0",
+	"index_version": 10,
+	"start_time": "Tue Jan 31 09:17:58 2017",
+	"call": "kallisto quant -i /home/sdt5z/genomes/ensembl-grch38/index-kallisto/INDEX -o SRR1039517 --plaintext -t 50 SRR1039517_1.fastq.gz SRR1039517_2.fastq.gz"
+}
