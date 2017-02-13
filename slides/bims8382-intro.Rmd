@@ -4,7 +4,7 @@ author: "<small>Spring 2016, Feb 13-Mar27<br>Mondays, 2:00-5:00pm</small>"
 date: "_Please sign in and pick up handouts in the back._"
 output: 
   slidy_presentation:
-    footer: "bioconnector.org | Survival Analysis"
+    footer: "bioconnector.org | BIMS 8382"
     font_adjustment: +2
 
 ---
