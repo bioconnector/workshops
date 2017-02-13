@@ -1,7 +1,7 @@
 ---
 title: "**BIMS8382**"
-author: "<small>Spring 2016, Feb 13-Mar27<br>Mondays, 2:00-5:00pm</small>"
-date: "_Please sign in and pick up handouts in the back._"
+author: "<small>Spring 2017, Feb 13 - Mar27<br>Mondays, 2:00-5:00pm</small>"
+date: "_Please sign in and let me know if you had installation issues._"
 output: 
   slidy_presentation:
     footer: "bioconnector.org | BIMS 8382"
