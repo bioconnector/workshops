@@ -162,7 +162,7 @@ summary(fit)
 6. The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Exponentiate the estimates to make them more interpretable (i.e. the odds ratio for each 1-unit increase in the predictor variable).
 
 ```{r}
-exp(fit$coefficients)
+round(exp(fit$coefficients), 4)
 ```
 
 
