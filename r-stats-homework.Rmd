@@ -50,7 +50,7 @@ max(stress$dpmaxdo)
 
 2. What is the cutoff for the 99th percentile for the measurment above? 
 
-**HINT**: The `quantile()` function defaults to 0, 0.25, .5, .75 and 1 but can accept arbitrary threshholds.
+**HINT**: The `quantile()` function defaults to 0, 0.25, .5, .75 and 1 but can accept arbitrary threshholds. See `?quantile` and look for the `probs` argument.
 
 ```{r}
 quantile(stress$dpmaxdo, probs = 0.99)
