@@ -29,16 +29,18 @@ The data we're going to look at is cleaned up version of a gene expression datas
 You can download the cleaned up version of the data at [the link above](data.html). The file is called [**brauer2007_tidy.csv**](data/brauer2007_tidy.csv). Load the **ggplot2**, **dplyr**, **readr** packages, and read the tidy _Brauer_ data into R using the `read_csv()` function (_note, **not** `read.csv()`_). Assign the data to an object called `ydat`.
 
 ```{r loadhwdata, echo=TRUE, eval=TRUE}
-library(ggplot2)
-library(dplyr)
-library(readr)
+library(tidyverse)
+# or ...
+# library(ggplot2)
+# library(dplyr)
+# library(readr)
 library(ggthemes)
 
-# Read data from file
-ydat <- read_csv("data/brauer2007_tidy.csv")
+# Preferably read data from the web
+ydat <- read_csv("http://bioconnector.org/workshops/data/brauer2007_tidy.csv")
 
-# Alternatively read data from web 
-# ydat <- read_csv("http://bioconnector.org/workshops/data/brauer2007_tidy.csv")
+# Alternatively read data from file
+# ydat <- read_csv("data/brauer2007_tidy.csv")
 
 # Display the data
 ydat
@@ -102,7 +104,6 @@ ydat %>%
     arrange(desc(meanexp)) %>%
     filter(row_number() == 1 | row_number() == n())
 ```
-
 
 The output tells us that the gene with the highest mean expression is *HXT3*, while the gene with the lowest mean expression is *HXT6*.
 
