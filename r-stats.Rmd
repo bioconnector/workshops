@@ -131,7 +131,7 @@ Alternatively, you _could_ still read in the data with **readr**'s `read_csv()`,
 
 ```{r loadreadr, eval=FALSE}
 library(readr)
-nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, factor)
+nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, as.factor)
 nh
 ```
 
