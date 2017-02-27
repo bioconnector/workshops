@@ -228,6 +228,58 @@ yjoined
 glimpse(yjoined)
 ```
 
-Looks like that did it! There are many different kinds of two-table verbs/joins in dplyr. In this example, every systematic name in `ynogo` had a corresponding entry in `sn2go`, but if this weren't the case, those un-annotated genes would have been removed entirely by the `inner_join`. A `left_join` would have returned all the rows in `ynogo`, but would have filled in `bp` and `mf` with missing values (`NA`) when there was no corresponding entry. See also: `right_join`, `semi_join`, and `anti_join`.
+There are many different kinds of two-table verbs/joins in dplyr. In this example, every systematic name in `ynogo` had a corresponding entry in `sn2go`, but if this weren't the case, those un-annotated genes would have been removed entirely by the `inner_join`. A `left_join` would have returned all the rows in `ynogo`, but would have filled in `bp` and `mf` with missing values (`NA`) when there was no corresponding entry. See also: `right_join`, `semi_join`, and `anti_join`.
 
+### Finishing touches
 
+We're almost there but we have an obvious discrepancy in the number of rows between `yjoined` and `ydat`.
+
+```{r rowcheck}
+nrow(yjoined)
+nrow(ydat)
+```
+
+Before we can figure out what rows are different, we need to make sure all of the columns are the same class and do something more miscellaneous cleanup.
+
+In particular:
+
+1. Convert rate to a numeric column
+2. Make sure `NA` values are coded properly
+3. Create (and merge) values to convert "G" to "Glucose", "L" to "Leucine", etc.
+4. Rename and reorder columns
+
+The code below implements those operations on `yjoined`.
+
+```{r misctidy}
+nutrientlookup <-
+  data_frame(nutrient = c("G", "L", "N", "P", "S", "U"), nutrientname = c("Glucose", "Leucine", "Ammonia","Phosphate", "Sulfate","Uracil"))
+
+yjoined <-
+  yjoined %>%
+  mutate(rate = as.numeric(rate)) %>%
+  mutate(symbol = ifelse(symbol == "NA", NA, symbol)) %>%
+  left_join(nutrientlookup) %>%
+  select(-nutrient) %>%
+  select(symbol:systematic_name, nutrient = nutrientname, rate:mf)
+```
+
+Now we can determine what rows are different between `yjoined` and `ydat` using `anti_join`, which will return all of the rows that *do not* match.
+
+```{r antijoin}
+anti_join(yjoined, ydat) 
+```
+
+Hmmmm ... so `yjoined` has some rows that have missing (`NA`) expression values. Let's try removing those and then comparing the data frame contents one more time.
+
+```{r rowcheck2}
+yjoined <-
+  yjoined %>%
+  filter(!is.na(expression))
+
+nrow(yjoined)
+nrow(ydat)
+
+all.equal(ydat, yjoined)
+```
+
+Looks like that did it! 
