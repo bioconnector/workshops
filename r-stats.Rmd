@@ -458,6 +458,8 @@ ggplot(nha, aes(SmokingStatus, BMI)) + geom_boxplot() + theme_classic()
 
 ### Linear regression
 
+[_(See slides)_](slides/r-stats.html#(7))
+
 Linear models are mathematical representations of the process that (_we think_) gave rise to our data. The model seeks to explain the relationship between a variable of interest, our _Y_, _outcome_, _response_, or _dependent_ variable, and one or more _X_, _predictor_, or _independent_ variables. Previously we talked about t-tests or ANOVA in the context of a simple linear regression model with only a single predictor variable, $X$:
 
 $$Y = \beta_{0} +  \beta_{1}X$$
@@ -497,6 +499,8 @@ ggplot(nha, aes(x=Height, y=Weight)) +
 ```
 
 ### Multiple regression
+
+[_(See slides)_](slides/r-stats.html#(8))
 
 Finally, let's do a multiple linear regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let's look at the effect of physical activity on testosterone levels. Let's do this with a t-test and linear regression, showing that you get the same results.
 
@@ -725,6 +729,8 @@ summary(glm(Diabetes~PhysActive+Gender+Age+Weight+Income, data=nha, family="bino
 
 ## Power & sample size
 
+[_(See slides)_](slides/r-stats.html#(10))
+
 This is a necessarily short introduction to the concept of power and sample size calculations. [Statistical power](https://en.wikipedia.org/wiki/Statistical_power), also sometimes called sensitivity, is defined as the probability that your test correctly rejects the null hypothesis when the alternative hypothesis is true. That is, if there really is an effect (difference in means, association between categorical variables, etc.), how likely are you to be able to _detect_ that effect at a given statistical significance level, given certain assumptions. 
 Generally there are a few moving pieces, and if you know all but one of them, you can calculate what that last one is. 
 
@@ -802,6 +808,8 @@ power.prop.test(power=.80, p1=.05, p2=.055, sig.level=.001)$n
 
 
 ## Tidying models
+
+[_(See slides)_](slides/r-stats.html#(11))
 
 We spent a lot of time in [other lessons](r-tidy.html) on _tidy **data**_, where each column is a variable and each row is an observation. Tidy data is easy to filter observations based on values in a column (e.g., we could get just adult males with `filter(nha, Gender=="male" & Age>=18)`, and easy to select particular variables/features of interest by their column name. 
 
