@@ -912,3 +912,6 @@ tidy(glmfit) %>%
 
 Check out some of the other [**broom** vignettes on CRAN](https://cran.r-project.org/web/packages/broom/index.html), and also check out the [**biobroom** package](http://bioconductor.org/packages/release/bioc/html/biobroom.html) on bioconductor for turning bioconductor objects and analytical results into tidy data frames.
 
+## Homework
+
+[Try this homework assignment](r-stats-homework.html).
