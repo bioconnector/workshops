@@ -106,7 +106,7 @@ tidy(chisq.test(xt))
 
 ## Muscular Dystrophy Genetics
 
-The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a [1985 paper](https://www.ncbi.nlm.nih.gov/pubmed/7137219). In particular, the authors were interested in the capability of values for creatine kinase (`ck`), hemopexin (`h`), pyruvate kinase (`pk`) and lactate dehydroginase (`ld`) markers as predictors for status of a woman as being a carrier for DMD (`carrier`). 
+The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a [1985 paper](https://www.ncbi.nlm.nih.gov/pubmed/7137219). In particular, the authors were interested in whether a woman's DMD carrier status (`carrier`) was related to the blood serum markers creatine kinase (`ck`), hemopexin (`h`), pyruvate kinase (`pk`) and lactate dehydrogenase (`ld`). 
 
 Use the following to read and store the data:
 
