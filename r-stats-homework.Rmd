@@ -11,20 +11,20 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = TRUE)
 ## Key Concepts
 
 > 
-- descriptive statistics
-- hypothesis testing
-- normality assumptions
-- cross tabulation
-- logistic regression
-- interpreting model summaries
+- Descriptive statistics
+- Hypothesis testing
+- Normality assumptions
+- Cross tabulation
+- Logistic regression
+- Interpreting model summaries
 
 The datasets we'll be using for this assignment are both curated and hosted by the [Vanderbilt Department of Biostatistics](http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets).
 
 ## Stress Tests
 
-Dobutamine is a drug that is used during echocardiograms (aka stress tests), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a [study published in 1999](https://www.ncbi.nlm.nih.gov/pubmed/10080472).
+Dobutamine is a drug that is used during echocardiograms (aka "stress tests"), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a [study published in 1999](https://www.ncbi.nlm.nih.gov/pubmed/10080472).
 
-We'll be using the data behind this paper to answer the questions that follow. 
+We'll be using the data behind this paper to answer the questions that follow. Use the following to read and store the data directly from the web. Feel free to load dplyr+readr or tidyverse packages and use the `read_csv()` function instead of base R's `read.csv()`.
 
 Use the following to read and store the data:
 
