@@ -26,10 +26,12 @@ Dobutamine is a drug that is used during echocardiograms (aka "stress tests"), w
 
 We'll be using the data behind this paper to answer the questions that follow. Use the following to read and store the data directly from the web. Feel free to load dplyr+readr or tidyverse packages and use the `read_csv()` function instead of base R's `read.csv()`.
 
-Use the following to read and store the data:
-
-```{r, echo = TRUE}
+```{r showReadFromWeb, echo = TRUE, eval=FALSE}
 stress <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.csv")
+```
+
+```{r, echo = FALSE, eval=TRUE}
+stress <- read.csv("data/stressEcho.csv")
 ```
 
 Note that in addition measuring Dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.
