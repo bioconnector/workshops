@@ -424,6 +424,12 @@ The F-test on the ANOVA table tells us that there _is_ a significant difference 
 nha$SmokingStatus <- factor(nha$SmokingStatus, 
                             levels=c("Never", "Former", "Current"))
 
+# Or, using forcats in a tidy way
+# library(forcats)
+# nha %>% 
+#   mutate(SmokingStatus = fct_relevel(SmokingStatus, 
+#                                      "Never", "Former", "Current"))
+
 # Re-fit the model
 fit <- lm(BMI~SmokingStatus, data=nha)
 
