@@ -258,11 +258,11 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 
 ```{r histograms}
 library(ggplot2)
-ggplot(nh, aes(BMI)) + geom_histogram()
-ggplot(nh, aes(Weight)) + geom_histogram()
+ggplot(nh, aes(BMI)) + geom_histogram(bins=30)
+ggplot(nh, aes(Weight)) + geom_histogram(bins=30)
 # In pounds, more bins
 ggplot(nh, aes(Weight*2.2)) + geom_histogram(bins=80)
-ggplot(nh, aes(Age)) + geom_histogram()
+ggplot(nh, aes(Age)) + geom_histogram(bins=30)
 ```
 
 
