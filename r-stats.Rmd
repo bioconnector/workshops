@@ -131,7 +131,7 @@ Alternatively, you _could_ still read in the data with **readr**'s `read_csv()`,
 
 ```{r loadreadr, eval=FALSE}
 library(readr)
-nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, factor)
+nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, as.factor)
 nh
 ```
 
@@ -258,11 +258,11 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 
 ```{r histograms}
 library(ggplot2)
-ggplot(nh, aes(BMI)) + geom_histogram()
-ggplot(nh, aes(Weight)) + geom_histogram()
+ggplot(nh, aes(BMI)) + geom_histogram(bins=30)
+ggplot(nh, aes(Weight)) + geom_histogram(bins=30)
 # In pounds, more bins
 ggplot(nh, aes(Weight*2.2)) + geom_histogram(bins=80)
-ggplot(nh, aes(Age)) + geom_histogram()
+ggplot(nh, aes(Age)) + geom_histogram(bins=30)
 ```
 
 
@@ -360,6 +360,8 @@ The results are still significant, but much less than the p-value reported for t
 
 ### Linear models
 
+[_(See slides)_](slides/r-stats.html#(6))
+
 > Analysis of variance and linear modeling are complex topics that deserve an entire semester dedicated to theory, design, and interpretation. A very good resource is [_An Introduction to Statistical Learning: with Applications in R_](https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370/ref=sr_1_1?ie=UTF8&qid=1473087847&sr=8-1&keywords=introduction+statistical+learning&tag=gettgenedone-20) by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The [PDF](http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf) of the book and all the R code used throughout are [available **free** on the author's website](http://www-bcf.usc.edu/~gareth/ISL/). What follows is a necessary over-simplification with more focus on implementation, and less on theory and design.
 
 Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you're trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). The distinction is largely semantic -- with a linear model you're asking, "do levels of a categorical variable affect the response?" where with ANOVA or t-tests you're asking, "does the mean response differ between levels of a categorical variable?"
@@ -393,7 +395,7 @@ t.test(BMI~RelationshipStatus, data=nha, var.equal=TRUE)
 
 1. The p-values from all three tests (t-test, ANOVA, and linear regression) are all identical (p=0.1256). This is because they're all identical: a t-test is a specific case of ANOVA, which is a specific case of linear regression. There may be some rounding error, but we'll talk about extracting the exact values from a model object later on.
 1. The test statistics are all related. The _t_ statistic from the t-test is **1.532**, which is the same as the t-statistic from the linear regression. If you square that, you get **2.347**, the _F_ statistic from the ANOVA. 
-1. The `t.test()` output shows you the means for the two groups, Committed and Single. Just displaying the `fit` object itself or running `summary(fit)` shows you the coefficients for a linear model. Here, the model assumes the "baseline" RelationshipStatus level is _Committed_, and that the _intercept_ in a regression model (e.g., $\beta_{0}$ in the model $Y = \beta_{0} +  \beta_{1}X$) is the mean of the baseline group. Being _Single_ results in an increase in BMI of 0.3413. This is the $\beta_{1}$ coefficient in the model. You can easily change the ordering of the levels. See the help for `?factor`, and check out the new [**forcats** package](https://hadley.github.io/forcats/), which provides tools **for** manipulating **cat**egorical variables.
+1. The `t.test()` output shows you the means for the two groups, Committed and Single. Just displaying the `fit` object itself or running `summary(fit)` shows you the coefficients for a linear model. Here, the model assumes the "baseline" RelationshipStatus level is _Committed_, and that the _intercept_ in a regression model (e.g., $\beta_{0}$ in the model $Y = \beta_{0} +  \beta_{1}X$) is the mean of the baseline group. Being _Single_ results in an increase in BMI of 0.3413. This is the $\beta_{1}$ coefficient in the model. You can easily change the ordering of the levels. See the help for `?factor`, and check out the new [**forcats** package](http://forcats.tidyverse.org/), which provides tools **for** manipulating **cat**egorical variables.
 
 ```{r}
 # P-value computed on a t-statistic with 3552 degrees of freedom

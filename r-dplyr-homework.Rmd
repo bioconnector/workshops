@@ -28,24 +28,24 @@ We're going to work with a different dataset for the homework here. It's a [clea
 
 Load the **dplyr** and **readr** packages, and read the gapminder data into R using the `read_csv()` function (n.b. `read_csv()` is _not_ the same as `read.csv()`). Assign the data to an object called `gm`.
 
-<!-- In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not. -->
+In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not.
 
-```{r loaddata, echo=TRUE, eval=TRUE}
+```{r loaddata, echo=TRUE, eval=FALSE}
 library(dplyr)
 library(readr)
 
 # Preferably: read data from web
-gm <- read_csv("data/gapminder.csv")
+gm <- read_csv("http://bioconnector.org/workshops/data/gapminder.csv")
 
 # Alternatively read from file:
-# gm <- read_csv("http://bioconnector.org/workshops/data/gapminder.csv")
+# gm <- read_csv("data/gapminder.csv")
 
 # Display the data
 gm
 ```
 
 
-```{r loaddatatrue, eval=FALSE, include=FALSE}
+```{r loaddatatrue, eval=TRUE, include=FALSE}
 library(dplyr)
 library(readr)
 gm <- read_csv("data/gapminder.csv")

@@ -1,7 +1,7 @@
 ---
 title: "Essential Statistics with R"
 author: "Sign in and pick up handouts in the back"
-date: "`r format(Sys.time(), '%m/%d/%Y')`"
+#date: "`r format(Sys.time(), '%m/%d/%Y')`"
 output: 
   slidy_presentation:
     footer: "bioconnector.org | Essential Statistics with R"
@@ -43,12 +43,12 @@ knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
 
 - Data
 - Setup instructions
-- Lessons dropdown: _check back immediately after course_
+- Lessons dropdown: all course material & link to HW/exercises
 - **`?`** dropdown: FAQs, resources, etc.
 
 ## Getting started
 
-Go to **[bioconnector.org](http://bioconnector.org)**. Hit the data link. Download **`nhanes.csv`** and **`nhanes_dd.csv`**. Save them both somewhere on your computer you can easily find. E.g., create a new folder on your desktop called **`rstats`** and save it there.
+Go to **[bioconnector.org](http://bioconnector.org)**. Hit the **data** link. Download **`nhanes.csv`** and **`nhanes_dd.csv`**. Save them both somewhere on your computer you can easily find. E.g., create a new folder on your desktop called **`rstats`** and save it there.
 
 Open RStudio. **File** -- **New file** -- **R script**. Save this file as **`nhanes_analysis.R`** in the same **`rstats`** folder above.
 
