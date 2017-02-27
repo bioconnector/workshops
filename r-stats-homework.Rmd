@@ -122,12 +122,12 @@ For more information on the data set see:
 
 http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.html
 
-1. What is the average value for lactate dehydroginase?
+1. What is the average value for lactate dehydrogenase?
 ```{r}
 mean(dmd$ld, na.rm = TRUE)
 ```
 
-2. The four serum markers (creatine kinase, hemopexin, pyruvate kinase and lactate dehydroginase) are all predictors of interest in this case. Use **ggplot2** to create histograms to assess the normality of the distribution for each of these variables.
+2. The four serum markers (creatine kinase, hemopexin, pyruvate kinase and lactate dehydrogenase) are all predictors of interest in this case. Use **ggplot2** to create histograms to assess the normality of the distribution for each of these variables.
 
 **HINT**: The plot below uses `gather()` from **tidyr** to transform the data so all histograms can be rendered in a single "facet wrapped" plot. Feel free to give this a shot or create separate histograms for each variable. Either method is acceptable.
 
