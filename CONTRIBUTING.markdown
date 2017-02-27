@@ -79,7 +79,7 @@ install.packages("shiny")
 install.packages("shinythemes")
 install.packages("Tmisc")
 install.packages("rlist")
-install.pacakges("purrr")
+install.packages("purrr")
 install.packages("rentrez")
 install.packages("XML")
 
