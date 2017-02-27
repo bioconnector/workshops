@@ -110,8 +110,12 @@ The questions that follow are based on a data collected to examine several blood
 
 Use the following to read and store the data:
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, eval=FALSE}
 dmd <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.csv")
+```
+
+```{r, echo=FALSE, eval=TRUE}
+dmd <- read.csv("data/dmd.csv")
 ```
 
 For more information on the data set see: 
