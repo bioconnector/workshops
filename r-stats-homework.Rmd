@@ -70,7 +70,7 @@ ggplot(stress, aes(dpmaxdo)) +
 t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)
 ```
 
-5. What is the p-value for this test? Make sure this is accessed from the results (using the `$` operator) rather than simply re-typing the value.
+5. What is the p-value for this test? Make sure this is accessed from the results (using the `$` operator) rather than simply re-typing the value. Feel free to extract the p-value directly from the t-test, or first use **broom::tidy()** to tidy the model first.
 
 ```{r}
 t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)$p.value
