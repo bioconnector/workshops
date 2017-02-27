@@ -34,13 +34,13 @@ stress <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stre
 stress <- read.csv("data/stressEcho.csv")
 ```
 
-Note that in addition measuring Dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.
+Note that in addition measuring dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.
 
 *Before answering the questions, make sure to review the data dictionary*: 
 
 http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html
 
-*Note that the data were originally coded by the authors of the study but were then partially recoded when curated. Pay particular attention to the any.event variable (did the subject experience any cardiac event over 12 months following the stress test), which should be interpeted as 0=NO, 1=YES.*
+*Note that the data were originally coded by the authors of the study but were then partially recoded when curated. Pay particular attention to the `any.event` variable (did the subject experience any cardiac event over 12 months following the stress test), which should be interpeted as 0=NO, 1=YES. The top of the data dicionary makes this clear that all event variables are recoded such that 0=no and 1=yes, which is more conventional.*
 
 1. What is the highest maximum heart rate double product with Dobutamine (*dpmaxdo*)?
 
