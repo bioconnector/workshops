@@ -137,10 +137,10 @@ library(tidyr)
 library(dplyr)
 
 dmd %>%
-  gather(var, value,ck:ld) %>%
+  gather(marker, value,ck:ld) %>%
   ggplot(aes(value)) +
   geom_histogram(bins = 25) +
-  facet_wrap(~var, scales = "free")
+  facet_wrap(~marker, scales = "free")
 ```
 
 3. All of these columns have outliers and are (at least slightly) skewed. But `ck` seems to require the most attention. Try using a log transformation on that column and create another histogram.
@@ -159,7 +159,7 @@ fit <- glm(carrier ~ log(ck) + h + pk + ld, data = dmd, family= "binomial")
 summary(fit)
 ```
 
-6. The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Exponentiate the estimates to make them more interpretable (i.e. the odds).
+6. The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Exponentiate the estimates to make them more interpretable (i.e. the odds ratio for each 1-unit increase in the predictor variable).
 
 ```{r}
 exp(fit$coefficients)
