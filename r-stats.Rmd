@@ -500,8 +500,6 @@ ggplot(nha, aes(x=Height, y=Weight)) +
 
 ### Multiple regression
 
-[_(See slides)_](slides/r-stats.html#(8))
-
 Finally, let's do a multiple linear regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let's look at the effect of physical activity on testosterone levels. Let's do this with a t-test and linear regression, showing that you get the same results.
 
 ```{r}
@@ -649,6 +647,8 @@ assocplot(xt)
 
 
 ### Logistic regression
+
+[_(See slides)_](slides/r-stats.html#(8))
 
 What if we wanted to model the discrete outcome, e.g., whether someone is insured, against several other variables, similar to how we did with multiple linear regression? We can't use linear regression because the outcome isn't continuous -- it's binary, either _Yes_ or _No_. For this we'll use _logistic regression_ to model the _log odds_ of binary response. That is, instead of modeling the outcome variable, $Y$, directly against the inputs, we'll model the _log odds_ of the outcome variable.
 
