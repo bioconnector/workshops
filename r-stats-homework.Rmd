@@ -42,7 +42,7 @@ http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html
 
 *Note that the data were originally coded by the authors of the study but were then partially recoded when curated. Pay particular attention to the `any.event` variable (did the subject experience any cardiac event over 12 months following the stress test), which should be interpeted as 0=NO, 1=YES. The top of the data dicionary makes this clear that all event variables are recoded such that 0=no and 1=yes, which is more conventional.*
 
-1. What is the highest maximum heart rate double product with Dobutamine (*dpmaxdo*)?
+1. What is the highest maximum heart rate double product with Dobutamine (`dpmaxdo`)?
 
 ```{r}
 max(stress$dpmaxdo)
@@ -56,7 +56,7 @@ max(stress$dpmaxdo)
 quantile(stress$dpmaxdo, probs = 0.99)
 ```
 
-3. Use **ggplot2** to create a histogram showing the distribution of the *dpmaxdo* values.  
+3. Use **ggplot2** to create a histogram showing the distribution of the `dpmaxdo` values.  
 
 ```{r}
 library(ggplot2)
@@ -64,7 +64,7 @@ ggplot(stress, aes(dpmaxdo)) +
   geom_histogram()
 ```
 
-4. The plot above indicates that the distribution is approximately normal, with the except of a few outliers at the right tail. With the normality assumption satisfied, perform a two sample t-test to compare the mean double product max heart values between those who did or did not experience any cardiac event (*any.event*). Assume equal variances between these groups.
+4. The plot above indicates that the distribution is approximately normal, with the except of a few outliers at the right tail. With the normality assumption satisfied, perform a two sample t-test to compare the mean double product max heart values between those who did or did not experience any cardiac event (`any.event`). Assume equal variances between these groups.
 
 ```{r}
 t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)
@@ -76,7 +76,7 @@ t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)
 t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)$p.value
 ```
 
-7. The smoking history column (*hxofCig*) is represented categorically as "heavy", "moderate" and "non-smoker". Create a margin table showing the counts for individuals who either did or did not have any cardiac event by smoking status.
+7. The smoking history column (`hxofCig`) is represented categorically as "heavy", "moderate" and "non-smoker". Create a margin table showing the counts for individuals who either did or did not have any cardiac event by smoking status.
 
 ```{r}
 xt <- xtabs(~ hxofCig + any.event, data = stress)
@@ -105,7 +105,7 @@ tidy(chisq.test(xt))
 
 ## Muscular Dystrophy Genetics
 
-The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a [1985 paper](https://www.ncbi.nlm.nih.gov/pubmed/7137219). In particular, the authors were interested in the capability of values for creatine kinase (*ck*), hemopexin (*h*), pyruvate kinase (*pk*) and lactate dehydroginase (*ld*) markers as predictors for status of a woman as being a carrier for DMD (*carrier*). 
+The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a [1985 paper](https://www.ncbi.nlm.nih.gov/pubmed/7137219). In particular, the authors were interested in the capability of values for creatine kinase (`ck`), hemopexin (`h`), pyruvate kinase (`pk`) and lactate dehydroginase (`ld`) markers as predictors for status of a woman as being a carrier for DMD (`carrier`). 
 
 Use the following to read and store the data:
 
@@ -138,7 +138,7 @@ dmd %>%
   facet_wrap(~var, scales = "free")
 ```
 
-3. All of these columns have outliers and are (at least slightly) skewed. But *ck* seems to require the most attention. Try using a log transformation on that column and create another histogram.
+3. All of these columns have outliers and are (at least slightly) skewed. But `ck` seems to require the most attention. Try using a log transformation on that column and create another histogram.
 
 ```{r}
 dmd %>%
@@ -147,7 +147,7 @@ dmd %>%
   geom_histogram(bins = 25)
 ```
 
-5. Even when transformed, the cytokine kinase is a little skewed. Assuming we can tolerate this, let's try fitting a binary logistic regression model that predicts the mother's status as carrier based on the values of the four blood serum markers. Don't forget to use the log version of *ck*, and to use `summary()` on the model object to view the coefficients.
+5. Even when transformed, the cytokine kinase is a little skewed. Assuming we can tolerate this, let's try fitting a binary logistic regression model that predicts the mother's status as carrier based on the values of the four blood serum markers. Don't forget to use the log version of `ck`, and to use `summary()` on the model object to view the coefficients.
 
 ```{r}
 fit <- glm(carrier ~ log(ck) + h + pk + ld, data = dmd, family= "binomial")
