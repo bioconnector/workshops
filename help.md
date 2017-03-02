@@ -17,6 +17,7 @@ title: "Further Resources"
 - [Swirl](http://swirlstats.com/): An R package that teaches you R (_and statistics!_) from within R
 - [Jenny Bryan's Stat 545 "Data wrangling, exploration, and analysis with R" course material](https://stat545-ubc.github.io/): An excellent resource for learning R, dplyr, and ggplot2
 - [DataCamp's free introduction to R](https://www.datacamp.com/courses/free-introduction-to-r)
+- [More DataCamp courses](https://www.datacamp.com/courses) (UVA's education benefits will cover these!).
 - [RStudio's printable cheat sheets](https://www.rstudio.com/resources/cheatsheets/)
 - [Rseek](http://rseek.org/): A custom Google search for R-related sites
 - Bioconductor [vignettes](https://www.bioconductor.org/help/package-vignettes/), [workflows](https://www.bioconductor.org/help/workflows/), and [course/conference materials](https://www.bioconductor.org/help/course-materials/)
