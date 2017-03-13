@@ -11,7 +11,8 @@ _site/
 *_cache/
 *_files/
 
-# Rendered HTML slides
+# Rendered HTML slides and keynote sources
+slides/*.key
 slides/*.html
 !slides/index.html
 
