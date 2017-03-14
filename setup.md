@@ -161,12 +161,10 @@ biocLite("DESeq2")
 
 **Recommended reading** prior to class:
 
-1. Conesa et al. A survey of best practices for RNA-seq data analysis. [Genome Biology 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8).  
-    - _This is a good all-purpose review on RNA-seq analysis_.
-1. Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." [PLoS ONE 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625). 
-    - _The data we'll use comes from this publication_.
-1. Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." [F1000Research 4 (2015)](http://f1000research.com/articles/4-1521/v1). 
-    - _This paper describes more recently developed approaches for gene-level analysis using transcript-level quantification, which is probably more accurate than the approach we're using here_.
+1. [Conesa et al. A survey of best practices for RNA-seq data analysis. _Genome Biology_ 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8).
+1. [Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." _F1000Research_ 4 (2015)](https://f1000research.com/articles/4-1521/v2).
+1. Abstract and introduction sections of [Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." _PLoS ONE_ 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625).
+
 
 ## Survival Analysis
 
