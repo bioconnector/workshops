@@ -145,9 +145,11 @@ biocLite("DESeq2")
 
 **Download data we'll use in class.** Create a new folder somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. Download the 3 data files below, saving them to the new `bioconnector/data` folder you just made.
 
-1. Count matrix (i.e., `countData`): [airway_rawcounts.csv](data/airway_rawcounts.csv)
-1. Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
-1. Gene Annotation data: [annotables_grch37.csv](data/annotables_grch37.csv)
+- Length-scaled count matrix (i.e., `countData`): [airway_scaledcounts.csv](data/airway_scaledcounts.csv)
+- Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
+- Gene Annotation data: [annotables_grch38.csv](data/annotables_grch38.csv)
+
+
 
 **Prerequisites!** This is _not_ an introductory R class. This class assumes you're comfortable working in R, using ggplot2 for visualization, and using dplyr verbs and the **`%>%`** for chaining together multiple operations. Work through the workshop materials below if you need a refresher.
 
