@@ -522,6 +522,20 @@ BRCA.mRNA[1:5, 1:5]
 
 > **Extra credit assignment**: Take a look at the [advanced data manipulation](r-dplyr-yeast.html) and [tidy data](r-tidy.html) classes, and see if you can figure out how to join the gene expression data to the clinical data for any particular cancer type.
 
+```{r extraCreditTidy, eval=FALSE}
+# Take the mRNA data
+BRCA.mRNA %>% 
+  # then make it a tibble (nice printing while debugging)
+  tbl_df() %>% 
+  # then get just a few genes
+  select(bcr_patient_barcode, PAX8, GATA3, ESR1) %>% 
+  # then trim the barcode (see head(clin), and ?substr)
+  mutate(bcr_patient_barcode = substr(bcr_patient_barcode, 1, 12)) %>% 
+  # then join back to clinical data
+  inner_join(clin, by="bcr_patient_barcode")
+```
+
+
 Similar to how `survivalTCGA()` was a nice helper function to pull out survival information from multiple different clinical datasets, `expressionsTCGA()` can pull out specific gene expression measurements across different cancer types. See the help for `?expressionsTCGA`. Let's pull out data for PAX8, GATA-3, and the estrogen receptor genes from breast, ovarian, and endometrial cancer, and plot the expression of each with a box plot.
 
 ```{r include=FALSE}
@@ -540,6 +554,23 @@ ggplot(expr, aes(dataset, GATA3, fill=dataset)) + geom_boxplot()
 ggplot(expr, aes(dataset, ESR1, fill=dataset)) + geom_boxplot()
 ggplot(expr, aes(dataset, ESR1, fill=dataset)) + geom_violin()
 ```
+
+
+We could also use tidyr to do this all in one go.
+
+```{r include=FALSE}
+theme_set(theme_bw())
+```
+
+```{r tidyGeneExprBoxplots, eval=TRUE, fig.width=10}
+expr %>% 
+  tbl_df() %>% 
+  gather(gene, expression, PAX8, GATA3, ESR1) %>% 
+  ggplot(aes(dataset, expression, fill=dataset)) + 
+    geom_boxplot() + 
+    facet_wrap(~gene)
+```
+
 
 ### Exercise set `r .ex``r .ex=.ex+1`
 
