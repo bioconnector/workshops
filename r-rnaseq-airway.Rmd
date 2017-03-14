@@ -51,15 +51,15 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 
 
 
-This is an introduction to RNAseq analysis involving reading in count data from an RNAseq experiment, exploring the data using base R functions and then analysis with the DESeq2 package. This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html). See also the [_Bioconductor_ heading on the setup page](setup.html#bioconductor) -- you'll need a few additional packages that are available through Bioconductor, not CRAN (the installation process is slightly different).
+This is an introduction to RNAseq analysis involving reading in quantitated gene expression data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 package. This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html). See also the [_Bioconductor_ heading on the setup page](setup.html#bioconductor) -- you'll need a few additional packages that are available through Bioconductor, not CRAN (the installation process is slightly different).
 
 **Recommended reading prior to class:**
 
 1. [Conesa et al. A survey of best practices for RNA-seq data analysis. _Genome Biology_ 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8).
+1. [Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." _F1000Research_ 4 (2015)](https://f1000research.com/articles/4-1521/v2).
 1. Abstract and introduction sections of [Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." _PLoS ONE_ 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625).
-1. [Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." _F1000Research_ 4 (2015)](http://f1000research.com/articles/4-1521/v1).
 
-**Slides**: [click here](slides/r-rnaseq-airway.html).
+**Slides**: [click here](slides/r-rnaseq-airway.pdf).
 
 ## Review
 
@@ -67,15 +67,15 @@ This is an introduction to RNAseq analysis involving reading in count data from 
 
 - [R basics](r-basics.html)
 - [Data frames](r-dataframes.html)
-- [Manipulating data with dplyr and `%>%`](r-dplyr.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr-yeast.html)
 - [Tidy data & advanced manipulation](r-tidy.html)
 - [Data Visualization with ggplot2](r-viz-gapminder.html)
 
 ### Data needed
 
-- Count matrix (i.e., `countData`): [airway_rawcounts.csv](data/airway_rawcounts.csv)
+- Length-scaled count matrix (i.e., `countData`): [airway_scaledcounts.csv](data/airway_scaledcounts.csv)
 - Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
-- Gene Annotation data: [annotables_grch37.csv](data/annotables_grch37.csv)
+- Gene Annotation data: [annotables_grch38.csv](data/annotables_grch38.csv)
 
 ## Background
 
