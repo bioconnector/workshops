@@ -504,3 +504,15 @@ sessionInfo()
 ```
 
 ----
+
+```{r, include=FALSE}
+knitr::knit_exit()
+```
+
+
+## Pathway Analysis
+
+![](img/r-rnaseq-airway-ipa-enos-pathway.jpg)
+
+
+![](img/r-rnaseq-airway-ipa-inflam-network.jpg)
