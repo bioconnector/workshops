@@ -12,7 +12,7 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 
 
 ```{r makeData, include=FALSE, eval=FALSE}
-# # THIS CHUNK IS USED TO CREATE THE DATA THAT WILL BE USED FOR THE ANALYSIS.
+# # THIS CHUNK IS USED TO CREATE THE SIMPLE COUNT DATA. SEE KALLISTO FOLDER IN DEV FOR SCALED.
 # 
 # # Create the count and metadata -------------------------------------------
 # 
