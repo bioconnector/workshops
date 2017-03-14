@@ -407,6 +407,18 @@ ggsurvplot(survfit(Surv(time, status)~agecat, data=lung), pval=TRUE)
 
 Remember, the Cox regression analyzes the continuous variable over the whole range of its distribution, where the log-rank test on the Kaplan-Meier plot can change depending on how you categorize your continuous variable. They're answering a similar question in a different way: the regression model is asking, _"what is the effect of age on survival?"_, while the log-rank test and the KM plot is asking, _"are there differences in survival between those less than 70 and those greater than 70 years old?"_.
 
+_(New in survminer 0.2.4: the survminer package can now determine the optimal cutpoint for one or multiple continuous variables at once, using the `surv_cutpoint()` and `surv_categorize()` functions. Refer to [this blog post](http://www.sthda.com/english/wiki/survminer-0-2-4#determine-the-optimal-cutpoint-for-continuous-variables) for more information.)_
+
+```{r determineOptimalCutpoints, include=FALSE, eval=FALSE}
+# see http://www.sthda.com/english/wiki/survminer-0-2-4
+cutpoint <- surv_cutpoint(lung, time="time", event="status", variables="age")
+cutpoint
+plot(cutpoint)
+surv_categorize(cutpoint)
+fit <- survfit(Surv(time, status)~age, surv_categorize(cutpoint))
+ggsurvplot(fit, pval=TRUE)
+```
+
 
 ## TCGA
 
