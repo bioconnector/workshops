@@ -144,16 +144,16 @@ Let's start with an exercise.
 
 If we look at our metadata, we see that the control samples are SRR1039508, SRR1039512, SRR1039516, and SRR1039520. This bit of code will take the rawcounts data, `mutate()` it to add a column called `controlmean`, then `select()` only the gene name and this newly created column, and assigning the result to a new object called `meancounts`. (_Hint_: `rawcounts %>% mutate(...) %>% select(...)`)
 
-```{r exMakeMeancounts}
+```{r exMakeMeancounts, echo=TRUE, results="markup"}
 meancounts <- rawcounts %>% 
   mutate(controlmean = (SRR1039508+SRR1039512+SRR1039516+SRR1039520)/4) %>% 
   select(ensgene, controlmean)
 meancounts
 ```
 
-1. Build off of this code, `mutate()` it once more (prior to the `select()`) function, to add another column called `treatedmean` that takes the mean of the expression values of the treated samples. Then `select()` only the `ensgene`, `controlmean` and `treatedmean` columns, assigning it to a new object called meancounts. It should look like this.
+1. Build off of this code, `mutate()` it once more (prior to the `select()`) function, to add another column called `treatedmean` that takes the mean of the expression values of the treated samples. Then `select()` only the `ensgene`, `controlmean` and `treatedmean` columns, assigning it to a new object called meancounts.
 
-```{r exMakeMeancounts2, echo=FALSE}
+```{r exMakeMeancounts2, echo=FALSE, results="markup"}
 meancounts <- rawcounts %>% 
   mutate(controlmean=(SRR1039508+SRR1039512+SRR1039516+SRR1039520)/4) %>% 
   mutate(treatedmean=(SRR1039509+SRR1039513+SRR1039517+SRR1039521)/4) %>% 
@@ -163,7 +163,7 @@ meancounts
 
 2. Directly comparing the raw counts is going to be problematic if we just happened to sequence one group at a higher depth than another. Later on we'll do this analysis properly, normalizing by sequencing depth per sample using a better approach. But for now, `summarize()` the data to show the `sum` of the mean counts across all genes for each group. Your answer should look like this:
 
-```{r exSummarizeMeancounts, echo=F}
+```{r exSummarizeMeancounts, echo=FALSE, results="markup"}
 meancounts %>% summarize(sum(controlmean), sum(treatedmean))
 ```
 
@@ -223,20 +223,20 @@ In total, we've got `r sum(abs(meancounts$log2fc)>2)` differentially expressed g
 
 Look up help on `?inner_join` or Google around for help for using **dplyr**'s `inner_join()` to join two tables by a common column/key. You downloaded [annotables_grch38.csv](data/annotables_grch38.csv) from [the data downloads page](data.html) on bioconnector.org. Load this data with `read_csv()` into an object called `anno`. Pipe it to `View()` or click on the object in the Environment pane to view the entire dataset. This table links the unambiguous Ensembl gene ID to things like the gene symbol, full gene name, location, Entrez gene ID, etc.
 
-```{r importAnno}
+```{r importAnno, echo=TRUE, results="markup"}
 anno <- read_csv("data/annotables_grch38.csv")
 anno
 ```
 
-1. Take our newly created `meancounts` object, and `arrange()` it `desc`ending by the absolute value (`abs()`) of the `log2fc` column. The results should look like this:
+1. Take our newly created `meancounts` object, and `arrange()` it `desc`ending by the absolute value (`abs()`) of the `log2fc` column. The first few rows should look like this:
 
-```{r arrangeMeancounts, echo=FALSE}
-meancounts %>% arrange(desc(abs(log2fc)))
+```{r arrangeMeancounts, echo=FALSE, results="markup"}
+meancounts %>% arrange(desc(abs(log2fc))) %>% head(3)
 ```
 
 2. Continue on that pipeline, and `inner_join()` it to the `anno` data by the `ensgene` column. Either assign it to a temporary object or pipe the whole thing to `View` to take a look. What do you notice? Would you trust these results? Why or why not?
 
-```{r meancountsArrJoin, echo=FALSE}
+```{r meancountsArrJoin, echo=FALSE, results="markup"}
 meancounts %>% 
   arrange(desc(abs(log2fc))) %>% 
   inner_join(anno, by="ensgene")
@@ -361,13 +361,13 @@ Either click on the `res` object in the environment pane or pass it to `View()` 
 
 1. Using a `%>%`, `arrange` the results by the adjusted p-value.
 
-```{r, echo=F}
+```{r, echo=F, results="markup"}
 res %>% arrange(padj) 
 ```
 
 2. Continue piping to `inner_join()`, joining the results to the `anno` object. See the help for `?inner_join`, specifically the `by=` argument. You'll have to do something like `... %>% inner_join(anno, by=c("row"="ensgene"))`. Once you're happy with this result, reassign the result back to `res`. It'll look like this.
 
-```{r, echo=F}
+```{r, echo=F, results="markup"}
 res <- res %>% 
   arrange(padj) %>% 
   inner_join(anno, by=c("row"="ensgene"))
@@ -376,15 +376,15 @@ head(as.data.frame(res))
 
 3. How many are significant with an adjusted p-value <0.05? (Pipe to `filter()`).
 
-```{r, echo=F}
-res %>% filter(padj<0.05)
+```{r, echo=F, results="markup"}
+res %>% filter(padj<0.05) %>% nrow()
 ```
 
 ----
 
 Finally, let's write out the significant results. See the help for `?write_csv`, which is part of the **readr** package (note: this is _not_ the same as `write.csv` with a dot.). We can continue that pipe and write out the significant results to a file like so:
 
-```{r, eval=F}
+```{r, eval=F, echo=TRUE}
 res %>% 
   filter(padj<0.05) %>% 
   write_csv("sigresults.csv")
