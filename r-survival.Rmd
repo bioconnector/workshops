@@ -2,7 +2,7 @@
 title: "Survival Analysis with R"
 ---
 
-This workshop will provide hands-on instruction and exercises covering survival analysis using R. The data to be used here will come from The Cancer Genome Atlas (TCGA), where we may also cover programmatic access to TCGA through Bioconductor if time allows. 
+This class will provide hands-on instruction and exercises covering survival analysis using R. Some of the data to be used here will come from The Cancer Genome Atlas (TCGA), where we may also cover programmatic access to TCGA through Bioconductor if time allows. 
 
 **Prerequisites: [Familiarity with R](r-basics.html) is _required_** (including working with [data frames](r-dataframes.html), installing/using packages, importing data, and saving results); familiarity with [dplyr](r-dplyr-yeast.html) and [ggplot2](r-viz-gapminder.html) packages is highly recommended. 
 
@@ -50,7 +50,7 @@ The **Kaplan-Meier** curve illustrates the survival function. It's a step functi
 
 [^censoring]: This describes the most common type of censoring -- _right censoring_. _Left censoring_ less commonly occurs when the "start" is unknown, such as when an initial diagnosis or exposure time is unknown. 
 
-**Proportional hazards assumption**: The main goal of survival analysis is to compare the survival functions in different groups, e.g., leukemia patients as compared to cancer-free controls. If you followed both groups until everyone died, both survival curves would end at 0%, but one group might have survived on average a lot longer than the other group. Survival analysis does this by comparing the _hazard_ at different times over the observation period. Survival analysis doesn't assume that the hazard is constant, but _does_ assume that the _ratio_ of hazards between groups is constant over time.[^cumhaz] This workshop does _not_ cover methods to deal with non-proportional hazards, or interactions of covariates with the time to event.
+**Proportional hazards assumption**: The main goal of survival analysis is to compare the survival functions in different groups, e.g., leukemia patients as compared to cancer-free controls. If you followed both groups until everyone died, both survival curves would end at 0%, but one group might have survived on average a lot longer than the other group. Survival analysis does this by comparing the _hazard_ at different times over the observation period. Survival analysis doesn't assume that the hazard is constant, but _does_ assume that the _ratio_ of hazards between groups is constant over time.[^cumhaz] This class does _not_ cover methods to deal with non-proportional hazards, or interactions of covariates with the time to event.
 
 [^cumhaz]: And, following the definitions above, assumes that the _cumulative hazard_ ratio between two groups remains constant over time.
 
@@ -241,7 +241,7 @@ head(colondeath)
 
 ```{r, results='markup', echo=FALSE}
 sfit <- survfit(Surv(time, status)~sex, data=colondeath)
-sfit$call <- NULL
+sfit$call <- NULL # this obscures how the survfit(...) call was made
 summary(sfit, times=seq(0, 2000, 500))
 ```
 
@@ -284,7 +284,7 @@ fit <- coxph(Surv(time, status)~sex, data=lung)
 fit
 ```
 
-The `exp(coef)` column contains $e^{\beta_1}$ (see [background](#background) section above for more info). This is the **hazard ratio** -- the multiplicative effect of that variable on the hazard rate (for each unit increase in that variable). So, for a categorical variable like sex, going from male (baseline) to female results in approximately 43% reduction in hazard. You could also flip the sign on the `coef` column, and take `exp(0.551)`, which you can interpret as being male resulting in a 1.73-fold increase in hazard, or that males die ad approximately 1.73x the rate per unit time as females (females die at 0.551x the rate per unit time as males). 
+The `exp(coef)` column contains $e^{\beta_1}$ (see [background](#background) section above for more info). This is the **hazard ratio** -- the multiplicative effect of that variable on the hazard rate (for each unit increase in that variable). So, for a categorical variable like sex, going from male (baseline) to female results in approximately ~40% reduction in hazard. You could also flip the sign on the `coef` column, and take `exp(0.531)`, which you can interpret as being male resulting in a 1.7-fold increase in hazard, or that males die ad approximately 1.7x the rate per unit time as females (females die at 0.531x the rate per unit time as males). 
 
 Just remember:
 
@@ -402,12 +402,12 @@ head(lung, 10)
 
 ```
 
+
+## TCGA
+
 ```{r cleanupPreTCGA, include=FALSE}
 rm(colondeath, lung, fit, s, sfit)
 ```
-
-
-## TCGA
 
 The Cancer Genome Atlas (TCGA) is a collaboration between the National Cancer Institute (NCI) and the National Human Genome Research Institute (NHGRI) that collected lots of clinical and genomic data across 33 cancer types. The entire TCGA dataset is over 2 petabytes worth of gene expression, CNV profiling, SNP genotyping, DNA methylation, miRNA profiling, exome sequencing, and other types of data. You can learn more about TCGA at [cancergenome.nih.gov](https://cancergenome.nih.gov). The data is now housed at the [Genomic Data Commons Portal](https://gdc-portal.nci.nih.gov/). There are lots of ways to access TCGA data without actually downloading and parsing through the data from GDC. We'll cover more of these below. But first, let's look at an R package that provides convenient, direct access to TCGA data.
 
@@ -503,7 +503,7 @@ dim(BRCA.mRNA)
 BRCA.mRNA[1:5, 1:5]
 ```
 
-> **Extra credit assignment**: Take a look at the [advanced data manipulation](r-dplyr-yeast.html) and [tidy data](r-tidy.html) workshops, and see if you can figure out how to join the gene expression data to the clinical data for any particular cancer type.
+> **Extra credit assignment**: Take a look at the [advanced data manipulation](r-dplyr-yeast.html) and [tidy data](r-tidy.html) classes, and see if you can figure out how to join the gene expression data to the clinical data for any particular cancer type.
 
 Similar to how `survivalTCGA()` was a nice helper function to pull out survival information from multiple different clinical datasets, `expressionsTCGA()` can pull out specific gene expression measurements across different cancer types. See the help for `?expressionsTCGA`. Let's pull out data for PAX8, GATA-3, and the estrogen receptor genes from breast, ovarian, and endometrial cancer, and plot the expression of each with a box plot.
 
