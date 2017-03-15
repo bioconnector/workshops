@@ -505,12 +505,22 @@ sessionInfo()
 
 ----
 
-```{r, include=FALSE}
+```{r, echo=FALSE, eval=TRUE, cache=FALSE}
 knitr::knit_exit()
 ```
 
 
 ## Pathway Analysis
+
+http://www.gettinggeneticsdone.com/2015/12/tutorial-rna-seq-differential.html
+
+http://bioconductor.org/packages/gage
+
+Luo, W. et al., 2009. GAGE: generally applicable gene set enrichment for pathway analysis. [_BMC bioinformatics_, 10:161](https://www.ncbi.nlm.nih.gov/pubmed/19473525).
+
+**[Report](img/r-rnaseq-airway-ipa-all.pdf)**
+
+**[eNOS pathway](img/r-rnaseq-airway-ipa-enos-report.pdf)**
 
 ![](img/r-rnaseq-airway-ipa-enos-pathway.jpg)
 
