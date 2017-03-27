@@ -154,7 +154,7 @@ yorig
 
 There are several issues here.
 
-1. **Multiple variables are stored in one column.** The `NAME` column contains lots of information, split up by `::`’s.
+1. **Multiple variables are stored in one column.** The `NAME` column contains lots of information, split up by `::`'s.
 1. **Nutrient and rate variables are stuck in column headers.** That is, the column names contain the values of two variables: nutrient (G, N, P, S, L, U) and growth rate (0.05-0.3). Remember, with tidy data, **each _column_ is a _variable_ and each _row_ is an _observation_.** Here, we have not one observation per row, but 36 (6 nutrients $\times$ 6 rates)! There's no way we could filter this data by a certain nutrient, or try to calculate statistics between rate and expression.
 1. **Expression values are scattered throughout the table.** Related to the problem above, and just like our heart rate example, `expression` isn't a single-column variable as in the cleaned tidy data, but it's scattered around these 36 columns.
 1. **Other important information is in a separate table.** We're missing all the gene ontology information we had in the tidy data (no information about biological process (`bp`) or molecular function (`mf`)).

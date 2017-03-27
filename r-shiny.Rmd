@@ -44,7 +44,7 @@ At minimum, a Shiny app has two components:
 - ui.R
 - server.R
 
-You can think of these as holding the form (ui.R) and function (server.R) of the app. It is possible to create single file apps[^6] but for the sake of clarity, we'll keep the scripts separate. Note that you must name the scripts accordingly – in other words, you can't have a ui script called my_ui.R or appui.R or youi.R ... it has to be ui.R and ditto for server.R
+You can think of these as holding the form (ui.R) and function (server.R) of the app. It is possible to create single file apps[^6] but for the sake of clarity, we'll keep the scripts separate. Note that you must name the scripts accordingly -- in other words, you can't have a ui script called my_ui.R or appui.R or youi.R ... it has to be ui.R and ditto for server.R
 
 There are a couple ways to build out the skeleton of your first Shiny project. You could find the code for an app that you want to mimic and use that as a baseline for your ui.R and server.R scripts. But that copy-and-paste workflow can be tedious, error-prone and unnecessary if you're using RStudio ... 
 
@@ -59,7 +59,7 @@ This will create a ui.R, server.R and .Rproj file (which is useful for maintaini
 
 The server.R script does the "work" for your Shiny app. Functionally you can do anything in a server.R script that you can in a regular R script. The only difference is that the parameter(s) you pass into that R code can be set by a user via input widgets. 
 
-So before you sink a bunch of time into creating an app that passes the parameters _dynamically_, you probably want to test that they work _statically_. One way to do this is to create a "scratch" script – this will be a place for you to get your code working with a single input. Once it's working here, you can figure out which pieces you'd like to dynamically change within the ui.R script.
+So before you sink a bunch of time into creating an app that passes the parameters _dynamically_, you probably want to test that they work _statically_. One way to do this is to create a "scratch" script -- this will be a place for you to get your code working with a single input. Once it's working here, you can figure out which pieces you'd like to dynamically change within the ui.R script.
 
 And it's worth pointing out that creating another file with a ".R" extension in the same directory as your ui.R and server.R files won't cause any conflicts.
 
@@ -132,11 +132,11 @@ You've got the "scratch" code doing what you want it to. And you've got the basi
 
 But now what?
 
-You need to decide what parameter you want to make dynamic – in other words, what variable do you want your users to be able to adjust to see how the results change. The class of this object will determine what kind of widget you'll start with. For example, if you have a continuous (numeric) variable then you may want to use a slider input or input box. On the other hand, if you have a discrete (factor) variable then you might need to use a select input or checkbox. There are a lot of widgets[^10] to choose from and a lot of ways you can use them.
+You need to decide what parameter you want to make dynamic -- in other words, what variable do you want your users to be able to adjust to see how the results change. The class of this object will determine what kind of widget you'll start with. For example, if you have a continuous (numeric) variable then you may want to use a slider input or input box. On the other hand, if you have a discrete (factor) variable then you might need to use a select input or checkbox. There are a lot of widgets[^10] to choose from and a lot of ways you can use them.
 
 Once you've decided what input method use you'll need to write the code for that widget in the ui.R script. Widgets can go inside any of the layout elements. 
 
-Every widget needs a name – this is a semi-arbitrary distinction you can make with the first, inputId argument to the widget function. Although you can freely name the widget, it's only semi-arbitrary because it the inputId must be unique (not used by another widget) and should be somewhat meaningful as you'll be calling the widget in the server.R script as well.
+Every widget needs a name -- this is a semi-arbitrary distinction you can make with the first, inputId argument to the widget function. Although you can freely name the widget, it's only semi-arbitrary because it the inputId must be unique (not used by another widget) and should be somewhat meaningful as you'll be calling the widget in the server.R script as well.
 
 ```{r}
 library(shiny)
@@ -163,7 +163,7 @@ This is as good a place as any to stop and make a few comments about Shiny's syn
 
 If you're not careful you can get mystified pretty easily while writing your app ... and / or spend way too much time looking for a missing comma or extra parenthesis. Debugging these syntactic errors can be a bigger headache in a Shiny app than it is an regular R script.
 
-Fortunately, RStudio is pretty good about highlighting breaks in code syntax. With all the nested functions in the ui.R script, it's important to look out for any open parentheses. Another tip is to remember that UI elements are each arguments to functions – as such, they're separated by commas.
+Fortunately, RStudio is pretty good about highlighting breaks in code syntax. With all the nested functions in the ui.R script, it's important to look out for any open parentheses. Another tip is to remember that UI elements are each arguments to functions -- as such, they're separated by commas.
 
 The server.R script has a slightly different syntax. It always starts with something like ```shinyServer(function(input, output) {``` and ends with ```})``` to close out that outermost function. Because the code inside of that first ```{``` is being defined as part of a function (and not a series of arguments) you don't need to use commas while separating objects. You will need to use the ```({``` while calling render functions for the output.
 
@@ -181,9 +181,9 @@ Let's say, for example, you wanted to create a histogram of random values while 
 
 The code above would take care of the _input_ portion of the histogram. To finish the thought and _output_ the plot you need two more pieces ...
 
-In the ui.R you have to specify a display output – like input widgets, these come in different flavors (e.g ```plotOutput()``` or ```textOutput()``` or ```tableOutput()```), can live anywhere in the layout and must be given an arbitrary id.
+In the ui.R you have to specify a display output -- like input widgets, these come in different flavors (e.g ```plotOutput()``` or ```textOutput()``` or ```tableOutput()```), can live anywhere in the layout and must be given an arbitrary id.
 
-Within the server.R script you'll need to call the UI output in the same way as the input – use 'output$' followed by the name you gave the 'id' argument.
+Within the server.R script you'll need to call the UI output in the same way as the input -- use 'output$' followed by the name you gave the 'id' argument.
 
 The last step is to assign the output in the server script to a render function (e.g. ```{r}enderPlot()``` or ```{r}enderText()```) that contains the scratch script modified with the 'input$' call.
 

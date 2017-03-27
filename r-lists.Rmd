@@ -291,7 +291,7 @@ list.table(had, fork)
 
 #### purrr
 
-According to its author, Hadley Wickham, the **purrr** package, "... fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr"[^8]. This is especially useful for working with lists when using lists for *programmatic* purposes, like writing functions or packages. But there are applications for *interactive* list manipulation with **purrr** as well. The following are particularly helpful:
+According to its author, Hadley Wickham, the **purrr** package, "... fills in the missing pieces in R's functional programming tools: it's designed to make your pure functions purrr"[^8]. This is especially useful for working with lists when using lists for *programmatic* purposes, like writing functions or packages. But there are applications for *interactive* list manipulation with **purrr** as well. The following are particularly helpful:
 
 - `map()`: allows functions to be passed to each element of the list (roughly analogous to `sapply()` or `lapply()`)
 - `flatten()`: simplifies a list to a vector (roughly analogous to `unlist()`)
