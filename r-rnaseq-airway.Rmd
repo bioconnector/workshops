@@ -107,7 +107,7 @@ We'll come back to this again later, but the data at our starting point looks li
 
 That is, we have **two tables**:
 
-1. The "count matrix" (called the `countData` in DESeq-speak) -- where _genes_ are in _rows_ and _samples_ are in _columns_, and the number in each cell is the number of reads that mapped to exons in that gene for that sample: **[airway_rawcounts.csv](data/airway_rawcounts.csv)**.
+1. The "count matrix" (called the `countData` in DESeq-speak) -- where _genes_ are in _rows_ and _samples_ are in _columns_, and the number in each cell is the number of reads that mapped to exons in that gene for that sample: **[airway_scaledcounts.csv](data/airway_scaledcounts.csv)**.
 1. The sample metadata (called the `colData` in DESeq-speak) -- where _samples_ are in _rows_ and _metadata_ about those samples are in _columns_: **[airway_metadata.csv](data/airway_metadata.csv)**. It's called the `colData` because this table supplies metadata/information about the columns of the `countData` matrix. Notice that the first column of `colData` must match the column names of `countData` (except the first, which is the gene ID column).[^tidy]
 
 [^tidy]: This only works when using the argument `tidy=TRUE` when creating the `DESeqDataSetFromMatrix()`.
@@ -119,14 +119,14 @@ First, let's load the **tidyverse** library. (This loads **readr**, **dplyr**, *
 ```{r libs_importdata}
 library(tidyverse)
 
-rawcounts <- read_csv("data/airway_scaledcounts.csv")
+mycounts <- read_csv("data/airway_scaledcounts.csv")
 metadata <-  read_csv("data/airway_metadata.csv")
 ```
 
 Now, take a look at each.
 
 ```{r viewImportedData}
-rawcounts
+mycounts
 metadata
 ```
 
@@ -142,10 +142,10 @@ Let's start with an exercise.
 
 ### Exercise `r .ex``r .ex=.ex+1`
 
-If we look at our metadata, we see that the control samples are SRR1039508, SRR1039512, SRR1039516, and SRR1039520. This bit of code will take the rawcounts data, `mutate()` it to add a column called `controlmean`, then `select()` only the gene name and this newly created column, and assigning the result to a new object called `meancounts`. (_Hint_: `rawcounts %>% mutate(...) %>% select(...)`)
+If we look at our metadata, we see that the control samples are SRR1039508, SRR1039512, SRR1039516, and SRR1039520. This bit of code will take the `mycounts` data, `mutate()` it to add a column called `controlmean`, then `select()` only the gene name and this newly created column, and assigning the result to a new object called `meancounts`. (_Hint_: `mycounts %>% mutate(...) %>% select(...)`)
 
 ```{r exMakeMeancounts, echo=TRUE, results="markup"}
-meancounts <- rawcounts %>% 
+meancounts <- mycounts %>% 
   mutate(controlmean = (SRR1039508+SRR1039512+SRR1039516+SRR1039520)/4) %>% 
   select(ensgene, controlmean)
 meancounts
@@ -154,7 +154,7 @@ meancounts
 1. Build off of this code, `mutate()` it once more (prior to the `select()`) function, to add another column called `treatedmean` that takes the mean of the expression values of the treated samples. Then `select()` only the `ensgene`, `controlmean` and `treatedmean` columns, assigning it to a new object called meancounts.
 
 ```{r exMakeMeancounts2, echo=FALSE, results="markup"}
-meancounts <- rawcounts %>% 
+meancounts <- mycounts %>% 
   mutate(controlmean=(SRR1039508+SRR1039512+SRR1039516+SRR1039520)/4) %>% 
   mutate(treatedmean=(SRR1039509+SRR1039513+SRR1039517+SRR1039521)/4) %>% 
   select(ensgene, controlmean, treatedmean)
@@ -274,39 +274,39 @@ DESeq works on a particular type of object called a DESeqDataSet. The DESeqDataS
 
 ![](img/countdatacoldata.png)
 
-Let's look at our rawcounts and metadata again.
+Let's look at our mycounts and metadata again.
 
 ```{r reExamineData}
-rawcounts
+mycounts
 metadata
-class(rawcounts)
+class(mycounts)
 class(metadata)
 ```
 
 Remember, we read in our count data and our metadata using `read_csv()` which read them in as those "special" dplyr data frames / tbls. We'll need to convert them back to regular data frames for them to work well with DESeq2.
 
 ```{r, results="hide"}
-rawcounts <- as.data.frame(rawcounts)
+mycounts <- as.data.frame(mycounts)
 metadata <- as.data.frame(metadata)
-head(rawcounts)
+head(mycounts)
 head(metadata)
-class(rawcounts)
+class(mycounts)
 class(metadata)
 ```
 
 Let's check that the column names of our count data (except the first, which is `ensgene`) are the same as the IDs from our colData. 
 
 ```{r}
-names(rawcounts)[-1]
+names(mycounts)[-1]
 metadata$id
-names(rawcounts)[-1]==metadata$id
-all(names(rawcounts)[-1]==metadata$id)
+names(mycounts)[-1]==metadata$id
+all(names(mycounts)[-1]==metadata$id)
 ```
 
 Now we can move on to constructing the actual DESeqDataSet object. The last thing we'll need to specify is a _design_ -- a _formula_ which expresses how the counts for each gene depend on the variables in colData. Take a look at `metadata` again. The thing we're interested in is the `dex` column, which tells us which samples are treated with dexamethasone versus which samples are untreated controls. We'll specify the design with a tilde, like this: `design=~dex`. (The tilde is the shifted key to the left of the number 1 key on my keyboard. It looks like a little squiggly line). So let's contruct the object and call it `dds`, short for our DESeqDataSet. If you get a warning about "some variables in design formula are characters, converting to factors" don't worry about it. Take a look at the `dds` object once you create it.
 
 ```{r constructDDS_phony, eval=FALSE}
-dds <- DESeqDataSetFromMatrix(countData=rawcounts, 
+dds <- DESeqDataSetFromMatrix(countData=mycounts, 
                               colData=metadata, 
                               design=~dex, 
                               tidy=TRUE)
@@ -314,7 +314,7 @@ dds
 ```
 
 ```{r constructDDS_real, echo=FALSE}
-dds <- suppressMessages(suppressWarnings(DESeqDataSetFromMatrix(countData=rawcounts, colData=metadata, design=~dex, tidy=TRUE)))
+dds <- suppressMessages(suppressWarnings(DESeqDataSetFromMatrix(countData=mycounts, colData=metadata, design=~dex, tidy=TRUE)))
 dds
 ```
 
