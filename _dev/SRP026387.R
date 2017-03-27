@@ -32,7 +32,7 @@ mycoldata <- colData(rse) %>%
             prepost=stringr::str_extract(characteristics, "Pre|Post") %>% factor) %>%
   tbl_df()
 mycoldata
-# mycoldata %>% write_csv("tmp_metadata.csv")
+# mycoldata %>% write_csv("../data/SRP026387_metadata.csv")
 
 mycountdata <- assay(rse) %>%
   as.data.frame %>%
@@ -40,7 +40,7 @@ mycountdata <- assay(rse) %>%
   tbl_df() %>%
   mutate_if(is.double, as.integer)
 mycountdata
-# mycountdata %>% write_csv("tmp_counts.csv")
+# mycountdata %>% write_csv("../data/SRP026387_scaledcounts.csv")
 
 library(DESeq2)
 dds <- DESeqDataSetFromMatrix(
