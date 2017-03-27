@@ -528,4 +528,8 @@ You can also start to visualize networks in the context of biology and how your 
 
 ![](img/r-rnaseq-airway-ipa-inflam-network.jpg)
 
+## Homework
+
+Looking for some extra practice? [Try the homework](r-rnaseq-homework.html).
+
 ----
