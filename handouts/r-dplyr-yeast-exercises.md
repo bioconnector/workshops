@@ -22,7 +22,7 @@ Here's a warm-up round. Try the following.
 
 
 ```
-## # A tibble: 6 × 2
+## # A tibble: 6 X 2
 ##    nutrient expression
 ##       <chr>      <dbl>
 ## 1   Glucose       6.28
@@ -37,7 +37,7 @@ Here's a warm-up round. Try the following.
 
 
 ```
-## # A tibble: 4 × 4
+## # A tibble: 4 X 4
 ##   symbol expression                  bp                             mf
 ##    <chr>      <dbl>               <chr>                          <chr>
 ## 1   ADH2       6.28       fermentation* alcohol dehydrogenase activity
@@ -50,7 +50,7 @@ Here's a warm-up round. Try the following.
 
 
 ```
-## # A tibble: 6 × 2
+## # A tibble: 6 X 2
 ##    nutrient meanexp
 ##       <chr>   <dbl>
 ## 1   Ammonia   0.943
@@ -62,7 +62,7 @@ Here's a warm-up round. Try the following.
 ```
 
 ```
-## # A tibble: 6 × 2
+## # A tibble: 6 X 2
 ##    nutrient meanexp
 ##       <chr>   <dbl>
 ## 1   Ammonia  -1.613
@@ -85,7 +85,7 @@ ydat %>% summarize(n_distinct(mf))
 ```
 
 ```
-## # A tibble: 1 × 1
+## # A tibble: 1 X 1
 ##   `n_distinct(mf)`
 ##              <int>
 ## 1             1086
@@ -95,7 +95,7 @@ ydat %>% summarize(n_distinct(mf))
 
 
 ```
-## # A tibble: 10 × 2
+## # A tibble: 10 X 2
 ##                                                              bp     n
 ##                                                           <chr> <int>
 ## 1                                    biological process unknown   269
@@ -111,7 +111,7 @@ ydat %>% summarize(n_distinct(mf))
 ```
 
 ```
-## # A tibble: 10 × 2
+## # A tibble: 10 X 2
 ##                                        mf     n
 ##                                     <chr> <int>
 ## 1              molecular function unknown   886
@@ -130,7 +130,7 @@ ydat %>% summarize(n_distinct(mf))
 
 
 ```
-## # A tibble: 737 × 3
+## # A tibble: 737 X 3
 ##    symbol                                                              bp
 ##     <chr>                                                           <chr>
 ## 1    SFB2                                           ER to Golgi transport
@@ -150,7 +150,7 @@ ydat %>% summarize(n_distinct(mf))
 
 
 ```
-## # A tibble: 881 × 2
+## # A tibble: 881 X 2
 ##                                               bp meanexp
 ##                                            <chr>   <dbl>
 ## 1                                  fermentation*    6.28
