@@ -1,0 +1,105 @@
+---
+title: "RNA-Seq Homework"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = TRUE)
+```
+
+(_Refer back to the [RNA-seq data analysis lesson](r-rnaseq-airway.html))._
+
+## Recount
+
+Take a look at the preprint: **Collado-Torres, Leonardo, et al. "recount: A large-scale resource of analysis-ready RNA-seq expression data." _bioRxiv_ (2016): 068478.** It's available at <http://biorxiv.org/content/early/2016/08/08/068478>.
+
+Here's the abstract:
+
+> recount is a resource of processed and summarized expression data spanning nearly 60,000 human RNA-seq samples from the Sequence Read Archive (SRA). The associated recount Bioconductor package provides a convenient API for querying, downloading, and analyzing the data. Each processed study consists of meta/phenotype data, the expression levels of genes and their underlying exons and splice junctions, and corresponding genomic annotation. We also provide data summarization types for quantifying novel transcribed sequence including base-resolution coverage and potentially unannotated splice junctions. We present workflows illustrating how to use recount to perform differential expression analysis including meta-analysis, annotation-free base-level analysis, and replication of smaller studies using data from larger studies. recount provides a valuable and user-friendly resource of processed RNA-seq datasets to draw additional biological insights from existing public data. The resource is available at <https://jhubiostatistics.shinyapps.io/recount/>.
+
+This preprint describes an incredible resource. The authors here have downloaded and pre-processed several thousand RNA-seq studies from the raw data available in the SRA. They make this data available through a web application[^shiny] at where you can browse, search, and sort the studies they've processed, and it gives you direct links to download analysis-ready pre-processed count data and metadata. As the abstract mentions, you can access recount at **[jhubiostatistics.shinyapps.io/recount/](https://jhubiostatistics.shinyapps.io/recount/)**.
+
+[^shiny]: Incidentally, the web application itself was built with R using the Shiny framework (<https://shiny.rstudio.com/>). [Pete teaches a workshop on this!](r-shiny.html)
+
+## Get some data
+
+In the accession search box, search for **SRP026387**. This has some pre-processed data from a study looking at the Wnt/Beta-catenin pathway and how that's affected by androgen deprivation therapy in treating prostate cancer. You can learn more about the [data](https://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP026387) and the [study](https://www.ncbi.nlm.nih.gov/pubmed/24054872) by clicking the accession number hyperlink.
+
+> Androgen ablation therapy (AAT) is standard treatment for locally-advanced/metastatic prostate cancer (PCa). Many patients develop castration-resistance (CRPCa) after ~2-3 years, with a poor prognosis. The molecular mechanisms underlying CRPCa progression are unclear. mRNA-Seq was performed on tumours from 7 patients with locally-advanced/metastatic PCa before and ~22 weeks after AAT initiation. Differentially regulated genes were identified in treatment pairs. Overall design: Tumour biopsies from 7 patients were taken before and after AAT treatment.
+
+You could get the gene-level counts and metadata by clicking the appropriate links. I downloaded the data and and cleaned up the metadata and gene identifiers a bit, and made that data available on the **[Data page](data.html)**. The files are called **[SRP026387_scaledcounts.csv](data/SRP026387_scaledcounts.csv)** and **[SRP026387_metadata.csv](SRP026387_metadata.csv)**.
+
+Go to the [Data page](data.html), download these data files, and load them into R. As we did in the [original lesson](r-rnaseq-airway.html)) under the [importing data](r-rnaseq-airway.html#importing_data) heading, you can load the tidyverse and load them with `read_csv()`, but before you can import them into a DESeqDataSet you'll have to convert them back to a regular data frame. You could alternatively use base R's `read.csv()` function and not have to worry about it.
+
+```{r}
+# Load the count data and metadata. Here, the "data" folder
+# is relative to my current working directory. Load the data
+# From wherever you keep it, or just load it directly from
+# the web using the bioconnector.org/data/... URLs.
+mycounts <- read.csv("data/SRP026387_scaledcounts.csv")
+metadata <- read.csv("data/SRP026387_metadata.csv")
+```
+
+Take a look at the metadata:
+
+```{r}
+metadata
+```
+
+And the first few rows of the count data:
+
+```{r}
+head(mycounts)
+```
+
+Finally, load the annotation data (best to do this with dplyr's `read_csv()` because it's pretty big. We'll need tidyverse later to do some joins).
+
+```{r}
+library(tidyverse)
+anno <- read_csv("data/annotables_grch38.csv")
+anno
+```
+
+
+## What genes are DE?
+
+1. After you've loaded the data, load the DESeq2 library and [import your data](r-rnaseq-airway.html#importing_data) into a DESeqDataSet using the `tidy=TRUE` argument, with the design formula being the `prepost` variable from the metadata. 
+1. Run the [DESeq pipeline](r-rnaseq-airway.html#deseq_pipeline). 
+1. [Get the results](http://bioconnector.org/workshops/r-rnaseq-airway.html#getting_results) for the pre vs post analysis.[^results]
+1. Arrange these results by p-value, and join the results to the annotation data (hint: `%>% inner_join(anno, by=c("row"="ensgene"))`).
+1. Print out the top 10 differentially expressed genes, their fold changes, p-values, adjusted p-values, annotated with the gene symbol and the description from the annotation data.[^mask]
+
+**Here's what your results should look like**. I'm showing actual values for the first few genes so you can check to see if your results are close. Don't worry about rounding errors.
+
+[^results]: Note that without further specifying to the `results()` function, the default is to treat the alphabetically first condition as the control, and the alphabetically second condition as the experimental group. Therefore, the differential expression values will be comparing "Pre" versus "Post", since "Post" comes first. 
+
+[^mask]: Note that you may need to explicitly call `select()` from the dplyr library using `dplyr::select()`, because loading DESeq2 will mask dplyr's select if you loaded dplyr or tidyverse first.
+
+```{r, echo=FALSE, cache=TRUE}
+library(DESeq2)
+
+# create the dataset
+dds <- DESeqDataSetFromMatrix(mycounts, metadata, design=~prepost, tidy=TRUE)
+
+# Run the pipeline
+dds <- DESeq(dds)
+
+# Do the last few steps.
+res <- results(dds, tidy=TRUE) %>% 
+  tbl_df() %>% 
+  arrange(pvalue) %>% 
+  inner_join(anno, by=c("row"="ensgene")) %>% 
+  head(10) %>% 
+  dplyr::select(row, log2FoldChange, pvalue, padj, symbol, description)
+
+# This is to show on the output what the hidden/obfuscated results would look like
+showResult <- res %>% 
+  mutate(description="?") %>% 
+  mutate_if(is.numeric, funs(. %>% signif(3))) %>% 
+  mutate_all(as.character)
+showResult[4:10, ] <- "?"
+showResult
+```
+
+
+----
+
