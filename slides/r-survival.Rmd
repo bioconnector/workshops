@@ -1,7 +1,7 @@
 ---
 title: "**Survival Analysis with R**"
-author: "<small>November 7 2016<br>2:00-5:00pm</small>"
-date: "_Please sign in and pick up handouts in the back._"
+author: "[bioconnector.org/workshops](http://bioconnector.org/workshops)"
+date: "_Please sign in & pick up **3** handouts.<br>Let me know if you need last-minute setup help._"
 output: 
   slidy_presentation:
     footer: "bioconnector.org | Survival Analysis"
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = FALSE)
     - Survival curves + life tables
     - Kaplan-Meier curves
     - Cox proportional hazards regression
-1. Example with TCGA data
+1. Example with TCGA data _(if time allows)_
 
 ## What this class is _not_
 
