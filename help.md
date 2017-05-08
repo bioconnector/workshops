@@ -43,6 +43,8 @@ title: "Further Resources"
 ### Markdown / RMarkdown resources
 
 - [Basic Markdown + RMarkdown reference](http://bioconnector.org/markdown)
+- [A good markdown reference](http://commonmark.org/help/)
+- [A good 10-minute markdown tutorial](http://commonmark.org/help/tutorial/)
 - [RStudio's RMarkdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf) and [RMarkdown Reference Sheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
 - [RStudio's RMarkdown documentation](http://rmarkdown.rstudio.com/): covers all the v2 enhancements to RMarkdown, [RMarkdown basics](http://rmarkdown.rstudio.com/authoring_basics.html) in more detail than covered here, the full [Pandoc Markdown specification](http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html) which lets you do more than just regular Markdown, information on [citations and bibliographies](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html), and several [examples](http://rmarkdown.rstudio.com/articles.html) illustrating advanced usage.
 - [knitr documentation](http://yihui.name/knitr/): has lots of useful reference material about how knitr works, [options](http://yihui.name/knitr/options/), controlling output, [examples](http://yihui.name/knitr/demos/), and more.
