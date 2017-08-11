@@ -1,5 +1,5 @@
 ---
-title: "BIMS8382"
+title: "BIMS8382 Syllabus"
 ---
 
 ## General Information
@@ -8,12 +8,16 @@ title: "BIMS8382"
 
 **Co-instructor:** VP Nagraj
 
-**When:**  
+**When:**  Spring 2018 (more info TBA).
+<!--
 Spring 2017 Module S1  
-Feb 13 - Mar 27, 2016  
+Feb 13 - Mar 27, 2017  
 2:00pm - 5:00pm  
+-->
 
-**Where:** BIMS Education Center (McKim Hall)
+**Where:** TBA
+
+<!-- **Where:** BIMS Education Center (McKim Hall) -->
 
 ## Course Schedule
 
@@ -50,7 +54,13 @@ This session focuses on analyzing real data from a biological application - anal
 
 ### What's this class all about? 
 
-This class introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, essential statistics and survival analysis, and culminates with analysis of data from a real RNA-seq experiment using R and Bioconductor packages.
+This class introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, essential statistics and survival analysis, and culminates with analyses of real experimental NGS data using R and Bioconductor packages.
+
+
+**This is not a _"Tool X"_ or _"Software Y"_ class.** I want you to take away from this series the ability to use an extremely powerful scientific computing environment (R) to do many of the things that you'll do _across study designs and disciplines_ -- managing, manipulating, visualizing, and analyzing large, sometimes high-dimensional data. Whether that data is gene expression data from yeast, microbial genomics data from _B. pertussis_, public health data from [Gapminder](http://www.gapminder.org/), RNA-seq data from humans, movie preference trends from Netflix, or truck routing data from FedEx, you'll need the same computational know-how and data literacy to do the same kinds of basic tasks in each. I might show you how to use specific tools here and there (DESeq2 for RNA-seq analysis, ggtree for drawing phylogenetic trees, etc.), but these are not important -- you probably won't be using the same specific software or methods 10 years from now, but you'll still use the same underlying data and computational foundation. **That** is the point of this series -- to arm you with a basic foundation, and more importantly, to **enable you to figure out how to use _this tool_ or _that tool_ on your own**, when you need to.
+
+**_This is not a statistics class._** There is a short lesson on [essential statistics using R](r-stats.html) but this 3-hour lesson offers neither a comprehensive background on underlying theory nor in-depth coverage of implementation strategies using R. Some general knowledge of statistics and study design is helpful, but isn't required for this course.
+
 
 ### What are the pre-requisites?
 
@@ -78,7 +88,10 @@ Glad you asked! [See here](help.html).
 
 ## Software requirements
 
-All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have time for troubleshooting software installation issues during class. See the [setup instructions](setup.html), and follow all instructions under the major headings for:
+All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have time for troubleshooting software installation issues during class. See the [setup instructions](setup.html).
+
+<!--
+, and follow all instructions under the major headings for:
 
 - [R](setup.html#r)
 - [R+RStudio+Packages](setup.html#r+rstudio+packages)
@@ -89,4 +102,4 @@ All the software we're using in class is open-source and freely available online
 - [Getting data](setup.html#get_data)
 
 You'll need to download _all_ the data. As [described in the setup page](setup.html#get_data), navigate to the [data page](data.html) and download _all_ the relevant datasets, saving them to a folder that's easy to find.
-
+-->
