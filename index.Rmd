@@ -2,19 +2,65 @@
 title: "Bioconnector Workshops & Courses"
 output: 
   html_document:
-    toc: false
+    toc: yes
 ---
 
 ### Workshops
 
 These workshops introduce methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data using the R statistical computing environment. Visit [bioconnector.virginia.edu](https://www.bioconnector.virginia.edu/workshops-and-events) to register.
 
-**_IMPORTANT_: [Click here for instructions on setting up your computer for any of these workshops](setup.html).** Each workshop involves lots of hands-on practice coding, and you'll need to download and install some free software **_prior to our first class_**. This may take up to an hour or so, and please do not hesitate to [email us](people.html) _prior to the workshop_ if you are having difficulty.
+**_IMPORTANT_: [Click here for instructions on setting up your computer for any of these workshops](setup.html).** Each workshop involves lots of hands-on practice coding, and you'll need to download and install some free software **_prior to our first class_**. This may take up to an hour or so, and please do not hesitate to [email me](people.html) _prior to the workshop_ if you are having difficulty.
 
 ### BIMS 8382
 
 [BIMS 8382](bims8382.html) is a graduate class built in part on the workshop material here. Please see the [BIMS 8382 syllabus](bims8382.html) for more information.
 
+### About this series 
+
+Both the workshop series and the BIMS8382 course introduce methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, and culminates with analyses of real experimental NGS data using R and Bioconductor packages.
+
+**This is not a _"Tool X"_ or _"Software Y"_ class.** I want you to take away from this series the ability to use an extremely powerful scientific computing environment (R) to do many of the things that you'll do _across study designs and disciplines_ -- managing, manipulating, visualizing, and analyzing large, sometimes high-dimensional data. Whether that data is gene expression data from yeast, microbial genomics data from _B. pertussis_, public health data from [Gapminder](http://www.gapminder.org/), RNA-seq data from humans, movie preference trends from Netflix, or truck routing data from FedEx, you'll need the same computational know-how and data literacy to do the same kinds of basic tasks in each. I might show you how to use specific tools here and there (DESeq2 for RNA-seq analysis, ggtree for drawing phylogenetic trees, etc.), but these are not important -- you probably won't be using the same specific software or methods 10 years from now, but you'll still use the same underlying data and computational foundation. **That** is the point of this series -- to arm you with a basic foundation, and more importantly, to **enable you to figure out how to use _this tool_ or _that tool_ on your own**, when you need to.
+
+**_This is not a statistics class._** There is a short lesson on [essential statistics using R](r-stats.html) but this 3-hour lesson offers neither a comprehensive background on underlying theory nor in-depth coverage of implementation strategies using R. Some general knowledge of statistics and study design is helpful, but isn't required for this course.
+
+### FAQ
+
+#### What are the pre-requisites?
+
+For the entire workshop series / BIMS8382 course, _there are none!_
+
+But, if you're taking these workshops piecemeal, _it depends on the class_. The introductory courses don't assume any knowledge of programming or using a command-line interface, but if you've ever had any experience here, the content won't come as so much of a shock. But _don't panic._ Command-line interfaces and programming languages like R are _incredibly powerful_ and will be utterly transformative on your research. There's a learning curve, and it's near-vertical in the beginning, but it's surmountable and the payoff is worth it!
+
+The later classes in the R series (manipulation, tidy data, visualization, RNA-seq, phylogenetic trees, statistics, TCGA, Bioconductor, etc.) all require a working knowledge of R, dplyr, and ggplot2.
+
+ [(Be sure to see the required software setup and recommended reading on the setup page)](setup.html).
+
+<!-- 
+## Can I audit this course?
+
+Yes! However, **_you will be expected to attend every class meeting, participate in coding exercises during class, and complete any and all assignments_**, just as if you are taking the course for credit. 
+
+**_UPDATE Feb 9 2016_**: The class is currently full.
+
+[Click here to register to request to audit](https://docs.google.com/forms/d/1tHO-X4DupnHgIEsUei0K3kX5_UfLRK-y2KfxmxC6Ux0/viewform). The first day of the course is Monday, Feb 15, 2016. One week prior to the course starting, I will allow anyone who's requested to audit into the course, giving priority to people registering for credit. There are still plenty of seats open, so good chances you'll be able to get in.
+-->
+
+<!--
+## Where will the class meet?
+
+Carter Classroom, Health Sciences Library room 1211. This is downstairs one floor to the right (across the hall from Stephen Turner's office).
+-->
+
+#### Do I need a laptop?
+
+**_YES._** You must have access to a computer on which you can install software. The class will be a mix of lecture, discussion, but primarily live coding. You must bring your laptop to each session. Bring your charging cable also. Please follow the [setup instructions](setup.html) prior to the workshop.
+
+#### Where do I get additional help?
+
+Glad you asked! [See here](help.html).
+
+
+
 ----
 
-**_Attribution_:** Course material is inspired by and/or modified in part from [Jenny Bryan's Stat 545 course](http://stat545-ubc.github.io/), [Software Carpentry](http://software-carpentry.org/), [Data Carpentry](http://datacarpentry.org/), [David Robinson's blog](http://varianceexplained.org/), [Marian Schmidt's MSU NGS Workshop](https://github.com/marschmi/NGS2015_RMarkdown_Reproducibility), [Vanderbilt Department of BioStatistics Datasets](http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets?CGISESSID=10713f6d891653ddcbb7ddbdd9cffb79), and likely many others.
+<small>**_Attribution_:** Course material is inspired by and/or modified in part from [Jenny Bryan's Stat 545 course](http://stat545-ubc.github.io/), [Software Carpentry](http://software-carpentry.org/), [Data Carpentry](http://datacarpentry.org/), [David Robinson's blog](http://varianceexplained.org/), [Marian Schmidt's MSU NGS Workshop](https://github.com/marschmi/NGS2015_RMarkdown_Reproducibility), [Vanderbilt Department of BioStatistics Datasets](http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets?CGISESSID=10713f6d891653ddcbb7ddbdd9cffb79), the [ggtree vignettes](http://bioconductor.org/packages/release/bioc/html/ggtree.html)and likely many others.</small>
