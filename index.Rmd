@@ -2,7 +2,7 @@
 title: "Bioconnector Workshops & Courses"
 output: 
   html_document:
-    toc: yes
+    toc: no
 ---
 
 ### Workshops
@@ -15,7 +15,9 @@ These workshops introduce methods, tools, and software for reproducibly managing
 
 [BIMS 8382](bims8382.html) is a graduate class built in part on the workshop material here. Please see the [BIMS 8382 syllabus](bims8382.html) for more information.
 
-### About this series 
+### FAQ
+
+#### What's this series all about? 
 
 Both the workshop series and the BIMS8382 course introduce methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, and culminates with analyses of real experimental NGS data using R and Bioconductor packages.
 
@@ -23,7 +25,6 @@ Both the workshop series and the BIMS8382 course introduce methods, tools, and s
 
 **_This is not a statistics class._** There is a short lesson on [essential statistics using R](r-stats.html) but this 3-hour lesson offers neither a comprehensive background on underlying theory nor in-depth coverage of implementation strategies using R. Some general knowledge of statistics and study design is helpful, but isn't required for this course.
 
-### FAQ
 
 #### What are the pre-requisites?
 
