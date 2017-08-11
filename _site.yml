@@ -117,12 +117,12 @@ navbar:
   right:
     - icon: fa-question fa-lg
       menu:
-        - text: "FAQ"
-          href: faq.html
         - text: "People"
           href: people.html
         - text: "Further resources"
           href: help.html
+        - text: "Source code for this site"
+          href: https://github.com/bioconnector/workshops
 output:
   html_document:
     theme: default
