@@ -1,0 +1,264 @@
+---
+title: 'Setup Instructions'
+---
+
+Please follow the instructions under **_Get Data_** and **_Core Software_** headings below. Depending on the class you're taking, you may also need to follow additional setup instructions under the [**_Electives_**](#electives) heading.
+
+
+## Get Data
+
+Click the **[<i class="fa fa-download"></i> Data](data.html)** link on the navbar at the top. You can download all the data needed by downloading **[this zip file <i class="fa fa-file-archive-o" aria-hidden="true"></i>](data.zip)** or by downloading individual data sets as needed at the **[<i class="fa fa-download"></i> Data](data.html)** page.
+
+
+## Core Lessons
+
+Install the following software regardless of which class(es) you're taking.
+
+### R
+
+**Install R.** You'll need R version **3.4.0** or higher.[^rversion] Download and install R for [Windows](http://cran.r-project.org/bin/windows/base/) or [Mac](http://cran.r-project.org/bin/macosx/) (download the latest R-3.x.x.pkg file for your appropriate version of Mac OS).
+
+### RStudio
+
+Download and install **[RStudio Desktop](https://www.rstudio.com/products/rstudio/download/)** version >= 1.0.143.
+
+R and RStudio are separate downloads and installations. **R** is the underlying statistical computing environment, but using R alone is no fun. **RStudio** is a graphical integrated development environment that makes using R much easier. You need R installed before you install RStudio.
+
+### CRAN packages
+
+Launch RStudio (RStudio, *not R itself*). Ensure that you have internet access, then copy and paste the following command into the **Console** panel (usually the lower-left panel, by default) and hit the Enter/Return key. 
+
+```r
+install.packages("tidyverse")
+```
+
+_A few notes_:
+
+- Commands are case-sensitive. 
+- You must be connected to the internet.
+- The [tidyverse](http://tidyverse.org/) package is kind of a meta-package that automatically installs/loads many core packages that we use throughout the workshops.[^tidyverse]
+- Even if you've installed these packages in the past, do re-install the most recent version. Many of these packages are updated often, and we may use new features in the workshop that aren't available in older versions.
+- If you're using Windows you might see errors about not having permission to modify the existing libraries -- disregard these. You can avoid this by running RStudio as an administrator (right click the RStudio icon, then click "Run as Administrator").
+
+[^rversion]: R version 3.4.0 was released April 2017. If you have not updated your R installation since then, you need to upgrade to a more recent version, since several of the required packages depend on a version at least this recent. You can check your R version with the `sessionInfo()` command.
+
+[^tidyverse]: Installing/loading the tidyverse **tidyverse** will install/load the core tidyverse packages that you are likely to use in almost every analysis:
+**ggplot2** (for data visualisation), **dplyr** (for data manipulation), **tidyr** (for data tidying), **readr** (for data import), **purrr** (for functional programming), and **tibble** (for tibbles, a modern re-imagining of data frames). It also installs a selection of other tidyverse packages that you're likely to use frequently, but probably not in every analysis (these are installed, but you'll have to load them separately with `library(packageName)`). This includes: **hms** (for times), **stringr** (for strings), **lubridate** (for date/times), **forcats** (for factors), **DBI** (for databases), **haven** (for SPSS, SAS and Stata files), **httr** (for web apis), **jsonlite** (or JSON), **readxl** (for .xls and .xlsx files), **rvest** (for web scraping), **xml2** (for XML), **modelr** (for modelling within a pipeline), and **broom** (for turning models into tidy data). After installing tidyverse with `install.packages("tidyverse")` and loading it with `library(tidyverse)`, you can use `tidyverse_update()` to update all the tidyverse packages installed on your system at once.
+
+Check that you've installed everything correctly by closing and reopening RStudio and entering the following command at the console window (don't worry about the _Conflicts with tidy packages_ warning):
+
+```r
+library(tidyverse)
+```
+
+This may produce some notes or other output, but as long as you don't get an error message, you're good to go. If you get a message that says something like: `Error in library(somePackageName) : there is no package called 'somePackageName'`, then the required packages did not install correctly. Please do not hesitate to email me _prior to the course_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
+
+
+### RMarkdown
+
+Several additional setup steps required for the reproducible research with RMarkdown class.
+
+1. First, install R, RStudio, and the tidyverse package as described above. Also install the knitr and rmarkdown packages.
+```r
+install.packages("knitr")
+install.packages("rmarkdown")
+```
+1. Next, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (`knitr`, `yaml`, `htmltools`, `caTools`, `bitops`, `rmarkdown`, and maybe a few others). Click "Yes" to install these.
+1. **_Optional_:** If you want to convert to PDF, you will need to install a **$\LaTeX$** typesetting engine. This differs on Mac and Windows. _Note that this part of the installation may take up to several hours, and isn't strictly required for the class._
+    - **Windows**: Download and install MiKTeX: <https://miktex.org/download>. Read the installation tutorial first at <https://miktex.org/howto/install-miktex>.
+    - **Mac**: Download and install MacTeX.pkg at <http://www.tug.org/mactex/mactex-download.html>. This is a very large download (>2 gigabytes), and may take a while depending on your network speed. Do this _prior to the course_.
+
+
+### Bioconductor
+
+Install the core Bioconductor packages ([more information here](https://www.bioconductor.org/install/)). These packages are installed differently than "regular" R packages from CRAN. Copy and paste these lines of code into your R console **one at a time**. 
+
+```r
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+```
+
+A few notes:
+
+- We will be using the latest versions of Bioconductor from the 3.5 release. This requires R version 3.4.0 or higher. If you have R 3.4.0 installed, running the commands above will install Bioconductor 3.5. See <http://bioconductor.org/news/bioc_3_5_release/>.
+- If at any point in the Bioconductor package installations you get prompts in the console asking you to update any existing packages, type `n` at the prompt at hit enter.
+- If you see a note long the lines of "_binary version available but the source version is later_", followed by a question, "_Do you want to install from sources the package which needs compilation? y/n_", type **`n` for no**, and hit enter.
+
+Check that you've installed everything correctly by closing and reopening RStudio and entering the following command at the console window:
+
+```r
+library(BiocInstaller)
+```
+
+If you get a message that says something like: `Error in library(BiocInstaller) : there is no package called 'BiocInstaller'`, then the required packages did not install correctly. Please do not hesitate to email me _prior to the course_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
+
+
+
+## Electives
+
+The instructions below apply to additional "elective" classes, and are not strictly required as part of the core set of classes.  Install these as necessary.
+
+
+### RNA-seq
+
+**Software setup:** Follow instructions above for [R+RStudio+Packages](#r) and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips. After installing R+RStudio, you'll need the tidyverse, Bioconductor core, and DESeq2 packages. 
+
+```r
+# tidyverse pkg installs dplyr, tibble, tidyr, ggplot2, readr, etc.
+install.packages("tidyverse")
+
+# Install Bioconductor core packages and DESeq2
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("DESeq2")
+```
+
+Check that you've installed everything correctly by closing and reopening RStudio and entering the following command at the console window:
+
+```r
+library(DESeq2)
+```
+
+If you get a message that says something like: `Error in library(DESeq2) : there is no package called 'DESeq2'`, then the required packages did not install correctly. Please do not hesitate to email me _prior to the course_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
+
+
+**Download data we'll use in class.** Create a new folder somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. Download the 3 data files below, saving them to the new `bioconnector/data` folder you just made.
+
+- Length-scaled count matrix (i.e., `countData`): [airway_scaledcounts.csv](data/airway_scaledcounts.csv)
+- Sample metadata (i.e., `colData`): [airway_metadata.csv](data/airway_metadata.csv)
+- Gene Annotation data: [annotables_grch38.csv](data/annotables_grch38.csv)
+
+
+**Prerequisites!** This is _not_ an introductory R class. This class assumes you're comfortable working in R, using ggplot2 for visualization, and using dplyr verbs and the **`%>%`** for chaining together multiple operations. Work through the workshop materials below if you need a refresher.
+
+- [R basics](r-basics.html)
+- [Data frames](r-dataframes.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr-yeast.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
+- [Tidy data & advanced manipulation](r-tidy.html)
+- [Data Visualization with ggplot2](r-viz-gapminder.html)
+
+**Recommended reading** prior to class:
+
+1. [Conesa et al. A survey of best practices for RNA-seq data analysis. _Genome Biology_ 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8).
+1. [Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." _F1000Research_ 4 (2015)](https://f1000research.com/articles/4-1521/v2).
+1. Abstract and introduction sections of [Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." _PLoS ONE_ 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625).
+
+
+
+### Phylogenetic trees
+
+**Software setup:** Follow instructions above for [R+RStudio+Packages](#r) and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips. After installing R+RStudio, you'll need the tidyverse, Bioconductor core, and the **ggtree** and **Biostrings** packages. 
+
+```r
+# tidyverse pkg installs dplyr, tibble, tidyr, ggplot2, readr, etc.
+install.packages("tidyverse")
+
+# Install Bioconductor core packages, ggtree and Biostrings
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("ggtree")
+biocLite("Biostrings")
+```
+
+Check that you've installed everything correctly by closing and reopening RStudio and entering the following commands at the console window, one at a time:
+
+```r
+library(ggtree)
+library(Biostrings)
+```
+
+If you get a message that says something like: `Error in library(ggtree) : there is no package called 'ggtree'`, (or similar with `Biostrings`) then the required packages did not install correctly. Please do not hesitate to email me _prior to the course_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
+
+
+**Download data we'll use in class.** Create a new folder somewhere on your computer that's easy to get to (e.g., your Desktop). Name it `bioconnector`. Inside that folder, make a folder called `data`, all lowercase. Download the data files below, saving them to the new `bioconnector/data` folder you just made.
+
+- A simple phylogenetic tree in Newick format: [tree_newick.nwk](data/tree_newick.nwk)
+- A rooted, time-measured phylogeny with influenza virus data: [flu_tree_beast.tree](data/flu_tree_beast.tree)
+- Amino acid sequences of flu samples in the data above: [flu_aasequence.fasta](data/flu_aasequence.fasta)
+
+**Prerequisites!** This is _not_ an introductory R class. _This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html), and most importantly, **[data visualization with ggplot2](r-viz-gapminder.html)**._
+
+**Recommended reading:** This lesson does _not_ cover methods and software for _generating_ phylogenetic trees, nor does it it cover _interpreting_ phylogenies. **[Here's a quick primer on how to read a phylogeny](http://epidemic.bio.ed.ac.uk/how_to_read_a_phylogeny)** that you should review prior to this lesson, but it is by no means extensive. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson.
+
+
+### Interactive Visualization
+
+The [Interactive Visualization with JavaScript and R](r-interactive-viz.html) lesson requires installation of several R packages in addition to those mentioned above:
+
+```r
+install.packages("highcharter")
+install.packages("d3heatmap")
+install.packages("leaflet")
+install.packages("visNetwork")
+install.packages("jsonlite")
+```
+
+To check that these are correctly installed, first close RStudio and then reopen it and run the following:
+
+```r
+library(highcharter)
+library(d3heatmap)
+library(leaflet)
+library(visNetwork)
+library(jsonlite)
+```
+
+These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
+
+
+### Shiny
+
+The [Building Shiny Web Apps in R](r-shiny.html) lesson requires installation of several R packages in addition to those mentioned above:
+
+```r
+install.packages("shiny")
+install.packages("shinythemes")
+install.packages("lubridate")
+```
+
+To check that these are correctly installed, first close RStudio and then reopen it and run the following:
+
+```r
+library(shiny)
+library(shinythemes)
+library(lubridate)
+```
+
+These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to the course_ if you are still having difficulty.
+
+
+### Survival Analysis
+
+**Software setup:** Follow instructions at the top for [R+RStudio+Packages](#r). Next, install the additional packages listed below from CRAN and Bioconductor by typing the commands below into your RStudio console window.
+
+```r
+# Install from CRAN
+install.packages("tidyverse")
+install.packages("survminer")
+
+# Install from Bioconductor
+# Install Bioconductor core packages
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+
+# Install RTCGA and RTCGA data packages
+biocLite("RTCGA")
+biocLite("RTCGA.clinical")
+biocLite("RTCGA.mRNA")
+```
+
+**Prerequisites!** This is _not_ an introductory R class. Work through the workshop materials below if you need a refresher on R, data frames, data manipulation and visualization.
+
+- [R basics](r-basics.html)
+- [Data frames](r-dataframes.html)
+- [Manipulating data with dplyr and `%>%`](r-dplyr-yeast.html) (also, work through the [dplyr vignette](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html))
+- [Tidy data & advanced manipulation](r-tidy.html)
+- [Data Visualization with ggplot2](r-viz-gapminder.html)
+
+
+
+
+
+----
+
+----
