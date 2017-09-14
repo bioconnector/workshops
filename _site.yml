@@ -16,6 +16,7 @@ navbar:
     - text: "Data"
       icon: fa-download
       href: "data.html"
+
     - text: "Workshops"
       icon: fa-book
       menu:
@@ -72,48 +73,89 @@ navbar:
 #          href:
 #        - text: "Introduction to SPSS"
 #          href:
-    - text: "BIMS8382"
+
+    - text: "THRIV"
       icon: fa-university
-      #icon: fa-graduation-cap
       menu:
         - text: "Syllabus"
           icon: fa-graduation-cap
-          href: bims8382.html
+          href: thriv.html
         - text: "----"
         - text: "--- Lessons ---"
-        - text: "R Basics"
-          href: r-basics.html
-        - text: "Data Frames"
-          href: r-dataframes.html
-        - text: "Data Manipulation"
-          href: r-dplyr-yeast.html
-        - text: "Tidying data"
-          href: r-tidy.html
-        - text: "Data Visualization"
-          href: r-viz-gapminder.html
-        - text: "Reproducible Research & RMarkdown"
-          href: r-rmarkdown.html
-        - text: "Essential Statistics with R"
-          href: r-stats.html
-        - text: "Survival Analysis with TCGA Data"
-          href: r-survival.html
-        - text: "RNA-Seq Data Analysis"
-          href: r-rnaseq-airway.html
+#        - text: "R Basics"
+#          href: r-basics.html
+#        - text: "Data Frames"
+#          href: r-dataframes.html
+#        - text: "Data Manipulation"
+#          href: r-dplyr-yeast.html
+#        - text: "Tidying data"
+#          href: r-tidy.html
+#        - text: "Data Visualization"
+#          href: r-viz-gapminder.html
+#        - text: "Reproducible Research & RMarkdown"
+#          href: r-rmarkdown.html
+#        - text: "Essential Statistics with R"
+#          href: r-stats.html
+#        - text: "Survival Analysis with TCGA Data"
+#          href: r-survival.html
+#        - text: "RNA-Seq Data Analysis"
+#          href: r-rnaseq-airway.html
         - text: "----"
         - text: "--- Homework ---"
-        - text: "Data Manipulation"
-          href: r-dplyr-homework.html
-        - text: "Data Visualization"
-          href: r-dataviz-homework.html
-        - text: "Reproducible Research & RMarkdown"
-          href: r-rmarkdown-homework.html
-        - text: "Essential Statistics"
-          href: r-stats-homework.html
-        - text: "RNA-seq Data Analysis"
-          href: r-rnaseq-homework.html
+#        - text: "Data Manipulation"
+#          href: r-dplyr-homework.html
+#        - text: "Data Visualization"
+#          href: r-dataviz-homework.html
+#        - text: "Reproducible Research & RMarkdown"
+#          href: r-rmarkdown-homework.html
+#        - text: "Essential Statistics"
+#          href: r-stats-homework.html
+#        - text: "RNA-seq Data Analysis"
+#          href: r-rnaseq-homework.html
+
+#    - text: "BIMS8382"
+#      #icon: fa-university
+#      menu:
+#        - text: "Syllabus"
+#          icon: fa-graduation-cap
+#          #href: bims8382.html
+#        - text: "----"
+#        - text: "--- Lessons ---"
+#        - text: "R Basics"
+#          href: r-basics.html
+#        - text: "Data Frames"
+#          href: r-dataframes.html
+#        - text: "Data Manipulation"
+#          href: r-dplyr-yeast.html
+#        - text: "Tidying data"
+#          href: r-tidy.html
+#        - text: "Data Visualization"
+#          href: r-viz-gapminder.html
+#        - text: "Reproducible Research & RMarkdown"
+#          href: r-rmarkdown.html
+#        - text: "Essential Statistics with R"
+#          href: r-stats.html
+#        - text: "Survival Analysis with TCGA Data"
+#          href: r-survival.html
+#        - text: "RNA-Seq Data Analysis"
+#          href: r-rnaseq-airway.html
+#        - text: "----"
+#        - text: "--- Homework ---"
+#        - text: "Data Manipulation"
+#          href: r-dplyr-homework.html
+#        - text: "Data Visualization"
+#          href: r-dataviz-homework.html
+#        - text: "Reproducible Research & RMarkdown"
+#          href: r-rmarkdown-homework.html
+#        - text: "Essential Statistics"
+#          href: r-stats-homework.html
+#        - text: "RNA-seq Data Analysis"
+#          href: r-rnaseq-homework.html
+
 #    - text: "Syllabus"
 #      icon: fa-book
 #      href: syllabus.html
+
   right:
     - icon: fa-question fa-lg
       menu:
