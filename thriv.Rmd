@@ -1,0 +1,121 @@
+---
+title: "THRIV Data Science Training Program"
+---
+
+## General Information
+
+### Logistics
+
+**_Instructor_: Stephen Turner**&nbsp;
+<a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address"><i class="fa fa-envelope"></i></a>
+<a href="https://med.virginia.edu/phs/faculty-and-staff-directory/stephen-d-turner-ph-d/" target="_blank"><i class="fa fa-phone"></i></a>
+<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter"></i></a>
+<a href="https://github.com/stephenturner/" target="_blank"><i class="fa fa-github"></i></a>
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss"></i></a>  
+<small>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.</small>
+
+**_When_:**  Fall 2017, Tuesdays 2-5pm. 
+
+Date | Location
+---------|---------
+Oct 17 | 560 Ray C Hunt Drive
+Oct 24 | 560 Ray C Hunt Drive
+Oct 31 | 560 Ray C Hunt Drive
+Nov 14 | [Carter classroom](https://www.hsl.virginia.edu/sites/default/files/floorplan2014.pdf), [UVA Health Sciences Library](https://www.hsl.virginia.edu/directions)
+Nov 21 | 560 Ray C Hunt Drive
+Dec  6 | 560 Ray C Hunt Drive
+Dec 19 | 560 Ray C Hunt Drive
+
+<!--
+Spring 2017 Module S1  
+Feb 13 - Mar 27, 2017  
+2:00pm - 5:00pm  
+-->
+
+### About this course
+
+This course introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, and culminates with analyses of real experimental NGS data using R and Bioconductor packages.
+
+**This is not a _"Tool X"_ or _"Software Y"_ class.** I want you to take away from this series the ability to use an extremely powerful scientific computing environment (R) to do many of the things that you'll do _across study designs and disciplines_ -- managing, manipulating, visualizing, and analyzing large, sometimes high-dimensional data. Whether that data is gene expression data from yeast, microbial genomics data from _B. pertussis_, public health data from [Gapminder](http://www.gapminder.org/), RNA-seq data from humans, movie preference trends from Netflix, or truck routing data from FedEx, you'll need the same computational know-how and data literacy to do the same kinds of basic tasks in each. I might show you how to use specific tools here and there (DESeq2 for RNA-seq analysis, ggtree for drawing phylogenetic trees, etc.), but these are not important -- you probably won't be using the same specific software or methods 10 years from now, but you'll still use the same underlying data and computational foundation. **That** is the point of this series -- to arm you with a basic foundation, and more importantly, to **enable you to figure out how to use _this tool_ or _that tool_ on your own**, when you need to.
+
+**_This is not a statistics class._** There is a short lesson on [essential statistics using R](r-stats.html) but this 3-hour lesson offers neither a comprehensive background on underlying theory nor in-depth coverage of implementation strategies using R. Some general knowledge of statistics and study design is helpful, but isn't required for this course.
+
+
+
+## Setup
+
+**[Click the <i class="fa fa-cog"></i> Setup](setup.html) link on the navbar at the top and review all the information and follow the instructions _prior to the workshop_**.
+
+You should set aside a couple hours to download, install, and test all the software needed for the course. All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have much time for troubleshooting software installation issues during class. 
+
+After installing and testing the software we'll be using, please download the data as instructed, and review the required reading _prior to class_.
+
+
+
+## Course Schedule
+
+> TBA
+
+<!-- ### Week 1: Intro to R -->
+
+<!-- This novice-level introduction is directed toward life scientists with little to no experience with statistical computing or bioinformatics. This interactive introduction will introduce the R statistical computing environment. The first part of this workshop will demonstrate very basic functionality in R, including functions, functions, vectors, creating variables, getting help, filtering, data frames, plotting, and reading/writing files. -->
+
+<!-- ### Week 2: Advanced Data Manipulation with R -->
+
+<!-- Data analysis involves a large amount of janitor work -- munging and cleaning data to facilitate downstream data analysis. This session assumes a basic familiarity with R and covers tools and techniques for advanced data manipulation. It will cover data cleaning and "tidy data," and will introduce R packages that enable data manipulation, analysis, and visualization using split-apply-combine strategies. Upon completing this lesson, students will be able to use the _dplyr_ package in R to effectively manipulate and conditionally compute summary statistics over subsets of a "big" dataset containing many observations. -->
+
+<!-- ### Week 3: Advanced Data Visualization with R and ggplot2 -->
+
+<!-- This session will cover fundamental concepts for creating effective data visualization and will introduce tools and techniques for visualizing large, high-dimensional data using R. We will review fundamental concepts for visually displaying quantitative information, such as using series of small multiples, avoiding "chart-junk," and maximizing the data-ink ratio. After briefly covering data visualization using base R graphics, we will introduce the _ggplot2_ package for advanced high-dimensional visualization. We will cover the grammar of graphics (geoms, aesthetics, stats, and faceting), and using ggplot2 to create plots layer-by-layer. Upon completing this lesson, students will be able to use R to explore a high-dimensional dataset by faceting and scaling arbitrarily complex plots in small multiples. -->
+
+<!-- ### Week 4: Reproducible Research & Dynamic Documents -->
+
+<!-- Contemporary life sciences research is plagued by reproducibility issues. This session covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this session we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents. -->
+
+<!-- ### Week 5: Essential Statistics -->
+
+<!-- This session will provide hands-on instruction and exercises covering basic statistical analysis in R. This will cover descriptive statistics, t-tests, linear models, chi-square, clustering, dimensionality reduction, and resampling strategies. We will also cover methods for "tidying" model results for downstream visualization and summarization. -->
+
+<!-- ### Week 6a: Survival Analysis -->
+
+<!-- This session will provide hands-on instruction and exercises covering survival analysis using R. The data for parts of this session will come from The Cancer Genome Atlas (TCGA), where we will also cover programmatic access to TCGA through Bioconductor. -->
+
+<!-- ### Week 6b: Visualizing and Annotating Phylogenetic Trees -->
+
+<!-- This lesson demonstrates how to use R and ggtree, an extension of the ggplot2 package, to visualize and annotate phylogenetic trees. This lesson does _not_ cover methods and software for _generating_ phylogenetic trees, nor does it it cover _interpreting_ phylogenies. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson. -->
+
+
+<!-- ### Week 7: Introduction to RNA-seq Data Analysis -->
+
+<!-- This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results. -->
+
+
+## FAQ
+
+### What are the pre-requisites?
+
+_There are none!_ [(But there is some required reading and software setup required before the course)](setup.html). This course doesn't assume any knowledge of programming or using a command-line interface, but if you've ever had any experience here, the content won't come as so much of a shock. But _don't panic._ Command-line interfaces and programming languages like R are _incredibly powerful_ and will be utterly transformative on your research. There's a learning curve, and it's near-vertical in the beginning, but it's surmountable and the payoff is worth it! 
+
+
+### Do I need a laptop?
+
+**YES.** You must have access to a computer on which you can install software. The class will be a mix of lecture, discussion, but primarily live coding. You must bring your laptop to the course every day. Bring your charging cable also. Please follow the [setup instructions](setup.html) prior to the workshop.
+
+### Where can I get more help?
+
+Glad you asked! [See here](help.html).
+
+
+<!--
+, and follow all instructions under the major headings for:
+
+- [R](setup.html#r)
+- [R+RStudio+Packages](setup.html#r+rstudio+packages)
+- [Bioconductor](setup.html#bioconductor)
+- [RMarkdown](setup.html#rmarkdown)
+- [RNA-seq](setup.html#rna-seq)
+- [Survival Analysis](setup.html#survival_analysis)
+- [Getting data](setup.html#get_data)
+
+You'll need to download _all_ the data. As [described in the setup page](setup.html#get_data), navigate to the [data page](data.html) and download _all_ the relevant datasets, saving them to a folder that's easy to find.
+-->
