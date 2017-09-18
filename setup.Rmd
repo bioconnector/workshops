@@ -26,7 +26,7 @@ R and RStudio are separate downloads and installations. **R** is the underlying 
 
 ### CRAN packages
 
-Launch RStudio (RStudio, *not R itself*). Ensure that you have internet access, then copy and paste the following command into the **Console** panel (usually the lower-left panel, by default) and hit the Enter/Return key. 
+We will need to install several core packages needed for most lessons. Launch RStudio (RStudio, *not R itself*). Ensure that you have internet access, then copy and paste the following commands, one-at-a-time, into the **Console** panel (usually the lower-left panel, by default) and hit the Enter/Return key. If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and [email one of the instructors](people.html) the command you typed and the error you received.
 
 ```r
 install.packages("tidyverse")

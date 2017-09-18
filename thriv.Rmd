@@ -46,7 +46,7 @@ This course introduces methods, tools, and software for reproducibly managing, m
 
 **[Click the <i class="fa fa-cog"></i> Setup](setup.html) link on the navbar at the top and review all the information and follow the instructions _prior to the workshop_**.
 
-You should set aside a couple hours to download, install, and test all the software needed for the course. All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have much time for troubleshooting software installation issues during class. 
+You should set aside a couple hours to download, install, and test all the software needed for the course. All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have much time for troubleshooting software installation issues during class. [Email one of the instructors](people.html) if you're having difficulty.
 
 After installing and testing the software we'll be using, please download the data as instructed, and review the required reading _prior to class_.
 
