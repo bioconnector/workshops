@@ -9,12 +9,14 @@ output:
 
 Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- `etype==1` indicates that row corresponds to recurrence; `etype==2` indicates death. 
 
-First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`. If you don't have dplyr or tidyverse, you can use the base `subset()` function instead.
+First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)`. If you don't have dplyr you can use the base `subset()` function instead.
 
+
+\bigskip
 
 ```r
-# using tidyverse/dplyr::filter
-library(tidyverse)
+# using dplyr::filter
+library(dplyr)
 colondeath <- filter(colon, etype==2)
 
 # Or, using base subset()
@@ -22,6 +24,8 @@ colondeath <- filter(colon, etype==2)
 
 head(colondeath)
 ```
+
+\bigskip
 
 1. Look at the help for `?colon` again. How are `sex` and `status` coded? How is this different from the lung data?
 
@@ -45,6 +49,8 @@ head(colondeath)
 ##  1500    287      46    0.598  0.0223        0.556        0.644
 ##  2000    238      25    0.545  0.0227        0.503        0.592
 ```
+
+\bigskip
 
 3. Using the survminer package, plot a Kaplan-Meier curve for this analysis with confidence intervals and showing the p-value. See `?ggsurvplot` for help. Is there a significant difference between males and females?
 
