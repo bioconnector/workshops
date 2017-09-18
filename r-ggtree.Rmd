@@ -29,7 +29,7 @@ This lesson does _not_ cover methods and software for _generating_ phylogenetic 
 
 Bioconductor packages usually have great documentation in the form of _vignettes_. Take a look at the [landing page for ggtree](http://bioconductor.org/packages/release/bioc/html/ggtree.html) -- about halfway down the page under the "Documentation" heading there are multiple walkthrough tutorials directed to different applications and functionalities of ggtree, chock full of runnable examples and explanations.
 
-Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup.html#bioconductor)), then load them every time you start a new R session. Load the tidyverse package first.
+Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup.html#bioconductor)), then load them every time you start a new R session.
 
 ```{r load_ggtree_without_junk, echo=FALSE}
 suppressPackageStartupMessages(suppressWarnings(library(ggtree)))
@@ -39,7 +39,7 @@ suppressPackageStartupMessages(suppressWarnings(library(ggtree)))
 library(ggtree)
 ```
 
-_A note on masked functions_: Take a second and look through some of the output that you see when you load ggtree after tidyverse. When you first installed ggtree it may have taken a while, because ggtree _depends_ on a number of other R packages. Each of these, in turn, may depend on other packages. These are all loaded into your working environment when you load ggtree. Also notice the lines that start with `The following objects are masked from 'package:...`. One example of this is the `collapse()` function from dplyr. When ggtree was loaded, it loaded it's own function called `collapse()`. Now, if you wanted to use dplyr's collapse function, you'll have to call it explicitly using this kind of syntax: `dplyr::collapse()`. [See this Q&A thread for more](http://stackoverflow.com/questions/4879377/r-masked-functions).
+_A note on masked functions_: If you already loaded a package like **dplyr**, take a second and look through some of the output that you see when you load **ggtree** after **dplyr**. When you first installed ggtree it may have taken a while, because ggtree _depends_ on a number of other R packages. Each of these, in turn, may depend on other packages. These are all loaded into your working environment when you load ggtree. Also notice the lines that start with `The following objects are masked from 'package:...`. One example of this is the `collapse()` function from dplyr. When ggtree was loaded, it loaded it's own function called `collapse()`. Now, if you wanted to use dplyr's collapse function, you'll have to call it explicitly using this kind of syntax: `dplyr::collapse()`. [See this Q&A thread for more](http://stackoverflow.com/questions/4879377/r-masked-functions).
 
 
 ## Tree Import
@@ -89,7 +89,6 @@ Let's first import our tree data. We're going to work with a made-up phylogeny w
 
 
 ```{r read.tree}
-library(tidyverse)
 library(ggtree)
 
 tree <- read.tree("data/tree_newick.nwk")
