@@ -9,7 +9,9 @@ geometry: margin=.35in
 
 ## Important libraries to load
 
-If you don't have a particular package installed already: `install.packages(Tmisc)`. Only **dplyr** and **broom** are strictly required for this lesson. Running `install.packages("tidyverse")` will install everything except **Tmisc**.
+If you don't have a particular package installed already: `install.packages(Tmisc)`. Only **dplyr** and **broom** are strictly required.
+
+\bigskip
 
 ```r
 library(dplyr)    # for filter(), mutate(), %>%, etc. see dplyr lesson.

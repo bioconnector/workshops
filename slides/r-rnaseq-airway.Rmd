@@ -105,7 +105,8 @@ Open RStudio. **File** -- **New file** -- **R script**. Save this file as **`air
 Quit RStudio, then double-click the R script to open R running in the `rstats` folder. You can also do this through the menu with **Session** -- **Set working directory** -- **To Source File Location**. Then load the data:
 
 ```r
-library(tidyverse)
+library(dplyr)
+library(readr)
 rawcounts <- read_csv("airway_rawcounts.csv")
 metadata <-  read_csv("airway_metadata.csv")
 ```

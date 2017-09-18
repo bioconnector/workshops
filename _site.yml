@@ -105,7 +105,7 @@ navbar:
 #        - text: "Data Manipulation"
 #          href: r-dplyr-homework.html
 #        - text: "Data Visualization"
-#          href: r-dataviz-homework.html
+#          href: r-viz-homework.html
 #        - text: "Reproducible Research & RMarkdown"
 #          href: r-rmarkdown-homework.html
 #        - text: "Essential Statistics"

@@ -114,10 +114,12 @@ That is, we have **two tables**:
 
 ## Import data
 
-First, let's load the **tidyverse** library. (This loads **readr**, **dplyr**, **ggplot2**, and several other needed packages). Then let's import our data [with **readr**'s `read_csv()` function](r-dataframes.html) (_note_: not `read.csv()`). Let's read in the actual count data and the experimental metadata.
+First, let's load the **readr**, **dplyr**, and **ggplot2** packages. Then let's import our data [with **readr**'s `read_csv()` function](r-dataframes.html) (_note_: not `read.csv()`). Let's read in the actual count data and the experimental metadata.
 
 ```{r libs_importdata}
-library(tidyverse)
+library(readr)
+library(dplyr)
+library(ggplot2)
 
 mycounts <- read_csv("data/airway_scaledcounts.csv")
 metadata <-  read_csv("data/airway_metadata.csv")
@@ -347,7 +349,7 @@ Note two things:
 
 ```{r getResults}
 res <- results(dds, tidy=TRUE)
-res <- tbl_df(res)
+res <- as_tibble(res)
 res
 ```
 
