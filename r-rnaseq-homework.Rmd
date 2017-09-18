@@ -73,7 +73,7 @@ anno
 
 [^results]: Note that without further specifying to the `results()` function, the default is to treat the alphabetically first condition as the control, and the alphabetically second condition as the experimental group. Therefore, the differential expression values will be comparing "Pre" versus "Post", since "Post" comes first. 
 
-[^mask]: Note that you may need to explicitly call `select()` from the dplyr library using `dplyr::select()`, because loading DESeq2 will mask dplyr's select if you loaded dplyr or tidyverse first.
+[^mask]: Note that you may need to explicitly call `select()` from the dplyr library using `dplyr::select()`, because loading DESeq2 will mask dplyr's select if you loaded dplyr first.
 
 ```{r, echo=FALSE, cache=TRUE}
 library(DESeq2)
