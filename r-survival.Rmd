@@ -80,10 +80,10 @@ This model shows that **the hazard ratio is $e^{\beta_1}$,** and remains constan
 
 ## Survival analysis in R
 
-The core survival analysis functions are in the **[survival](https://cran.r-project.org/web/packages/survival/)** package. The survival package is one of the few "core" packages that comes bundled with your basic R installation, so you probably didn't need to `install.packages()` it. But, you'll need to load it like any other library when you want to use it. We'll also be using several of the **[tidyverse](https://github.com/tidyverse/tidyverse#readme)** packages, so let's load that too. Finally, we'll also want to load the **[survminer](https://cran.rstudio.com/web/packages/survminer/index.html)** package, which provides much nicer Kaplan-Meier plots out-of-the-box than what you get out of base graphics.
+The core survival analysis functions are in the **[survival](https://cran.r-project.org/web/packages/survival/)** package. The survival package is one of the few "core" packages that comes bundled with your basic R installation, so you probably didn't need to `install.packages()` it. But, you'll need to load it like any other library when you want to use it. We'll also be using the **dplyr** package, so let's load that too. Finally, we'll also want to load the **[survminer](https://cran.rstudio.com/web/packages/survminer/index.html)** package, which provides much nicer Kaplan-Meier plots out-of-the-box than what you get out of base graphics.
 
 ```{r loadPkgs}
-library(tidyverse)
+library(dplyr)
 library(survival)
 library(survminer)
 ```
@@ -545,6 +545,7 @@ theme_set(theme_bw())
 
 
 ```{r geneExprBoxplots, results="markup"}
+library(ggplot2)
 expr <- expressionsTCGA(BRCA.mRNA, OV.mRNA, UCEC.mRNA,
                         extract.cols = c("PAX8", "GATA3", "ESR1"))
 head(expr)
@@ -563,6 +564,7 @@ theme_set(theme_bw())
 ```
 
 ```{r tidyGeneExprBoxplots, eval=TRUE, fig.width=10}
+library(tidyr)
 expr %>% 
   tbl_df() %>% 
   gather(gene, expression, PAX8, GATA3, ESR1) %>% 
