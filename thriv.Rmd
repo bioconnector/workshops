@@ -14,17 +14,17 @@ title: "THRIV Data Science Training Program"
 <a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss"></i></a>  
 <small>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.</small>
 
-**_When_:**  Fall 2017, Tuesdays 2-5pm. 
+**_When_:**  Fall 2017, Tuesdays **1-4pm**. 
 
 Date | Location
 ---------|---------
-Oct 17 | 560 Ray C Hunt Drive
-Oct 24 | 560 Ray C Hunt Drive
-Oct 31 | 560 Ray C Hunt Drive
+Oct 17 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
+Oct 24 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
+Oct 31 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
 Nov 14 | [Carter classroom](https://www.hsl.virginia.edu/sites/default/files/floorplan2014.pdf), [UVA Health Sciences Library](https://www.hsl.virginia.edu/directions)
-Nov 21 | 560 Ray C Hunt Drive
-Dec  6 | 560 Ray C Hunt Drive
-Dec 19 | 560 Ray C Hunt Drive
+Nov 21 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
+Dec  6 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
+Dec 19 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
 
 <!--
 Spring 2017 Module S1  
