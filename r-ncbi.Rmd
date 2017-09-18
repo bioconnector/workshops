@@ -212,7 +212,7 @@ entrez_db_links(db = "taxonomy")
 
 There are `r length(nuclinkid)` records for *Aedes aegypti* in NCBI's nucleotide database ... `entrez_fetch()` can pull down each in fasta format:
 
-```{r}
+```{r fetch_fasta, eval=FALSE}
 yfmfasta <- entrez_fetch(db = "nuccore", id = nuclinkid, rettype = "fasta")
 ```
 
@@ -222,7 +222,7 @@ Let's take a look at one of the sequences:
 strsplit(yfmfasta, ">")[[1]][1]
 ```
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, eval=FALSE}
 stringr::str_trunc(strsplit(yfmfasta, ">")[[1]][4], width = 400)
 ```
 
