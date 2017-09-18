@@ -86,7 +86,7 @@ dds <- DESeq(dds)
 
 # Do the last few steps.
 res <- results(dds, tidy=TRUE) %>% 
-  tbl_df() %>% 
+  as_tibble() %>% 
   arrange(pvalue) %>% 
   inner_join(anno, by=c("row"="ensgene")) %>% 
   head(10) %>% 

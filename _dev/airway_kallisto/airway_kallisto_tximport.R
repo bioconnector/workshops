@@ -47,7 +47,7 @@ txicounts <- txi$counts %>%
   round %>%
   as.data.frame %>%
   rownames_to_column("ensgene") %>%
-  tbl_df
+  as_tibble
 txicounts
 # txicounts %>% write_csv("../../data/airway_scaledcounts.csv")
 
@@ -55,7 +55,7 @@ txilength <- txi$length %>%
   round %>%
   as.data.frame %>%
   rownames_to_column("ensgene") %>%
-  tbl_df
+  as_tibble
 txilength
 # txilength %>% write_csv("../../data/airway_length.csv")
 
@@ -63,7 +63,7 @@ txitpm <- txi$abundance %>%
   as.data.frame %>%
   round(2) %>%
   rownames_to_column("ensgene") %>%
-  tbl_df
+  as_tibble
 txitpm
 # txitpm %>% write_csv("../../data/airway_tpm.csv")
 

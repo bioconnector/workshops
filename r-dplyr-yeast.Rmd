@@ -51,7 +51,12 @@ ydat
 
 The [dplyr package](https://github.com/hadley/dplyr) is a relatively new R package that makes data manipulation fast and easy. It imports functionality from another package called magrittr that allows you to chain commands together into a pipeline that will completely change the way you write R code such that you're writing code the way you're thinking about the problem.
 
-When you read in data with the readr package (`read_csv()`) and you had the dplyr package loaded already, the data frame takes on this "special" class of data frames called a `tbl`, which you can see with `class(ydat)`. If you have other "regular" data frames in your workspace, the `tbl_df()` function will convert it into the special dplyr `tbl` that displays nicely (e.g.: `iris <- tbl_df(iris)`). You don't have to turn all your data frame objects into tbl_df objects, but it does make working with large datasets a bit easier.
+When you read in data with the readr package (`read_csv()`) and you had the dplyr package loaded already, the data frame takes on this "special" class of data frames called a `tbl` (pronounced "tibble"), which you can see with `class(ydat)`. If you have other "regular" data frames in your workspace, the `as_tibble()` function will convert it into the special dplyr `tbl` that displays nicely (e.g.: `iris <- as_tibble(iris)`). You don't have to turn all your data frame objects into tibbles, but it does make working with large datasets a bit easier. 
+
+You can read more about tibbles in [Tibbles chapter in _R for Data Science_](http://r4ds.had.co.nz/tibbles.html) or in the [tibbles vignette](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html). They keep most of the features of data frames, and drop the features that used to be convenient but are now frustrating (i.e. converting character vectors to factors). You can read more about the differences between data frames and tibbles in [this section of the tibbles vignette](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html#tibbles-vs-data-frames), but the major convenience for us concerns **printing** (aka displaying) a tibble to the screen. When you print (i.e., display) a tibble, it only shows the first 10 rows and all the columns that fit on one screen. It also prints an abbreviated description of the column type. You can control the default appearance with options:
+
+- `options(tibble.print_max = n, tibble.print_min = m)`: if there are more than _n_ rows, print only the first _m_ rows. Use `options(tibble.print_max = Inf)` to always show all rows.
+- `options(tibble.width = Inf)` will always print all columns, regardless of the width of the screen.
 
 ## dplyr verbs
 
@@ -64,7 +69,7 @@ The dplyr package gives you a handful of useful **verbs** for managing data. On 
 1. `summarize()`
 1. `group_by()`
 
-They all take a `data.frame` or `tbl_df` as their input for the first argument, and they all return a `data.frame` or `tbl_df` as output.
+They all take a data frame or tibble as their input for the first argument, and they all return a data frame or tibble as output.
 
 ### filter()
 

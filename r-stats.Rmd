@@ -30,8 +30,8 @@ options(max.print=200)
 ###############################################################################
 library(dplyr)
 
-# nhdemo <- Hmisc::sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/DEMO_G.XPT") %>% tbl_df 
-# nhbody <- Hmisc::sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/BMX_G.XPT") %>% tbl_df
+# nhdemo <- Hmisc::sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/DEMO_G.XPT") %>% as_tibble 
+# nhbody <- Hmisc::sasxport.get("http://wwwn.cdc.gov/Nchs/Nhanes/2011-2012/BMX_G.XPT") %>% as_tibble
 nhhiq <-  Hmisc::sasxport.get("http://wwwn.cdc.gov/nchs/nhanes/2011-2012/HIQ_G.XPT") %>% 
   transmute(ID=as.integer(seqn), Insured=as.integer(hiq011)) %>% 
   mutate(Insured=recode(Insured, `1`="Yes", `2`="No", .default=NA_character_, .missing=NA_character_))
@@ -123,7 +123,7 @@ Now, let's actually load the data. You can get help for the import function with
 
 ```{r loaddata}
 nh <- read.csv(file="data/nhanes.csv")
-nh <- tbl_df(nh)
+nh <- as_tibble(nh)
 nh
 ```
 
@@ -135,7 +135,7 @@ nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, as.factor)
 nh
 ```
 
-Take a look at that output. The nice thing about loading dplyr and wrapping the object with `tbl_df()` is that data frames are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
+Take a look at that output. The nice thing about loading dplyr and wrapping the object with `as_tibble()` is that data frames are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
 
 ```{r view, eval=FALSE}
 View(nh)
