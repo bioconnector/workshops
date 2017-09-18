@@ -227,6 +227,8 @@ install.packages("d3heatmap")
 install.packages("leaflet")
 install.packages("visNetwork")
 install.packages("jsonlite")
+install.packages("threejs")
+install.packages("igraph")
 ```
 
 To check that these are correctly installed, first close RStudio and then reopen it and run the following:
@@ -237,6 +239,8 @@ library(d3heatmap)
 library(leaflet)
 library(visNetwork)
 library(jsonlite)
+library(threejs)
+library(igraph)
 ```
 
 These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email one of the instructors](people.html) _prior to the course_ if you are still having difficulty.

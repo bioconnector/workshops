@@ -237,8 +237,8 @@ The base layout above is helpful, but an even better depiction of the patient tr
 ```{r}
 visNetwork(patientnodes,patientlinks) %>%
         visNodes(
-            shape = "triangle", 
-            color = list(background = "lightblue", 
+            shape = "triangle",
+            color = list(background = "lightblue",
             border = "darkblue",
             highlight = "firebrick"),
             shadow = list(enabled = TRUE, size = 10)) %>%
@@ -297,13 +297,27 @@ Much like the base `plot()` function, `hchart()` can produce a variety of differ
 hchart(kubrick, "scatter",  hcaes(x = year, y = rating))
 ```
 
-Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. While `hchart()` provides a quick way to implement this interactivity, to fully take advantage of Highhcarts features it may be necessary to use a different approach.
+Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. We can extend this interactivity with other functions from the package, each of which can be passed with the the **magrittr** piping syntax.
 
-The `highchart()` function provides a "canvas" from which you can invoke specific plot types, and can accept further customization as arguments. So the code below will create a "highcart" and then (using the **magrittr** piping syntax) pass that object along to another function that creates a scatter plot. This method allows for more customization of the scatter plot than `hchart()`, as you can easily specifiy attributes to be mapped on onto the size (z) and label.
+**nb** `highchart()` is another approach. This function creates a "canvas" from which you can invoke specific plot types, and can accept further customization as arguments. 
+
+So the code below will create a "highchart" and then (using the **magrittr** piping syntax) pass that object along to another function that creates a scatter plot or in this case a "bubble" scatter plot. This method allows for more customization of the scatter plot than `hchart()`, as you can prepare your data to include attributes to be mapped on onto the size (z) and label.
 
 ```{r}
-highchart() %>%
-    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title)
+kubrick <- 
+  kubrick %>%
+  select(x = year,
+         y = rating,
+         z = budget, 
+         label = title)
+
+highchart() %>%  
+  hc_add_series(data = kubrick, 
+                type = "bubble", 
+                dataLabels = list(enabled = TRUE, 
+                                  format = "{point.label}")
+                )
+
 ```
 
 The plot above provides much more information and interactivity than the previous visualizations. However, it can still be improved. 
@@ -312,23 +326,92 @@ For one thing, the plot should have a title. We can give it one with `hc_title()
 
 ```{r}
 # specify options
-kubrickopts <- list(plotOptions = list(series = list(dataLabels = list(allowOverlap = TRUE))))
+kubrickopts <- list(plotOptions = list(series = 
+                                         list(dataLabels =
+                                                list(allowOverlap = TRUE))))
 
 # create plot and pass in options to disable behavior
-highchart(hc_opts = kubrickopts) %>%
-    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title) %>%
-    hc_title(text = "Stanley Kubrick IMDB Ratings By Year") 
+highchart(hc_opts = kubrickopts) %>%  
+  hc_add_series(data = kubrick, 
+                type = "bubble", 
+                dataLabels = list(enabled = TRUE, 
+                                  format = "{point.label}")
+                ) %>%
+  hc_title(text = "Stanley Kubrick IMDB Ratings By Year") 
+```
+
+### threejs
+
+The **threejs** R package[^20] is another htmlwidget, which makes it possible to make several kinds of data visualizations baded on the **three.js** JavaScript library[^21].
+
+The help documentation for **threejs** categorizes the possible visualizations as follows[^22]:
+
+> - `graphjs`: an interactive network visualization widget 
+> - `scatterplot3js`: a 3-d scatterplot widget similar to, but more limited than, the scatterplot3d function
+> - `globejs` : a somewhat silly widget that plots data and images on a 3-d globe
+
+`graphjs` implements 3D interactive network visualizations. The first argument to the function is an `igraph` object, which is a data structure that manages the definition of nodes and edges (and associated attributes)[^23]. 
+
+We can use the patients data from the **visNetwork** example to try it out:
+
+```{r}
+library(threejs)
+library(igraph)
+g <- graph_from_data_frame(d = patientlinks)
+
+graphjs(g)
+```
+
+`scatterplot3js` creates a three-dimensional interactive scatterplot. The plot needs specifications for X,Y,Z indices. Additionally, the following example (using the Kubrick data from the **highcharter** demo above) also includes point labels that are displayed at the top of the plot on hover:
+
+```{r}
+scatterplot3js(x = kubrick$x, 
+               y = kubrick$y, 
+               z = kubrick$z,
+               labels = kubrick$title)
+```
+
+`globejs` on its own renders a JavaScript visualization of the Earth:
+
+```{r}
+globejs()
+```
+
+Data with latitude and longitude can be mapped onto the globe. The code below reads in a list of airports that contains coordinates for each given location. The size of the airport ("small", "medium", "large") is also included as metadata. Each point is plotted on the globe, colored by size:
+
+```{r}
+library(jsonlite)
+library(dplyr)
+
+# globejs 
+airports <- fromJSON("https://raw.githubusercontent.com/jbrooksuk/JSON-Airports/master/airports.json")
+
+# create a dataframe key of size to colors
+sizecolors <-
+  data_frame(size = c("small","medium","large"),
+             color = c("lightblue", "gold","firebrick"))
+
+airports <-
+  airports %>%
+  # some of the data is missing lat and lon
+  filter(!is.na(lat) & !is.na(lon)) %>%
+  # join with colors
+  left_join(sizecolors)
+
+globejs(lat = airports$lat, 
+        lon = airports$lon,
+        color = airports$color)
 ```
 
 ## Shiny 
 
-One of the principal advantages of JavaScript visualizations is that they are ready to insert directly into web applications. They can potentially be embedded in HTML content, and included in a variety of frameworks. One such framework, specific to R development, is Shiny[^20].
+One of the principal advantages of JavaScript visualizations is that they are ready to insert directly into web applications. They can potentially be embedded in HTML content, and included in a variety of frameworks. One such framework, specific to R development, is Shiny[^24].
 
 Created and maintained by RStudio, Shiny is a web application framework developing interactive, web-based tools with R. JavaScript / R bindings developed with **htmlwidgets** include functions (`render*()` for server.R and `*Output()` for ui.R) to create and update these visualizations in a Shiny app.
 
 ## Future Features
 
-The **htmlwidgets** package significantly cuts down on the complexity of integrating JavaScript libraries into R[^21]. As mentioned above, this package creates boilerplate outlines and provides a helpful structure for writing the pieces of R and JavaScript code that will communicate with one another. The end result of the binding is a package that includes functions to be called to create the visualization of interest. The relative ease of this workflow has resulted in a flood of new JavaScript / R visualization tools in the past year[^22] ... and there will likely be many more released in the future. Another new tool in development is **crosstalk**, which aims to facilitate interaction *across* JavaScript frameworks via R[^23]. 
+The **htmlwidgets** package significantly cuts down on the complexity of integrating JavaScript libraries into R[^25]. As mentioned above, this package creates boilerplate outlines and provides a helpful structure for writing the pieces of R and JavaScript code that will communicate with one another. The end result of the binding is a package that includes functions to be called to create the visualization of interest. The relative ease of this workflow has resulted in a flood of new JavaScript / R visualization tools in the past year[^26] ... and there will likely be many more released in the future. Another new tool in development is **crosstalk**, which aims to facilitate interaction *across* JavaScript frameworks via R[^23]. 
 
 ## References
 
@@ -351,7 +434,11 @@ The **htmlwidgets** package significantly cuts down on the complexity of integra
 [^17]: https://shop.highsoft.com/highcharts
 [^18]: https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf
 [^19]: http://api.highcharts.com/highcharts
-[^20]: http://shiny.rstudio.com/
-[^21]: http://www.htmlwidgets.org/develop_intro.html
-[^22]: http://www.buildingwidgets.com/
-[^23]: https://github.com/rstudio/crosstalk
+[^20]: https://bwlewis.github.io/rthreejs/
+[^21]: https://threejs.org/
+[^22]: https://github.com/bwlewis/rthreejs
+[^23]: http://igraph.org/r/
+[^24]: http://shiny.rstudio.com/
+[^25]: http://www.htmlwidgets.org/develop_intro.html
+[^26]: http://www.buildingwidgets.com/
+[^27]: https://github.com/rstudio/crosstalk

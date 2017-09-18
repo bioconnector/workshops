@@ -83,6 +83,8 @@ install.packages("rlist")
 install.packages("purrr")
 install.packages("rentrez")
 install.packages("XML")
+install.packages("threejs")
+install.packages("igraph")
 
 # Bioconductor
 source("http://bioconductor.org/biocLite.R")
@@ -91,6 +93,8 @@ biocLite("DESeq2")
 biocLite("RTCGA")
 biocLite("RTCGA.clinical")
 biocLite("RTCGA.mRNA")
+biocLite("ggtree")
+biocLite("EBImage")
 ```
 
 If you want to optionally demonstrate something without strictly requiring the package to build the site, you could duplicate a chunk, echoing but not evaluating the first, and evaluating but not echoing the second, where you check to see if the package is installed in the second. For example, as used in the intro stats lesson, optionally show how _if_ you have Tmisc installed, you can plot and tabulate missing data, but if you don't have Tmisc, the site build won't fail (you just won't see the output):
