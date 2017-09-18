@@ -237,8 +237,8 @@ The base layout above is helpful, but an even better depiction of the patient tr
 ```{r}
 visNetwork(patientnodes,patientlinks) %>%
         visNodes(
-            shape = "triangle", 
-            color = list(background = "lightblue", 
+            shape = "triangle",
+            color = list(background = "lightblue",
             border = "darkblue",
             highlight = "firebrick"),
             shadow = list(enabled = TRUE, size = 10)) %>%
@@ -297,13 +297,27 @@ Much like the base `plot()` function, `hchart()` can produce a variety of differ
 hchart(kubrick, "scatter",  hcaes(x = year, y = rating))
 ```
 
-Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. While `hchart()` provides a quick way to implement this interactivity, to fully take advantage of Highhcarts features it may be necessary to use a different approach.
+Both of the plots above are interactive in the sense that they display information about a point (or bin) on hover. We can extend this interactivity with other functions from the package, each of which can be passed with the the **magrittr** piping syntax.
 
-The `highchart()` function provides a "canvas" from which you can invoke specific plot types, and can accept further customization as arguments. So the code below will create a "highcart" and then (using the **magrittr** piping syntax) pass that object along to another function that creates a scatter plot. This method allows for more customization of the scatter plot than `hchart()`, as you can easily specifiy attributes to be mapped on onto the size (z) and label.
+**nb** `highchart()` is another approach. This function creates a "canvas" from which you can invoke specific plot types, and can accept further customization as arguments. 
+
+So the code below will create a "highchart" and then (using the **magrittr** piping syntax) pass that object along to another function that creates a scatter plot or in this case a "bubble" scatter plot. This method allows for more customization of the scatter plot than `hchart()`, as you can prepare your data to include attributes to be mapped on onto the size (z) and label.
 
 ```{r}
-highchart() %>%
-    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title)
+kubrick <- 
+  kubrick %>%
+  select(x = year,
+         y = rating,
+         z = budget, 
+         label = title)
+
+highchart() %>%  
+  hc_add_series(data = kubrick, 
+                type = "bubble", 
+                dataLabels = list(enabled = TRUE, 
+                                  format = "{point.label}")
+                )
+
 ```
 
 The plot above provides much more information and interactivity than the previous visualizations. However, it can still be improved. 
@@ -312,12 +326,18 @@ For one thing, the plot should have a title. We can give it one with `hc_title()
 
 ```{r}
 # specify options
-kubrickopts <- list(plotOptions = list(series = list(dataLabels = list(allowOverlap = TRUE))))
+kubrickopts <- list(plotOptions = list(series = 
+                                         list(dataLabels =
+                                                list(allowOverlap = TRUE))))
 
 # create plot and pass in options to disable behavior
-highchart(hc_opts = kubrickopts) %>%
-    hc_add_series_scatter(x = kubrick$year, y = kubrick$rating, z = kubrick$budget, label = kubrick$title) %>%
-    hc_title(text = "Stanley Kubrick IMDB Ratings By Year") 
+highchart(hc_opts = kubrickopts) %>%  
+  hc_add_series(data = kubrick, 
+                type = "bubble", 
+                dataLabels = list(enabled = TRUE, 
+                                  format = "{point.label}")
+                ) %>%
+  hc_title(text = "Stanley Kubrick IMDB Ratings By Year") 
 ```
 
 ## Shiny 
