@@ -32,12 +32,10 @@ Bioconductor packages usually have great documentation in the form of _vignettes
 Just like R packages from CRAN, you only need to install Bioconductor packages once ([instructions here](setup.html#bioconductor)), then load them every time you start a new R session. Load the tidyverse package first.
 
 ```{r load_ggtree_without_junk, echo=FALSE}
-suppressPackageStartupMessages(suppressWarnings(library(tidyverse)))
 suppressPackageStartupMessages(suppressWarnings(library(ggtree)))
 ```
 
 ```{r load_ggtree, eval=FALSE}
-library(tidyverse)
 library(ggtree)
 ```
 
@@ -438,13 +436,5 @@ read.tree("data/tree_newick.nwk") %>%
            color="purple3", alpha = .5, node=17) %>% 
   phylopic("6c9cb19d-1d8a-4215-88ba-d49cd4917a5e", 
            color="purple3", alpha = .5, node=21)
-```
-
-
-
-```{r, include=FALSE}
-#######################################################################
-knitr::knit_exit() ####################################################
-#######################################################################
 ```
 
