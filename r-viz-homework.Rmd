@@ -4,9 +4,9 @@ title: "Advanced Data Visualization Homework"
 
 (_Refer back to the [Advanced Data Visualization lesson](r-viz-gapminder.html))._
 
-```{r inithomework, echo=FALSE, eval=TRUE}
+```{r inithomework, include=FALSE}
 library(knitr)
-opts_chunk$set(eval=TRUE, echo=FALSE, fig.keep="last", message = FALSE, warning = FALSE)
+opts_chunk$set(eval=TRUE, echo=FALSE, fig.keep="last", message = FALSE, warning = FALSE, cache=TRUE)
 ```
 
 ### Key Concepts
@@ -29,12 +29,9 @@ The data we're going to look at is cleaned up version of a gene expression datas
 You can download the cleaned up version of the data at [the link above](data.html). The file is called [**brauer2007_tidy.csv**](data/brauer2007_tidy.csv). Load the **ggplot2**, **dplyr**, **readr** packages, and read the tidy _Brauer_ data into R using the `read_csv()` function (_note, **not** `read.csv()`_). Assign the data to an object called `ydat`.
 
 ```{r loadhwdata, echo=TRUE, eval=TRUE}
-library(tidyverse)
-# or ...
-# library(ggplot2)
-# library(dplyr)
-# library(readr)
-library(ggthemes)
+library(readr)
+library(dplyr)
+library(ggplot2)
 
 # Preferably read data from the web
 ydat <- read_csv("http://bioconnector.org/workshops/data/brauer2007_tidy.csv")
@@ -188,6 +185,7 @@ ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) +
 > **HINT 2** You can either do this by trial-and-error or check out the package vignette to get an idea of what each theme looks like: <https://github.com/jrnold/ggthemes>
 
 ```{r}
+library(ggthemes)
 ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
   geom_line(aes(col=nutrient), lty=1) + 
   geom_smooth(col = "black", se = FALSE, lty=3) + 

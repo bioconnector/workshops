@@ -556,6 +556,6 @@ Don't forget - see [this course's help page](help.html#ggplot2-resources) for li
 
 ## Homework
 
-Looking for more practice? [Try this homework assignment](r-dataviz-homework.html).
+Looking for more practice? [Try this homework assignment](r-viz-homework.html).
 
 ----
