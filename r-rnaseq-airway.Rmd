@@ -347,7 +347,7 @@ Note two things:
 
 ```{r getResults}
 res <- results(dds, tidy=TRUE)
-res <- tbl_df(res)
+res <- as_tibble(res)
 res
 ```
 
