@@ -28,7 +28,7 @@ In the accession search box, search for **SRP026387**. This has some pre-process
 
 You could get the gene-level counts and metadata by clicking the appropriate links. I downloaded the data and and cleaned up the metadata and gene identifiers a bit, and made that data available on the **[Data page](data.html)**. The files are called **[SRP026387_scaledcounts.csv](data/SRP026387_scaledcounts.csv)** and **[SRP026387_metadata.csv](data/SRP026387_metadata.csv)**.
 
-Go to the [Data page](data.html), download these data files, and load them into R. As we did in the [original lesson](r-rnaseq-airway.html)) under the [importing data](r-rnaseq-airway.html#importing_data) heading, you can load the tidyverse and load them with `read_csv()`, but before you can import them into a DESeqDataSet you'll have to convert them back to a regular data frame. You could alternatively use base R's `read.csv()` function and not have to worry about it.
+Go to the [Data page](data.html), download these data files, and load them into R. As we did in the [original lesson](r-rnaseq-airway.html)) under the [importing data](r-rnaseq-airway.html#importing_data) heading, you can load the **readr** and **dplyr**, and libraries and load them with `read_csv()`, but before you can import them into a DESeqDataSet you'll have to convert them back to a regular data frame. You could alternatively use base R's `read.csv()` function and not have to worry about it.
 
 ```{r}
 # Load the count data and metadata. Here, the "data" folder
@@ -51,10 +51,11 @@ And the first few rows of the count data:
 head(mycounts)
 ```
 
-Finally, load the annotation data (best to do this with dplyr's `read_csv()` because it's pretty big. We'll need tidyverse later to do some joins).
+Finally, load the annotation data (best to do this with dplyr's `read_csv()` because it's pretty big).
 
 ```{r}
-library(tidyverse)
+library(readr)
+library(dplyr)
 anno <- read_csv("data/annotables_grch38.csv")
 anno
 ```
