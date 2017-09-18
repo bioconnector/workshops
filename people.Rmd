@@ -1,8 +1,13 @@
 ---
 title: "People"
+output: 
+  html_document:
+    toc: yes
 ---
 
-### Stephen Turner
+## Instructors
+
+#### Stephen Turner
 
 Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.
 
@@ -12,13 +17,15 @@ Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, an
 - Blog: [gettinggeneticsdone.com](http://www.gettinggeneticsdone.com/)
 - GitHub: [github.com/stephenturner](https://github.com/stephenturner/)
 
-### VP Nagraj
+#### VP Nagraj
 
 VP is a research data analyst in UVA's Health Sciences Library, and runs the HSL's [Data Analysis Support Hub (DASH) service](https://www.bioconnector.virginia.edu/dash).
 
 - Email: <a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=L6Yf0_ZmAoCwCbPyxLxBbGrIq97gwXUiKEBKeJFEJ9k=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75L6Yf0_ZmAoCwCbPyxLxBbGrIq97gwXUiKEBKeJFEJ9k\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">v...</a>@virginia.edu
 - GitHub: [github.com/vpnagraj](https://github.com/vpnagraj)
 
-### Others
+## Administrative Contacts
 
-_Administrative contact_: Bart Ragon (<a href="http://www.google.com/recaptcha/mailhide/d?k=01Fpsn9fRqsAnOn2xvB6hPaw==&amp;c=gJBxKZodv6VkyiheH-XULOo6Hd2KyoERfhLPLohoLZE=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Fpsn9fRqsAnOn2xvB6hPaw\75\75\46c\75gJBxKZodv6VkyiheH-XULOo6Hd2KyoERfhLPLohoLZE\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">b...</a>@virginia.edu)
+- _For HSL workshops_: Bart Ragon (<a href="http://www.google.com/recaptcha/mailhide/d?k=01Fpsn9fRqsAnOn2xvB6hPaw==&amp;c=gJBxKZodv6VkyiheH-XULOo6Hd2KyoERfhLPLohoLZE=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Fpsn9fRqsAnOn2xvB6hPaw\75\75\46c\75gJBxKZodv6VkyiheH-XULOo6Hd2KyoERfhLPLohoLZE\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">b...</a>@virginia.edu)
+- _For BIMS8382_: Amy Bouton (<a href="http://www.google.com/recaptcha/mailhide/d?k=01qcLUpoGx9G6y7uCzkRHIFg==&amp;c=aowm48A1qsDKUhTZ2M05N4Uf54yUbhaEe8HgPGWmUyg=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\x3d01qcLUpoGx9G6y7uCzkRHIFg\x3d\x3d\x26c\x3daowm48A1qsDKUhTZ2M05N4Uf54yUbhaEe8HgPGWmUyg\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">a...</a>@eservices.virginia.edu)
+- _For THRIV_: Sandra Burks (<a href="http://www.google.com/recaptcha/mailhide/d?k=01YjKx1hY9lQCM4dSamb30Tg==&amp;c=iS8BUwgZdiPzvvgosbmvWuZCgu96ulWjXv6AxKj1Ufs=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\x3d01YjKx1hY9lQCM4dSamb30Tg\x3d\x3d\x26c\x3diS8BUwgZdiPzvvgosbmvWuZCgu96ulWjXv6AxKj1Ufs\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address">s...</a>@hscmail.mcc.virginia.edu)
