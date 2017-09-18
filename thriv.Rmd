@@ -14,7 +14,7 @@ title: "THRIV Data Science Training Program"
 <a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss"></i></a>  
 <small>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.</small>
 
-**_When_:**  Fall 2017, Tuesdays **1-4pm**. 
+**_When_:**  Fall 2017, Tuesdays <mark>**2-5pm**</mark>. 
 
 Date | Location
 ---------|---------
