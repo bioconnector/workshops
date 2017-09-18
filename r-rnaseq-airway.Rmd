@@ -25,7 +25,7 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 # # Create metadata
 # metadata <- colData(airway) %>%
 #   data.frame(id=rownames(.), ., stringsAsFactors=FALSE) %>%
-#   tbl_df() %>%
+#   as_tibble() %>%
 #   transmute(id, dex, celltype=cell, geo_id=SampleName) %>%
 #   mutate(dex=dex %>%
 #            as.character %>%
@@ -37,7 +37,7 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 # # Create countdata
 # countdata <- assay(airway) %>%
 #   data.frame(ensgene=rownames(.), ., stringsAsFactors=FALSE) %>%
-#   tbl_df()
+#   as_tibble()
 # countdata %>% write_csv("data/airway_rawcounts.csv")
 # 
 # # Test import with DESeq2
@@ -272,7 +272,7 @@ Take a second and read through all the stuff that flies by the screen when you l
 
 DESeq works on a particular type of object called a DESeqDataSet. The DESeqDataSet is a single object that contains input values, intermediate calculations like how things are normalized, and all results of a differential expression analysis. You can construct a DESeqDataSet from a count matrix, a metadata file, and a formula indicating the design of the experiment. See the help for `?DESeqDataSetFromMatrix`. If you read through the [DESeq2 vignette](http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf) you'll read about the structure of the data that you need to construct a DESeqDataSet object.
 
-`DESeqDataSetFromMatrix` requires the count matrix (`countData` argument) to be a matrix or numeric data frame. either the row names or the first column of the `countData` must be the identifier you'll use for each gene. The column names of `countData` are the sample IDs, and they must match the row names of `colData` (or the first column when `tidy=TRUE`). `colData` is an additional dataframe describing sample metadata. Both `colData` and `countData` must be regular `data.frame` objects -- they can't have the special `tbl_df` class wrapper created when importing with `readr::read_*`.
+`DESeqDataSetFromMatrix` requires the count matrix (`countData` argument) to be a matrix or numeric data frame. either the row names or the first column of the `countData` must be the identifier you'll use for each gene. The column names of `countData` are the sample IDs, and they must match the row names of `colData` (or the first column when `tidy=TRUE`). `colData` is an additional dataframe describing sample metadata. Both `colData` and `countData` must be regular `data.frame` objects -- they can't have the special `tbl` class wrapper created when importing with `readr::read_*`.
 
 ![](img/countdatacoldata.png)
 

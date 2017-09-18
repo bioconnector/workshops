@@ -3,7 +3,7 @@ title: "RNA-Seq Homework"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = TRUE, cache=TRUE)
 ```
 
 (_Refer back to the [RNA-seq data analysis lesson](r-rnaseq-airway.html))._
@@ -86,7 +86,7 @@ dds <- DESeq(dds)
 
 # Do the last few steps.
 res <- results(dds, tidy=TRUE) %>% 
-  tbl_df() %>% 
+  as_tibble() %>% 
   arrange(pvalue) %>% 
   inner_join(anno, by=c("row"="ensgene")) %>% 
   head(10) %>% 

@@ -526,7 +526,7 @@ BRCA.mRNA[1:5, 1:5]
 # Take the mRNA data
 BRCA.mRNA %>% 
   # then make it a tibble (nice printing while debugging)
-  tbl_df() %>% 
+  as_tibble() %>% 
   # then get just a few genes
   select(bcr_patient_barcode, PAX8, GATA3, ESR1) %>% 
   # then trim the barcode (see head(clin), and ?substr)
@@ -566,7 +566,7 @@ theme_set(theme_bw())
 ```{r tidyGeneExprBoxplots, eval=TRUE, fig.width=10}
 library(tidyr)
 expr %>% 
-  tbl_df() %>% 
+  as_tibble() %>% 
   gather(gene, expression, PAX8, GATA3, ESR1) %>% 
   ggplot(aes(dataset, expression, fill=dataset)) + 
     geom_boxplot() + 

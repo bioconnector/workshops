@@ -62,7 +62,7 @@ nh <- read.csv("nhanes.csv")
 
 # Make it a tbl for better printing
 library(dplyr)
-nh <- tbl_df(nh)
+nh <- as_tibble(nh)
 ```
 
 ## T-tests vs ANOVA vs linear models

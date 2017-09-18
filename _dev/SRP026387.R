@@ -30,14 +30,14 @@ mycoldata <- colData(rse) %>%
   transmute(id,
             replicate=stringr::str_extract(title, "R\\d"),
             prepost=stringr::str_extract(characteristics, "Pre|Post") %>% factor) %>%
-  tbl_df()
+  as_tibble()
 mycoldata
 # mycoldata %>% write_csv("../data/SRP026387_metadata.csv")
 
 mycountdata <- assay(rse) %>%
   as.data.frame %>%
   rownames_to_column("ensgene") %>%
-  tbl_df() %>%
+  as_tibble() %>%
   mutate_if(is.double, as.integer)
 mycountdata
 # mycountdata %>% write_csv("../data/SRP026387_scaledcounts.csv")
@@ -54,7 +54,7 @@ dds <- DESeq(dds)
 plotPCA(vst(dds), intgroup="prepost")
 
 results(dds, tidy=TRUE) %>%
-  tbl_df %>%
+  as_tibble %>%
   arrange(desc(abs(stat))) %>%
   inner_join(anno, by=c("row"="ensgene")) %>%
   View
