@@ -222,11 +222,11 @@ ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE,
 
 Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- `etype==1` indicates that row corresponds to recurrence; `etype==2` indicates death. 
 
-First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)` or `library(tidyverse)`. If you don't have dplyr or tidyverse, you can use the base `subset()` function instead.
+First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)`. If you don't have dplyr you can use the base `subset()` function instead.
 
 ```{r}
-# using tidyverse/dplyr::filter
-library(tidyverse)
+# using dplyr::filter
+library(dplyr)
 colondeath <- filter(colon, etype==2)
 
 # Or, using base subset()
@@ -378,7 +378,7 @@ cut(lung$age, breaks=c(0, 62, Inf), labels=c("young", "old"))
 # the base r way:
 lung$agecat <- cut(lung$age, breaks=c(0, 62, Inf), labels=c("young", "old"))
 
-# or the tidyverse way:
+# or the dplyr way:
 lung <- lung %>% 
   mutate(agecat=cut(age, breaks=c(0, 62, Inf), labels=c("young", "old")))
 
@@ -397,7 +397,7 @@ But, what if we chose a different cut point, say, 70 years old, which is roughly
 # the base r way:
 lung$agecat <- cut(lung$age, breaks=c(0, 70, Inf), labels=c("young", "old"))
 
-# or the tidyverse way:
+# or the dplyr way:
 lung <- lung %>% 
   mutate(agecat=cut(age, breaks=c(0, 70, Inf), labels=c("young", "old")))
 
