@@ -5,7 +5,7 @@ title: "Advanced Data Manipulation Homework"
 (_Refer back to the [Advanced Data Manipulation lesson](r-dplyr-yeast.html))._
 
 ```{r inithw, echo=FALSE}
-knitr::opts_chunk$set(echo=FALSE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo=FALSE, message = FALSE, warning = FALSE, cache=TRUE)
 ```
 
 ### Key Concepts

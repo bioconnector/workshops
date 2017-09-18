@@ -3,7 +3,7 @@ title: "RNA-Seq Homework"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = TRUE, cache=TRUE)
 ```
 
 (_Refer back to the [RNA-seq data analysis lesson](r-rnaseq-airway.html))._

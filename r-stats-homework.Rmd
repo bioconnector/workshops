@@ -3,7 +3,7 @@ title: "Essential Statistics Homework"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = TRUE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = TRUE, cache=TRUE)
 ```
 
 (_Refer back to the [Essential Statistics lesson](r-stats.html))._
