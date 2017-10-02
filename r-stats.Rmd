@@ -15,7 +15,7 @@ This workshop will provide hands-on instruction and exercises covering basic sta
 
 **Slides**: [click here](slides/r-stats.html).
 
-```{r, echo=FALSE, message=FALSE, eval=TRUE}
+```{r, echo=FALSE, message=FALSE, eval=TRUE, include=FALSE}
 library(knitr)
 opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
 # options(digits=3)
@@ -24,7 +24,7 @@ options(max.print=200)
 ```
 
 
-```{r make_data, include=FALSE, eval=FALSE}
+```{r make_nh_data, include=FALSE, eval=FALSE}
 ###############################################################################
 ############# THIS CHUNK IS ONLY HERE TO SHOW HOW I MADE THE DATA #############
 ###############################################################################
@@ -80,6 +80,60 @@ nh %>% readr::write_csv("data/nhanes.csv")
 # nh <- readr::read_csv("data/nhanes.csv")
 # nh <- nh %>% mutate_if(is.factor, funs(as.character))
 # nhad <- nh %>% filter(Age >=18, BMI>1)
+
+```
+
+```{r make_batch_data, include=FALSE, eval=FALSE}
+###############################################################################
+############# THIS CHUNK IS ONLY HERE TO SHOW HOW I MADE THE DATA #############
+###############################################################################
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+ssize <- 20
+set.seed(2017-10-02)
+batchdata <- tibble(id=1:ssize) %>% 
+  mutate(batch=rep(0:1, each=n()/2)) %>% 
+  mutate(treat=rep(0:1, times=n()/2)) %>% 
+  mutate(y = 10 - treat + 2*batch) %>% 
+  mutate(y=round(y+rnorm(n()), 2)) %>% 
+  mutate(design="good")
+
+batchdata %>% 
+  lm(y~treat+batch, data=.) %>% 
+  summary()
+
+batchdata %>% 
+  mutate(design="bad", treat=batch)
+  
+
+  # mutate(good=rep(0:1, times=n()/2)) %>% 
+  # gather(dataset, batch, bad, good) %>% 
+  # select(dataset, id, treatment, batch) %>% 
+  # mutate()
+
+batchdata <- tibble(id=1:ssize) %>% 
+  mutate(treatment=rep(0:1, each=n()/2)) %>% 
+  mutate(bad=treatment) %>% 
+  mutate(good=rep(0:1, times=n()/2)) %>% 
+  gather(dataset, batch, bad, good) %>% 
+  select(dataset, id, treatment, batch) %>% 
+  mutate(y = 10 - treatment + 2*batch) %>% 
+  # mutate(y=round(y+rnorm(n()), 2)) %>% 
+  mutate(treatment=factor(treatment, labels=c("control", "drug"))) %>% 
+  mutate(batch=paste0("batch", batch+1)) %>% 
+  print
+
+batchdata %>% 
+  filter(dataset=="bad") %>% 
+  lm(y~treatment, data=.) %>% 
+  summary()
+
+batchdata %>% 
+  filter(dataset=="good") %>% 
+  lm(y~treatment, data=.) %>% 
+  summary()
 
 ```
 
