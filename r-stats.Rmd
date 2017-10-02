@@ -91,22 +91,49 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-ssize <- 20
+ssize <- 8
 set.seed(2017-10-02)
 batchdata <- tibble(id=1:ssize) %>% 
   mutate(batch=rep(0:1, each=n()/2)) %>% 
   mutate(treat=rep(0:1, times=n()/2)) %>% 
-  mutate(y = 10 - treat + 2*batch) %>% 
-  mutate(y=round(y+rnorm(n()), 2)) %>% 
-  mutate(design="good")
+  mutate(y = 10 + treat + 2*batch) %>% 
+  # mutate(y=round(y+rnorm(n()), 2)) %>% 
+  mutate(design="good") %>% 
+  print()
+batchdata <- batchdata %>% 
+  mutate(batch=treat) %>% 
+  mutate(y = 10 + treat + batch) %>% 
+  mutate(design="bad") %>% 
+  bind_rows(batchdata) %>% 
+  print()
+
+batchdata <- batchdata %>% 
+  mutate(y=round(y+rnorm(n()), 2)) %>%
+  mutate(treat=factor(treat, labels=c("control", "drug"))) %>% 
+  mutate(batch=paste0("batch", batch+1))
+
 
 batchdata %>% 
+  filter(design=="bad") %>% 
+  lm(y~treat, data=.) %>% 
+  summary()
+
+batchdata %>% 
+  filter(design=="bad") %>% 
   lm(y~treat+batch, data=.) %>% 
   summary()
 
 batchdata %>% 
-  mutate(design="bad", treat=batch)
-  
+  filter(design=="good") %>% 
+  lm(y~treat, data=.) %>% 
+  summary()
+
+batchdata %>% 
+  filter(design=="bad") %>% 
+  lm(y~treat+batch, data=.) %>% 
+  summary()
+
+
 
   # mutate(good=rep(0:1, times=n()/2)) %>% 
   # gather(dataset, batch, bad, good) %>% 
