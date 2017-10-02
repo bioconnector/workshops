@@ -58,6 +58,8 @@ This is an introduction to RNAseq analysis involving reading in quantitated gene
 1. [Conesa et al. A survey of best practices for RNA-seq data analysis. _Genome Biology_ 17:13 (2016)](http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8).
 1. [Soneson et al. "Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences." _F1000Research_ 4 (2015)](https://f1000research.com/articles/4-1521/v2).
 1. Abstract and introduction sections of [Himes et al. "RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells." _PLoS ONE_ 9.6 (2014): e99625](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625).
+1. Review the [_Introduction_ (10.1)](http://r4ds.had.co.nz/tibbles.html#introduction-4), [_Tibbles vs. data.frame_ (10.3)](http://r4ds.had.co.nz/tibbles.html#tibbles-vs.data.frame), and [_Interacting with Older Code_ (10.4)](http://r4ds.had.co.nz/tibbles.html#interacting-with-older-code) sections of the [**_R for Data Science_ book**](http://r4ds.had.co.nz/tibbles.html). We will initially be using the `read_*` functions from the [**readr** package](http://readr.tidyverse.org/). These functions load data into a _tibble_ instead of R's traditional data.frame. Tibbles are data frames, but they tweak some older behaviors to make life a little easier. These sections explain the few key small differences between traditional data.frames and tibbles. 
+
 
 **Slides**: [click here](slides/r-rnaseq-airway.pdf).
 

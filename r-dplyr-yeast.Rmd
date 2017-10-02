@@ -15,7 +15,10 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 
 Data analysis involves a large amount of [janitor work](http://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html) -- munging and cleaning data to facilitate downstream data analysis. This lesson demonstrates techniques for advanced data manipulation and analysis with the split-apply-combine strategy. We will use the dplyr package in R to effectively manipulate and conditionally compute summary statistics over subsets of a "big" dataset containing many observations.
 
-This lesson assumes a [basic familiarity with R](r-basics.html) and [data frames](r-dataframes.html).
+**This lesson assumes a [basic familiarity with R](r-basics.html) and [data frames](r-dataframes.html).**
+
+**Recommended reading:** Review the [_Introduction_ (10.1)](http://r4ds.had.co.nz/tibbles.html#introduction-4) and [_Tibbles vs. data.frame_ (10.3)](http://r4ds.had.co.nz/tibbles.html#tibbles-vs.data.frame) sections of the [**_R for Data Science_ book**](http://r4ds.had.co.nz/tibbles.html). We will initially be using the `read_*` functions from the [**readr** package](http://readr.tidyverse.org/). These functions load data into a _tibble_ instead of R's traditional data.frame. Tibbles are data frames, but they tweak some older behaviors to make life a little easier. These sections explain the few key small differences between traditional data.frames and tibbles. 
+
 
 ## Review
 
