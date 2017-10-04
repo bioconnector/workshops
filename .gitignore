@@ -12,7 +12,7 @@ _site/
 *_files/
 
 # Rendered HTML slides and keynote sources
-slides/*.key
+# slides/*.key
 slides/*.html
 !slides/index.html
 
