@@ -29,6 +29,10 @@ Stephen Turner (Bioinformatics Core Director, PHS)
 
 **[bioconnector.org/workshops/thriv](http://bioconnector.org/workshops/thriv)**
 
+_-or, shorter:-_
+
+**[git.io/thriv](http://git.io/thriv)**
+
 ## Agenda
 
 Subject to change!
