@@ -138,7 +138,7 @@ With the IDs for the articles, we can now access their full records. As its name
 
 Note that NCBI does place restricitons on the size of queries. We'll address how to get around this issue by using `web_history` (see [web_history](#web_history)) ... but for now we can just use a subset of the IDs. 
 
-```{r}
+```{r, eval=FALSE}
 recs <- entrez_fetch(db = "pubmed", id = res$ids[1:25], rettype = "xml", parsed = TRUE)
 ```
 
@@ -159,7 +159,7 @@ XML documents are arranged as "trees" or "document object models (DOM)" ... thes
 
 `xpathSApply()` uses base R's `sapply()` to iterate over a list and return a vector. 
 
-```{r}
+```{r, eval=FALSE}
 xpathSApply(recs, "//MedlineCitation/Article/ArticleTitle", xmlValue)
 ```
 
@@ -234,13 +234,13 @@ res$web_history
 
 So if we wanted to retrieve all records from our original search, regardless of how many there are, we can pass the web history object in the "web_history" argument to `entrez_fetch()` rather than a list of IDs. 
 
-```{r}
+```{r, eval=FALSE}
 recs <- entrez_fetch(db = "pubmed", web_history = res$web_history, rettype = "xml", parsed = TRUE)
 ```
 
 Did we get all of the titles?
 
-```{r}
+```{r, eval=FALSE}
 plosidtitles <- xpathSApply(recs, "//MedlineCitation/Article/ArticleTitle", xmlValue)
 
 length(plosidtitles) == res$count
