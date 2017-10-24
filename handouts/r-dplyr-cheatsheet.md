@@ -10,9 +10,11 @@ output: pdf_document
 
 # Keyboard shortcuts
 
-**Insert assignment operator, `<-`**: Command+Enter (Ctrl+Enter on Windows)
+**Run source line(s) in console**: Command+Enter (Ctrl+Enter on Windows)
 
-**Insert pipe operator, `%>%`**: Alt+- (dash)
+**Insert assignment operator, `<-`**: Alt+`-` (dash)
+
+**Insert pipe operator, `%>%`**: Cmd+Shift+M (Ctrl+Shift+Enter on Windows)
 
 **Cancel / get unstuck**: Escape key. If you forget to close a paranthesis, quote, etc., and your R prompt shows `+` instead of `>`, focus cursor on console, and hit the Escape key.
 
