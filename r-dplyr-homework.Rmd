@@ -1,11 +1,14 @@
 ---
 title: "Advanced Data Manipulation Homework"
+output:
+  html_document:
+    code_folding: hide
 ---
 
 (_Refer back to the [Advanced Data Manipulation lesson](r-dplyr-yeast.html))._
 
 ```{r inithw, echo=FALSE}
-knitr::opts_chunk$set(echo=FALSE, message = FALSE, warning = FALSE, cache=TRUE)
+knitr::opts_chunk$set(echo=TRUE, message = FALSE, warning = FALSE, cache=TRUE)
 ```
 
 ### Key Concepts
@@ -25,11 +28,13 @@ knitr::opts_chunk$set(echo=FALSE, message = FALSE, warning = FALSE, cache=TRUE)
 We're going to work with a different dataset for the homework here. It's a [cleaned-up excerpt](https://github.com/jennybc/gapminder) from the [Gapminder data](http://www.gapminder.org/data/). Download the [**gapminder.csv** data by clicking here](data/gapminder.csv) or using the link above. Download it, and save it in a `data/` subfolder of the project directory where you can access it easily from R.
 
 
-Load the **dplyr** and **readr** packages, and read the gapminder data into R using the `read_csv()` function (n.b. `read_csv()` is _not_ the same as `read.csv()`). Assign the data to an object called `gm`.
+Load the **dplyr** and **readr** packages, and read the gapminder data into R using the `read_csv()` function (n.b. `read_csv()` is _not_ the same as `read.csv()`). Assign the data to an object called `gm`. Run `gm` to display it.
 
-In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not.
+_Note, the code is available by hitting the "Code" button above each expected output, but try not to use it unless you're stuck_.
 
-```{r loaddata, echo=TRUE, eval=FALSE}
+<!-- In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not. -->
+
+```{r loaddata, echo=FALSE, eval=FALSE}
 library(dplyr)
 library(readr)
 
@@ -44,10 +49,15 @@ gm
 ```
 
 
-```{r loaddatatrue, eval=TRUE, include=FALSE}
+```{r loaddatatrue, eval=TRUE, include=TRUE}
+# Load required libraries
 library(dplyr)
 library(readr)
+
+# Read the data
 gm <- read_csv("data/gapminder.csv")
+
+# Take a look
 gm
 ```
 
@@ -56,20 +66,16 @@ gm
 
 Use **dplyr** functions to address the following questions:
 
-1) How many unique countries are represented per continent?
+1) How many unique countries are represented per continent? (_Hint:_ `group_by` then summarize with a call to `n_distinct(...)`).
 
 ```{r problem1}
-# gm %>%
-#     distinct(country, .keep_all=TRUE) %>%
-#     group_by(continent) %>%
-#     summarise(n = n())
 gm %>% 
   group_by(continent) %>% 
   summarize(n=n_distinct(country))
 ```
 
 
-2) Which European nation had the lowest GDP per capita in 1997? 
+2) Which European nation had the lowest GDP per capita in 1997? (_Hint:_ filter, arrange, `head(n=1)`)
 
 ```{r problem2}
 gm %>%
@@ -79,17 +85,17 @@ gm %>%
 ```
 
 
-3) According to the data available, what was the average life expectancy across each continent in the 1980s?
+3) According to the data available, what was the average life expectancy across each continent in the 1980s? (_Hint:_ filter, group\_by, summarize)
 
 ```{r problem3}
 gm %>%
     filter(year == 1982 | year == 1987) %>%
     group_by(continent) %>%
-    summarize(mean.lifeExp = mean(lifeExp))
+    summarize(mean_lifeExp = mean(lifeExp))
 ```
 
 
-4) What 5 countries have the highest total GDP over all years combined?
+4) What 5 countries have the highest total GDP over all years combined? (_Hint:_ GDP per capita is simply GDP divided by the total population size. To get GDP back, you'd mutate to calculate GDP as the product of GDP per capita times the population size. Mutate, group_by, summarize, arrange, `head(n=5)`)
 
 ```{r problem4}
 gm %>%
@@ -115,20 +121,19 @@ gm %>%
 ```{r problem6}
 gm %>%
     group_by(country) %>%
-    summarise(r = abs(cor(lifeExp, gdpPercap))) %>%
-    arrange(desc(r)) %>%
+    summarise(cor = cor(lifeExp, gdpPercap)) %>%
+    arrange(desc(abs(cor))) %>%
     head(10)
 ```
 
 
-7) Which combinations of continent (besides Asia) and year have the highest average population across all countries? _N.b. your output should include all results sorted by highest average population_. With what you already know, this one may stump you. See [this Q&A](http://stackoverflow.com/q/27207963/654296) for how to `ungroup` before `arrange`ing. This also [behaves differently in more recent versions of dplyr](https://github.com/hadley/dplyr/releases/tag/v0.5.0).
+7) Which combinations of continent (besides Asia) and year have the highest average population across all countries? _N.b. your output should include all results sorted by highest average population_.  (_Hint:_ filter where continent `!=` Asia, group by two variables, summarize, then arrange.)
 
 ```{r problem7}
 gm %>%
     filter(continent != "Asia") %>%
     group_by(continent, year) %>%
     summarise(mean.pop = mean(pop)) %>%
-    ungroup() %>%
     arrange(desc(mean.pop)) 
 ```
 
@@ -144,19 +149,8 @@ gm %>%
 ```
 
 
-9) Subset **gm** to only include observations from 1992 and store the results as **gm1992**. What kind of object is this?
+9) **_Bonus!_** Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 
-```{r problem9}
-gm1992 <-
-    gm %>%
-    filter(year == 1992)
-
-gm1992 %>% 
-    class()
-```
-
-
-10) **_Bonus!_** Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
 
 ```{r problem10}
 gm %>% 
