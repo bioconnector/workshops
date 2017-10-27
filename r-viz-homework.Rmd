@@ -1,12 +1,15 @@
 ---
 title: "Advanced Data Visualization Homework"
+output:
+  html_document:
+    code_folding: hide
 ---
 
 (_Refer back to the [Advanced Data Visualization lesson](r-viz-gapminder.html))._
 
 ```{r inithomework, include=FALSE}
 library(knitr)
-opts_chunk$set(eval=TRUE, echo=FALSE, fig.keep="last", message = FALSE, warning = FALSE, cache=TRUE)
+opts_chunk$set(eval=TRUE, echo=TRUE, fig.keep="last", message = FALSE, warning = FALSE, cache=TRUE)
 ```
 
 ### Key Concepts
@@ -28,16 +31,20 @@ The data we're going to look at is cleaned up version of a gene expression datas
 
 You can download the cleaned up version of the data at [the link above](data.html). The file is called [**brauer2007_tidy.csv**](data/brauer2007_tidy.csv). Load the **ggplot2**, **dplyr**, **readr** packages, and read the tidy _Brauer_ data into R using the `read_csv()` function (_note, **not** `read.csv()`_). Assign the data to an object called `ydat`.
 
-```{r loadhwdata, echo=TRUE, eval=TRUE}
+_Note, the code is available by hitting the "Code" button above each expected output, but try not to use it unless you're stuck_.
+
+
+```{r loadhwdata}
+# Load required libraries
 library(readr)
 library(dplyr)
 library(ggplot2)
 
-# Preferably read data from the web
-ydat <- read_csv("http://bioconnector.org/workshops/data/brauer2007_tidy.csv")
+# Read data from file
+ydat <- read_csv("data/brauer2007_tidy.csv")
 
-# Alternatively read data from file
-# ydat <- read_csv("data/brauer2007_tidy.csv")
+# Alternatively read data from the web
+# ydat <- read_csv("http://bioconnector.org/workshops/data/brauer2007_tidy.csv")
 
 # Display the data
 ydat
@@ -198,7 +205,7 @@ ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) +
 
 11) The last step is to save the plot you've created. Write your plot to a 10 X 6 PDF using a **ggplot2** function.
 
-```{r, eval = FALSE, echo = FALSE}
+```{r, eval = FALSE}
 p <- ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
   geom_line(aes(col=nutrient), lty=1) + 
   geom_smooth(col = "black", se = FALSE, lty=3) + 
