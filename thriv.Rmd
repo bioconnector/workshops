@@ -9,7 +9,7 @@ title: "THRIV Data Science Training Program"
 **_Instructor_: Stephen Turner**&nbsp;
 <a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address"><i class="fa fa-envelope"></i></a>
 <a href="https://med.virginia.edu/phs/faculty-and-staff-directory/stephen-d-turner-ph-d/" target="_blank"><i class="fa fa-phone"></i></a>
-<a href="https://twitter.com/genetics_blog" target="_blank"><i class="fa fa-twitter"></i></a>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter"></i></a>
 <a href="https://github.com/stephenturner/" target="_blank"><i class="fa fa-github"></i></a>
 <a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss"></i></a>  
 <small>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.</small>
