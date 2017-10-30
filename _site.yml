@@ -31,20 +31,22 @@ navbar:
           href: r-tidy.html
         - text: "List Manipulation"
           href: r-lists.html
-        - text: "Data Visualization"
-          href: r-viz-gapminder.html
         - text: "Interactive Visualization with JavaScript and R"
           href: r-interactive-viz.html
-        - text: "Reproducible Research & RMarkdown"
-          href: r-rmarkdown.html
         - text: "Building Shiny Web Apps in R"
           href: r-shiny.html
         - text: "Harvesting Data from NCBI"
           href: r-ncbi.html
+        - text: "Data Visualization"
+#          href: r-viz-gapminder.html
+        - text: "Reproducible Research & RMarkdown"
+#          href: r-rmarkdown.html
         - text: "Essential Statistics with R"
 #          href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
 #          href: r-survival.html
+        - text: "Drawing & annotating phylogenetic trees"
+#          href: r-ggtree.html
         - text: "----"
         - text: "--- NGS DATA ANALYSIS ---"
         - text: "RNA-seq (airway data)"
