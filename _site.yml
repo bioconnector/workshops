@@ -38,7 +38,7 @@ navbar:
         - text: "Harvesting Data from NCBI"
           href: r-ncbi.html
         - text: "Data Visualization"
-#          href: r-viz-gapminder.html
+          href: r-viz-gapminder.html
         - text: "Reproducible Research & RMarkdown"
 #          href: r-rmarkdown.html
         - text: "Essential Statistics with R"
