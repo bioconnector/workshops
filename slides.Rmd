@@ -15,7 +15,8 @@ suppressPackageStartupMessages(library(dplyr))
 dir <- "slides/"
 list.files(dir) %>%
   sort %>% 
-  grep("\\.html$", ., value=TRUE) %>% 
+  grep("\\.(html|pdf)$", ., value=TRUE) %>% 
+  grep("r-rnaseq-airway\\.html", ., invert = TRUE, value=TRUE) %>% 
   grep("^index\\.html$", ., value=TRUE, invert=TRUE) %>% 
   paste0("- [", ., "](", paste0(dir, .), ")") %>% 
   cat(sep="\n")
