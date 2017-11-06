@@ -153,6 +153,8 @@ Visit **[bioconnector.org/markdown](http://bioconnector.org/markdown/#!rmarkdown
 
 ## Authoring RMarkdown documents
 
+> **_Note_**: Before going any further, open up the options (Tools, Global Options), click the RMarkdown section, and **uncheck** the box, _"Show output inline for all R Markdown documents."_
+
 ### From scratch
 
 First, open RStudio. Create a new project. Quit RStudio, then launch RStudio using the project file (.Rproj) you just created.
@@ -246,7 +248,7 @@ This is going to put a YAML header in the file that looks something like this:
 ---
 title: "Gapminder Analysis"
 author: "Stephen Turner"
-date: "January 1, 2016"
+date: "January 1, 2017"
 output: html_document
 ---
 ```
@@ -257,7 +259,7 @@ The stuff between the three `---`s is metadata. You can read more about what kin
 ---
 title: "Gapminder analysis"
 author: "Stephen Turner"
-date: "January 1, 2016"
+date: "January 1, 2017"
 output: 
   html_document: 
     fig_caption: yes
