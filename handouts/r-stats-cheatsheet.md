@@ -9,16 +9,16 @@ geometry: margin=.35in
 
 ## Important libraries to load
 
-If you don't have a particular package installed already: `install.packages(Tmisc)`. Only **dplyr** and **broom** are strictly required.
+If you don't have a particular package installed already: `install.packages(Tmisc)`. 
 
 \bigskip
 
 ```r
+library(readr)    # for optimized read with read_csv() instead of read.csv()
 library(dplyr)    # for filter(), mutate(), %>%, etc. see dplyr lesson.
-library(broom)    # for model tidying with tidy(), augment(), glance()
-library(ggplot2)  # optional, for making plots in this lesson
-library(readr)    # optional, for optimized read with read_csv() instead of read.csv()
-library(Tmisc)    # optional, for gg_na() and propmiss()
+library(ggplot2)  # for making plots in this lesson
+library(broom)    # OPTIONAL: for model tidying with tidy(), augment(), glance()
+library(Tmisc)    # OPTIONAL: for gg_na() and propmiss()
 ```
 
 ## The pipe: **`%>%`**
@@ -27,9 +27,11 @@ When you load the **dplyr** library you can use **`%>%`**, the _pipe_. Running *
 
 ## Functions
 
+\small
+
 | **Function** | **Description** | 
 | --- | --- |
-| `read.csv("path/nhanes.csv")` | Read in `nhanes.csv` in the `path/` folder |
+| `read_csv("path/nhanes.csv")` | Read `nhanes.csv` in the `path/` folder (**readr**) |
 | `View(df)` | View tabular data frame `df` in a graphical viewer |
 | `head(df)` ; `tail(df)` | Print first and last few rows of data frame `df` |
 | `mean`, `median`, `range` | Descriptive stats. Remember `na.rm=TRUE` if desired |
@@ -47,11 +49,14 @@ When you load the **dplyr** library you can use **`%>%`**, the _pipe_. Running *
 | `chisq.test(xt)` | Chi-square test on a contingency table `xt` |
 | `fisher.test(xt)` | Fisher's exact test on a contingency table `xt` |
 | `mosaicplot(xt)` | Mosaic plot for a contingency table `xt` |
-| `relevel(x, ref="control")` | Re-level a factor variable |
+| `factor(x, levels=c("wt", "mutant"))` | Create factor specifying level order |
+| `relevel(x, ref="wildtype")` | Re-level a factor variable |
 | `glm(y~x1+x2, data=df, family="binomial")` | Fit a logistic regression model |
 | `power.t.test(n, power, sd, delta)` | T-test power calculations | 
 | `power.prop.test(n, power, p1, p2)` | Proportions test power calculations | 
 | `tidy()` `augment()` `glance()` | Model tidying functions in the broom package |
+
+\normalsize
 
 ## ggplot2 basics
 
