@@ -26,12 +26,18 @@ Dobutamine is a drug that is used during echocardiograms (aka "stress tests"), w
 
 We'll be using the data behind this paper to answer the questions that follow. Use the following to read and store the data directly from the web. Feel free to load dplyr+readr and use the `read_csv()` function instead of base R's `read.csv()`.
 
+```{r}
+library(readr)
+library(dplyr)
+```
+
+
 ```{r showReadFromWeb, echo = TRUE, eval=FALSE}
-stress <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.csv")
+stress <- read_csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.csv")
 ```
 
 ```{r, echo = FALSE, eval=TRUE}
-stress <- read.csv("data/stressEcho.csv")
+stress <- read_csv("data/stressEcho.csv")
 ```
 
 Note that in addition measuring dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.
@@ -114,11 +120,11 @@ The questions that follow are based on a data collected to examine several blood
 Use the following to read and store the data:
 
 ```{r, echo=TRUE, eval=FALSE}
-dmd <- read.csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.csv")
+dmd <- read_csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.csv")
 ```
 
 ```{r, echo=FALSE, eval=TRUE}
-dmd <- read.csv("data/dmd.csv")
+dmd <- read_csv("data/dmd.csv")
 ```
 
 For more information on the data set see: 
