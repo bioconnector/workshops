@@ -1,7 +1,7 @@
 ---
-title: "Essential Statistics with R"
-author: "Sign in and pick up handouts in the back"
-#date: "`r format(Sys.time(), '%m/%d/%Y')`"
+# title: "Essential Statistics with R"
+# author: "Sign in and pick up handouts in the back"
+# date: "`r format(Sys.time(), '%m/%d/%Y')`"
 output: 
   slidy_presentation:
     footer: "bioconnector.org | Essential Statistics with R"
@@ -9,6 +9,27 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```
+
+## Essential Statistics with R {.bigger}
+
+Ensure you have the following packages installed:
+
+```r
+# Only need to do this once
+install.packages("dplyr")
+install.packages("readr")
+install.packages("ggplot2")
+```
+
+Load the packages. Ask for help if any of these fail with an error.
+
+
+```r
+# Do this in each new session
+library(dplyr)
+library(readr)
+library(ggplot2)
 ```
 
 ## Essential Statistics with R: Agenda 
@@ -32,7 +53,7 @@ knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
 - This is _not_ an introductory R class. Pre-requisites: 
     - Installing/using packages
     - Importing data, saving results
-    - Familiarity with dplyr `%>%` and ggplot2 recommended
+    - Familiarity with readr, dplyr `%>%`, and ggplot2 recommended
 - This is _not_ a statistics course. Not covering:
     - Underlying mathematical motivation
     - How to choose the correct statistical procedure
@@ -54,16 +75,15 @@ Open RStudio. **File** -- **New file** -- **R script**. Save this file as **`nha
 
 Quit RStudio, then double-click the R script to open R running in the `rstats` folder. You can also do this through the menu with **Session** -- **Set working directory** -- **To Source File Location**.
 
-Load the data:
+Load the required libraries and data:
 
 ```r
-# Load the data
-nh <- read.csv("nhanes.csv")
-
-# Make it a tbl for better printing
 library(dplyr)
-nh <- as_tibble(nh)
+library(readr)
+nh <- read_csv("nhanes.csv")
 ```
+
+(If you don't have these packages installed, use `install.packages("dplyr")` and `install.packages("dplyr")`).
 
 ## T-tests vs ANOVA vs linear models
 
