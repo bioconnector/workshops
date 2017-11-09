@@ -1056,4 +1056,26 @@ Check out some of the other [**broom** vignettes on CRAN](https://cran.r-project
 
 ## Homework
 
-[Try this homework assignment](r-stats-homework.html).
+### Stress tests & muscular dystrophy genetics
+
+**[Try this homework assignment](r-stats-homework.html).** 
+
+There are two parts to this assignment, each using data curated and hosted by the [Vanderbilt Department of Biostatistics](http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets). The first part looks at the effects of different doses of a drug used during echocardiograms called dobutamine. The second uses data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). 
+
+### Additional topics & recommended reading
+
+#### Batch effects
+
+_Batch effects_ are sources of technical variation introduced during an experiment, such as processing with different reagents, handling by a different technician, sequencing on a different flow cell, or processing samples in groups on different days. If these _batch effects_ are strongly confounded with the study variable of interest, they can call into question the validity of your results, and in some cases, render collected data completely useless. The papers below discuss batch effects and how they can be mitigated. 
+
+1. **Chapter 5** of Scherer, Andreas. _Batch effects and noise in microarray experiments: sources and solutions._ Vol. 868. John Wiley & Sons, 2009. 
+    - Chapter 5 only: <http://onlinelibrary.wiley.com/doi/10.1002/9780470685983.ch5/pdf>.
+    - Entire book: <https://faculty.mu.edu.sa/public/uploads/1382673974.78419780470741382.pdf>.
+2. Leek, Jeffrey T., et al. "Tackling the widespread and critical impact of batch effects in high-throughput data." _Nature Reviews Genetics_ 11.10 (2010): 733-739. Available at <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880143/>.
+
+#### What's my _n_?
+
+"What's my _n_" isn't always a straightforward question to answer, especially when it comes to cell culture expriments. The post and article below go into some of these details.
+
+1. Statistics for Experimental Biologists: "What is 'n' in cell culture experiments?" Available at <http://labstats.net/articles/cell_culture_n.html>.
+2. Vaux, David L., Fiona Fidler, and Geoff Cumming. "Replicates and repeats—what is the difference and is it significant?." _EMBO reports_ 13.4 (2012): 291-296. Available at <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3321166/>.
