@@ -1064,7 +1064,7 @@ There are two parts to this assignment, each using data curated and hosted by th
 
 ### Additional topics & recommended reading
 
-#### Batch effects
+#### 1. Batch effects
 
 _Batch effects_ are sources of technical variation introduced during an experiment, such as processing with different reagents, handling by a different technician, sequencing on a different flow cell, or processing samples in groups on different days. If these _batch effects_ are strongly confounded with the study variable of interest, they can call into question the validity of your results, and in some cases, render collected data completely useless. The papers below discuss batch effects and how they can be mitigated. 
 
@@ -1073,9 +1073,16 @@ _Batch effects_ are sources of technical variation introduced during an experime
     - Entire book: <https://faculty.mu.edu.sa/public/uploads/1382673974.78419780470741382.pdf>.
 2. Leek, Jeffrey T., et al. "Tackling the widespread and critical impact of batch effects in high-throughput data." _Nature Reviews Genetics_ 11.10 (2010): 733-739. Available at <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880143/>.
 
-#### What's my _n_?
+#### 2. What's my _n_?
 
 "What's my _n_" isn't always a straightforward question to answer, especially when it comes to cell culture expriments. The post and article below go into some of these details.
 
 1. Statistics for Experimental Biologists: "What is 'n' in cell culture experiments?" Available at <http://labstats.net/articles/cell_culture_n.html>.
 2. Vaux, David L., Fiona Fidler, and Geoff Cumming. "Replicates and repeats—what is the difference and is it significant?." _EMBO reports_ 13.4 (2012): 291-296. Available at <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3321166/>.
+
+#### 3. Technical versus biological replicates
+
+Technical replicates involve taking multiple measurements on the same sample. Biological replicates are different samples each with separate measurements/assays. While technical replicates can help calibrate the precision of an instrument or assay, biological replicates are necessary for statistical analysis to make inferences about a condition or treatment. Read the paper and note below for more information on technical vs biological replication.
+
+1. Blainey, Paul, Martin Krzywinski, and Naomi Altman. "Points of significance: replication." _Nature methods_ 11.9 (2014): 879-880. Available at <http://rdcu.be/yguA>.
+2. Illumina Technical Note: "The Power of Replicates." Available at <https://www.illumina.com/Documents/products/technotes/technote_power_replicates.pdf>.
