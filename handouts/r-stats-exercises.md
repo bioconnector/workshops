@@ -61,8 +61,11 @@ output: pdf_document
     b. Display that table with margins.
     c. Show the proportions of diabetics and nondiabetics, separately, who are physically active or not.
     d. Is this relationship significant?
-    e. Create two different visualizations showing the relationship.
-2. Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor.
+    e. Create a mosaic plot to visualize the relationship.
+2. Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor. First, make Diabetes a factor variable: 
+    ```r
+    nha$Diabetes <- factor(nha$Diabetes)
+    ```
     a. Fit a model with just physical activity as a predictor, and display a model summary.
     b. Add gender to the model, and show a summary.
     c. Continue adding weight and age to the model. What happens to the gender association?
@@ -85,11 +88,10 @@ output: pdf_document
 ## [1] 8.764711
 ```
 
-3. You're doing a population study looking at the effect of a SNP on disease X. Disease X has a baseline prevalence of 5% in the population, but you suspect the SNP might increase the risk of disease X by 10% (this is typical for SNP effects on common, complex diseases). How many samples do you need to have 80% power to detect this effect, given that you want a statistical significance of $p<0.001$?
+3. You're doing a population genome-wide association study (GWAS) looking at the effect of a SNP on disease X. Disease X has a baseline prevalence of 5% in the population, but you suspect the SNP might increase the risk of disease X by 10% (this is typical for SNP effects on common, complex diseases). Calculate the number of samples do you need to have 80% power to detect this effect, given that you want a genome-wide statistical significance of $p<5\times10^{-8}$ to account for multiple testing.[^siglevel] (Hint, you can expressed $5\times10^{-8}$ in R using `5e-8` instead of `.00000005`).
 
+[^siglevel]: <https://www.quora.com/Why-is-P-value-5x10-8-chosen-as-a-threshold-to-reach-genome-wide-significance>
 
 ```
-## [1] 67946.82
+## [1] 157589.5
 ```
-
-
