@@ -472,7 +472,7 @@ It looks like single people have a very slightly higher BMI than those in a comm
 fit <- lm(BMI~RelationshipStatus, data=nha)
 ```
 
-You can display the object itself, but that isn't too interesting. You can get the more familiar ANOVA table by calling the `anova()` function on the `fit` object. More generally, the `summary()` function on a linear model object will tell you much more. 
+You can display the object itself, but that isn't too interesting. You can get the more familiar ANOVA table by calling the `anova()` function on the `fit` object. More generally, the `summary()` function on a linear model object will tell you much more. (Note this is different from dplyr's **summarize** function).
 
 ```{r}
 fit
@@ -513,17 +513,22 @@ summary(fit)
 
 The F-test on the ANOVA table tells us that there _is_ a significant difference in means between current, former, and never smokers (p=$4.54 \times 10^{-8}$). However, the linear model output might not have been what we wanted. Because the default handling of categorical variables is to treat the alphabetical first level as the baseline, "Current" smokers are treated as baseline, and this mean becomes the intercept, and the coefficients on "Former" and "Never" describe how those groups' means differ from current smokers. What if we wanted "Never" smokers to be the baseline, followed by Former, then Current? Have a look at `?factor` to relevel the factor levels.
 
+```{r, results="hide"}
+# Look at nha$SmokingStatus
+nha$SmokingStatus
+
+# What if you turn it into a factor variable?
+factor(nha$SmokingStatus)
+
+# Now let's relevel it and see what that looks like. 
+factor(nha$SmokingStatus, levels=c("Never", "Former", "Current"))
+
+# If we're happy with that, let's change the value of nha$SmokingStatus in place
+nha$SmokingStatus <- factor(nha$SmokingStatus, levels=c("Never", "Former", "Current"))
+```
+
+
 ```{r}
-# Re-level the SmokingStatus variable
-nha$SmokingStatus <- factor(nha$SmokingStatus, 
-                            levels=c("Never", "Former", "Current"))
-
-# Or, using forcats in a tidy way
-# library(forcats)
-# nha %>% 
-#   mutate(SmokingStatus = fct_relevel(SmokingStatus, 
-#                                      "Never", "Former", "Current"))
-
 # Re-fit the model
 fit <- lm(BMI~SmokingStatus, data=nha)
 
