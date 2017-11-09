@@ -432,7 +432,21 @@ t.test(AlcoholYear~RelationshipStatus, data=nha)
 
 See the heading, _Welch Two Sample t-test_, and notice that the degrees of freedom might not be what we expected based on our sample size. Now look at the help for `?t.test` again, and look at the `var.equal` argument, which is by default set to `FALSE`. One of the assumptions of the t-test is [homoscedasticity](https://en.wikipedia.org/wiki/Homoscedasticity), or homogeneity of variance. This assumes that the variance in the outcome (e.g., BMI) is identical across both levels of the predictor (diabetic vs non-diabetic). Since this is rarely the case, the t-test defaults to using the [Welch correction](https://en.wikipedia.org/wiki/Welch%27s_t-test), which is a more reliable version of the t-test when the homoscedasticity assumption is violated.
 
+> _**A note on one-tailed versus two-tailed tests:**_ A two-tailed test is almost always more appropriate. The hypothesis you're testing here is spelled out in the results ("alternative hypothesis: true difference in means is not equal to 0"). If the p-value is very low, you can reject the null hypothesis that there's no difference in means. Because you typically don't know _a priori_ whether the difference in means will be positive or negative (e.g., we don't know _a priori_ whether Single people would be expected to drink more or less than those in a committed relationship), we want to do the two-tailed test. However, if we _only_ wanted to test a very specific directionality of effect, we could use a one-tailed test and specify which direction we expect. This is more powerful if we "get it right", but much less powerful for the opposite effect. Notice how the p-value changes depending on how we specify the hypothesis. Again, the **two-tailed test is almost always more appropriate**.
+
+```{r, results='hide'}
+# Two tailed
+t.test(AlcoholYear~RelationshipStatus, data=nha)
+
+# Difference in means is >0 (committed drink more)
+t.test(AlcoholYear~RelationshipStatus, data=nha, alternative="greater")
+
+# Difference in means is <0 (committed drink less)
+t.test(AlcoholYear~RelationshipStatus, data=nha, alternative="less")
+```
+
 > _**A note on paired versus unpaired t-tests:**_ The t-test we performed here was an unpaired test. Here the males and females are different people. The diabetics and nondiabetics are different samples. The single and committed individuals are completely independent, separate observations. In this case, an _unpaired_ test is appropriate. An alternative design might be when data is derived from samples who have been measured at two different time points or locations, e.g., before versus after treatment, left versus right hand, etc. In this case, a _**paired t-test**_ would be more appropriate. A paired test takes into consideration the intra and inter-subject variability, and is more powerful than the unpaired test. See the help for `?t.test` for more information on how to do this.
+
 
 
 ### Wilcoxon test
@@ -602,7 +616,7 @@ ggplot(nha, aes(x=Height, y=Weight)) +
 Finally, let's do a multiple linear regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let's look at the effect of physical activity on testosterone levels. Let's do this with a t-test and linear regression, showing that you get the same results.
 
 ```{r}
-t.test(Testosterone~PhysActive, data=nha)
+t.test(Testosterone~PhysActive, data=nha, var.equal=TRUE)
 summary(lm(Testosterone~PhysActive, data=nha))
 ```
 
@@ -617,7 +631,7 @@ This shows us that after accounting for age that the testosterone / physical act
 Adding other predictors can also swing things the other way. We know that men have much higher testosterone levels than females. Sex is probably the single best predictor of testosterone levels in our dataset. By not accounting for this effect, our unaccounted-for variation remains very high. By accounting for Gender, we now reduce the residual error in the model, and the physical activity effect once again becomes significant. Also notice that our model fits much better (higher R-squared), and is much more significant overall.
 
 ```{r}
-summary(lm(Testosterone~PhysActive+Age+Gender, data=nha))
+summary(lm(Testosterone ~ PhysActive+Age+Gender, data=nha))
 ```
 
 We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/summary.lm.html) and [`anova()`](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/anova.lm.html) functions for extracting information from an [`lm` class object](http://stat.ethz.ch/R-manual/R-patched/library/stats/html/lm.html). There are several other accessor functions that can be used on a linear model object. Check out the help page for each one of these to learn more.
@@ -631,7 +645,7 @@ We've only looked at the [`summary()`](http://stat.ethz.ch/R-manual/R-patched/li
 
 1. Is the average BMI different in single people versus those in a committed relationship? Perform a t-test.
 2. The `Work` variable is coded "Looking" (n=159), "NotWorking" (n=1317), and "Working" (n=2230).
-    - Fit a linear model. Assign this to an object called `fit`. What does the `fit` object tell you when you display it directly?
+    - Fit a linear model of `Income` against `Work`. Assign this to an object called `fit`. What does the `fit` object tell you when you display it directly?
     - Run an `anova()` to get the ANOVA table. Is the model significant?
     - Run a Tukey test to get the pairwise contrasts. (Hint: `TukeyHSD()` on `aov()` on the fit). What do you conclude?
     - Instead of thinking of this as ANOVA, think of it as a linear model. After you've thought about it, get some `summary()` statistics on the fit. Do these results jive with the ANOVA model?
@@ -655,7 +669,6 @@ summary(lm(HDLChol~Diabetes, data=nha))
 summary(lm(HDLChol~Diabetes+Weight, data=nha))
 summary(lm(HDLChol~Diabetes+Weight+Gender+Age+PhysActive, data=nha))
 ```
-
 
 
 ## Discrete variables
