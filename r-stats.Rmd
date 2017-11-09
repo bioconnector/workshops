@@ -188,35 +188,32 @@ kable(transform(read.csv("data/nhanes_dd.csv", header=TRUE), Variable=paste0("<s
 
 ### Import & inspect
 
-There are some built-in functions for reading in data in text files. These functions are _read-dot-something_ -- for example, `read.csv()` reads in comma-delimited text data; `read.delim()` reads in tab-delimited text, etc. Normally I would use instead use the _read-underscore-something_ functions like `read_csv()` or `read_tsv()` from the [readr](https://github.com/hadley/readr) package. Compared to the base functions, they're _much_ faster, they're good at guessing the types of data in the columns, and they have more sensible defaults than the equivalent base functions do. If you have the [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html) package loaded as well, and you read in the data with readr, the data will display nicely. 
-
-We're going to be working with _factors_ throughout this lesson. Factors are R's way of representing categorical variables that can take on a _discrete_, distinct set of values, e.g., "Yes/No", "Mutant/WT", "Case/Control", etc. The readr package's `read_*` functions don't allow you to convert strings like "Yes/No" to factors automatically. But the base `read.*` functions do this automatically (not always the desired behavior).
-
-We'll want to use the **dplyr** package throughout, so let's go ahead and load it.
+First, let's load the dplyr and readr libraries.
 
 ```{r loadpkgs}
+library(readr)
 library(dplyr)
 ```
 
-If you see a warning that looks like this: `Error in library(dplyr) : there is no package called 'dplyr'`, then you don't have the package installed correctly. See the [setup page](setup.html). 
+If you see a warning that looks like this: `Error in library(dplyr) : there is no package called 'dplyr'` (or similar with readr), then you don't have the package installed correctly. See the [setup page](setup.html). 
 
-Now, let's actually load the data. You can get help for the import function with `?read.csv`. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we're going to be referring to this data a lot, let's give it a short easy name to type. I'm going to call it `nh`. Once we've loaded it we can type the name of the object itself (`nh`) to see it printed to the screen. However, **dplyr** can convert your "regular" data frame to a "tibble," which prints more nicely.
+Now, let's actually load the data. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we're going to be referring to this data a lot, let's give it a short easy name to type. I'm going to call it `nh`. Once we've loaded it we can type the name of the object itself (`nh`) to see it printed to the screen.
 
 ```{r loaddata}
-nh <- read.csv(file="data/nhanes.csv")
-nh <- as_tibble(nh)
+nh <- read_csv(file="data/nhanes.csv")
 nh
 ```
 
-Alternatively, you _could_ still read in the data with **readr**'s `read_csv()`, but you'll want to convert the character variables to factors for the remainder of the lesson.
+> _**A note on characters versus factors:**_ One thing that you immediately notice is that all the categorical variables are read in as _character_ data types. This data type is used for storing strings of text, for example, IDs, names, descriptive text, etc. There's another related data type called _**factors**_. Factor variables are used to represent categorical variables with two or more _levels_, e.g., "male" or "female" for Gender, or "Single" versus "Committed" for RelationshipStatus. For the most part, statistical analysis treats these two data types the same. It's often easier to leave categorical variables as characters. However, in some cases you may get a warning message alerting you that a character variable was converted into a factor variable during analysis. Generally, these warnings are nothing to worry about. You can, if you like, convert individual variables to factor variables, or simply use dplyr's `mutate_if` to convert all character vectors to factor variables:
 
-```{r loadreadr, eval=FALSE}
-library(readr)
-nh <- read_csv("data/nhanes.csv") %>% mutate_if(is.character, as.factor)
+```{r asfactor, eval=FALSE}
+nh <- nh %>% mutate_if(is.character, as.factor)
 nh
 ```
 
-Take a look at that output. The nice thing about loading dplyr and wrapping the object with `as_tibble()` is that data frames are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
+Take a look at that output. The nice thing about loading dplyr and reading data with readr functions is that data are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. 
+
+If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
 
 ```{r view, eval=FALSE}
 View(nh)
@@ -264,6 +261,19 @@ nh$Race %>% unique() %>% length()
 mean(nh$Age)
 median(nh$Age)
 range(nh$Age)
+```
+
+You could also do the last few operations using dplyr, but remember, this returns a single-row, single-column tibble, _not_ a single scalar value like the above. This is only really useful in the context of grouping and summarizing. 
+
+```{r, results='hide'}
+# Compute the mean age
+nh %>% 
+  summarize(mean(Age))
+
+# Now grouped by other variables
+nh %>% 
+  group_by(Gender, Race) %>% 
+  summarize(mean(Age))
 ```
 
 The `summary()` function (note, this is different from **dplyr**'s `summarize()`) works differently depending on which kind of object you pass to it. If you run `summary()` on a data frame, you get some very basic summary statistics on each variable in the data.
@@ -422,6 +432,9 @@ t.test(AlcoholYear~RelationshipStatus, data=nha)
 
 See the heading, _Welch Two Sample t-test_, and notice that the degrees of freedom might not be what we expected based on our sample size. Now look at the help for `?t.test` again, and look at the `var.equal` argument, which is by default set to `FALSE`. One of the assumptions of the t-test is [homoscedasticity](https://en.wikipedia.org/wiki/Homoscedasticity), or homogeneity of variance. This assumes that the variance in the outcome (e.g., BMI) is identical across both levels of the predictor (diabetic vs non-diabetic). Since this is rarely the case, the t-test defaults to using the [Welch correction](https://en.wikipedia.org/wiki/Welch%27s_t-test), which is a more reliable version of the t-test when the homoscedasticity assumption is violated.
 
+> _**A note on paired versus unpaired t-tests:**_ The t-test we performed here was an unpaired test. Here the males and females are different people. The diabetics and nondiabetics are different samples. The single and committed individuals are completely independent, separate observations. In this case, an _unpaired_ test is appropriate. An alternative design might be when data is derived from samples who have been measured at two different time points or locations, e.g., before versus after treatment, left versus right hand, etc. In this case, a _**paired t-test**_ would be more appropriate. A paired test takes into consideration the intra and inter-subject variability, and is more powerful than the unpaired test. See the help for `?t.test` for more information on how to do this.
+
+
 ### Wilcoxon test
 
 Another assumption of the t-test is that data is normally distributed. Looking at the histogram for AlcoholYear shows that this data clearly isn't.
@@ -436,7 +449,7 @@ The [Wilcoxon rank-sum test (a.k.a. Mann-Whitney _U_ test)](https://en.wikipedia
 wilcox.test(AlcoholYear~RelationshipStatus, data=nha)
 ```
 
-The results are still significant, but much less than the p-value reported for the (incorrect) t-test above.
+The results are still significant, but much less than the p-value reported for the (incorrect) t-test above. Also note in the help for `?wilcox.test` that there's a `paired` option here too.
 
 
 ### Linear models
