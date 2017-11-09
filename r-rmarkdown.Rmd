@@ -367,7 +367,7 @@ Here are a few examples of documents I've published:
 
 ## Further resources
 
-See [the (R)markdown section on this course's help page](help.html#markdown__rmarkdown_resources) for links to getting more help with reproducible research, Markdown, and RMarkdown.
+See [the (R)markdown section on this course's help page](help.html#markdown__rmarkdown_resources) for links to getting more help with reproducible research, Markdown, and RMarkdown. Need further motivation? See [this video](https://youtu.be/s3JldKoA0zw).
 
 ## Homework
 
