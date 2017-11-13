@@ -1,12 +1,40 @@
 # credit ----
 # Much of this work from https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post
 
+# A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A.
+# Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and
+# human-to-human transmission for emerging pathogens using case onset data. PLOS
+# Currents Outbreaks. Mar 7, edition 1. doi:
+# http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f
+
+# A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A.
+# Donnelly, and S. Riley. 2014. Data from: Distinguishing between reservoir
+# exposure and human-to-human transmission for emerging pathogens using case
+# onset data. Dryad Digital Repository. http://dx.doi.org/10.5061/dryad.2g43n.
+
+# Line list available at http://datadryad.org/resource/doi:10.5061/dryad.2g43n/1
+
+
+# lead in ideas ----
+# do this more simply with iris first?
+# show data cleaning / feature extraction, then provide analysis-ready data to use?
+
+
+# packages needed by caret ----
+library(caret)
+library(randomForest)
+library(gbm)
+# others called by caret in model comparison section below
+
+
 # init ----
 
 library(tidyverse)
 library(here)
+library(caret)
 theme_set(theme_bw())
 setwd(here("_dev"))
+
 
 # create data ----
 
@@ -73,7 +101,6 @@ fludata <- flu %>%
 
 fludata
 
-
 # is this dummy-variable creation necessary or will caret just do it for you? test both ways.
 model.matrix(~0+province, data=fludata)
 
@@ -83,6 +110,8 @@ fludata <- cbind(fludata, model.matrix(~0+province, data=fludata)) %>%
   set_names(~gsub("province", "", .))
 
 fludata
+
+
 
 # imputation ----
 
@@ -105,42 +134,65 @@ fluimp %>% write_csv(here("data", "fluH7N9_china_2013_analysisready.csv"))
 
 # test/train/validation ----
 
+library(tidyverse)
+library(here)
+library(caret)
 fluimp <- read_csv(here("data", "fluH7N9_china_2013_analysisready.csv"))
+
 
 fluimp
 
 unknown <- fluimp %>%
   filter(is.na(outcome))
+unknown
 
 known <- fluimp %>%
-  filter(!is.na(outcome))
+  filter(!is.na(outcome)) %>%
+  select(-case_id)
+known
 
-# n <- nrow(known)
-# sample(n, size=n*2/3)
-# sample(n, size=n*2/3)
-#
-# set.seed(42)
-# sample(n, size=n*2/3)
-# set.seed(42)
-# sample(n, size=n*2/3)
-#
+# bootstrapping or CV?
 
-# library(mlr)
-# lrn <- makeLearner("classif.lda")
-# task <- makeClassifTask(data=known, target="outcome")
-# model <- train(lrn, task, subset=trainindex)
-# pred <- predict(model, task, subset=testindex)
-# pred
-#
-# performance(pred, measures = list(mmce, acc))
+# see useR talk 2013 from Kuhn
+# http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf
 
-control <- trainControl(method="repeatedcv", number=10, repeats=10)
+# Bootstrapping takes a random sample with replacement. The random sample is the
+# same size as the original data set. Samples may be selected more than once and
+# each sample has a 63.2% chance of showing up at least once. Some samples won't
+# be selected and these samples will be used to predict performance. The process
+# is repeated multiple times (say 30?100).
 
-known %>% select(-case_id) %>% mutate_at(vars(female, hospital, early_outcome:Zhejiang), factor)
+# ?train
+# control <- trainControl(method="repeatedcv", number=10, repeats=10)
+# set.seed(27)
+# modrf <- train(outcome~., data=known, method="rf", preProcess=NULL, trControl=control)
 
 set.seed(27)
-model <- train(outcome~., data=known %>% select(-case_id), method="rf", preProcess=NULL, trControl=control)
+modrf <- train(outcome~., data=known, method="rf")
+modrf
+varImp(modrf, scale=TRUE)
+varImp(modrf, scale=TRUE) %>% plot()
 
-importance <- varImp(model, scale=TRUE)
-plot(importance)
-?varImpPlot
+set.seed(28)
+modgbm <- train(outcome~., data=known, method="gbm", verbose=FALSE)
+modgbm
+varImp(modrf, scale=TRUE)
+varImp(modrf, scale=TRUE) %>% plot()
+
+# compare models
+modsum <- resamples(list(gbm=modgbm, rf=modrf))
+summary(modsum)
+
+
+# predict the unknowns
+predict(modrf, newdata=unknown)
+predict(modrf, newdata=unknown, type="prob")
+# get them back in the data
+unknown
+unknown %>%
+  mutate(outcome=predict(modrf, newdata=unknown))
+
+# check that distributions are somewhat similar.
+fluimp %>%
+  gather(key, value, age, days_to_hospital, days_to_outcome) %>%
+  ggplot(aes(outcome, value, fill=factor(female))) + geom_boxplot() + facet_wrap(~key, scale="free_y")
