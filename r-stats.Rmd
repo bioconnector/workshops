@@ -204,14 +204,23 @@ nh <- read_csv(file="data/nhanes.csv")
 nh
 ```
 
+Take a look at that output. The nice thing about loading dplyr and reading data with readr functions is that data are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. 
+
 > _**A note on characters versus factors:**_ One thing that you immediately notice is that all the categorical variables are read in as _character_ data types. This data type is used for storing strings of text, for example, IDs, names, descriptive text, etc. There's another related data type called _**factors**_. Factor variables are used to represent categorical variables with two or more _levels_, e.g., "male" or "female" for Gender, or "Single" versus "Committed" for RelationshipStatus. For the most part, statistical analysis treats these two data types the same. It's often easier to leave categorical variables as characters. However, in some cases you may get a warning message alerting you that a character variable was converted into a factor variable during analysis. Generally, these warnings are nothing to worry about. You can, if you like, convert individual variables to factor variables, or simply use dplyr's `mutate_if` to convert all character vectors to factor variables:
 
-```{r asfactor, eval=TRUE}
+```{r asfactor, eval=TRUE, results="hide"}
 nh <- nh %>% mutate_if(is.character, as.factor)
 nh
 ```
 
-Take a look at that output. The nice thing about loading dplyr and reading data with readr functions is that data are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you'll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you'll see at the bottom of the output which, if any, columns were hidden from view. 
+Now just take a look at just a few columns that are now factors. Remember, you can look at individual variables with the `mydataframe$specificVariable` syntax.
+
+```{r, results="hide"}
+nh$RelationshipStatus
+nh$Race
+levels(nh$Race)
+```
+
 
 If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the **Environment** panel in RStudio. Or you could use the `View()` function (_with a capital V_).
 
@@ -285,9 +294,13 @@ summary(nh)
 
 ### Missing data
 
-Let's try taking the mean of a different variable.
+Let's try taking the mean of a different variable, either the dplyr way or the simpler `$` way.
 
-```{r}
+```{r, results='hide'}
+# the dplyr way: returns a single-row single-column tibble/dataframe
+nh %>% summarize(mean(Income))
+
+# returns a single value
 mean(nh$Income)
 ```
 
@@ -513,6 +526,9 @@ t.test(BMI~RelationshipStatus, data=nha, var.equal=TRUE)
 1-pf(2.347, df1=1, df2=3552)
 ```
 
+> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> _**A note on dummy coding:**_ If you have a $k$-level factor, R creates $k-1$ dummy variables, or indicator variables, by default, using the alphabetically first level as baseline. For example, the levels of RelationshipStatus are "Committed" and "Single". R creates a dummy variable called "RelationshipStatusSingle" that's **0** if you're committed, and **1** if you're Single. The linear model is saying for every unit increase in RelationshipStatusSingle, i.e., going from committed to single, results in a 0.314-unit increase in BMI. You can change the ordering of the factors to change the interpretation of the model (e.g., treating Single as baseline and going from Single to Committed). We'll do this in the next section.
+
+
 ### ANOVA
 
 Recap: t-tests are for assessing the differences in means between _two_ groups. A t-test is a specific case of ANOVA, which is a specific case of a linear model. Let's run ANOVA, but this time looking for differences in means between more than two groups.
@@ -525,20 +541,35 @@ anova(fit)
 summary(fit)
 ```
 
-The F-test on the ANOVA table tells us that there _is_ a significant difference in means between current, former, and never smokers (p=$4.54 \times 10^{-8}$). However, the linear model output might not have been what we wanted. Because the default handling of categorical variables is to treat the alphabetical first level as the baseline, "Current" smokers are treated as baseline, and this mean becomes the intercept, and the coefficients on "Former" and "Never" describe how those groups' means differ from current smokers. What if we wanted "Never" smokers to be the baseline, followed by Former, then Current? Have a look at `?factor` to relevel the factor levels.
+The F-test on the ANOVA table tells us that there _is_ a significant difference in means between current, former, and never smokers (p=$4.54 \times 10^{-8}$). However, the linear model output might not have been what we wanted. Because the default handling of categorical variables is to treat the alphabetical first level as the baseline, "Current" smokers are treated as baseline, and this mean becomes the intercept, and the coefficients on "Former" and "Never" describe how those groups' means differ from current smokers. 
+
+Back to dummy coding / indicator variables: SmokingStatus is "Current", "Former", and "Never." By default, R will create _two_ indicator variables here that in tandem will explain this variable.
+
+```{r, echo=FALSE}
+tribble(
+  ~`Original SmokingStatus`, ~`Indicator: SmokingStatusFormer`, ~`Indicator: SmokingStatusNever`,
+  "_Current_", 0, 0,
+  "_Former_", 1, 0,
+  "_Never_", 0, 1
+) %>% knitr::kable()
+```
+
+
+What if we wanted "Never" smokers to be the baseline, followed by Former, then Current? Have a look at `?factor` to relevel the factor levels.
 
 ```{r, results="hide"}
 # Look at nha$SmokingStatus
 nha$SmokingStatus
 
-# What if you turn it into a factor variable?
-factor(nha$SmokingStatus)
-
-# Now let's relevel it and see what that looks like. 
-factor(nha$SmokingStatus, levels=c("Never", "Former", "Current"))
+# What happens if we relevel it? Let's see what that looks like.
+relevel(nha$SmokingStatus, ref="Never")
 
 # If we're happy with that, let's change the value of nha$SmokingStatus in place
-nha$SmokingStatus <- factor(nha$SmokingStatus, levels=c("Never", "Former", "Current"))
+nha$SmokingStatus <- relevel(nha$SmokingStatus, ref="Never")
+
+# Or we could do this the dplyr way
+nha <- nha %>% 
+  mutate(SmokingStatus=relevel(SmokingStatus, ref="Never"))
 ```
 
 
@@ -546,8 +577,8 @@ nha$SmokingStatus <- factor(nha$SmokingStatus, levels=c("Never", "Former", "Curr
 # Re-fit the model
 fit <- lm(BMI~SmokingStatus, data=nha)
 
-# Show the ANOVA table
-anova(fit)
+# Optionally, show the ANOVA table
+# anova(fit)
 
 # Print the full model statistics
 summary(fit)
@@ -775,35 +806,21 @@ summary(mod)
 Before we fit a logistic regression model let's _relevel_ the Race variable so that "White" is the baseline. We saw above that people who identify as "White" have the highest rates of being insured. When we run the logistic regression, we'll get a separate coefficient (effect) for each level of the factor variable(s) in the model, telling you the increased odds that that level has, _as compared to the baseline group_.
 
 ```{r, results="hide"}
-#Look at Race: it's a character vector
+#Look at Race. The default ordering is alphabetical
 nha$Race
 
-# What if we coerce it into a factor?
-factor(nha$Race)
-
-# Default levels are alphabetical: Asian Black Hispanic Mexican Other White
 # Let's relevel that where the group with the highest rate of insurance is "baseline"
-relevel(factor(nha$Race), ref="White")
+relevel(nha$Race, ref="White")
 
 # If we're happy with that result, permanently change it
-nha$Race <- relevel(factor(nha$Race), ref="White")
+nha$Race <- relevel(nha$Race, ref="White")
+
+# Or do it the dplyr way
+nha <- nha %>% 
+  mutate(Race=relevel(Race, ref="White"))
 ```
 
-Now, let's fit a logistic regression model assessing how the odds of being insured change with different levels of race. Before we do that we need to turn "Insured" into a factor variable also.
-
-```{r, results="hide"}
-# Take a look
-nha$Insured
-
-# Factor it, take a look
-factor(nha$Insured)
-
-# Make the factor coercion stick
-nha$Insured <- factor(nha$Insured)
-
-# Take a look
-nha$Insured
-```
+Now, let's fit a logistic regression model assessing how the odds of being insured change with different levels of race. 
 
 
 ```{r}
