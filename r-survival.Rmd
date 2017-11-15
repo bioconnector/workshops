@@ -136,6 +136,15 @@ dim(lung)
 View(lung)
 ```
 
+Notice that lung is a plain `data.frame` object. You could see what it looks like as a tibble (prints nicely, tells you the type of variable each column is). You could then reassign `lung` to the `as_tibble()`-ified version.
+
+```{r, results="hide"}
+as_tibble(lung)
+lung <- as_tibble(lung)
+lung
+```
+
+
 ### Survival Curves
 
 Check out the help for `?Surv`. This is the main function we'll use to create the survival object. You can play fast and loose with how you specify the arguments to `Surv`. The help tells you that when there are two unnamed arguments, they will match `time` and `event` in that order. This is the common shorthand you'll often see for right-censored data. The alternative lets you specify interval data, where you give it the start and end times (`time` and `time2`). If you keep reading you'll see how `Surv` tries to guess how you're coding the status variable. It will try to guess whether you're using 0/1 or 1/2 to represent censored vs "dead", respectively.[^deadevent]
@@ -222,11 +231,11 @@ ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE,
 
 Take a look at the built in `colon` dataset. If you type `?colon` it'll ask you if you wanted help on the colon dataset from the survival package, or the colon operator. Click "Chemotherapy for Stage B/C colon cancer", or be specific with `?survival::colon`. This dataset has survival and recurrence information on 929 people from a clinical trial on colon cancer chemotherapy. There are two rows per person, indidicated by the event type (`etype`) variable -- `etype==1` indicates that row corresponds to recurrence; `etype==2` indicates death. 
 
-First, let's filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)`. If you don't have dplyr you can use the base `subset()` function instead.
+First, let's turn the colon data into a tibble, then filter the data to only include the survival data, not the recurrence data. Let's call this new object `colondeath`. The `filter()` function is in the **dplyr** library, which you can get by running `library(dplyr)`. If you don't have dplyr you can use the base `subset()` function instead.
 
 ```{r}
-# using dplyr::filter
 library(dplyr)
+colon <- as_tibble(colon)
 colondeath <- filter(colon, etype==2)
 
 # Or, using base subset()
@@ -423,7 +432,7 @@ ggsurvplot(fit, pval=TRUE)
 ## TCGA
 
 ```{r cleanupPreTCGA, include=FALSE}
-rm(colondeath, lung, fit, s, sfit)
+suppressWarnings(rm(colondeath, colon, cutpoint, lung, fit, s, sfit))
 ```
 
 The Cancer Genome Atlas (TCGA) is a collaboration between the National Cancer Institute (NCI) and the National Human Genome Research Institute (NHGRI) that collected lots of clinical and genomic data across 33 cancer types. The entire TCGA dataset is over 2 petabytes worth of gene expression, CNV profiling, SNP genotyping, DNA methylation, miRNA profiling, exome sequencing, and other types of data. You can learn more about TCGA at [cancergenome.nih.gov](https://cancergenome.nih.gov). The data is now housed at the [Genomic Data Commons Portal](https://gdc-portal.nci.nih.gov/). There are lots of ways to access TCGA data without actually downloading and parsing through the data from GDC. We'll cover more of these below. But first, let's look at an R package that provides convenient, direct access to TCGA data.
