@@ -196,3 +196,58 @@ unknown %>%
 fluimp %>%
   gather(key, value, age, days_to_hospital, days_to_outcome) %>%
   ggplot(aes(outcome, value, fill=factor(female))) + geom_boxplot() + facet_wrap(~key, scale="free_y")
+
+
+
+
+# flu forecasting with prophet --------------------------------------------
+
+# devtools::install_github("hrbrmstr/cdcfluview")
+library(tidyverse)
+library(cdcfluview)
+age_group_distribution(years=2015)
+geographic_spread(2015)
+?hospitalizations
+?ilinet
+
+flu <- ilinet()
+flu
+flu <- flu %>% select(week_start, ilitotal, total_patients)
+flu
+
+pi <- pi_mortality(coverage_area = "national")
+pi
+pi <- pi %>% transmute(week_start=wk_start+1, fludeaths=number_influenza, pneumoniadeaths=number_pneumonia, all_deaths)
+pi
+
+fludata <- left_join(flu, pi, by="week_start") %>% filter(!is.na(week_start))
+fludata <- fludata %>% filter(year(week_start)>=2003)
+
+
+ggplot(fludata, aes(week_start, ilitotal)) + geom_line()
+ggplot(fludata, aes(week_start, fludeaths)) + geom_line()
+
+
+fludata
+
+library(prophet)
+fludata
+?prophet
+m <- fludata %>%
+  select(ds=week_start, y=ilitotal) %>%
+  prophet
+future <- make_future_dataframe(m, periods=365*5)
+forecast <- predict(m, future)
+tail(forecast)
+plot(m, forecast)
+prophet_plot_components(m, forecast)
+prophet:::plot.prophet
+
+m <- fludata %>%
+  filter(!is.na(fludeaths)) %>%
+  select(ds=week_start, y=fludeaths) %>%
+  prophet
+future <- make_future_dataframe(m, periods=365*5)
+forecast <- predict(m, future)
+tail(forecast)
+prophet_plot_components(m, forecast)
