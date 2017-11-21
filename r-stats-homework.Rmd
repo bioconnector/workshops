@@ -1,9 +1,12 @@
 ---
 title: "Essential Statistics Homework"
+output:
+  html_document:
+    code_folding: hide
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, cache=TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache=TRUE)
 ```
 
 (_Refer back to the [Essential Statistics lesson](r-stats.html))._
@@ -22,23 +25,32 @@ The datasets we'll be using for this assignment are both curated and hosted by t
 
 ## Stress Tests
 
-Dobutamine is a drug that is used during echocardiograms (aka "stress tests"), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a [study published in 1999](https://www.ncbi.nlm.nih.gov/pubmed/10080472).
+Dobutamine is a drug that is used during echocardiograms (aka "stress tests"), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a [study published in 1999](https://www.ncbi.nlm.nih.gov/pubmed/10080472). We'll be using the data behind this paper to answer the questions that follow. 
 
-We'll be using the data behind this paper to answer the questions that follow. Use the following to read and store the data directly from the web. Feel free to load dplyr+readr and use the `read_csv()` function instead of base R's `read.csv()`.
-
-```{r}
+```coffee
+# Load libraries
 library(readr)
 library(dplyr)
-```
 
-
-```{r showReadFromWeb, echo = TRUE, eval=FALSE}
-stress <- read_csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.csv")
-```
-
-```{r, echo = FALSE, eval=TRUE}
+# Read data
 stress <- read_csv("data/stressEcho.csv")
+
+# Take a look
+stress
 ```
+
+```{r, echo=FALSE}
+# Load libraries
+library(readr)
+library(dplyr)
+
+# Read data
+stress <- read_csv("data/stressEcho.csv")
+
+# Take a look
+stress
+```
+
 
 Note that in addition measuring dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.
 
@@ -119,11 +131,13 @@ The questions that follow are based on a data collected to examine several blood
 
 Use the following to read and store the data:
 
-```{r, echo=TRUE, eval=FALSE}
-dmd <- read_csv("http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.csv")
+
+```coffee
+dmd <- read_csv("data/dmd.csv")
 ```
 
-```{r, echo=FALSE, eval=TRUE}
+
+```{r, echo=FALSE}
 dmd <- read_csv("data/dmd.csv")
 ```
 
