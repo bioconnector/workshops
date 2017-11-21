@@ -62,10 +62,7 @@ output: pdf_document
     c. Show the proportions of diabetics and nondiabetics, separately, who are physically active or not.
     d. Is this relationship significant?
     e. Create a mosaic plot to visualize the relationship.
-2. Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor. First, make Diabetes a factor variable: 
-    ```r
-    nha$Diabetes <- factor(nha$Diabetes)
-    ```
+2. Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor. 
     a. Fit a model with just physical activity as a predictor, and display a model summary.
     b. Add gender to the model, and show a summary.
     c. Continue adding weight and age to the model. What happens to the gender association?
