@@ -1,4 +1,4 @@
-"","bhr","basebp","basedp","pkhr","sbp","dp","dose","maxhr","pctMphr","mbp","dpmaxdo","dobdose","age","gender","baseEF","dobEF","chestpain","restwma","posSE","newMI","newPTCA","newCABG","death","hxofHT","hxofDM","hxofCig","hxofMI","hxofPTCA","hxofCABG","any.event","ecg"
+"id","bhr","basebp","basedp","pkhr","sbp","dp","dose","maxhr","pctMphr","mbp","dpmaxdo","dobdose","age","gender","baseEF","dobEF","chestpain","restwma","posSE","newMI","newPTCA","newCABG","death","hxofHT","hxofDM","hxofCig","hxofMI","hxofPTCA","hxofCABG","any.event","ecg"
 "1",92,103,9476,114,86,9804,40,100,74,121,12100,40,85,"male",27,32,0,0,0,0,0,0,0,0,0,"non-smoker",1,1,0,0,"normal"
 "2",62,139,8618,120,158,18960,40,120,82,158,18960,40,73,"male",39,40,0,0,0,1,0,0,0,0,1,"non-smoker",1,0,0,1,"equivocal"
 "3",62,139,8618,120,157,18840,40,120,82,157,18840,40,73,"male",39,40,0,0,0,1,0,0,0,0,1,"non-smoker",1,0,0,1,"equivocal"
