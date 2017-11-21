@@ -109,6 +109,60 @@ If you get a message that says something like: `Error in library(BiocInstaller) 
 
 The instructions below apply to additional "elective" classes, and are not strictly required as part of the core set of classes.  Install these as necessary.
 
+### Survival Analysis
+
+**Prerequisites!** This is _not_ an introductory R class. _This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and to a lesser degree, [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html), and [data visualization with ggplot2](r-viz-gapminder.html)._
+
+**Software setup:** Follow instructions above for [R+RStudio+Packages](#r), [CRAN packages](#cran-packages), and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips. 
+
+_For this class you'll also need the **survminer** package from CRAN and the and **RTCGA**, **RTCGA.clinical**, **RTCGA.mRNA**, packages from Bioconductor._
+
+If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and [email one of the instructors](people.html) _prior to class_ with the command you typed and the error you received.
+
+```r
+# Install core CRAN packages:
+install.packages("dplyr")
+install.packages("readr")
+install.packages("tidyr")
+install.packages("ggplot2")
+
+# For this class, also install survminer from CRAN
+install.packages("survminer")
+
+
+# Install Bioconductor core packages:
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+
+# For this class, you'll also need RTCGA and RTCGA data packages
+biocLite("RTCGA")
+biocLite("RTCGA.clinical")
+biocLite("RTCGA.mRNA")
+```
+
+Check that you've installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane:
+
+```r
+# Test CRAN package installation:
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+
+# Test survminer
+library(survminer)
+
+# Test RTCGA:
+library(RTCGA)
+library(RTCGA.clinical)
+library(RTCGA.mRNA)
+```
+
+This may produce some notes or other output, but as long as you don't get an error message, you're good to go. If you get a message that says something like: `Error in library(somePackageName) : there is no package called 'somePackageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to class_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
+
+### Predictive analytics
+
+_Check back later..._
 
 ### RNA-seq
 
@@ -266,60 +320,6 @@ library(lubridate)
 ```
 
 These commands may produce some notes or other output, but as long as they work without an error message, you're good to go. If you get a message that says something like: `Error in library(packageName) : there is no package called 'packageName'`, then the required packages did not install correctly. Please do not hesitate to [email one of the instructors](people.html) _prior to the course_ if you are still having difficulty.
-
-
-### Survival Analysis
-
-**Prerequisites!** This is _not_ an introductory R class. _This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), and to a lesser degree, [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html), and [data visualization with ggplot2](r-viz-gapminder.html)._
-
-**Software setup:** Follow instructions above for [R+RStudio+Packages](#r), [CRAN packages](#cran-packages), and [Bioconductor](#bioconductor). See the sections above for full instructions and troubleshooting tips. 
-
-_For this class you'll also need the **survminer** package from CRAN and the and **RTCGA**, **RTCGA.clinical**, **RTCGA.mRNA**, packages from Bioconductor._
-
-If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and [email one of the instructors](people.html) _prior to class_ with the command you typed and the error you received.
-
-```r
-# Install core CRAN packages:
-install.packages("dplyr")
-install.packages("readr")
-install.packages("tidyr")
-install.packages("ggplot2")
-
-# For this class, also install survminer from CRAN
-install.packages("survminer")
-
-
-# Install Bioconductor core packages:
-source("http://bioconductor.org/biocLite.R")
-biocLite()
-
-# For this class, you'll also need RTCGA and RTCGA data packages
-biocLite("RTCGA")
-biocLite("biocLite("RTCGA")
-biocLite("RTCGA.clinical")
-biocLite("RTCGA.mRNA")")
-biocLite("RTCGA.mRNA")
-```
-
-Check that you've installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane:
-
-```r
-# Test CRAN package installation:
-library(dplyr)
-library(readr)
-library(tidyr)
-library(ggplot2)
-
-# Test survminer
-library(survminer)
-
-# Test RTCGA:
-library(RTCGA)
-library(RTCGA.clinical)
-library(RTCGA.mRNA)
-```
-
-This may produce some notes or other output, but as long as you don't get an error message, you're good to go. If you get a message that says something like: `Error in library(somePackageName) : there is no package called 'somePackageName'`, then the required packages did not install correctly. Please do not hesitate to [email one of the instructors](people.html) _prior to class_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
 
 
 
