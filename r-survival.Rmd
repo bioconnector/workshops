@@ -496,6 +496,8 @@ clin <- survivalTCGA(BRCA.clinical, OV.clinical, GBM.clinical,
 head(clin)
 # How many samples of each type?
 table(clin$admin.disease_code)
+# Tabulate by outcome
+xtabs(~admin.disease_code+patient.vital_status, data=clin) %>% addmargins()
 ```
 
 Now let's run a Cox PH model against the disease code. By default it's going to treat breast cancer as the baseline, because alphabetically it's first. But you can reorder this if you want with `factor()`.
