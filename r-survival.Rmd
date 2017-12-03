@@ -482,7 +482,7 @@ This tells us all the clinical datasets available for each cancer type. If we ju
 ```{r, eval=FALSE}
 dim(BRCA.clinical)
 names(BRCA.clinical)
-View(BRCA.clinical)
+# View(BRCA.clinical)
 ```
 
 We're going to use the `survivalTCGA()` function from the RTCGA package to pull out survival information from the clinical data. It does this by looking at vital status (dead or alive) and creating a `times` variable that's either the days to death or the days followed up before being censored. Look at the help for `?survivalTCGA` for more info. You give it a list of clinical datasets to pull from, and a character vector of variables to extract. Let's look at breast cancer, ovarian cancer, and glioblastoma multiforme. Let's just extract the cancer type (`admin.disease_code`).
