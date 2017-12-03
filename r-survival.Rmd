@@ -477,7 +477,7 @@ library(RTCGA.clinical)
 ?clinical
 ```
 
-This tells us all the clinical datasets available for each cancer type. If we just focus on breast cancer, look at how big the data is! There are `r nrow(BRCA.clinical)` rows by `r ncol(BRCA.clinical)` columns in this data alone. Let's look at some of the variable names, and `View()` the data. 
+This tells us all the clinical datasets available for each cancer type. If we just focus on breast cancer, look at how big the data is! There are `r nrow(BRCA.clinical)` rows by `r ncol(BRCA.clinical)` columns in this data alone. Let's look at some of the variable names. **_Be careful with `View()` here_** -- with so many columns, depending on which version of RStudio you have that may or may not have fixed this issue, Viewing a large dataset like this may lock up your RStudio. 
 
 ```{r, eval=FALSE}
 dim(BRCA.clinical)
