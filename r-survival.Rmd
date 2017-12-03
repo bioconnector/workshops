@@ -293,7 +293,7 @@ fit <- coxph(Surv(time, status)~sex, data=lung)
 fit
 ```
 
-The `exp(coef)` column contains $e^{\beta_1}$ (see [background](#background) section above for more info). This is the **hazard ratio** -- the multiplicative effect of that variable on the hazard rate (for each unit increase in that variable). So, for a categorical variable like sex, going from male (baseline) to female results in approximately ~40% reduction in hazard. You could also flip the sign on the `coef` column, and take `exp(0.531)`, which you can interpret as being male resulting in a 1.7-fold increase in hazard, or that males die ad approximately 1.7x the rate per unit time as females (females die at 0.531x the rate per unit time as males). 
+The `exp(coef)` column contains $e^{\beta_1}$ (see [background](#background) section above for more info). This is the **hazard ratio** -- the multiplicative effect of that variable on the hazard rate (for each unit increase in that variable). So, for a categorical variable like sex, going from male (baseline) to female results in approximately ~40% reduction in hazard. You could also flip the sign on the `coef` column, and take `exp(0.531)`, which you can interpret as being male resulting in a 1.7-fold increase in hazard, or that males die ad approximately 1.7x the rate per unit time as females (females die at 0.588x the rate per unit time as males). 
 
 Just remember:
 
