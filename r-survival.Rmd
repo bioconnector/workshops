@@ -221,7 +221,7 @@ This plot is substantially more informative by default, just because it automati
 ggsurvplot(sfit, conf.int=TRUE, pval=TRUE, risk.table=TRUE, 
            legend.labs=c("Male", "Female"), legend.title="Sex",  
            palette=c("dodgerblue2", "orchid2"), 
-           main="Kaplan-Meier Curve for Lung Cancer Survival", 
+           title="Kaplan-Meier Curve for Lung Cancer Survival", 
            risk.table.height=.15)
 ```
 
