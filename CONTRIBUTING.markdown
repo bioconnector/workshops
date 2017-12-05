@@ -85,6 +85,14 @@ install.packages("rentrez")
 install.packages("XML")
 install.packages("threejs")
 install.packages("igraph")
+# Needed for predictive analytics / forecasting
+install.packages("caret")
+install.packages("randomForest")
+install.packages("gbm")
+install.packages("glmnet")
+install.packages("kknn")
+install.packages("mice")
+install.packages("prophet")
 
 # Bioconductor
 source("http://bioconductor.org/biocLite.R")
