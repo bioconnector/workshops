@@ -121,15 +121,17 @@ This class will provide hands-on instruction for using machine learning algorith
 **Slides**: [click here](slides/r-stats.html).
 -->
 
-## Our Data
+## Predictive Modeling 
+
+### H7N9 Outbreak Data
 
 This data used here is from the 2013 outbreak of [influenza A H7N9 in China](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), analyzed by Kucharski et al., published in 2014. 
 
-> Publication: A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. [_PLOS Currents Outbreaks_ (2014) Mar 7 Edition 1](http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f). 
+> **Publication:** A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. [_PLOS Currents Outbreaks_ (2014) Mar 7 Edition 1](http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f). 
 
-> Data: Kucharski A, Mills HL, Pinsent A, Fraser C, Van Kerkhove M, Donnelly CA, Riley S (2014) Data from: Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. _Dryad Digital Repository_. https://doi.org/10.5061/dryad.2g43n
+> **Data:** Kucharski A, Mills HL, Pinsent A, Fraser C, Van Kerkhove M, Donnelly CA, Riley S (2014) Data from: Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. _Dryad Digital Repository_. https://doi.org/10.5061/dryad.2g43n.
 
-The data is made available in the [outbreaks](https://cran.r-project.org/web/packages/outbreaks/index.html) package, which is a collection of several simulated and real outbreak datasets, and has been very slightly modified for use here. There are two datasets available to download on the [data](data.html) page: 
+The data is made available in the [outbreaks](https://cran.r-project.org/web/packages/outbreaks/index.html) package, which is a collection of several simulated and real outbreak datasets, and has been very [slightly modified](https://github.com/bioconnector/workshops/blame/master/r-predictive-flu.Rmd#L20) for use here. There are two datasets available to download on the [data](data.html) page: 
 
 1. **[h7n9.csv](data/h7n9.csv)**: The original dataset. Contains the following variables, with lots of missing data throughout.
     - **`case_id`**: the sample identifier
@@ -154,121 +156,183 @@ The data is made available in the [outbreaks](https://cran.r-project.org/web/pac
     - **`Zhejiang`**: Indicator variable: 1 = the patient was from the Zhejiang province.
     - **`Other`**: Indicator variable: 1 = the patient was from some other less common province.
 
+Starting with the [original dataset](data/h7n9.csv) we're going to do some exploratory data analysis, and we'll extract and recode _features_ from the raw data, including age, days between onset and hospitalization or outcome, gender, and the patient's province. We will eventually want to traing a model to predict the patient's outcome. We'll do this by training and testing different models on the data where the outcome is known, and then apply these models to cases where we don't know the outcome. There are lots of missing data points in other variables, so we'll _impute_ those variables to maximize our use of the data. 
 
+### Importing H7N9 data
 
+First, let's load the packages we'll need initially.
 
-```{r}
-knitr::knit_exit()
+```{r loadPkgs}
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+```
+
+Now let's read in the data and take a look. Notice that it correctly read in the dates as date-formatted variables. Later on, when we run functions such as `median()` on a date variable, it knows how to handle that properly. You'll also notice that there are missing values throughout.
+
+```{r importH7N9}
+# Read in data
+flu <- read_csv("data/h7n9.csv")
+
+# View in RStudio (capital V)
+# View(flu)
+
+# Take a look
+flu
 ```
 
 
-```{r, eval=FALSE, include=FALSE}
-# credit ----
-# Much of this work from https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post
+### Exploratory data analysis
 
-# A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A.
-# Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and
-# human-to-human transmission for emerging pathogens using case onset data. PLOS
-# Currents Outbreaks. Mar 7, edition 1. doi:
-# http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f
+Let's use ggplot2 to take a look at the data. Refer back to the [ggplot2 class](r-viz-gapminder.html) if you need a refresher.
 
-# A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A.
-# Donnelly, and S. Riley. 2014. Data from: Distinguishing between reservoir
-# exposure and human-to-human transmission for emerging pathogens using case
-# onset data. Dryad Digital Repository. http://dx.doi.org/10.5061/dryad.2g43n.
+The **outcome** variable is the thing we're most interested in here -- it's the thing we want to eventually predict for the unknown cases. Let's look at the distribution of that outcome variable (Death, Recover or unknown (NA)), by **age**. We'll create a density distribution looking at age, with the fill of the distribution colored by outcome status.
 
-# Line list available at http://datadryad.org/resource/doi:10.5061/dryad.2g43n/1
+```{r}
+ggplot(flu, aes(age)) + geom_density(aes(fill=outcome), alpha=1/3)
+```
 
+Let's look at the counts of the number of deaths, recoveries, and unknowns by sex, then separately by province.
 
-# lead in ideas ----
-# do this more simply with iris first?
-# show data cleaning / feature extraction, then provide analysis-ready data to use?
+```{r, fig.show=FALSE, fig.keep='none'}
+ggplot(flu, aes(gender)) +
+  geom_bar(aes(fill=outcome), position="dodge") 
+```
 
+We can simply add a `facet_wrap` to split by province. 
 
-# init ----
-
-library(tidyverse)
-library(here)
-theme_set(theme_bw())
-setwd(here("_dev"))
-
-
-# packages needed by caret ----
-library(caret)
-library(randomForest)
-library(gbm)
-library(glmnet)
-library(kknn)
-# others called by caret in model comparison section below
-
-
-
-
-# create data ----
-
-# create semiclean data ----
-outbreaks::fluH7N9_china_2013 %>%
-  # remove the two cases where gender or age is missing
-  filter(!is.na(gender) & age!="?") %>%
-  # Make age numeric
-  mutate(age=as.numeric(age)) %>%
-  # american english please
-  rename(date_of_hospitalization = date_of_hospitalisation) %>%
-  # lump all but three of the most common provinces together
-  mutate(province=forcats::fct_lump(province, 3)) %>%
-  # make the names easier to deal with
-  set_names(~gsub("_of_", "_", .)) %>%
-  # make this more explicitly a string/factor
-  mutate(case_id=paste0("case_", case_id)) %>%
-  as_tibble() %>%
-  write_csv(here("data", "h7n9.csv"))
-
-flu <- read_csv(here("data", "h7n9.csv"))
-flu
-
-
-# EDA ----
-
-# Read in data
-flu <- read_csv(here("data", "h7n9.csv"))
-flu
-
-# Feel free to follow along but don't worry if not grokking code here, not doing
-# any data transformations that needed later.
-
-# Look at the distribution of death, recovery, and missing, by age
-ggplot(flu, aes(age)) +
-  geom_density(aes(fill=outcome), alpha=1/3)
-
-# Look at distribution by gender across provinces
+```{r}
 ggplot(flu, aes(gender)) +
   geom_bar(aes(fill=outcome), position="dodge") +
   facet_wrap(~province)
+```
 
-# Show the distribution of age by province, colored by outcome. This shows that
-# there's a higher rate of death in older individuals but this is only observed
-# in Jiangsu and Zhejiang provinces.
+Let's draw a boxplot showing the age distribution by province, by outcome. This shows that there's a higher rate of death in older individuals but this is only observed in Jiangsu and Zhejiang provinces.
+
+```{r, fig.keep='last'}
+# First just by age
+ggplot(flu, aes(province, age)) + geom_boxplot()
+# Then by age and outcome
 ggplot(flu, aes(province, age)) + geom_boxplot(aes(fill=outcome))
+```
 
-# Gather the data where we have the different date variables as a column
+Let's try something a little bit more advanced. First, take a look at the data again.
+
+```{r, results='hide'}
+flu
+```
+
+Notice how we have three different date variables: date of onset, hospitalization, and outcome. I'd like to draw a plot showing the date on the x-axis with a line connecting the three points from onset, to hospitalization, to outcome (if known) for each patient. I'll put age on the y-axis so the individuals are separated, and I'll do this faceted by province. 
+
+First we need to use the `gather` function from the **tidyr** package to gather up all the `date_?` variables into a single column we'll call `key`, with the actual values being put into a new column called `date`.
+
+```{r}
+# Gather the date columns
 flugather <- flu %>%
   gather(key, date, starts_with("date_"))
-flugather
-# Show how many days passed between onset, hospitalization, and outcome, for each case.
-# Lots of missing data points, difficult to draw a conclusion.
+
+# Look at the data as is
+# flugather
+
+# Better: Show the data arranged by case_id so you see the three entries
+flugather %>% arrange(case_id)
+```
+
+Now that we have this, let's visualize the number of days that passed between onset, hospitalization and outcome, for each case. We see that there are lots of unconnected points, especially in Jiangsu and Zhejiang provinces, where one of these dates isn't known.
+
+```{r, fig.width=10, fig.height=8}
 ggplot(flugather, aes(date, y=age, color=outcome)) +
   geom_point() +
   geom_path(aes(group=case_id)) +
   facet_wrap(~province)
+```
 
-# features ----
+### Feature Extraction
 
+The variables in our data are useful for summary statistics, visualization, EDA, etc. But we need to do some _feature extraction_ or variable recoding to get the most out of machine learning models.
+
+- Age: we'll keep this one as is. 
+- Gender: instead of m/f, let's convert this into a binary indicator variable where 0=female, 1=male. 
+- Province: along the same lines, let's create binary classifiers that indicate Shanghai, Zhejiang, Jiangsu, or other provinces.
+- Hospitalization: let's create a binary classifier where  =not hospitalized, 1=hospitalized.
+- Early onset: let's create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).
+- Dates: Let's also take the _dates_ of onset, hospitalization, and outcome, and transform these into _days_ between onset and hospitalization, and days from onset to outcome. The algorithms aren't going to look at one column then another to do this math -- we have to extract this feature ourselves.
+
+Let's build up this pipeline one step at a time. If you want to skip ahead, you can simply read in the already extracted/recoded/imputed dataset at [`data/h7n9_analysisready.csv`](data/h7n9_analysisready.csv).
+
+First, let's make a backup of the original data in case we mess something up.
+
+```{r}
+flu_orig <- flu
+```
+
+#### Create gender / hospitalization indicators
+
+Now let's start recoding, one step at a time. First of all, when we mutate to add a new variable, we can put in a logical comparison to tell us whether a statement is TRUE or FALSE. For example, let's look at the gender variable.
+
+```{r, results="hide"}
+flu$gender
+```
+
+We can ask if gender is male ("m") like this:
+
+```{r, results="hide"}
+flu$gender=="m"
+```
+
+So we can do that with a mutate statement on a pipeline. Once we do that, we can remove the old gender variable. E.g.:
+
+```{r, results="hide"}
+flu %>%
+  mutate(male = gender=="m") %>% 
+  select(-gender)
+```
+
+Similarly, let's get an indicator whether someone was hospitalized or not. If hospitalization is missing, this would return TRUE.
+
+```{r, results="hide"}
+flu$date_hospitalization
+is.na(flu$date_hospitalization)
+```
+
+So now, let's add that to our pipeline from above.
+
+```{r, results="hide"}
+flu %>%
+  mutate(male = gender=="m") %>% 
+  select(-gender) %>%
+  mutate(hospital = !is.na(date_hospitalization))
+```
+
+#### Convert dates to "days to \_\_\_"
+
+Let's continue to add days from onset to hospitalization and days to outcome by subtracting one date from the other, and converting the value to numeric. We'll also create an early outcome binary variable indicating whether the date of the outcome was less than the median, after removing missing variables. We'll finally remove all the variables that start with "date." Finally, we'll use the `mutate_if` function, which takes a predicate and an action function. We'll ask -- _if_ the variable is logical (TRUE/FALSE), turn it into an integer (1/0). 
+
+
+```{r, results="hide"}
+# What's the median outcome date?
 median(flu$date_outcome, na.rm=TRUE)
 
-fludata <- flu %>%
-  # make male yes/no if gender is F, then remove gender.
-  mutate(male = gender=="m") %>% select(-gender) %>%
-  # Was someone ever hospitalized?
+# Run the whole pipeline
+flu %>%
+  mutate(male = gender=="m") %>% 
+  select(-gender) %>%
+  mutate(hospital = !is.na(date_hospitalization)) %>%
+  mutate(days_to_hospital = as.numeric(date_hospitalization - date_onset)) %>%
+  mutate(days_to_outcome  = as.numeric(date_outcome - date_onset)) %>%
+  mutate(early_outcome = date_outcome < median(date_outcome, na.rm=TRUE)) %>%
+  select(-starts_with("date")) %>%
+  mutate_if(is.logical, as.integer)
+```
+
+Once you're satisfied your pipeline works, reassign the pipeline back to the `flu` object itself (remember, we created the backup above in case we messed something up here).
+
+```{r}
+# Make the assignment
+flu <- flu %>%
+  mutate(male = gender=="m") %>% 
+  select(-gender) %>%
   mutate(hospital = !is.na(date_hospitalization)) %>%
   mutate(days_to_hospital = as.numeric(date_hospitalization - date_onset)) %>%
   mutate(days_to_outcome  = as.numeric(date_outcome - date_onset)) %>%
@@ -276,72 +340,142 @@ fludata <- flu %>%
   select(-starts_with("date")) %>%
   mutate_if(is.logical, as.integer)
 
-fludata
+# Take a look
+flu
+```
 
-# is this dummy-variable creation necessary or will caret just do it for you? test both ways.
-model.matrix(~0+province, data=fludata)
+#### Create indicators for province
 
-# bind the columns with the original data
-cbind(fludata, model.matrix(~0+province, data=fludata))
+Now, there's one more thing we want to do. Instead of a single "province" variable that has multiple levels, we want to do the dummy coding ourselves. When we ran regression models R handled this internally without our intervention. But we need to be explicit here. Here's one way to do it. 
 
-# turn it into a tibble, remove the province variable
-fludata <- cbind(fludata, model.matrix(~0+province, data=fludata)) %>%
+First, there's a built-in function called `model.matrix` that creates dummy codes. You have to give it a formula like you do in linear models, but here, I give it a `~0+variable` syntax so that it doesn't try to create an intercept. That is, instead of _k-1_ dummy variables, it'll create _k_. Try it.
+
+```{r, results="hide"}
+model.matrix(~0+province, data=flu)
+```
+
+There's another built-in function called `cbind` that binds columns together. This can be dangerous to use if you're not certain that rows are in the same order (there, it's better to use an inner join). But here, we're certain they're in the same order. Try binding the results of that to the original data.
+
+```{r, results="hide"}
+cbind(flu, model.matrix(~0+province, data=flu))
+```
+
+Finally, turn it into a tibble and select out the original province variable. Once you've run the pipeline, go back and make the assignment back to the `flu` object itself.
+
+```{r}
+flu <- cbind(flu, model.matrix(~0+province, data=flu)) %>%
   as_tibble() %>%
   select(-province)
+flu
+```
 
-fludata
+_Optional_: Notice how the new variables are provinceJiangsu, provinceOther, provinceShanghai, provinceZhejiang. If we want to strip off the "province" we can do that. There's a built-in command called `gsub` that can help here.
 
-# Remove "province" from the names
-names(fludata)
-gsub("province", "", names(fludata))
-names(fludata) <- gsub("province", "", names(fludata))
-fludata
+```{r, results="hide"}
+# Take a look at the names of the flu dataset.
+names(flu)
+
+# Remove "province"
+gsub("province", "", names(flu))
+
+# Now make the assignment back to names(flu)
+names(flu) <- gsub("province", "", names(flu))
+
+# Take a look
+flu
+```
 
 
+### Imputation
 
-# imputation ----
+We have a lot of missing data points throughout. Most of the data mining algorithms we're going to use later can't handle missing data, so observations with any missing data are excluded from the model completely. If we have a large dataset and only a few missing values, it's probably better to exclude them and proceed. But since we've already got a pretty low number of observations, we need to try to impute missing values to maximize our use of the data we have.
 
+There are lots of different imputation approaches. An overly simplistic method is simply a mean or median imputation -- you simply plug in the mean value for that column for the missing sample's value. This leaves the mean unchanged (good) but artificially decreases the variance (not good). We're going to use the **mice** package for imputation (Multivariate Imputation by Chained Equations). This package gives you functions that can impute continuous, binary, and ordered/unordered categorical data, imputing each incomplete variable with a separate model. It tries to account for relations in the data and uncertainty about those relationships. The methods are described in the paper.
+
+> Buuren, S., & Groothuis-Oudshoorn, K. (2011). mice: Multivariate imputation by chained equations in R. [_Journal of statistical software_, 45(3)](https://www.jstatsoft.org/article/view/v045i03).
+
+Let's load the mice package, and take a look at our data again.
+
+```{r}
 library(mice)
+flu
+```
 
-# "outcome" is what we want to try to predict, but we need to impute missing values in other variables.
-# take flu data, remove case id and outcome variable, run mice to impute
-fluimp <- fludata %>%
+Eventually we want to predict the outcome, so we don't want to factor that into the imputation. We also don't want to factor in the case ID, because that's just an individual's identifier. So let's create a new dataset selecting out those two variables so we can try to impute everything else.
+
+```{r, results="hide"}
+flu %>% 
+  select(-1, -2)
+```
+
+The `mice()` function itself returns a special kind of object called a multiply imputed data set, and from this we can run mice's `complete()` on the thing returned by `mice()` to complete the dataset that was passed to it. Here's what we'll do. We'll take the flu data, select out the first two columns, create the imputation, then complete the original data, assigning that to a new dataset called `fluimp`.
+
+```{r mice, results="hide"}
+fluimp <- flu %>%
   select(-1, -2) %>%
   mice(print=FALSE) %>%
   complete()
+fluimp
+```
 
-# put the data back together
-fluimp <- fludata %>%
+Now, we need to put the data back together again. We do this by selecting the original two columns from the original flu data, and then using `cbind()` like above to mash the two datasets together side by side. Finally, we'll turn it back into a tibble. Once you've run the pipeline and you like the result, assign it back to `fluimp`.
+
+```{r}
+# Run the pipeline successfully first before you reassign!
+fluimp <- flu %>%
   select(1,2) %>%
   cbind(fluimp) %>%
   as_tibble()
-
 fluimp
+```
 
-fluimp %>% write_csv(here("data", "h7n9_analysisready.csv"))
+### Model training
 
+Now, we're ready to do some predictive modeling! If you didn't make it this far and you just want to read in the analysis ready dataset, you can do that too. 
 
-# test/train/validation ----
+```{r}
+fluimp <- read_csv("data/h7n9_analysisready.csv")
+```
 
-library(tidyverse)
-library(here)
-library(caret)
-fluimp <- read_csv(here("data", "h7n9_analysisready.csv"))
+#### Splitting data
 
+First, let's split the datasets into those where we know the outcome, and those where we don't. The unknown samples will be the ones where `is.na(outcome)` is TRUE. So you can use a filter statement.
 
-fluimp
-
-# these are samples with unknown data we'll use later to predict
+```{r, results="hide"}
+# Run the pipeline successfully first before you reassign!
+# These are samples with unknown data we'll use later to predict
 unknown <- fluimp %>%
   filter(is.na(outcome))
 unknown
+```
 
-# samples with known outcomes
+The known samples are the cases where `!is.na(outcome)` is TRUE, that is, cases where the outcome is not (`!`) missing. One thing we want to do here while we're at it is remove the case ID. This is just an arbitrary numerically incrementing counter and we _don't_ want to use this in building a model!
+
+```{r, results="hide"}
+# Run the pipeline successfully first before you reassign!
+# Samples with known outcomes used for model training.
 known <- fluimp %>%
   filter(!is.na(outcome)) %>%
   select(-case_id)
 known
+```
 
+#### The caret package
+
+We're going to use the **caret** package for building and testing predictive models using a variety of different data mining / ML algorithms. The package was published in JSS in 2008. Max Kuhn's [slides from the 2013 useR! conference](https://www.r-project.org/conferences/useR-2013/Tutorials/kuhn/user_caret_2up.pdf) are also a great resource, as is the [caret package vignette](https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf), and the [detailed e-book documentation](http://topepo.github.io/caret/). 
+
+> Kuhn, M. (2008). Building Predictive Models in R Using the caret Package. _Journal of Statistical Software_, 28(5), 1 - 26. doi: <http://dx.doi.org/10.18637/jss.v028.i05>
+
+The [**caret**](http://cran.r-project.org/web/packages/caret/index.html) package (short for _C_lassification _A_nd _RE_gression _T_raining) is a set of functions that streamline the process for creating and testing a wide variety of predictive models with different resampling approaches, as well as estimating variable importance from developed models. There are many different modeling functions in R spread across many different packages, and they all have different syntax for model training and/or prediction. The **caret** package provides a uniform interface the functions themselves, as well as a way to standardize common tasks (such parameter tuning and variable importance).
+
+
+
+```{r, echo=FALSE}
+knitr::knit_exit()
+```
+
+
+```{r, eval=FALSE, include=FALSE}
 # bootstrapping or CV?
 
 # see useR talk 2013 from Kuhn
