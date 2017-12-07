@@ -125,13 +125,15 @@ This class will provide hands-on instruction for using machine learning algorith
 
 ### H7N9 Outbreak Data
 
-This data used here is from the 2013 outbreak of [influenza A H7N9 in China](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), analyzed by Kucharski et al., published in 2014. 
+This data used here is from the 2013 outbreak of [influenza A H7N9 in China](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), analyzed by Kucharski et al., published in 2014.
 
-> **Publication:** A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. [_PLOS Currents Outbreaks_ (2014) Mar 7 Edition 1](http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f). 
+> **Publication**: A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. [_PLOS Currents Outbreaks_ (2014) Mar 7 Edition 1](http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f). 
 
-> **Data:** Kucharski A, Mills HL, Pinsent A, Fraser C, Van Kerkhove M, Donnelly CA, Riley S (2014) Data from: Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. _Dryad Digital Repository_. https://doi.org/10.5061/dryad.2g43n.
+> **Data**: Kucharski A, Mills HL, Pinsent A, Fraser C, Van Kerkhove M, Donnelly CA, Riley S (2014) Data from: Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. _Dryad Digital Repository_. https://doi.org/10.5061/dryad.2g43n.
 
-The data is made available in the [outbreaks](https://cran.r-project.org/web/packages/outbreaks/index.html) package, which is a collection of several simulated and real outbreak datasets, and has been very [slightly modified](https://github.com/bioconnector/workshops/blame/master/r-predictive-flu.Rmd#L20) for use here. There are two datasets available to download on the [data](data.html) page: 
+The data is made available in the [outbreaks](https://cran.r-project.org/web/packages/outbreaks/index.html) package, which is a collection of several simulated and real outbreak datasets, and has been very [slightly modified](https://github.com/bioconnector/workshops/blame/master/r-predictive-flu.Rmd#L20) for use here. The analysis we'll do here is inspired by and modified in part from a [similar analysis by Shirin Glander](https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post).
+
+There are two datasets available to download on the [data](data.html) page: 
 
 1. **[h7n9.csv](data/h7n9.csv)**: The original dataset. Contains the following variables, with lots of missing data throughout.
     - **`case_id`**: the sample identifier
@@ -408,9 +410,10 @@ flu %>%
   select(-1, -2)
 ```
 
-The `mice()` function itself returns a special kind of object called a multiply imputed data set, and from this we can run mice's `complete()` on the thing returned by `mice()` to complete the dataset that was passed to it. Here's what we'll do. We'll take the flu data, select out the first two columns, create the imputation, then complete the original data, assigning that to a new dataset called `fluimp`.
+The `mice()` function itself returns a special kind of object called a multiply imputed data set, and from this we can run mice's `complete()` on the thing returned by `mice()` to complete the dataset that was passed to it. Here's what we'll do. We'll take the flu data, select out the first two columns, create the imputation, then complete the original data, assigning that to a new dataset called `fluimp`. First let's set the random number seed generator to some number (use the same as I do if you want identical results).
 
 ```{r mice, results="hide"}
+set.seed(42)
 fluimp <- flu %>%
   select(-1, -2) %>%
   mice(print=FALSE) %>%
@@ -429,17 +432,81 @@ fluimp <- flu %>%
 fluimp
 ```
 
-### Model training
-
-Now, we're ready to do some predictive modeling! If you didn't make it this far and you just want to read in the analysis ready dataset, you can do that too. 
+At this point we're almost ready to do some predictive modeling! If you didn't make it this far and you just want to read in the analysis ready dataset, you can do that too. 
 
 ```{r}
 fluimp <- read_csv("data/h7n9_analysisready.csv")
 ```
 
-#### Splitting data
 
-First, let's split the datasets into those where we know the outcome, and those where we don't. The unknown samples will be the ones where `is.na(outcome)` is TRUE. So you can use a filter statement.
+### The caret package
+
+We're going to use the **caret** package for building and testing predictive models using a variety of different data mining / ML algorithms. The package was published in JSS in 2008. Max Kuhn's [slides from the 2013 useR! conference](https://www.r-project.org/conferences/useR-2013/Tutorials/kuhn/user_caret_2up.pdf) are also a great resource, as is the [caret package vignette](https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf), and the [detailed e-book documentation](http://topepo.github.io/caret/). 
+
+> Kuhn, M. (2008). Building Predictive Models in R Using the caret Package. _Journal of Statistical Software_, 28(5), 1 - 26. doi: <http://dx.doi.org/10.18637/jss.v028.i05>
+
+The [**caret**](http://cran.r-project.org/web/packages/caret/index.html) package (short for _C_lassification _A_nd _RE_gression _T_raining) is a set of functions that streamline the process for creating and testing a wide variety of predictive models with different resampling approaches, as well as estimating variable importance from developed models. There are many different modeling functions in R spread across many different packages, and they all have different syntax for model training and/or prediction. The **caret** package provides a uniform interface the functions themselves, as well as a way to standardize common tasks (such parameter tuning and variable importance).
+
+The `train` function from caret is used to:
+
+- evaluate, using resampling, the effect of model tuning parameters on performance
+- choose the "optimal" model across these parameters
+- estimate model performance from a training set
+
+#### Models available in caret
+
+First you have to choose a specific type of model or algorithm. Currently there are **`r I(length(unique(caret::modelLookup()$model)))`** different algorithms implemented in caret. Caret provides the interface to the method, but you still need the external package installed. For example, we'll be fitting a Random Forest model, and for that we'll need the [randomForest](https://cran.r-project.org/package=randomForest) package installed. You can see all the methods that you can deploy by looking at the help for train.
+
+```{r, include=FALSE}
+library(caret)
+```
+
+
+```{r, eval=FALSE}
+library(caret)
+?train
+```
+
+From here, click on the link to see the [available models](http://topepo.github.io/caret/available-models.html) or [models by tag](http://topepo.github.io/caret/train-models-by-tag.html). From here you can search for particular models by name. We're going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages [randomForest](https://cran.r-project.org/package=randomForest), [gbm](https://cran.r-project.org/package=gbm), [kknn](https://cran.r-project.org/package=kknn), and [glmnet](https://cran.r-project.org/package=glmnet), respectively. 
+
+Each of the models may have one or more _tuning parameters_ -- some value or option you can set to tweak how the algorithm develops. In k-nearest neighbors, we can try different values of _k_. With random forest, we can set the _mtry_ option -- the algorithm will select _mtry_ number of predictors to attempt a split for classification. Caret attempts to do this using a procedure like this:
+
+![_The caret model training algorithm. Image from the caret paper._](img/caret-pseudocode.png)
+
+That is, it sweeps through each possible parameter you can set for the particular type of model you choose, and uses some kind of resampling scheme with your training data, fitting the model on a subset and testing on the held-out samples.
+
+#### Resampling 
+
+The default resampling scheme caret uses is the [bootstrap](https://en.wikipedia.org/wiki/Bootstrapping_(statistics)). Bootstrapping takes a random sample _with replacement_ from your data that's the same size of the original data. Samples might be selected more than once, and some aren't selected at all. On average, each sample has a ~63.2% chance of showing up at least once in a bootstrap sample. Some samples won't show up at all, and these _held out_ samples are the ones that are used for testing the performance of the trained model. You repeat this process many times (e.g., 25, 100, etc) to get an average performance estimate on unseen data. Here's what it looks like in practice.
+
+![_Bootstrapping schematic. Image from Max Kuhn's 2013 useR! talk._](img/caret-bootstrap.png)
+
+Many alternatives exist. Another popular approach is cross-validation. Here, a subset of your data (e.g., 4/5ths, or 80%) is used for training, and the remaining 1/5th or 20% is used for performance assessment. You slide the cross-validation interval over and use the next 4/5ths for training and 1/5th for testing. You do this again for all 5ths of the data. You can optionally repeat this process many times (_repeated cross-validation_) to get an average cross validation prediction accuracy for a given model and set of tuning parameters.
+
+The `trainControl` option in the `train` function controls this, and you can learn more about this under the [Basic Parameter Tuning](http://topepo.github.io/caret/model-training-and-tuning.html#basic-parameter-tuning) section of the caret documentation.
+
+### Model training
+
+```{r reentrypoint1, include=FALSE, eval=FALSE}
+# This chunk is here if you just want to start interactive lesson development
+# from this point without worrying about what happened above.
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+library(caret)
+```
+
+
+Let's try it out! If you didn't make it through the data preprocessing steps and you just want to read in the analysis ready dataset, you can do this: 
+
+```{r}
+fluimp <- read_csv("data/h7n9_analysisready.csv")
+```
+
+#### Splitting data into known and unknown outcomes
+
+Before we continue, let's split the dataset into samples where we know the outcome, and those where we don't. The unknown samples will be the ones where `is.na(outcome)` is TRUE. So you can use a filter statement.
 
 ```{r, results="hide"}
 # Run the pipeline successfully first before you reassign!
@@ -460,15 +527,151 @@ known <- fluimp %>%
 known
 ```
 
-#### The caret package
+#### A note on reproducibility and `set.seed()`
 
-We're going to use the **caret** package for building and testing predictive models using a variety of different data mining / ML algorithms. The package was published in JSS in 2008. Max Kuhn's [slides from the 2013 useR! conference](https://www.r-project.org/conferences/useR-2013/Tutorials/kuhn/user_caret_2up.pdf) are also a great resource, as is the [caret package vignette](https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf), and the [detailed e-book documentation](http://topepo.github.io/caret/). 
+When we train a model using resampling, that sampling is going to happen _pseudo_-randomly. Try running this function which generates five numbers from a random uniform distribution between 0 and 1.
 
-> Kuhn, M. (2008). Building Predictive Models in R Using the caret Package. _Journal of Statistical Software_, 28(5), 1 - 26. doi: <http://dx.doi.org/10.18637/jss.v028.i05>
+```{r, results="hide"}
+runif(5)
+```
 
-The [**caret**](http://cran.r-project.org/web/packages/caret/index.html) package (short for _C_lassification _A_nd _RE_gression _T_raining) is a set of functions that streamline the process for creating and testing a wide variety of predictive models with different resampling approaches, as well as estimating variable importance from developed models. There are many different modeling functions in R spread across many different packages, and they all have different syntax for model training and/or prediction. The **caret** package provides a uniform interface the functions themselves, as well as a way to standardize common tasks (such parameter tuning and variable importance).
+If you run that function over and over again, you'll get different results. But, we can set the random number seed generator with any value we choose, and we'll get the same result. Try setting the seed, drawing the random numbers, then re-setting the same seed, and re-running the `runif` function again. You should get identical results.
+
+```{r, results="hide"}
+set.seed(22908)
+runif(5)
+```
+
+Eventually I'm going to compare different models to each other, so I want to set the random number seed generator to the same value for each model so the same random bootstrap samples are identical across models.
+
+#### Random Forest
+
+Let's fit a [random forest](https://en.wikipedia.org/wiki/Random_forest) model. See the help for `?train` and click on the link therein to see what abbreviations correspond to which model. First set the random number seed generator to some number, e.g., 8382, that we'll use for all other models we make. The model forumula here takes the know data, and the `responseVar~.` syntax says "predict `responseVar` using every other variable in the data." Finally, notice how when we call `train()` from the **caret** package using "rf" as the type of model, it automatically loads the **randomForest** package that you installed. If you didn't have it installed, it would probably ask you to install it first.
+
+```{r}
+# Set the random number seed generator
+set.seed(8382)
+
+# Fit a random forest model for outcome against everything in the model (~.)
+modrf <- train(outcome~., data=known, method="rf")
+
+# Take a look at the output
+modrf
+```
+
+Take a look at what that tells us. It tells us it's fitting a Random Forest model using 77 samples, predicting a categorical outcome class (Death or Recover) based on 10 predictors. It's not doing any pre-processing like centering or scaling, and it's doing bootstrap resampling of 77 samples with replacement, repeated 25 times each. Random Forest has a single tuning parameter, mtry -- the algorithm will select _mtry_ number of predictors to attempt a split for classification when building a classification tree. The caret package does 25 bootstrap resamples for different values of mtry (you can also control this too if you want), and computes [accuracy](https://en.wikipedia.org/wiki/Sensitivity_and_specificity#Confusion_matrix) and [kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) measures of performance on the held-out samples. 
+
+Accuracy is the number of true assignments to the correct class divided by the total number of samples. [Kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) takes into account the expected accuracy while considering chance agreement, and is useful for extremely imbalanced class distributions. For continuous outcomes, you can measure things like RMSE or correlation coefficients.
+
+<!-- INFORMATION ABOUT RF HERE! -->
+<!-- INFORMATION ABOUT RF HERE! -->
+<!-- INFORMATION ABOUT RF HERE! -->
+<!-- INFORMATION ABOUT RF HERE! -->
+<!-- INFORMATION ABOUT RF HERE! -->
+
+Caret also provides a function for [assessing the importance of each variable](http://topepo.github.io/caret/variable-importance.html). The `varImp` function knows what kind of model was fitted and knows how to estimate variable importance. For Random Forest, it's an estimate of how much worse the prediction gets after randomly shuffling the values of each predictor variable in turn. A variable that's important will result in a much worse prediction than a variable that's not as meaningful.
+
+```{r}
+varImp(modrf, scale=TRUE)
+```
+
+You can also pass that whole thing to `plot()`, or wrap the statement in `plot()`, to see a graphical representation.
+
+```{r}
+varImp(modrf, scale=TRUE) %>% plot()
+```
+
+#### Stochastic Gradient Boosting
+
+Let's try a different method, [stochastic gradient boosting](https://en.wikipedia.org/wiki/Gradient_boosting), which uses a different method for building an ensemble of classification trees (see [this post](https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/) for a discussion of bagging vs boosting). This requires the **gbm** package. Again, set the random seed generator.
+
+```{r}
+set.seed(8382)
+modgbm <- train(outcome~., data=known, method="gbm", verbose=FALSE)
+modgbm
+```
+
+Notice how stochastic gradient boosting has two different tuning parameters - interaction depth and n trees. There were others (shrinkage, and `n.minobsinnode`) that were held constant. The caret package automates the bootstrap resampling based performance assessment across all combinations of depth and ntrees, and it tells you where you got the best performance. Notice that the performance here doesn't seem to be as good as random forest. We can also look at variable importance here too, and see similar rankings.
+
+```{r, fig.show=FALSE, fig.keep='none', results="hide"}
+varImp(modgbm, scale=TRUE)
+varImp(modgbm, scale=TRUE) %>% plot()
+```
+
+#### Model comparison: Random Forest vs Gradient Boosting
+
+Let's compare those two models. Because the random seed was set to the same number (8382), the bootstrap resamples were identical across each model. Let's directly compare the results for the best models from each method.
+
+```{r}
+modsum <- resamples(list(gbm=modgbm, rf=modrf))
+summary(modsum)
+```
+
+It appears that random forest is doing much better in terms of both accuracy and kappa. Let's train a few other types of models.
+
+#### Elastic net regularized logistic regression
+
+[Elastic net regularization](https://en.wikipedia.org/wiki/Elastic_net_regularization) is a method that combines both the [lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) and [ridge](https://en.wikipedia.org/wiki/Tikhonov_regularization) methods of reguarizing a model. [Regularization](https://en.wikipedia.org/wiki/Regularization_(mathematics)) is a method for _penalizing_ a model as it gains complexity with more predictors in an attempt to avoid overfitting. You'll need the glmnet package for this.
+
+```{r}
+modglmnet <- train(outcome~., data=known, method="glmnet")
+modglmnet
+```
 
 
+#### k-nearest neighbor
+
+[k-nearest neighbor](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm) attempts to assign samples to their closest labeled neighbors in high-dimensional space. You'll need the kknn package for this.
+
+```{r}
+set.seed(8382)
+modknn <- train(outcome~., data=known, method="kknn")
+modknn
+```
+
+#### Compare all the models
+
+Now let's look at the performance characteristics for the best performing model across all four types of models we produced. It still looks like random forest is coming through as the winner.
+
+```{r}
+modsum <- resamples(list(gbm=modgbm, rf=modrf, glmnet=modglmnet, knn=modknn))
+summary(modsum)
+```
+
+The `bwplot()` function can take this model summary object and visualize it. 
+
+```{r}
+bwplot(modsum)
+```
+
+### Prediction on unknown samples
+
+Once we have a model trained it's fairly simple to predict the class of the unknown samples. Take a look at the unknown data again:
+
+```{r, results="hide"}
+unknown
+```
+
+Now, since Random Forest worked best, let's use that model to predict the outcome!
+
+```{r}
+predict(modrf, newdata=unknown)
+```
+
+This gives you a vector of values that would be the outcome for the individuals in the `unknown` dataset. From here it's pretty simple to put them back in the data with a `mutate()`.
+
+```{r}
+unknown %>%
+  mutate(outcome=predict(modrf, newdata=unknown))
+```
+
+Alternatively, you could pass in `type="prob"` to get prediction probabilities instead of predicted classes. 
+
+```{r}
+predict(modrf, newdata=unknown, type="prob") %>% head()
+```
+
+You could also imagine going further to get the prediction probabilities out of each type of model we made. You could add up the prediction probabilities for Death and Recovery for each individual across model types, and then compute a ratio. If across all the models that ratio is, for example, 2x in favor of death, you could predict death, or if it's 2x in favor of recovery, you predict recover, and if it's in between, you might call it "uncertain." This lets you not only reap the advantages of ensemble learning within a single algorithm, but also lets you use information across a variety of different algorithm types.
 
 ```{r, echo=FALSE}
 knitr::knit_exit()
@@ -476,67 +679,6 @@ knitr::knit_exit()
 
 
 ```{r, eval=FALSE, include=FALSE}
-# bootstrapping or CV?
-
-# see useR talk 2013 from Kuhn
-# http://www.edii.uclm.es/~useR-2013/Tutorials/kuhn/user_caret_2up.pdf
-
-# Bootstrapping takes a random sample with replacement. The random sample is the
-# same size as the original data set. Samples may be selected more than once and
-# each sample has a 63.2% chance of showing up at least once. Some samples won't
-# be selected and these samples will be used to predict performance. The process
-# is repeated multiple times (say 30?100).
-
-# ?train
-# control <- trainControl(method="repeatedcv", number=10, repeats=10)
-# set.seed(27)
-# modrf <- train(outcome~., data=known, method="rf", preProcess=NULL, trControl=control)
-
-# random forest
-set.seed(42)
-modrf <- train(outcome~., data=known, method="rf")
-modrf
-varImp(modrf, scale=TRUE)
-varImp(modrf, scale=TRUE) %>% plot()
-
-# gradient boosting
-set.seed(43)
-modgbm <- train(outcome~., data=known, method="gbm", verbose=FALSE)
-modgbm
-varImp(modgbm, scale=TRUE)
-varImp(modgbm, scale=TRUE) %>% plot()
-
-# compare models
-modsum <- resamples(list(gbm=modgbm, rf=modrf))
-summary(modsum)
-
-# LASSO / Elastic-Net Regularized Generalized Linear Models
-set.seed(44)
-modlasso <- train(outcome~., data=known, method="glmnet")
-modlasso
-
-# k-nearest neighbors
-set.seed(45)
-modknn <- train(outcome~., data=known, method="kknn")
-modknn
-
-
-# compare models
-modsum <- resamples(list(gbm=modgbm, rf=modrf, lasso=modlasso, knn=modknn))
-summary(modsum)
-bwplot(modsum)
-
-
-# predict the unknowns
-predict(modrf, newdata=unknown)
-# get them back in the data
-unknown
-unknown %>%
-  mutate(outcome=predict(modrf, newdata=unknown))
-
-# Prediction probabilities
-predict(modrf, newdata=unknown, type="prob") %>% head()
-
 # # sum up prediction probabilities
 # predict(modrf, newdata=unknown, type="prob")
 # data.frame(rf    = predict(modrf,    newdata=unknown, type="prob"),
@@ -552,16 +694,9 @@ predict(modrf, newdata=unknown, type="prob") %>% head()
 #     log2ratio < -1 ~ "Recover",
 #     TRUE ~ "UNCERTAIN"
 #   )) %>% View
+```
 
-
-# check that distributions are somewhat similar.
-fluimp %>%
-  gather(key, value, age, days_to_hospital, days_to_outcome) %>%
-  ggplot(aes(outcome, value, fill=factor(male))) + geom_boxplot() + facet_wrap(~key, scale="free_y")
-
-
-
-
+```{r, eval=FALSE, include=FALSE}
 # flu forecasting with prophet --------------------------------------------
 
 # devtools::install_github("hrbrmstr/cdcfluview")
