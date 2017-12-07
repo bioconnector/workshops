@@ -164,6 +164,30 @@ This may produce some notes or other output, but as long as you don't get an err
 
 _Check back later..._
 
+```r
+install.packages("caret", dependencies = c("Depends", "Suggests"))
+```
+
+```
+There are binary versions available but the source versions are later:
+                binary  source  needs_compilation
+somePackage1    ....    ....               TRUE
+somePackage1    ....    ....               FALSE
+
+Do you want to install from sources the package which needs compilation?
+```
+
+or
+
+```
+Packages which are only available in source form, and may need compilation of C/C++/Fortran: ‘Rpoppler’ ‘Rmpi’
+Do you want to attempt to install these from sources?
+```
+
+Type `n` and hit `Enter` for "no."
+
+
+
 ### RNA-seq
 
 **Prerequisites!** This is _not_ an introductory R class. _This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r-dataframes.html), [manipulating data with dplyr and `%>%`](r-dplyr-yeast.html), and [data visualization with ggplot2](r-viz-gapminder.html)._

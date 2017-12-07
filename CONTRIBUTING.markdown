@@ -86,7 +86,7 @@ install.packages("XML")
 install.packages("threejs")
 install.packages("igraph")
 # Needed for predictive analytics / forecasting
-install.packages("caret")
+install.packages("caret", dependencies = c("Depends", "Suggests"))
 install.packages("randomForest")
 install.packages("gbm")
 install.packages("glmnet")
