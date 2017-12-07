@@ -13,23 +13,10 @@ library(ggplot2)
 theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 ```
 
-This class will provide hands-on instruction for using machine learning algorithms to predict a disease outcome. We will cover data cleaning, feature extraction, imputation, and using a variety of models to try to predict disease outcome. We will use resampling strategies to assess the performance of predictive modeling procedures such as Random Forest, stochastic gradient boosting, elastic net regularized regression (LASSO), and k-nearest neighbors. We will also demonstrate demonstrate how to _forecast_ future trends given historical infectious disease surveillance data using methodology that accounts for seasonality and nonlinearity. 
-
-**Prerequisites: _This is not a beginner R class._** [Familiarity with R](r-basics.html), installing/using packages, importing/saving results, expertise with [data manipulation using **dplyr**](r-dplyr-yeast.html) and [visualization with **ggplot2**](r-viz-gapminder.html) are all _required_. 
-
-
-**You must [complete the setup here](setup.html#predictive_analytics) _prior to class_.** This includes installing R, RStudio, and the required packages under the ["Predictive Analytics" heading](setup.html#predictive_analytics). Please [contact me](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
-
-<!--
-**Handouts**: Download and print out these handouts and bring them to class:
-
-- [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
-- [Exercises handout](handouts/r-stats-exercises.pdf)
-
-**Slides**: [click here](slides/r-stats.html).
--->
 
 ```{r createData, eval=FALSE, include=FALSE}
+# # Uncomment this block to recreate datasets
+# 
 # # Create china flu data
 # library(tidyverse)
 # 
@@ -117,7 +104,57 @@ This class will provide hands-on instruction for using machine learning algorith
 # ilidata %>% write_csv(here::here("data", "ilinet.csv"))
 ```
 
+
+This class will provide hands-on instruction for using machine learning algorithms to predict a disease outcome. We will cover data cleaning, feature extraction, imputation, and using a variety of models to try to predict disease outcome. We will use resampling strategies to assess the performance of predictive modeling procedures such as Random Forest, stochastic gradient boosting, elastic net regularized regression (LASSO), and k-nearest neighbors. We will also demonstrate demonstrate how to _forecast_ future trends given historical infectious disease surveillance data using methodology that accounts for seasonality and nonlinearity. 
+
+**Prerequisites: _This is not a beginner R class._** [Familiarity with R](r-basics.html), installing/using packages, importing/saving results, expertise with [data manipulation using **dplyr**](r-dplyr-yeast.html) and [visualization with **ggplot2**](r-viz-gapminder.html) are all _required_. 
+
+
+**You must [complete the setup here](setup.html#predictive_analytics) _prior to class_.** This includes installing R, RStudio, and the required packages under the ["Predictive Analytics" heading](setup.html#predictive_analytics). Please [contact me](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
+
+<!--
+**Handouts**: Download and print out these handouts and bring them to class:
+
+- [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
+- [Exercises handout](handouts/r-stats-exercises.pdf)
+
+**Slides**: [click here](slides/r-stats.html).
+-->
+
 ## Our Data
+
+This data used here is from the 2013 outbreak of [influenza A H7N9 in China](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), analyzed by Kucharski et al., published in 2014. 
+
+> Publication: A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. [_PLOS Currents Outbreaks_ (2014) Mar 7 Edition 1](http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f). 
+
+> Data: Kucharski A, Mills HL, Pinsent A, Fraser C, Van Kerkhove M, Donnelly CA, Riley S (2014) Data from: Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. _Dryad Digital Repository_. https://doi.org/10.5061/dryad.2g43n
+
+The data is made available in the [outbreaks](https://cran.r-project.org/web/packages/outbreaks/index.html) package, which is a collection of several simulated and real outbreak datasets, and has been very slightly modified for use here. There are two datasets available to download on the [data](data.html) page: 
+
+1. **[h7n9.csv](data/h7n9.csv)**: The original dataset. Contains the following variables, with lots of missing data throughout.
+    - **`case_id`**: the sample identifier
+    - **`date_onset`**: date of onset of syptoms
+    - **`date_hospitalization`**: date the patient was hospitalized, if available
+    - **`date_outcome`**: date the outcome (recovery, death) was observed, if available
+    - **`outcome`**: "Death" or "Recover," if available
+    - **`gender`**: male (m) or female (f)
+    - **`age`**: age of the individual, if known
+    - **`province`**: either Shanghai, Jiangsu, Zhejiang, or Other (lumps together less common provinces)
+2. **[h7n9\_analysisready.csv](data/h7n9_analysisready.csv)**: The "analysis-ready" dataset. This data has been cleaned up, with some "feature extraction" / variable recoding done to make the data more suitable to data mining / machine learning methods used here. We still have the outcome variable, either _Death_, _Recover_ or unknown (NA). Sex (m/f) has been recoded to a "
+    - **`case_id`**: _(same as above)_
+    - **`outcome`**: _(same as above)_
+    - **`age`**: _(same as above, imputed if unknown)_
+    - **`male`**: Instead of sex (m/f), this is a 0/1 indicator, where 1=male, 0=female.
+    - **`hospital`**: Indicator variable whether or not the patient was hospitalized
+    - **`days_to_hospital`**: The number of days between onset and hospitalization
+    - **`days_to_outcome`**: The number of days between onset and outcome (if available)
+    - **`early_outcome`**: Whether or not the outcome was recorded prior to the median date of the outcome in the dataset
+    - **`Jiangsu`**: Indicator variable: 1 = the patient was from the Jiangsu province.
+    - **`Shanghai`**: Indicator variable: 1 = the patient was from the Shanghai province.
+    - **`Zhejiang`**: Indicator variable: 1 = the patient was from the Zhejiang province.
+    - **`Other`**: Indicator variable: 1 = the patient was from some other less common province.
+
+
 
 
 ```{r}
