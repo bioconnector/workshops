@@ -73,8 +73,8 @@ navbar:
           href: r-rmarkdown.html
         - text: "Essential Statistics with R"
           href: r-stats.html
-#        - text: "Survival Analysis with TCGA Data"
-#          href: r-survival.html
+        - text: "Survival Analysis with TCGA Data"
+          href: r-survival.html
 #        - text: "Predictive Analytics & Forecasting Influenza"
 #          href: r-flu.html
         - text: "----"
