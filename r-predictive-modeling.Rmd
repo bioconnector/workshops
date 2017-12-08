@@ -84,24 +84,24 @@ theme_set(theme_bw(base_size=16) + theme(strip.background = element_blank()))
 # 
 # 
 # # Create ILInet data
-# library(tidyverse)
-# library(cdcfluview)
-# 
-# ili <- ilinet()
-# ili <- ili %>% select(week_start, ilitotal, total_patients)
-# ili
-# 
-# pi <- pi_mortality(coverage_area = "national")
-# pi
-# pi <- pi %>% transmute(week_start=wk_start+1, fludeaths=number_influenza, pneumoniadeaths=number_pneumonia, all_deaths)
-# pi
-# 
-# ilidata <- ili %>%
-#   left_join(pi, by="week_start") %>%
-#   filter(!is.na(week_start)) %>%
-#   filter(week_start>="2003-01-01" & week_start<="2017-10-31")
-# 
-# ilidata %>% write_csv(here::here("data", "ilinet.csv"))
+library(tidyverse)
+library(cdcfluview)
+
+ili <- ilinet()
+ili <- ili %>% select(week_start, ilitotal, total_patients)
+ili
+
+pi <- pi_mortality(coverage_area = "national")
+pi
+pi <- pi %>% transmute(week_start=wk_start+1, fludeaths=number_influenza, pneumoniadeaths=number_pneumonia, all_deaths)
+pi
+
+ilidata <- ili %>%
+  left_join(pi, by="week_start") %>%
+  filter(!is.na(week_start)) %>%
+  filter(week_start>="2003-01-01" & week_start<="2017-10-31")
+
+ilidata %>% write_csv(here::here("data", "ilinet.csv"))
 ```
 
 
@@ -123,9 +123,18 @@ This class will provide hands-on instruction for using machine learning algorith
 
 ## Predictive Modeling 
 
+Here we're going to use some epidemiological data collected during an influenza A (H7N9) outbreak in China in 2013. Of 134 cases with data, 31 died, 46 recovered, but 57 cases do not have a recorded outcome. We'll develop models capable of predicting death or recovery from the unlabeled cases. Along the way, we will: 
+
+- Do some exploratory data analysis and data visualization to get an overall sense of the data we have.
+- Extract and recode _features_ from the raw data that are more amenable to data mining / machine learning algorithms. 
+- Impute missing data points from some of the predictor variables.
+- Use a framework that enables consistent access to hundreds of classification and regression algorithms, and that facilitates automated parameter tuning using bootstrapping-based resampling for model assessment. 
+- We will develop models using several different approaches (Random Forest, stochastic gradient boosting, elastic net regularized logistic regression, _k_-nearest neighbor) by training and testing the models on the data where the outcome is known
+- We will compare the performance of each of the models and apply the best to predict the outcome for cases where we didn't know the outcome.
+
 ### H7N9 Outbreak Data
 
-This data used here is from the 2013 outbreak of [influenza A H7N9 in China](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), analyzed by Kucharski et al., published in 2014.
+The data we're using here is from the 2013 outbreak of [influenza A H7N9 in China](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), analyzed by Kucharski et al., published in 2014.
 
 > **Publication**: A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. [_PLOS Currents Outbreaks_ (2014) Mar 7 Edition 1](http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f). 
 
@@ -158,7 +167,6 @@ There are two datasets available to download on the [data](data.html) page:
     - **`Zhejiang`**: Indicator variable: 1 = the patient was from the Zhejiang province.
     - **`Other`**: Indicator variable: 1 = the patient was from some other less common province.
 
-Starting with the [original dataset](data/h7n9.csv) we're going to do some exploratory data analysis, and we'll extract and recode _features_ from the raw data, including age, days between onset and hospitalization or outcome, gender, and the patient's province. We will eventually want to traing a model to predict the patient's outcome. We'll do this by training and testing different models on the data where the outcome is known, and then apply these models to cases where we don't know the outcome. There are lots of missing data points in other variables, so we'll _impute_ those variables to maximize our use of the data. 
 
 ### Importing H7N9 data
 
@@ -469,7 +477,7 @@ library(caret)
 
 From here, click on the link to see the [available models](http://topepo.github.io/caret/available-models.html) or [models by tag](http://topepo.github.io/caret/train-models-by-tag.html). From here you can search for particular models by name. We're going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages [randomForest](https://cran.r-project.org/package=randomForest), [gbm](https://cran.r-project.org/package=gbm), [kknn](https://cran.r-project.org/package=kknn), and [glmnet](https://cran.r-project.org/package=glmnet), respectively. 
 
-Each of the models may have one or more _tuning parameters_ -- some value or option you can set to tweak how the algorithm develops. In k-nearest neighbors, we can try different values of _k_. With random forest, we can set the _mtry_ option -- the algorithm will select _mtry_ number of predictors to attempt a split for classification. Caret attempts to do this using a procedure like this:
+Each of the models may have one or more _tuning parameters_ -- some value or option you can set to tweak how the algorithm develops. In k-nearest neighbors, we can try different values of _k_. With random forest, we can set the $m_{\text{try}}$ option -- the algorithm will select $m_{\text{try}}$ number of predictors to attempt a split for classification. Caret attempts to do this using a procedure like this:
 
 ![_The caret model training algorithm. Image from the caret paper._](img/caret-pseudocode.png)
 
@@ -546,7 +554,7 @@ Eventually I'm going to compare different models to each other, so I want to set
 
 #### Random Forest
 
-Let's fit a [random forest](https://en.wikipedia.org/wiki/Random_forest) model. See the help for `?train` and click on the link therein to see what abbreviations correspond to which model. First set the random number seed generator to some number, e.g., 8382, that we'll use for all other models we make. The model forumula here takes the know data, and the `responseVar~.` syntax says "predict `responseVar` using every other variable in the data." Finally, notice how when we call `train()` from the **caret** package using "rf" as the type of model, it automatically loads the **randomForest** package that you installed. If you didn't have it installed, it would probably ask you to install it first.
+Let's fit a [random forest](https://en.wikipedia.org/wiki/Random_forest) model. See the help for `?train` and click on the link therein to see what abbreviations correspond to which model. First set the random number seed generator to some number, e.g., 8382, that we'll use for all other models we make. The model forumula here takes the know data, and the `responseVar~.` syntax says "predict `responseVar` using every other variable in the data." Finally, notice how when we call `train()` from the **caret** package using "rf" as the type of model, it automatically loads the **[randomForest](https://cran.r-project.org/package=randomForest)** package that you installed. If you didn't have it installed, it would probably ask you to install it first.
 
 ```{r}
 # Set the random number seed generator
@@ -559,15 +567,21 @@ modrf <- train(outcome~., data=known, method="rf")
 modrf
 ```
 
-Take a look at what that tells us. It tells us it's fitting a Random Forest model using 77 samples, predicting a categorical outcome class (Death or Recover) based on 10 predictors. It's not doing any pre-processing like centering or scaling, and it's doing bootstrap resampling of 77 samples with replacement, repeated 25 times each. Random Forest has a single tuning parameter, mtry -- the algorithm will select _mtry_ number of predictors to attempt a split for classification when building a classification tree. The caret package does 25 bootstrap resamples for different values of mtry (you can also control this too if you want), and computes [accuracy](https://en.wikipedia.org/wiki/Sensitivity_and_specificity#Confusion_matrix) and [kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) measures of performance on the held-out samples. 
+Take a look at what that tells us. It tells us it's fitting a Random Forest model using 77 samples, predicting a categorical outcome class (Death or Recover) based on 10 predictors. It's not doing any pre-processing like centering or scaling, and it's doing bootstrap resampling of 77 samples with replacement, repeated 25 times each. Random Forest has a single tuning parameter, $m_{\text{try}}$ -- the algorithm will select $m_{\text{try}}$ number of predictors to attempt a split for classification when building a classification tree. The caret package does 25 bootstrap resamples for different values of $m_{\text{try}}$ (you can also control this too if you want), and computes [accuracy](https://en.wikipedia.org/wiki/Sensitivity_and_specificity#Confusion_matrix) and [kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) measures of performance on the held-out samples. 
 
 Accuracy is the number of true assignments to the correct class divided by the total number of samples. [Kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) takes into account the expected accuracy while considering chance agreement, and is useful for extremely imbalanced class distributions. For continuous outcomes, you can measure things like RMSE or correlation coefficients.
 
-<!-- INFORMATION ABOUT RF HERE! -->
-<!-- INFORMATION ABOUT RF HERE! -->
-<!-- INFORMATION ABOUT RF HERE! -->
-<!-- INFORMATION ABOUT RF HERE! -->
-<!-- INFORMATION ABOUT RF HERE! -->
+> **_A bit about random forests._** Random forests is an ensemble learning approach based on classification trees. The CART (classification and regression tree) method searches through all available predictors to try to find a value of a single variable that splits the data into two groups by minimizing the impurity of the outcome between the two groups. The process is repeated over and over again until a hierarchical (tree) structure is created. But trees don't have great performance (prediction accuracy) compared to other models. Small changes in the data can drastically affect the structure of the tree. 
+> 
+> Tree algorithms are improved by ensemble approaches - instead of growing a single tree, grow many trees and aggregate (majority vote or averaging) the predictions made by the ensemble. The random forest algorithm is essentially:
+> 
+> 1. From the training data of _n_ samples, draw a bootstrap sample of size _n_.
+> 1. For each bootstrap sample, grow a classification tree, but with a small modification compared to the traditional algorithm: instead of selecting from all possible predictor variables to form a split, choose the best split among a randomly selected subset of $m_{\text{try}}$ predictors. Here, $m_{\text{try}}$ is the only tuning parameter. The trees are grown to their maximum size and not "pruned" back.
+> 1. Repeat the steps agove until a large number of trees is grown. 
+> 1. Estimate the performance of the ensemble of trees using the "out-of-bag" samples - i.e., those that were never selected during the bootstrap procedure in step #1. 
+> 1. Estimate the importance of each variable in the model by randomly permuting each predictor variable in testing on the out-of-bag samples. If a predictor is important, prediction accuracy will degrade. If the predictor isn't that helpful, performance doesn't deteriorate as much. 
+> 
+> Random forests are efficient compared to growing a single tree. For one, the RF algorithm only selects from $m_{\text{try}}$ predictors at each step, rather than all available predictors. Usually $m_{\text{try}}$ is by default somewhere close to the square root of the total number of available predictors, so the search is very fast. Second, while the traditional CART tree algorithm has to go through extensive cross-validation based pruning to avoid overfitting, the RF algorithm doesn't do any pruning at all. In fact, building an RF model _can_ be faster than building a single tree!
 
 Caret also provides a function for [assessing the importance of each variable](http://topepo.github.io/caret/variable-importance.html). The `varImp` function knows what kind of model was fitted and knows how to estimate variable importance. For Random Forest, it's an estimate of how much worse the prediction gets after randomly shuffling the values of each predictor variable in turn. A variable that's important will result in a much worse prediction than a variable that's not as meaningful.
 
@@ -583,7 +597,7 @@ varImp(modrf, scale=TRUE) %>% plot()
 
 #### Stochastic Gradient Boosting
 
-Let's try a different method, [stochastic gradient boosting](https://en.wikipedia.org/wiki/Gradient_boosting), which uses a different method for building an ensemble of classification trees (see [this post](https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/) for a discussion of bagging vs boosting). This requires the **gbm** package. Again, set the random seed generator.
+Let's try a different method, [stochastic gradient boosting](https://en.wikipedia.org/wiki/Gradient_boosting), which uses a different method for building an ensemble of classification trees (see [this post](https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/) for a discussion of bagging vs boosting). This requires the **[gbm](https://cran.r-project.org/package=gbm)** package. Again, set the random seed generator.
 
 ```{r}
 set.seed(8382)
@@ -611,7 +625,7 @@ It appears that random forest is doing much better in terms of both accuracy and
 
 #### Elastic net regularized logistic regression
 
-[Elastic net regularization](https://en.wikipedia.org/wiki/Elastic_net_regularization) is a method that combines both the [lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) and [ridge](https://en.wikipedia.org/wiki/Tikhonov_regularization) methods of reguarizing a model. [Regularization](https://en.wikipedia.org/wiki/Regularization_(mathematics)) is a method for _penalizing_ a model as it gains complexity with more predictors in an attempt to avoid overfitting. You'll need the glmnet package for this.
+[Elastic net regularization](https://en.wikipedia.org/wiki/Elastic_net_regularization) is a method that combines both the [lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) and [ridge](https://en.wikipedia.org/wiki/Tikhonov_regularization) methods of reguarizing a model. [Regularization](https://en.wikipedia.org/wiki/Regularization_(mathematics)) is a method for _penalizing_ a model as it gains complexity with more predictors in an attempt to avoid overfitting. You'll need the **[glmnet](https://cran.r-project.org/package=glmnet)** package for this.
 
 ```{r}
 modglmnet <- train(outcome~., data=known, method="glmnet")
@@ -621,7 +635,7 @@ modglmnet
 
 #### k-nearest neighbor
 
-[k-nearest neighbor](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm) attempts to assign samples to their closest labeled neighbors in high-dimensional space. You'll need the kknn package for this.
+[k-nearest neighbor](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm) attempts to assign samples to their closest labeled neighbors in high-dimensional space. You'll need the **[kknn](https://cran.r-project.org/package=kknn)** package for this.
 
 ```{r}
 set.seed(8382)
@@ -673,11 +687,6 @@ predict(modrf, newdata=unknown, type="prob") %>% head()
 
 You could also imagine going further to get the prediction probabilities out of each type of model we made. You could add up the prediction probabilities for Death and Recovery for each individual across model types, and then compute a ratio. If across all the models that ratio is, for example, 2x in favor of death, you could predict death, or if it's 2x in favor of recovery, you predict recover, and if it's in between, you might call it "uncertain." This lets you not only reap the advantages of ensemble learning within a single algorithm, but also lets you use information across a variety of different algorithm types.
 
-```{r, echo=FALSE}
-knitr::knit_exit()
-```
-
-
 ```{r, eval=FALSE, include=FALSE}
 # # sum up prediction probabilities
 # predict(modrf, newdata=unknown, type="prob")
@@ -695,6 +704,15 @@ knitr::knit_exit()
 #     TRUE ~ "UNCERTAIN"
 #   )) %>% View
 ```
+
+# Forecasting
+
+
+```{r, echo=FALSE}
+knitr::knit_exit()
+```
+
+
 
 ```{r, eval=FALSE, include=FALSE}
 # flu forecasting with prophet --------------------------------------------
