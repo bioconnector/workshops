@@ -162,11 +162,23 @@ This may produce some notes or other output, but as long as you don't get an err
 
 ### Predictive analytics
 
-_Check back later..._
+**Prerequisites!** This is _not_ an introductory R class. In addition to familiarity with R, this lesson also assumes familiarity with:
+
+- [Advanced data manipulating data with dplyr and `%>%`](r-dplyr-yeast.html)
+- [Data tidying with tidyr](r-tidy.html)
+- [Advanced data visualization with ggplot2](r-viz-gapminder.html)
+
+Some knowledge of statistics and resampling procedures is helpful, but not strictly required.
+
+**Software setup:** Follow instructions above for [R+RStudio+Packages](#r) and [CRAN packages](#cran-packages). For this class, you'll also need several additional packages described below. If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and [email me](people.html) _prior to class_ with the command you typed and the error you received.
+
+First, install the **[caret](https://cran.r-project.org/package=caret)** package, which provides a unified interface to hundreds of data mining and machine learning algorithms and a framework for model training and evaluation. This command will also install all the additional packages that **caret** recommends. 
 
 ```r
 install.packages("caret", dependencies = c("Depends", "Suggests"))
 ```
+
+When you do this, you may get a note asking you about installing source packages that need compilation. If you get this message, type `n` and hit `Enter` at the prompt for "no."
 
 ```
 There are binary versions available but the source versions are later:
@@ -177,15 +189,51 @@ somePackage1    ....    ....               FALSE
 Do you want to install from sources the package which needs compilation?
 ```
 
-or
+Similarly, if you get a message that looks like this, type `n` and hit `Enter` for "no."
 
 ```
 Packages which are only available in source form, and may need compilation of C/C++/Fortran: ‘Rpoppler’ ‘Rmpi’
 Do you want to attempt to install these from sources?
 ```
 
-Type `n` and hit `Enter` for "no."
+The **caret** package provides the utilities for interfacing with many other packages' machine learning algorithms. We're going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages [randomForest](https://cran.r-project.org/package=randomForest), [gbm](https://cran.r-project.org/package=gbm), [kknn](https://cran.r-project.org/package=kknn), and [glmnet](https://cran.r-project.org/package=glmnet), respectively. We will also need the [mice](https://cran.r-project.org/package=mice) package for multiple imputation. The following commands will install these packages.
 
+```r
+install.packages("randomForest")
+install.packages("gbm")
+install.packages("kknn")
+install.packages("glmnet")
+install.packages("mice")
+```
+
+Finally, we'll conclude with a demonstration of _forecasting_, for which we'll need the [prophet](https://cran.r-project.org/package=prophet) package.
+
+```r
+install.packages("prophet")
+```
+
+Check that you've installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane. If you get an error telling you that the package isn't installed, try re-installing it as demonstrated above. If you're still having trouble, [email me](people.html) _prior to class_ with the command you typed to install and the error(s) you received.
+
+```r
+library(caret)
+library(randomForest)
+library(gbm)
+library(kknn)
+library(glmnet)
+library(mice)
+library(prophet)
+`````
+
+**Download data we'll use in class.** You will need the following datasets from the **[data](data.html)** page:
+
+- **[h7n9.csv](data/h7n9.csv)**: The slightly processed raw dataset from an [influenza A H7N9 outbreak in China in 2013](https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9), published by [Kucharski _et al_ 2014](https://www.ncbi.nlm.nih.gov/pubmed/24619563). Contains the original variables, with lots of missing data throughout.
+- **[h7n9\_analysisready.csv](data/h7n9_analysisready.csv)**: The "analysis-ready" dataset. This data has been cleaned up, with some "feature extraction" / variable recoding done to make the data more suitable to data mining / machine learning methods used in this class. We will start with the raw data above, but I provide this data in case you don't make it all the way through the data cleaning and feature extraction steps we will need to perform.
+- **[ilinet.csv](data/ilinet.csv)**: Historical flu tracking data from the CDC's U.S. Outpatient [Influenza-like Illness Surveillance Network](https://wwwn.cdc.gov/ilinet/) along with data from the [National Center for Health Statistics (NCHS) Mortality Surveillance System](https://gis.cdc.gov/grasp/fluview/mortality.html). This contains ILI totals from CDC and flu + pneumonia death data from NCHS through the end of October 2017.
+
+
+**Recommended reading** prior to class:
+
+> _(check back later)_
 
 
 ### RNA-seq
