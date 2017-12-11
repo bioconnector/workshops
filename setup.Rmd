@@ -160,7 +160,7 @@ library(RTCGA.mRNA)
 
 This may produce some notes or other output, but as long as you don't get an error message, you're good to go. If you get a message that says something like: `Error in library(somePackageName) : there is no package called 'somePackageName'`, then the required packages did not install correctly. Please do not hesitate to [email me](people.html) _prior to class_ if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.
 
-### Predictive analytics
+### Predictive modeling
 
 **Prerequisites!** This is _not_ an introductory R class. In addition to familiarity with R, this lesson also assumes familiarity with:
 

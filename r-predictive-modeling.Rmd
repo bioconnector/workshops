@@ -110,7 +110,7 @@ This class will provide hands-on instruction for using machine learning algorith
 **Prerequisites: _This is not a beginner R class._** [Familiarity with R](r-basics.html), installing/using packages, importing/saving results, expertise with [data manipulation using **dplyr**](r-dplyr-yeast.html) and [visualization with **ggplot2**](r-viz-gapminder.html) are all _required_. 
 
 
-**You must [complete the setup here](setup.html#predictive_analytics) _prior to class_.** This includes installing R, RStudio, and the required packages under the ["Predictive Analytics" heading](setup.html#predictive_analytics). Please [contact me](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
+**You must [complete the setup here](setup.html#predictive_modeling) _prior to class_.** This includes installing R, RStudio, and the required packages under the ["Predictive modeling" heading](setup.html#predictive_modeling). Please [contact me](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
 
 <!--
 **Handouts**: Download and print out these handouts and bring them to class:
