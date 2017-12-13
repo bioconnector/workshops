@@ -628,6 +628,7 @@ It appears that random forest is doing much better in terms of both accuracy and
 [Elastic net regularization](https://en.wikipedia.org/wiki/Elastic_net_regularization) is a method that combines both the [lasso](https://en.wikipedia.org/wiki/Lasso_(statistics)) and [ridge](https://en.wikipedia.org/wiki/Tikhonov_regularization) methods of reguarizing a model. [Regularization](https://en.wikipedia.org/wiki/Regularization_(mathematics)) is a method for _penalizing_ a model as it gains complexity with more predictors in an attempt to avoid overfitting. You'll need the **[glmnet](https://cran.r-project.org/package=glmnet)** package for this.
 
 ```{r}
+set.seed(8382)
 modglmnet <- train(outcome~., data=known, method="glmnet")
 modglmnet
 ```
@@ -758,77 +759,90 @@ See the prophet preprint for more.
 
 ### CDC ILI time series data
 
-...
+Here we're going to use historical flu tracking data from the CDC's U.S. Outpatient [Influenza-like Illness Surveillance Network](https://wwwn.cdc.gov/ilinet/) along with data from the [National Center for Health Statistics (NCHS) Mortality Surveillance System](https://gis.cdc.gov/grasp/fluview/mortality.html). This contains ILI totals from CDC and flu + pneumonia death data from NCHS through the end of October 2017. It's the **[ilinet.csv](data/ilinet.csv)** file on the [data](data.html) page. Let's read it in, then take a look. Notice that `week_start` was automatically read in as a date data type. What you see as `2003-01-06` is actually represented internally as a date, not a character.
 
-```{r, echo=FALSE}
-knitr::knit_exit()
+```{r}
+# Read in the ILI data.
+ili <- read_csv("data/ilinet.csv")
+ili
 ```
 
+We have information on ILI frequency since January 2003, but we don't have information on death data until 2009. From here, we have data up through the end of October 2017.
 
+```{r}
+tail(ili)
+```
 
-```{r, eval=FALSE, include=FALSE}
-# flu forecasting with prophet --------------------------------------------
+### Forecasting with prophet
 
-# devtools::install_github("hrbrmstr/cdcfluview")
-library(tidyverse)
-library(cdcfluview)
-age_group_distribution(years=2015)
-geographic_spread(2015)
-?hospitalizations
-?ilinet
+Let's load the prophet library then take a look at the help for `?prophet`.
 
-ili <- ilinet()
-ili
-ili <- ili %>% select(week_start, ilitotal, total_patients)
-ili
-
-pi <- pi_mortality(coverage_area = "national")
-pi
-pi <- pi %>% transmute(week_start=wk_start+1, fludeaths=number_influenza, pneumoniadeaths=number_pneumonia, all_deaths)
-pi
-
-ilidata <- ili %>%
-  left_join(pi, by="week_start") %>%
-  filter(!is.na(week_start)) %>%
-  filter(week_start>="2003-01-01" & week_start<="2017-10-31")
-
-ilidata %>% write_csv(here::here("data", "ilinet.csv"))
-
-
-library(tidyverse)
-ilidata
-ilidata %>% tail
-ggplot(ilidata, aes(week_start, ilitotal)) + geom_line()
-ggplot(ilidata, aes(week_start, fludeaths)) + geom_line()
-
-
-ilidata
-
+```{r}
 library(prophet)
-ilidata
-?prophet
-m <- ilidata %>%
-  select(ds=week_start, y=ilitotal) %>%
-  prophet
-future <- make_future_dataframe(m, periods=365*5)
-forecast <- predict(m, future)
-tail(forecast)
-plot(m, forecast)
-prophet_plot_components(m, forecast)
-prophet:::plot.prophet
-
-m <- ilidata %>%
-  filter(!is.na(fludeaths)) %>%
-  select(ds=week_start, y=fludeaths) %>%
-  prophet
-future <- make_future_dataframe(m, periods=365*5)
-forecast <- predict(m, future)
-tail(forecast)
-plot(m, forecast)
-prophet_plot_components(m, forecast)
-
+# ?prophet
 ```
 
+The help tells you that prophet requires a data frame containing columns named `ds` of type date and `y`, containing the time series data. Many other options are available. Let's start with the data, select `week_start` calling it `ds`, and `ilitotal` calling it `y`.
+
+```{r, results="hide"}
+ili %>% 
+  select(week_start, ilitotal)
+
+ili %>% 
+  select(ds=week_start, y=ilitotal)
+```
+
+Once we do that, we can simply pipe this to `prophet()` to produce the prophet forecast model.
+
+```{r, results='hide'}
+pmod <- ili %>% 
+  select(ds=week_start, y=ilitotal) %>% 
+  prophet()
+```
+
+Now, let's make a "future" dataset to use to predict. Looking at `?make_future_dataframe` will tell you that this function takes the prophet model and the number of days forward to project.
+
+```{r, results="hide"}
+future <- make_future_dataframe(pmod, periods=365*5)
+tail(future)
+```
+
+Now, let's forecast the future! Take a look - the `yhat`, `yhat_lower`, and `yhat_upper` columns are the predictions, lower, and upper confidence bounds. There are additional columns for seasonal and yearly trend effects.
+
+```{r, results='hide'}
+forecast <- predict(pmod, future)
+tail(forecast)
+```
+
+If we pass the prophet model and the forecast into the generic `plot()` function, it knows what kind of objects are being passed, and will visualize the data appropriately.
+
+```{r}
+plot(pmod, forecast) + ggtitle("Five year ILI forecast")
+```
+
+You can also use the `prophet_plot_components` function to see the forecast broken down into trend and yearly seasonality. We see an inflection point around 2010 where ILI reports seem to stop rising -- if you go back to the previous plot you'll see it there too. Perhaps this is due to a change in surveillance or reporting strategy. You also see the yearly trend, which makes sense for flu outbreaks. You also noticed that when we originally fit the model, daily and weekly seasonality was disabled. This makes sense for broad time-scale things like influenza surveillance over decades, but you might enable it for more granular time-series data.
+
+```{r}
+prophet_plot_components(pmod, forecast)
+```
+
+Try it with the flu death data. Look at both flu deaths and pneumonia deaths. First, limit the data frame to only include the latter portion where we have death surveillance data. Then use the same procedure.
+
+```{r, results='hide'}
+pmod <- ili %>%
+  filter(!is.na(pneumoniadeaths)) %>%
+  select(ds=week_start, y=pneumoniadeaths) %>%
+  prophet()
+future <- make_future_dataframe(pmod, periods=365*5)
+forecast <- predict(pmod, future)
+plot(pmod, forecast) + ggtitle("Five year pneumonia death forecast")
+```
+
+See the prophet preprint for more.
+
+> Taylor SJ, Letham B. (2017) Forecasting at scale. _PeerJ Preprints_ 5:e3190v2 https://doi.org/10.7287/peerj.preprints.3190v2
+
+----
 
 ----
 
