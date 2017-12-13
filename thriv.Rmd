@@ -27,7 +27,7 @@ Nov 21 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
 Nov 28 | _No class._
 Dec  5 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
 Dec 12 | _No class._
-Dec 19 | [560 Ray C Hunt Drive](https://goo.gl/maps/MiqYpredRPS2)
+Dec 19 | [Carter classroom](https://www.hsl.virginia.edu/sites/default/files/floorplan2014.pdf), [UVA Health Sciences Library](https://www.hsl.virginia.edu/directions) _<mark>1:30-4:30pm</mark>_
 
 <!--
 Spring 2017 Module S1  
@@ -79,18 +79,23 @@ Contemporary life sciences research is plagued by reproducibility issues. This s
 
 This session will provide hands-on instruction and exercises covering basic statistical analysis in R. This will cover descriptive statistics, t-tests, linear models, chi-square, clustering, dimensionality reduction, and resampling strategies. We will also cover methods for "tidying" model results for downstream visualization and summarization.
 
-### Week 6-7a: Survival Analysis
+### Week 6: Survival Analysis
 
 This session will provide hands-on instruction and exercises covering survival analysis using R. The data for parts of this session will come from The Cancer Genome Atlas (TCGA), where we will also cover programmatic access to TCGA through Bioconductor.
 
-### Week 6-7b: Visualizing and Annotating Phylogenetic Trees
+<!-- ### Week 6-7b: Visualizing and Annotating Phylogenetic Trees -->
 
-This lesson demonstrates how to use R and ggtree, an extension of the ggplot2 package, to visualize and annotate phylogenetic trees. This lesson does _not_ cover methods and software for _generating_ phylogenetic trees, nor does it it cover _interpreting_ phylogenies. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson.
+<!-- This lesson demonstrates how to use R and ggtree, an extension of the ggplot2 package, to visualize and annotate phylogenetic trees. This lesson does _not_ cover methods and software for _generating_ phylogenetic trees, nor does it it cover _interpreting_ phylogenies. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson. -->
 
 
-### Week 6-7c: Introduction to RNA-seq Data Analysis
+<!-- ### Week 6-7c: Introduction to RNA-seq Data Analysis -->
 
-This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results.
+<!-- This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results. -->
+
+### Week 7: Predictive Modeling & Forecasting
+
+This session will provide hands-on instruction for using machine learning algorithms to predict a disease outcome. We will cover data cleaning, feature extraction, imputation, and using a variety of models to try to predict disease outcome. We will use resampling strategies to assess the performance of predictive modeling procedures such as Random Forest, stochastic gradient boosting, elastic net regularized regression (LASSO), and k-nearest neighbors. We will also demonstrate demonstrate how to _forecast_ future trends given historical infectious disease surveillance data using methodology that accounts for seasonality and nonlinearity. 
+
 
 
 ## FAQ
