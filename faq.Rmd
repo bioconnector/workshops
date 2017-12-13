@@ -44,5 +44,4 @@ Glad you asked! [See here](help.html).
 
 ## I'm looking for the old course website.
 
-- The course website from 2014-2015 is here: [bioconnector.org/workshops2015](http://bioconnector.org/workshops2015/).
-- The BIMS8382 course website is here: [bioconnector.org/bims8382](http://bioconnector.org/bims8382).
+- The course website from 2014-2015 is here: [bioconnector.github.io/workshops2015](http://bioconnector.github.io/workshops2015/).

@@ -15,7 +15,7 @@ opts_chunk$set(message=FALSE, warning=FALSE, eval=TRUE, echo=TRUE, cache=TRUE)
 1. Choose _HTML document_, and give your document a title and an author's name.
 1. Using the appropriate Markdown syntax and embedding RMarkdown chunks, reproduce the report below. (Feel free to copy and paste text as needed).
     - Ensure that the **bold**, _italicized_, and `fixed width` text come through in your document. Fixed width text is produced by enclosing text in backtick characters (the key above the tab key, to the left of the number 1 key on most keyboards).
-    - For the faceted figure at the bottom, see the help for options [here](http://bioconnector.org/markdown/#!rmarkdown.md#Options) or [here](http://yihui.name/knitr/options/#chunk_options) to set `fig.width` and `fig.height` to 10.
+    - For the faceted figure at the bottom, see the help for options [here](http://bioconnector.github.io/markdown/#!rmarkdown.md#Options) or [here](http://yihui.name/knitr/options/#chunk_options) to set `fig.width` and `fig.height` to 10.
 1. Ensure that this report is fully reproducible. You can assume that any computer this runs on will have the appropriate libraries installed (dplyr, readr, ggplot2), and that the data to read in is correctly placed in the `data/` directory relative to the current working directory.
 
 

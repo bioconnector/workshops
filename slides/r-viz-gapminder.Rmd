@@ -1,7 +1,7 @@
 ---
 output: 
   slidy_presentation:
-    footer: "bioconnector.org | Essential Statistics with R"
+    footer: "Data Visualization"
 ---
 
 ```{r setup, include=FALSE}

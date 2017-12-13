@@ -42,9 +42,9 @@ title: "Further Resources"
 
 ### Markdown / RMarkdown resources
 
-- [Basic Markdown + RMarkdown reference](http://bioconnector.org/markdown)
+- [Basic Markdown + RMarkdown reference](http://bioconnector.github.io/markdown)
 - In-browser markdown editors: 
-    - Minimal: [bioconnector.org/markdown-editor](http://bioconnector.org/markdown-editor)
+    - Minimal: [bioconnector.github.io/markdown-editor](http://bioconnector.github.io/markdown-editor)
     - Better: [stackedit.io](http://stackedit.io), [dillinger.io](http://dillinger.io)
 - [A good markdown reference](http://commonmark.org/help/)
 - [A good 10-minute markdown tutorial](http://commonmark.org/help/tutorial/)

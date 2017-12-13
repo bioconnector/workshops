@@ -5,7 +5,7 @@ date: "December 18, 2015"
 output: html_document
 ---
 
-Before coming, you should have downloaded the gapminder data. If you [downloaded this entire lesson repository](https://github.com/bioconnector/workshops/archive/master.zip), once you extract it you'll find it in `workshops/lessons/r/data/gapminder.csv`. Alternatively you can download it directly from <http://bioconnector.org/data/>. This dataset is an excerpt from the [Gapminder](http://www.gapminder.org/) data, that's [already been cleaned up to a degree](https://github.com/jennybc/gapminder).
+Before coming, you should have downloaded the gapminder data. If you [downloaded this entire lesson repository](https://github.com/bioconnector/workshops/archive/master.zip), once you extract it you'll find it in `workshops/lessons/r/data/gapminder.csv`. Alternatively you can download it directly from the [data page](data.html). This dataset is an excerpt from the [Gapminder](http://www.gapminder.org/) data, that's [already been cleaned up to a degree](https://github.com/jennybc/gapminder).
 
 Open up the data in Excel if you have it installed, and take a look. This particular dataset has 1704 observations on six variables:
 
@@ -23,9 +23,6 @@ Once we've loaded it we can type the name of the object itself (`gm`) to view th
 ```{r readGapminder}
 # Read in the data from a file
 gm <- read.csv("data/gapminder.csv", header=TRUE)
-
-# Alternatively, read directly from the web:
-# gm <- read.csv(url("http://bioconnector.org/data/gapminder.csv"), header=TRUE)
 
 # See what kind of data it is, and print the object to the screen
 class(gm)

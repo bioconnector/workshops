@@ -19,14 +19,14 @@ This lesson assumes a [basic familiarity with R](r-basics.html), [data frames](r
 
 ## Before class
 
-Prior to class, spend a few minutes to learn a little bit about _Markdown_. All you really need to know is that Markdown is a lightweight markup language that lets you create styled text (like **bold**, _italics_, [links](http://bioconnector.org/markdown), etc.) using a very lightweight plain-text syntax: `(like **bold**, _italics_, [links](http://bioconnector.org/markdown), etc.)`. The resulting text file can be _rendered_ into many downstream formats, like PDF (for printing) or HTML (websites).
+Prior to class, spend a few minutes to learn a little bit about _Markdown_. All you really need to know is that Markdown is a lightweight markup language that lets you create styled text (like **bold**, _italics_, [links](http://bioconnector.github.io/markdown), etc.) using a very lightweight plain-text syntax: `(like **bold**, _italics_, [links](http://bioconnector.github.io/markdown), etc.)`. The resulting text file can be _rendered_ into many downstream formats, like PDF (for printing) or HTML (websites).
 
 1. _(30 seconds)_ Read the summary paragraph on the [Wikipedia page](https://en.wikipedia.org/wiki/Markdown). 
 1. _(1 minute)_ Bookmark and refer to this markdown reference: <http://commonmark.org/help/>.
 1. _(5-10 minutes)_ Run through this 10-minute in-browser markdown tutorial: <http://commonmark.org/help/tutorial/>.
 1. _(5-10 minutes)_ Go to <http://dillinger.io/>, an in-browser Markdown editor, and play around. Write a simple markdown document, and export it to HTML and/or PDF.
 1. _(10 minutes)_ See RStudio's excellent documentation on Rmarkdown at <http://rmarkdown.rstudio.com/>. Click "Getting Started" and watch the 1 minute video on the [Introduction page](http://rmarkdown.rstudio.com/lesson-1.html). Continue reading through each section here on the navigation bar to the left (_Introduction_ through _Cheatsheets_, and optionally download and print out the cheat sheet). Finally, browse through the [RMarkdown Gallery](http://rmarkdown.rstudio.com/gallery.html). 
-<!-- 1. _(5-10 minutes)_ Take a look at the Markdown/Rmarkdown reference for this course: <http://bioconnector.org/markdown>. Scroll through the Markdown reference, which you've already seen by this point, then click the RMarkdown link at the top and skim through this.  -->
+<!-- 1. _(5-10 minutes)_ Take a look at the Markdown/Rmarkdown reference for this course: <http://bioconnector.github.io/markdown>. Scroll through the Markdown reference, which you've already seen by this point, then click the RMarkdown link at the top and skim through this.  -->
 1. _(0 seconds)_ No need to look now, but don't forget that the course [help page](help.html) has some [useful resources on Markdown+RMarkdown](help.html#markdown-rmarkdown-resources).
 
 ## Who cares about reproducible research?
@@ -141,7 +141,7 @@ Ever heard of HTML? It's what drives the internet. HTML is a _markup language_ -
 
 I emphasize **text** because this is fundamentally different than word processing. When you use MS Word, for example, you're creating a special proprietary binary file (the .docx) file that shows you how a document looks. By contrast, writing in a markup language like HTML or Markdown, you're writing plain old text, using a text editor. The toolchain used to render the markup text into what you see on a display or in a PDF has always been and will always bee free and open. 
 
-You can learn Markdown in about 5 minutes. Visit **[bioconnector.org/markdown](http://bioconnector.org/markdown)** for a quick-start reference and links to other resources. Let's open up a web-based Markdown editor like <http://dillinger.io/> or use a desktop Markdown editor like [MarkdownPad](http://markdownpad.com/) (Windows) or [MacDown](http://macdown.uranusjr.com/) (Mac).
+You can learn Markdown in about 5 minutes. Visit **[bioconnector.github.io/markdown](http://bioconnector.github.io/markdown)** for a quick-start reference and links to other resources. Let's open up a web-based Markdown editor like <http://dillinger.io/> or use a desktop Markdown editor like [MarkdownPad](http://markdownpad.com/) (Windows) or [MacDown](http://macdown.uranusjr.com/) (Mac).
 
 ### RMarkdown workflow
 
@@ -149,7 +149,7 @@ RMarkdown is an enhanced version of Markdown that lets you embed R code into the
 
 ![](img/rmarkdown-workflow.png)
 
-Visit **[bioconnector.org/markdown](http://bioconnector.org/markdown/#!rmarkdown.md)** for a quick reference on RMarkdown.
+Visit **[bioconnector.github.io/markdown](http://bioconnector.github.io/markdown/#!rmarkdown.md)** for a quick reference on RMarkdown.
 
 ## Authoring RMarkdown documents
 
@@ -159,7 +159,7 @@ Visit **[bioconnector.org/markdown](http://bioconnector.org/markdown/#!rmarkdown
 
 First, open RStudio. Create a new project. Quit RStudio, then launch RStudio using the project file (.Rproj) you just created.
 
-Next, download the gapminder data from [bioconnector.org/data](http://bioconnector.org/data/gapminder.csv). Put this file in your R project directory. Maybe put it in a subdirectory called "data." Importantly, now your code and data will live in the same place.
+Next, download the gapminder data from [the data page](data.html). Put this file in your R project directory. Maybe put it in a subdirectory called "data." Importantly, now your code and data will live in the same place.
 
 Let's create a bare-bones RMarkdown document that compiles to HTML. In RStudio, select **File**, **New File**, **R Markdown...**. Don't worry about the title and author fields. When the new document launches, select everything then delete it. Let's author an RMarkdown file from scratch. Save it as `fromscratch.Rmd`. 
 
@@ -170,7 +170,7 @@ catn("This is my first RMarkdown document!")
 catn()
 catn("# Let's embed some R code")
 catn()
-catn("Let's load the **Gapminder** data from <http://bioconnector.org>:")
+catn("Let's load the **Gapminder** data:")
 catn()
 catn("```{r}")
 catn("library(dplyr)")
@@ -192,7 +192,7 @@ catn("```")
 
 Hit the **Knit HTML** button in the editor window. You should see the rendered document pop up.
 
-So let's break that down to see exactly what happened there. Recall the [RMarkdown Workflow](http://bioconnector.org/markdown/#!rmarkdown.md#How_does_it_work?) shown above. You start with an RMarkdown document (Rmd). When you hit the Knit HTML button, The **knitr** R package parses through your source document and executes all the R code chunks defined by the R code chunk blocks. The source code itself and the results are then turned back into regular markdown, inserted into an intermediate markdown file (.md), and finally rendered into HTML by [Pandoc](http://pandoc.org/).
+So let's break that down to see exactly what happened there. Recall the [RMarkdown Workflow](http://bioconnector.github.io/markdown/#!rmarkdown.md#How_does_it_work?) shown above. You start with an RMarkdown document (Rmd). When you hit the Knit HTML button, The **knitr** R package parses through your source document and executes all the R code chunks defined by the R code chunk blocks. The source code itself and the results are then turned back into regular markdown, inserted into an intermediate markdown file (.md), and finally rendered into HTML by [Pandoc](http://pandoc.org/).
 
 Try this. Instead of using the button, load the knitr package and just knit the document to markdown format. Run this in the console.
 
@@ -211,7 +211,7 @@ Now, open up that regular markdown file and take a look.
     
     # Let's embed some R code
     
-    Let's load the **Gapminder** data from <http://bioconnector.org>:
+    Let's load the **Gapminder** data:
     
     
     ```r
@@ -327,7 +327,7 @@ A special note about **caching**: The `cache=` option is automatically set to `F
 
 ### Tables
 
-Read about printing tables at [bioconnector.org/markdown](http://bioconnector.org/markdown/#!rmarkdown.md#Printing_tables_nicely).
+Read about printing tables at [bioconnector.github.io/markdown](http://bioconnector.github.io/markdown/#!rmarkdown.md#Printing_tables_nicely).
 
 The [knitr](http://yihui.name/knitr/) package that runs the RMarkdown document in the background also has a function called `kable` that helps with printing tables nicely. It's only useful when you set `echo=FALSE` and `results='asis'`. Try this.
 

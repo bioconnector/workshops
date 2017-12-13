@@ -34,20 +34,6 @@ _Note, the code is available by hitting the "Code" button above each expected ou
 
 <!-- In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not. -->
 
-```{r loaddata, echo=FALSE, eval=FALSE}
-library(dplyr)
-library(readr)
-
-# Preferably: read data from web
-gm <- read_csv("http://bioconnector.org/workshops/data/gapminder.csv")
-
-# Alternatively read from file:
-# gm <- read_csv("data/gapminder.csv")
-
-# Display the data
-gm
-```
-
 
 ```{r loaddatatrue, eval=TRUE, include=TRUE}
 # Load required libraries

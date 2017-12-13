@@ -4,7 +4,7 @@
 # date: "`r format(Sys.time(), '%m/%d/%Y')`"
 output: 
   slidy_presentation:
-    footer: "bioconnector.org | Essential Statistics with R"
+    footer: "Essential Statistics with R"
 ---
 
 ```{r setup, include=FALSE}

@@ -51,7 +51,7 @@ The workflow is as follows:
 
 ![](img/intvizgraphic.png)
 
-> **nb** Many JavaScript / R bindings developed with **htmlwidgets** support piping with **magrittr**, and the examples that follow will make extensive use of the `%>%` syntax. For more information on the pipe, refer to the [**dplyr** lesson](http://bioconnector.org/workshops/r-dplyr-yeast.html#the_pipe:_%%) material. 
+> **nb** Many JavaScript / R bindings developed with **htmlwidgets** support piping with **magrittr**, and the examples that follow will make extensive use of the `%>%` syntax. For more information on the pipe, refer to the [**dplyr** lesson](r-dplyr-yeast.html#the_pipe:_%%) material. 
 
 ```{r}
 library(magrittr)

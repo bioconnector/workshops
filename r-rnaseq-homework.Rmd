@@ -32,9 +32,7 @@ Go to the [Data page](data.html), download these data files, and load them into 
 
 ```{r}
 # Load the count data and metadata. Here, the "data" folder
-# is relative to my current working directory. Load the data
-# From wherever you keep it, or just load it directly from
-# the web using the bioconnector.org/data/... URLs.
+# is relative to my current working directory. 
 mycounts <- read.csv("data/SRP026387_scaledcounts.csv")
 metadata <- read.csv("data/SRP026387_metadata.csv")
 ```
@@ -65,7 +63,7 @@ anno
 
 1. After you've loaded the data, load the DESeq2 library and [import your data](r-rnaseq-airway.html#importing_data) into a DESeqDataSet using the `tidy=TRUE` argument, with the design formula being the `prepost` variable from the metadata. 
 1. Run the [DESeq pipeline](r-rnaseq-airway.html#deseq_pipeline). 
-1. [Get the results](http://bioconnector.org/workshops/r-rnaseq-airway.html#getting_results) for the pre vs post analysis.[^results]
+1. [Get the results](r-rnaseq-airway.html#getting_results) for the pre vs post analysis.[^results]
 1. Arrange these results by p-value, and join the results to the annotation data (hint: `%>% inner_join(anno, by=c("row"="ensgene"))`).
 1. Print out the top 10 differentially expressed genes, their fold changes, p-values, adjusted p-values, annotated with the gene symbol and the description from the annotation data.[^mask]
 

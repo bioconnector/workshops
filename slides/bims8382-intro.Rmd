@@ -1,10 +1,10 @@
 ---
 title: "**BIMS8382**"
-author: "<small>Spring 2017, Feb 13 - Mar27<br>Mondays, 2:00-5:00pm</small>"
+author: "<small>Spring 2018, Feb 12 - Mar26<br>Mondays, 2:00-5:00pm</small>"
 date: "_Please sign in and let me know if you had installation issues._"
 output: 
   slidy_presentation:
-    footer: "bioconnector.org | BIMS 8382"
+    footer: "http://bims.fun | BIMS 8382"
     font_adjustment: +2
 
 ---
@@ -30,7 +30,7 @@ Pete Nagraj (Data Scientist, SOM Research Computing)
 
 ### Course Website
 
-**[bioconnector.org/workshops/bims8382](http://bioconnector.org/workshops/bims8382)**
+**[http://bims.fun](http://bims.fun)**
 
 ## Agenda
 

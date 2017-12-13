@@ -30,10 +30,7 @@ Let's read in the data to an object called `gm` and take a look with `View`. Rem
 library(readr)
 library(dplyr)
 
-# You could read the data directly from the web:
-# gm <- read_csv("http://bioconnector.org/workshops/data/gapminder.csv")
-
-# Or better to download the data locally and read the file
+# Download the data locally and read the file
 gm <- read_csv(file="data/gapminder.csv")
 
 # Show the first few lines of the data

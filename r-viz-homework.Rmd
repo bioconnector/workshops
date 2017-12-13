@@ -43,9 +43,6 @@ library(ggplot2)
 # Read data from file
 ydat <- read_csv("data/brauer2007_tidy.csv")
 
-# Alternatively read data from the web
-# ydat <- read_csv("http://bioconnector.org/workshops/data/brauer2007_tidy.csv")
-
 # Display the data
 ydat
 ```
