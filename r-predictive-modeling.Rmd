@@ -453,7 +453,7 @@ We're going to use the **caret** package for building and testing predictive mod
 
 > Kuhn, M. (2008). Building Predictive Models in R Using the caret Package. _Journal of Statistical Software_, 28(5), 1 - 26. doi: <http://dx.doi.org/10.18637/jss.v028.i05>
 
-The [**caret**](http://cran.r-project.org/web/packages/caret/index.html) package (short for _C_lassification _A_nd _RE_gression _T_raining) is a set of functions that streamline the process for creating and testing a wide variety of predictive models with different resampling approaches, as well as estimating variable importance from developed models. There are many different modeling functions in R spread across many different packages, and they all have different syntax for model training and/or prediction. The **caret** package provides a uniform interface the functions themselves, as well as a way to standardize common tasks (such parameter tuning and variable importance).
+The [**caret**](http://cran.r-project.org/web/packages/caret/index.html) package (short for **C**lassification **A**nd **RE**gression **T**raining) is a set of functions that streamline the process for creating and testing a wide variety of predictive models with different resampling approaches, as well as estimating variable importance from developed models. There are many different modeling functions in R spread across many different packages, and they all have different syntax for model training and/or prediction. The **caret** package provides a uniform interface the functions themselves, as well as a way to standardize common tasks (such parameter tuning and variable importance).
 
 The `train` function from caret is used to:
 
