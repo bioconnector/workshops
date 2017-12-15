@@ -265,7 +265,7 @@ The variables in our data are useful for summary statistics, visualization, EDA,
 - Age: we'll keep this one as is. 
 - Gender: instead of m/f, let's convert this into a binary indicator variable where 0=female, 1=male. 
 - Province: along the same lines, let's create binary classifiers that indicate Shanghai, Zhejiang, Jiangsu, or other provinces.
-- Hospitalization: let's create a binary classifier where  =not hospitalized, 1=hospitalized.
+- Hospitalization: let's create a binary classifier where  0=not hospitalized, 1=hospitalized.
 - Early onset: let's create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).
 - Dates: Let's also take the _dates_ of onset, hospitalization, and outcome, and transform these into _days_ between onset and hospitalization, and days from onset to outcome. The algorithms aren't going to look at one column then another to do this math -- we have to extract this feature ourselves.
 
@@ -571,7 +571,7 @@ Take a look at what that tells us. It tells us it's fitting a Random Forest mode
 
 Accuracy is the number of true assignments to the correct class divided by the total number of samples. [Kappa](https://en.wikipedia.org/wiki/Cohen%27s_kappa) takes into account the expected accuracy while considering chance agreement, and is useful for extremely imbalanced class distributions. For continuous outcomes, you can measure things like RMSE or correlation coefficients.
 
-> **_A bit about random forests._** Random forests is an ensemble learning approach based on classification trees. The CART (classification and regression tree) method searches through all available predictors to try to find a value of a single variable that splits the data into two groups by minimizing the impurity of the outcome between the two groups. The process is repeated over and over again until a hierarchical (tree) structure is created. But trees don't have great performance (prediction accuracy) compared to other models. Small changes in the data can drastically affect the structure of the tree. 
+> **_A bit about random forests._** Random forests are an ensemble learning approach based on classification trees. The CART (classification and regression tree) method searches through all available predictors to try to find a value of a single variable that splits the data into two groups by minimizing the impurity of the outcome between the two groups. The process is repeated over and over again until a hierarchical (tree) structure is created. But trees don't have great performance (prediction accuracy) compared to other models. Small changes in the data can drastically affect the structure of the tree. 
 > 
 > Tree algorithms are improved by ensemble approaches - instead of growing a single tree, grow many trees and aggregate (majority vote or averaging) the predictions made by the ensemble. The random forest algorithm is essentially:
 > 
