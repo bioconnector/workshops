@@ -716,7 +716,7 @@ Recently, the data science team at Facebook released as open-source a tool they 
 
 <!-- - Release blog post: https://research.fb.com/prophet-forecasting-at-scale/ -->
 - Paper (preprint): https://peerj.com/preprints/3190/
-- Project homepage :https://facebook.github.io/prophet/
+- Project homepage: https://facebook.github.io/prophet/
 - Documentation: https://facebook.github.io/prophet/docs/quick_start.html
 - R package: https://cran.r-project.org/web/packages/prophet/index.html
 - Python package: https://pypi.python.org/pypi/fbprophet/
