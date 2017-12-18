@@ -380,7 +380,7 @@ flu <- cbind(flu, model.matrix(~0+province, data=flu)) %>%
 flu
 ```
 
-_Optional_: Notice how the new variables are provinceJiangsu, provinceOther, provinceShanghai, provinceZhejiang. If we want to strip off the "province" we can do that. There's a built-in command called `gsub` that can help here.
+_Optional_: Notice how the new variables are provinceJiangsu, provinceOther, provinceShanghai, provinceZhejiang. If we want to strip off the "province" we can do that. There's a built-in command called `gsub` that can help here. Take a look at the help for `?gsub`.
 
 ```{r, results="hide"}
 # Take a look at the names of the flu dataset.
