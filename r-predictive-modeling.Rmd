@@ -299,11 +299,12 @@ flu %>%
   select(-gender)
 ```
 
-Similarly, let's get an indicator whether someone was hospitalized or not. If hospitalization is missing, this would return TRUE.
+Similarly, let's get an indicator whether someone was hospitalized or not. If hospitalization is missing, this would return TRUE. If you want to ask whether they are _not_ missing, you would use `!` to negate the logical question, i.e., `!is.na(flu$date_hospitalization)`.
 
 ```{r, results="hide"}
 flu$date_hospitalization
 is.na(flu$date_hospitalization)
+!is.na(flu$date_hospitalization)
 ```
 
 So now, let's add that to our pipeline from above.
