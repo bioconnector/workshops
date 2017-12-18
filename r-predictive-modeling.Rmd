@@ -609,6 +609,7 @@ modgbm
 Notice how stochastic gradient boosting has two different tuning parameters - interaction depth and n trees. There were others (shrinkage, and `n.minobsinnode`) that were held constant. The caret package automates the bootstrap resampling based performance assessment across all combinations of depth and ntrees, and it tells you where you got the best performance. Notice that the performance here doesn't seem to be as good as random forest. We can also look at variable importance here too, and see similar rankings.
 
 ```{r, fig.show=FALSE, fig.keep='none', results="hide"}
+library(gbm) # needed because new version of caret doesn't load
 varImp(modgbm, scale=TRUE)
 varImp(modgbm, scale=TRUE) %>% plot()
 ```
