@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="styles.css" />
 
 </head>
 
@@ -462,23 +462,23 @@ div.tocify {
 
 
 <p>Please follow the instructions under <strong><em>Get Data</em></strong> and <strong><em>Core Software</em></strong> headings below. Depending on the class you’re taking, you may also need to follow additional setup instructions under the <a href="#electives"><strong><em>Electives</em></strong></a> heading.</p>
-<div id="get-data" class="section level2">
+<section id="get-data" class="level2">
 <h2>Get Data</h2>
 <p>Click the <strong><a href="data.html"><i class="fa fa-download"></i> Data</a></strong> link on the navbar at the top. You can download all the data needed by downloading <strong><a href="data.zip">this zip file <i class="fa fa-file-archive-o" aria-hidden="true"></i></a></strong> or by downloading individual data sets as needed at the <strong><a href="data.html"><i class="fa fa-download"></i> Data</a></strong> page.</p>
-</div>
-<div id="core-lessons" class="section level2">
+</section>
+<section id="core-lessons" class="level2">
 <h2>Core Lessons</h2>
 <p>Install the following software regardless of which class(es) you’re taking.</p>
-<div id="r" class="section level3">
+<section id="r" class="level3">
 <h3>R</h3>
-<p><strong>Install R.</strong> You’ll need R version <strong>3.4.0</strong> or higher.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Download and install R for <a href="http://cran.r-project.org/bin/windows/base/">Windows</a> or <a href="http://cran.r-project.org/bin/macosx/">Mac</a> (download the latest R-3.x.x.pkg file for your appropriate version of Mac OS).</p>
-</div>
-<div id="rstudio" class="section level3">
+<p><strong>Install R.</strong> You’ll need R version <strong>3.4.0</strong> or higher.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> Download and install R for <a href="http://cran.r-project.org/bin/windows/base/">Windows</a> or <a href="http://cran.r-project.org/bin/macosx/">Mac</a> (download the latest R-3.x.x.pkg file for your appropriate version of Mac OS).</p>
+</section>
+<section id="rstudio" class="level3">
 <h3>RStudio</h3>
 <p>Download and install <strong><a href="https://www.rstudio.com/products/rstudio/download/">RStudio Desktop</a></strong> version &gt;= 1.0.143.</p>
 <p>R and RStudio are separate downloads and installations. <strong>R</strong> is the underlying statistical computing environment, but using R alone is no fun. <strong>RStudio</strong> is a graphical integrated development environment that makes using R much easier. You need R installed before you install RStudio.</p>
-</div>
-<div id="cran-packages" class="section level3">
+</section>
+<section id="cran-packages" class="level3">
 <h3>CRAN packages</h3>
 <p>We will need to install several core packages needed for most lessons. Launch RStudio (RStudio, <em>not R itself</em>). Ensure that you have internet access, then copy and paste the following commands, one-at-a-time, into the <strong>Console</strong> panel (usually the lower-left panel, by default) and hit the Enter/Return key. If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and <a href="people.html">email one of the instructors</a> <em>prior to class</em> with the command you typed and the error you received.</p>
 <pre class="r"><code>install.packages(&quot;dplyr&quot;)
@@ -491,24 +491,24 @@ install.packages(&quot;ggplot2&quot;)</code></pre>
 <li>You must be connected to the internet.</li>
 <li>Even if you’ve installed these packages in the past, do re-install the most recent version. Many of these packages are updated often, and we may use new features in the workshop that aren’t available in older versions.</li>
 <li>If you’re using Windows you might see errors about not having permission to modify the existing libraries – disregard these. You can avoid this by running RStudio as an administrator (right click the RStudio icon, then click “Run as Administrator”).</li>
-<li>These core packages are part of the “tidyverse” ecosystem (see <a href="https://www.tidyverse.org/">tidyverse.org</a>). There is a <a href="http://tidyverse.org/">tidyverse</a> package that’s kind of a meta-package that automatically installs/loads all of the above packages and several other commonly used packages for data analysis that all play well together.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> You could optionally install the tidyverse package instead of all these packages individually. See <a href="https://www.tidyverse.org/">tidyverse.org</a> for more.</li>
+<li>These core packages are part of the “tidyverse” ecosystem (see <a href="https://www.tidyverse.org/">tidyverse.org</a>). There is a <a href="http://tidyverse.org/">tidyverse</a> package that’s kind of a meta-package that automatically installs/loads all of the above packages and several other commonly used packages for data analysis that all play well together.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> You could optionally install the tidyverse package instead of all these packages individually. See <a href="https://www.tidyverse.org/">tidyverse.org</a> for more.</li>
 </ul>
-<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following command at the console window (don’t worry about any messages that look something like <code>the following objects are masked from ...</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>, or <code>Warning message: package ... was build under R version ...</code><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>):</p>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following command at the console window (don’t worry about any messages that look something like <code>the following objects are masked from ...</code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>, or <code>Warning message: package ... was build under R version ...</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>):</p>
 <pre class="r"><code>library(dplyr)
 library(readr)
 library(tidyr)
 library(ggplot2)</code></pre>
 <p>This may produce some notes or other output, but as long as you don’t get an error message, you’re good to go. If you get a message that says something like: <code>Error in library(somePackageName) : there is no package called 'somePackageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to class</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
-</div>
-<div id="rmarkdown" class="section level3">
+</section>
+<section id="rmarkdown" class="level3">
 <h3>RMarkdown</h3>
 <p>Several additional setup steps required for the reproducible research with RMarkdown class.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>First, install R, RStudio, and the core CRAN packages as described above. Also install the knitr and rmarkdown packages.</li>
 </ol>
 <pre class="r"><code>install.packages(&quot;knitr&quot;)
 install.packages(&quot;rmarkdown&quot;)</code></pre>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Next, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (<code>knitr</code>, <code>yaml</code>, <code>htmltools</code>, <code>caTools</code>, <code>bitops</code>, <code>rmarkdown</code>, and maybe a few others). Click “Yes” to install these.</li>
 <li><strong><em>Optional</em>:</strong> If you want to convert to PDF, you will need to install a <strong><span class="math inline">\(\LaTeX\)</span></strong> typesetting engine. This differs on Mac and Windows. <em>Note that this part of the installation may take up to several hours, and isn’t strictly required for the class.</em>
 <ul>
@@ -516,8 +516,8 @@ install.packages(&quot;rmarkdown&quot;)</code></pre>
 <li><strong>Mac</strong>: Download and install MacTeX.pkg at <a href="http://www.tug.org/mactex/mactex-download.html" class="uri">http://www.tug.org/mactex/mactex-download.html</a>. This is a very large download (&gt;2 gigabytes), and may take a while depending on your network speed. Do this <em>prior to the course</em>.</li>
 </ul></li>
 </ol>
-</div>
-<div id="bioconductor" class="section level3">
+</section>
+<section id="bioconductor" class="level3">
 <h3>Bioconductor</h3>
 <p>Install the core Bioconductor packages (<a href="https://www.bioconductor.org/install/">more information here</a>). These packages are installed differently than “regular” R packages from CRAN. Copy and paste these lines of code into your R console <strong>one at a time</strong>.</p>
 <pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
@@ -531,12 +531,12 @@ biocLite()</code></pre>
 <p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following command at the console window:</p>
 <pre class="r"><code>library(BiocInstaller)</code></pre>
 <p>If you get a message that says something like: <code>Error in library(BiocInstaller) : there is no package called 'BiocInstaller'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to the course</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
-</div>
-</div>
-<div id="electives" class="section level2">
+</section>
+</section>
+<section id="electives" class="level2">
 <h2>Electives</h2>
 <p>The instructions below apply to additional “elective” classes, and are not strictly required as part of the core set of classes. Install these as necessary.</p>
-<div id="survival-analysis" class="section level3">
+<section id="survival-analysis" class="level3">
 <h3>Survival Analysis</h3>
 <p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. <em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, and to a lesser degree, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-viz-gapminder.html">data visualization with ggplot2</a>.</em></p>
 <p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a>, <a href="#cran-packages">CRAN packages</a>, and <a href="#bioconductor">Bioconductor</a>. See the sections above for full instructions and troubleshooting tips.</p>
@@ -575,8 +575,8 @@ library(RTCGA)
 library(RTCGA.clinical)
 library(RTCGA.mRNA)</code></pre>
 <p>This may produce some notes or other output, but as long as you don’t get an error message, you’re good to go. If you get a message that says something like: <code>Error in library(somePackageName) : there is no package called 'somePackageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email me</a> <em>prior to class</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
-</div>
-<div id="predictive-modeling" class="section level3">
+</section>
+<section id="predictive-modeling" class="level3">
 <h3>Predictive modeling</h3>
 <p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. In addition to familiarity with R, this lesson also assumes familiarity with:</p>
 <ul>
@@ -624,8 +624,8 @@ library(prophet)</code></pre>
 <blockquote>
 <p><em>(check back later)</em></p>
 </blockquote>
-</div>
-<div id="rna-seq" class="section level3">
+</section>
+<section id="rna-seq" class="level3">
 <h3>RNA-seq</h3>
 <p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. <em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-viz-gapminder.html">data visualization with ggplot2</a>.</em></p>
 <p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a>, <a href="#cran-packages">CRAN packages</a>, and <a href="#bioconductor">Bioconductor</a>. See the sections above for full instructions and troubleshooting tips.</p>
@@ -660,13 +660,13 @@ library(DESeq2)</code></pre>
 <li>Gene Annotation data: <a href="data/annotables_grch38.csv">annotables_grch38.csv</a></li>
 </ul>
 <p><strong>Recommended reading</strong> prior to class:</p>
-<ol style="list-style-type: decimal">
-<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8">Conesa et al. A survey of best practices for RNA-seq data analysis. <em>Genome Biology</em> 17:13 (2016)</a>.</li>
+<ol type="1">
+<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8">Conesa et al. A survey of best practices for RNA-seq data analysis. <em>Genome Biology</em> 17:13 (2016)</a>.</li>
 <li><a href="https://f1000research.com/articles/4-1521/v2">Soneson et al. “Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences.” <em>F1000Research</em> 4 (2015)</a>.</li>
 <li>Abstract and introduction sections of <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625">Himes et al. “RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells.” <em>PLoS ONE</em> 9.6 (2014): e99625</a>.</li>
 </ol>
-</div>
-<div id="phylogenetic-trees" class="section level3">
+</section>
+<section id="phylogenetic-trees" class="level3">
 <h3>Phylogenetic trees</h3>
 <p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. <em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and most importantly, <strong><a href="r-viz-gapminder.html">data visualization with ggplot2</a></strong>.</em></p>
 <p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a>, <a href="#cran-packages">CRAN packages</a>, and <a href="#bioconductor">Bioconductor</a>. See the sections above for full instructions and troubleshooting tips.</p>
@@ -703,8 +703,8 @@ library(Biostrings)</code></pre>
 <li>Amino acid sequences of flu samples in the data above: <a href="data/flu_aasequence.fasta">flu_aasequence.fasta</a></li>
 </ul>
 <p><strong>Recommended reading:</strong> This lesson does <em>not</em> cover methods and software for <em>generating</em> phylogenetic trees, nor does it it cover <em>interpreting</em> phylogenies. <strong><a href="http://epidemic.bio.ed.ac.uk/how_to_read_a_phylogeny">Here’s a quick primer on how to read a phylogeny</a></strong> that you should review prior to this lesson, but it is by no means extensive. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson.</p>
-</div>
-<div id="interactive-visualization" class="section level3">
+</section>
+<section id="interactive-visualization" class="level3">
 <h3>Interactive Visualization</h3>
 <p>The <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a> lesson requires installation of several R packages in addition to those mentioned above:</p>
 <pre class="r"><code>install.packages(&quot;highcharter&quot;)
@@ -723,8 +723,8 @@ library(jsonlite)
 library(threejs)
 library(igraph)</code></pre>
 <p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to the course</em> if you are still having difficulty.</p>
-</div>
-<div id="shiny" class="section level3">
+</section>
+<section id="shiny" class="level3">
 <h3>Shiny</h3>
 <p>The <a href="r-shiny.html">Building Shiny Web Apps in R</a> lesson requires installation of several R packages in addition to those mentioned above:</p>
 <pre class="r"><code>install.packages(&quot;shiny&quot;)
@@ -737,17 +737,17 @@ library(lubridate)</code></pre>
 <p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to the course</em> if you are still having difficulty.</p>
 <hr />
 <hr />
-</div>
-</div>
-<div class="footnotes">
+</section>
+</section>
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>R version 3.4.0 was released April 2017. If you have not updated your R installation since then, you need to upgrade to a more recent version, since several of the required packages depend on a version at least this recent. You can check your R version with the <code>sessionInfo()</code> command.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Installing/loading the tidyverse <strong>tidyverse</strong> will install/load the core tidyverse packages that you are likely to use in almost every analysis: <strong>ggplot2</strong> (for data visualisation), <strong>dplyr</strong> (for data manipulation), <strong>tidyr</strong> (for data tidying), <strong>readr</strong> (for data import), <strong>purrr</strong> (for functional programming), and <strong>tibble</strong> (for tibbles, a modern re-imagining of data frames). It also installs a selection of other tidyverse packages that you’re likely to use frequently, but probably not in every analysis (these are installed, but you’ll have to load them separately with <code>library(packageName)</code>). This includes: <strong>hms</strong> (for times), <strong>stringr</strong> (for strings), <strong>lubridate</strong> (for date/times), <strong>forcats</strong> (for factors), <strong>DBI</strong> (for databases), <strong>haven</strong> (for SPSS, SAS and Stata files), <strong>httr</strong> (for web apis), <strong>jsonlite</strong> (or JSON), <strong>readxl</strong> (for .xls and .xlsx files), <strong>rvest</strong> (for web scraping), <strong>xml2</strong> (for XML), <strong>modelr</strong> (for modelling within a pipeline), and <strong>broom</strong> (for turning models into tidy data). After installing tidyverse with <code>install.packages(&quot;tidyverse&quot;)</code> and loading it with <code>library(tidyverse)</code>, you can use <code>tidyverse_update()</code> to update all the tidyverse packages installed on your system at once.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>We’ll talk about this in class. It’s not a concern.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>This means the version of R you have installed is older than the version that the package author used when they built the package you’re trying to use. 99% of the time it isn’t a problem, unless your R version is very old (you should be using 3.4.0 or later for this course).<a href="#fnref4">↩</a></p></li>
+<li id="fn1"><p>R version 3.4.0 was released April 2017. If you have not updated your R installation since then, you need to upgrade to a more recent version, since several of the required packages depend on a version at least this recent. You can check your R version with the <code>sessionInfo()</code> command.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Installing/loading the tidyverse <strong>tidyverse</strong> will install/load the core tidyverse packages that you are likely to use in almost every analysis: <strong>ggplot2</strong> (for data visualisation), <strong>dplyr</strong> (for data manipulation), <strong>tidyr</strong> (for data tidying), <strong>readr</strong> (for data import), <strong>purrr</strong> (for functional programming), and <strong>tibble</strong> (for tibbles, a modern re-imagining of data frames). It also installs a selection of other tidyverse packages that you’re likely to use frequently, but probably not in every analysis (these are installed, but you’ll have to load them separately with <code>library(packageName)</code>). This includes: <strong>hms</strong> (for times), <strong>stringr</strong> (for strings), <strong>lubridate</strong> (for date/times), <strong>forcats</strong> (for factors), <strong>DBI</strong> (for databases), <strong>haven</strong> (for SPSS, SAS and Stata files), <strong>httr</strong> (for web apis), <strong>jsonlite</strong> (or JSON), <strong>readxl</strong> (for .xls and .xlsx files), <strong>rvest</strong> (for web scraping), <strong>xml2</strong> (for XML), <strong>modelr</strong> (for modelling within a pipeline), and <strong>broom</strong> (for turning models into tidy data). After installing tidyverse with <code>install.packages(&quot;tidyverse&quot;)</code> and loading it with <code>library(tidyverse)</code>, you can use <code>tidyverse_update()</code> to update all the tidyverse packages installed on your system at once.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>We’ll talk about this in class. It’s not a concern.<a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>This means the version of R you have installed is older than the version that the package author used when they built the package you’re trying to use. 99% of the time it isn’t a problem, unless your R version is very old (you should be using 3.4.0 or later for this course).<a href="#fnref4" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>

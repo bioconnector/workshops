@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="styles.css" />
 
 </head>
 
@@ -462,16 +462,16 @@ div.tocify {
 
 
 <p>(<em>Refer back to the <a href="r-rnaseq-airway.html">RNA-seq data analysis lesson</a>).</em></p>
-<div id="recount" class="section level2">
+<section id="recount" class="level2">
 <h2>Recount</h2>
 <p>Take a look at the preprint: <strong>Collado-Torres, Leonardo, et al. “recount: A large-scale resource of analysis-ready RNA-seq expression data.” <em>bioRxiv</em> (2016): 068478.</strong> It’s available at <a href="http://biorxiv.org/content/early/2016/08/08/068478" class="uri">http://biorxiv.org/content/early/2016/08/08/068478</a>.</p>
 <p>Here’s the abstract:</p>
 <blockquote>
 <p>recount is a resource of processed and summarized expression data spanning nearly 60,000 human RNA-seq samples from the Sequence Read Archive (SRA). The associated recount Bioconductor package provides a convenient API for querying, downloading, and analyzing the data. Each processed study consists of meta/phenotype data, the expression levels of genes and their underlying exons and splice junctions, and corresponding genomic annotation. We also provide data summarization types for quantifying novel transcribed sequence including base-resolution coverage and potentially unannotated splice junctions. We present workflows illustrating how to use recount to perform differential expression analysis including meta-analysis, annotation-free base-level analysis, and replication of smaller studies using data from larger studies. recount provides a valuable and user-friendly resource of processed RNA-seq datasets to draw additional biological insights from existing public data. The resource is available at <a href="https://jhubiostatistics.shinyapps.io/recount/" class="uri">https://jhubiostatistics.shinyapps.io/recount/</a>.</p>
 </blockquote>
-<p>This preprint describes an incredible resource. The authors here have downloaded and pre-processed several thousand RNA-seq studies from the raw data available in the SRA. They make this data available through a web application<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> at where you can browse, search, and sort the studies they’ve processed, and it gives you direct links to download analysis-ready pre-processed count data and metadata. As the abstract mentions, you can access recount at <strong><a href="https://jhubiostatistics.shinyapps.io/recount/">jhubiostatistics.shinyapps.io/recount/</a></strong>.</p>
-</div>
-<div id="get-some-data" class="section level2">
+<p>This preprint describes an incredible resource. The authors here have downloaded and pre-processed several thousand RNA-seq studies from the raw data available in the SRA. They make this data available through a web application<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> at where you can browse, search, and sort the studies they’ve processed, and it gives you direct links to download analysis-ready pre-processed count data and metadata. As the abstract mentions, you can access recount at <strong><a href="https://jhubiostatistics.shinyapps.io/recount/">jhubiostatistics.shinyapps.io/recount/</a></strong>.</p>
+</section>
+<section id="get-some-data" class="level2">
 <h2>Get some data</h2>
 <p>In the accession search box, search for <strong>SRP026387</strong>. This has some pre-processed data from a study looking at the Wnt/Beta-catenin pathway and how that’s affected by androgen deprivation therapy in treating prostate cancer. You can learn more about the <a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP026387">data</a> and the <a href="https://www.ncbi.nlm.nih.gov/pubmed/24054872">study</a> by clicking the accession number hyperlink.</p>
 <blockquote>
@@ -542,15 +542,15 @@ anno</code></pre>
 ## 10 ENSG00000001167   4800     NFYA     6  41072945  41099976      1
 ## # ... with 66,521 more rows, and 2 more variables: biotype &lt;chr&gt;,
 ## #   description &lt;chr&gt;</code></pre>
-</div>
-<div id="what-genes-are-de" class="section level2">
+</section>
+<section id="what-genes-are-de" class="level2">
 <h2>What genes are DE?</h2>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>After you’ve loaded the data, load the DESeq2 library and <a href="r-rnaseq-airway.html#importing_data">import your data</a> into a DESeqDataSet using the <code>tidy=TRUE</code> argument, with the design formula being the <code>prepost</code> variable from the metadata.</li>
 <li>Run the <a href="r-rnaseq-airway.html#deseq_pipeline">DESeq pipeline</a>.</li>
-<li><a href="r-rnaseq-airway.html#getting_results">Get the results</a> for the pre vs post analysis.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
+<li><a href="r-rnaseq-airway.html#getting_results">Get the results</a> for the pre vs post analysis.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
 <li>Arrange these results by p-value, and join the results to the annotation data (hint: <code>%&gt;% inner_join(anno, by=c(&quot;row&quot;=&quot;ensgene&quot;))</code>).</li>
-<li>Print out the top 10 differentially expressed genes, their fold changes, p-values, adjusted p-values, annotated with the gene symbol and the description from the annotation data.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></li>
+<li>Print out the top 10 differentially expressed genes, their fold changes, p-values, adjusted p-values, annotated with the gene symbol and the description from the annotation data.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></li>
 </ol>
 <p><strong>Here’s what your results should look like</strong>. I’m showing actual values for the first few genes so you can check to see if your results are close. Don’t worry about rounding errors.</p>
 <pre><code>## # A tibble: 10 x 6
@@ -567,15 +567,15 @@ anno</code></pre>
 ##  9               ?              ?        ?        ?          ?           ?
 ## 10               ?              ?        ?        ?          ?           ?</code></pre>
 <hr />
-</div>
-<div class="footnotes">
+</section>
+<section class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Incidentally, the web application itself was built with R using the Shiny framework (<a href="https://shiny.rstudio.com/" class="uri">https://shiny.rstudio.com/</a>). <a href="r-shiny.html">Pete teaches a workshop on this!</a><a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>Note that without further specifying to the <code>results()</code> function, the default is to treat the alphabetically first condition as the control, and the alphabetically second condition as the experimental group. Therefore, the differential expression values will be comparing “Pre” versus “Post”, since “Post” comes first.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>Note that you may need to explicitly call <code>select()</code> from the dplyr library using <code>dplyr::select()</code>, because loading DESeq2 will mask dplyr’s select if you loaded dplyr first.<a href="#fnref3">↩</a></p></li>
+<li id="fn1"><p>Incidentally, the web application itself was built with R using the Shiny framework (<a href="https://shiny.rstudio.com/" class="uri">https://shiny.rstudio.com/</a>). <a href="r-shiny.html">Pete teaches a workshop on this!</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Note that without further specifying to the <code>results()</code> function, the default is to treat the alphabetically first condition as the control, and the alphabetically second condition as the experimental group. Therefore, the differential expression values will be comparing “Pre” versus “Post”, since “Post” comes first.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Note that you may need to explicitly call <code>select()</code> from the dplyr library using <code>dplyr::select()</code>, because loading DESeq2 will mask dplyr’s select if you loaded dplyr first.<a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
-</div>
+</section>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>

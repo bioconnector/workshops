@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
-<link rel="stylesheet" href="styles.css" type="text/css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="styles.css" />
 
 </head>
 
@@ -463,7 +463,7 @@ div.tocify {
 
 <p>(<em>Refer back to the <a href="r-rmarkdown.html">main RMarkdown lesson</a>).</em></p>
 <p><strong><em>INSTRUCTIONS</em></strong>: Following the horizontal lines below, beginning with the <strong>Introduction</strong> heading, is a report that is produced from an RMarkdown document. Write an RMarkdown document and “Knit HTML” to produce a report similar to what you see below.</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Start by clicking on the menus: <em>File</em>, <em>New File</em>, <em>R Markdown…</em>.</li>
 <li>Choose <em>HTML document</em>, and give your document a title and an author’s name.</li>
 <li>Using the appropriate Markdown syntax and embedding RMarkdown chunks, reproduce the report below. (Feel free to copy and paste text as needed).
@@ -476,25 +476,25 @@ div.tocify {
 <hr />
 <p><mark><strong><em>THE REPORT THAT YOU SHOULD PRODUCE FOLLOWS BELOW.</em></strong></mark></p>
 <hr />
-<div id="introduction" class="section level2">
+<section id="introduction" class="level2">
 <h2>Introduction</h2>
-<p>This data is a tidy version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
-<ol style="list-style-type: decimal">
+<p>This data is a tidy version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
+<ol type="1">
 <li><strong>Raise or lower their expression in response to growth rate</strong>. Growth-rate dependent expression patterns can tell us a lot about cell cycle control, and how the cell responds to stress. The authors found that expression of &gt;25% of all yeast genes is linearly correlated with growth rate, independent of the limiting nutrient. They also found that the subset of negatively growth-correlated genes is enriched for peroxisomal functions, and positively correlated genes mainly encode ribosomal functions.</li>
 <li><strong>Respond differently when different nutrients are being limited</strong>. If you see particular genes that respond very differently when a nutrient is sharply restricted, these genes might be involved in the transport or metabolism of that specific nutrient.</li>
 </ol>
-</div>
-<div id="data-analysis" class="section level2">
+</section>
+<section id="data-analysis" class="level2">
 <h2>Data analysis</h2>
 <p>Below we will load the dataset and proceed with a very basic analysis.</p>
-<div id="load-and-examine-biological-processes" class="section level3">
+<section id="load-and-examine-biological-processes" class="level3">
 <h3>Load and examine biological processes</h3>
 <p>After loading the <strong>dplyr</strong> and <strong>readr</strong> libraries, use readr’s <code>read_csv()</code> function to read the data directly from the web, assigning it to an object in our workspace called <code>ydat</code>.</p>
 <pre class="r"><code>library(dplyr)
 library(readr)
 ydat &lt;- read_csv(&quot;data/brauer2007_tidy.csv&quot;)</code></pre>
 <p>Which biological processes have the most genes? That is,</p>
-<ol style="list-style-type: decimal">
+<ol type="1">
 <li>Take the ydat data,</li>
 <li><em>then</em> group it by biological process,</li>
 <li><em>then</em> summarize it to count the number of distinct genes within each process,</li>
@@ -529,8 +529,8 @@ ydat &lt;- read_csv(&quot;data/brauer2007_tidy.csv&quot;)</code></pre>
 ## 18                                        ER to Golgi transport    33
 ## 19                           35S primary transcript processing*    30
 ## 20                             chromatin silencing at telomere*    29</code></pre>
-</div>
-<div id="visualize-genes-in-a-particular-biological-process" class="section level3">
+</section>
+<section id="visualize-genes-in-a-particular-biological-process" class="level3">
 <h3>Visualize genes in a particular biological process</h3>
 <p>Create a new object that contains the data filtered down to the 36 genes involved in <em>cell wall organization and biogenesis</em>. Plot a scatter plot of the expression versus rate, color-coding by the limiting nutrient, showing a different gene in each panel, where the y-axis scale in each panel can vary from panel to panel.</p>
 <pre class="r"><code># First load the ggplot2 library
@@ -550,8 +550,8 @@ ggplot(cwob, aes(rate, expression, color = nutrient)) +
 <hr />
 <p><mark><strong><em>THE REPORT YOU SHOULD PRODUCE ENDS HERE</em></strong></mark></p>
 <hr />
-</div>
-</div>
+</section>
+</section>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
