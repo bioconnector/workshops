@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Essential Statistics with R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Essential Statistics with R</h1>
+
+</div>
+
+
+<p>This workshop will provide hands-on instruction and exercises covering basic statistical analysis in R. This will cover descriptive statistics, <em>t</em>-tests, linear models, chi-square, clustering, dimensionality reduction, and resampling strategies. We will also cover methods for “tidying” model results for downstream visualization and summarization.</p>
+<p><strong>Prerequisites: <a href="r-basics.html">Familiarity with R</a> is <em>required</em></strong> (including working with <a href="r-dataframes.html">data frames</a>, installing/using packages, importing data, and saving results); familiarity with <a href="r-dplyr-yeast.html">dplyr</a> and <a href="r-viz-gapminder.html">ggplot2</a> packages is highly recommended.</p>
+<p><strong>You must <a href="setup.html#R">complete the basic R setup here</a> <em>prior to class</em>.</strong> This includes installing R, RStudio, and the required packages. Please <a href="people.html">contact one of the instructors</a> <em>prior to class</em> if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.</p>
+<p><strong>Handouts</strong>: Download and print out these handouts and bring them to class:</p>
+<ul>
+<li><a href="handouts/r-stats-cheatsheet.pdf">Cheat sheet</a></li>
+<li><a href="handouts/r-stats-exercises.pdf">Exercises handout</a></li>
+</ul>
+<p><strong>Slides</strong>: <a href="slides/r-stats.html">click here</a>.</p>
+<div id="our-data-nhanes" class="section level2">
+<h2>Our data: NHANES</h2>
+<div id="about-nhanes" class="section level3">
+<h3>About NHANES</h3>
+<p>The data we’re going to work with comes from the National Health and Nutrition Examination Survey (NHANES) program at the CDC. You can read a lot more about NHANES on the <a href="http://www.cdc.gov/nchs/nhanes/">CDC’s website</a> or <a href="https://en.wikipedia.org/wiki/National_Health_and_Nutrition_Examination_Survey">Wikipedia</a>. NHANES is a research program designed to assess the health and nutritional status of adults and children in the United States. The survey is one of the only to combine both survey questions and physical examinations. It began in the 1960s and since 1999 examines a nationally representative sample of about 5,000 people each year. The NHANES interview includes demographic, socioeconomic, dietary, and health-related questions. The physical exam includes medical, dental, and physiological measurements, as well as several standard laboratory tests. NHANES is used to determine the prevalence of major diseases and risk factors for those diseases. NHANES data are also the basis for national standards for measurements like height, weight, and blood pressure. Data from this survey is used in epidemiology studies and health sciences research, which help develop public health policy, direct and design health programs and services, and expand the health knowledge for the Nation.</p>
+<p>We are using a small slice of this data. We’re only using a handful of variables from the 2011-2012 survey years on about 5,000 individuals. The CDC uses a <a href="http://www.cdc.gov/nchs/data/series/sr_02/sr02_162.pdf">sampling strategy</a> to purposefully oversample certain subpopulations like racial minorities. Naive analysis of the original NHANES data can lead to mistaken conclusions because the percentages of people from each racial group in the data are different from general population. The 5,000 individuals here are resampled from the larger NHANES study population to undo these oversampling effects, so you can treat this as if it were a simple random sample from the American population.</p>
+<p>You can download the data at <a href="data.html">the link above</a>. The file is called <a href="data/nhanes.csv"><strong>nhanes.csv</strong></a>. There’s also a <a href="data/nhanes_dd.csv">data dictionary (filename <strong>nhanes_dd.csv</strong>)</a> that lists and describes each variable in our NHANES dataset. This table is copied below.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>id</strong></td>
+<td align="left">A unique sample identifier</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Gender</strong></td>
+<td align="left">Gender (sex) of study participant coded as male or female</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Age</strong></td>
+<td align="left">Age in years at screening of study participant. Note: Subjects 80 years or older were recorded as 80.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Race</strong></td>
+<td align="left">Reported race of study participant, including non-Hispanic Asian category: Mexican, Hispanic, White, Black, Asian, or Other. Not availale for 2009-10.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Education</strong></td>
+<td align="left">Educational level of study participant Reported for participants aged 20 years or older. One of 8thGrade, 9-11thGrade, HighSchool, SomeCollege, or CollegeGrad.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>MaritalStatus</strong></td>
+<td align="left">Marital status of study participant. Reported for participants aged 20 years or older. One of Married, Widowed, Divorced, Separated, NeverMarried, or LivePartner (living with partner).</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>RelationshipStatus</strong></td>
+<td align="left">Simplification of MaritalStatus, coded as Committed if MaritalStatus is Married or LivePartner, and Single otherwise.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Insured</strong></td>
+<td align="left">Indicates whether the individual is covered by health insurance.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Income</strong></td>
+<td align="left">Numerical version of HHIncome derived from the middle income in each category</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Poverty</strong></td>
+<td align="left">A ratio of family income to poverty guidelines. Smaller numbers indicate more poverty</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>HomeRooms</strong></td>
+<td align="left">How many rooms are in home of study participant (counting kitchen but not bathroom). 13 rooms = 13 or more rooms.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>HomeOwn</strong></td>
+<td align="left">One of Home, Rent, or Other indicating whether the home of study participant or someone in their family is owned, rented or occupied by some other arrangement.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Work</strong></td>
+<td align="left">Indicates whether the individual is current working or not.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Weight</strong></td>
+<td align="left">Weight in kg</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Height</strong></td>
+<td align="left">Standing height in cm. Reported for participants aged 2 years or older.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>BMI</strong></td>
+<td align="left">Body mass index (weight/height2 in kg/m2). Reported for participants aged 2 years or older.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Pulse</strong></td>
+<td align="left">60 second pulse rate</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>BPSys</strong></td>
+<td align="left">Combined systolic blood pressure reading, following the procedure outlined for BPXSAR.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>BPDia</strong></td>
+<td align="left">Combined diastolic blood pressure reading, following the procedure outlined for BPXDAR.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Testosterone</strong></td>
+<td align="left">Testerone total (ng/dL). Reported for participants aged 6 years or older. Not available for 2009-2010.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>HDLChol</strong></td>
+<td align="left">Direct HDL cholesterol in mmol/L. Reported for participants aged 6 years or older.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>TotChol</strong></td>
+<td align="left">Total HDL cholesterol in mmol/L. Reported for participants aged 6 years or older.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Diabetes</strong></td>
+<td align="left">Study participant told by a doctor or health professional that they have diabetes. Reported for participants aged 1 year or older as Yes or No.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>DiabetesAge</strong></td>
+<td align="left">Age of study participant when first told they had diabetes. Reported for participants aged 1 year or older.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>nPregnancies</strong></td>
+<td align="left">How many times participant has been pregnant. Reported for female participants aged 20 years or older.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>nBabies</strong></td>
+<td align="left">How many of participants deliveries resulted in live births. Reported for female participants aged 20 years or older.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>SleepHrsNight</strong></td>
+<td align="left">Self-reported number of hours study participant usually gets at night on weekdays or workdays. Reported for participants aged 16 years and older.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>PhysActive</strong></td>
+<td align="left">Participant does moderate or vigorous-intensity sports, fitness or recreational activities (Yes or No). Reported for participants 12 years or older.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>PhysActiveDays</strong></td>
+<td align="left">Number of days in a typical week that participant does moderate or vigorous-intensity activity. Reported for participants 12 years or older.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>AlcoholDay</strong></td>
+<td align="left">Average number of drinks consumed on days that participant drank alcoholic beverages. Reported for participants aged 18 years or older.</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>AlcoholYear</strong></td>
+<td align="left">Estimated number of days over the past year that participant drank alcoholic beverages. Reported for participants aged 18 years or older.</td>
+</tr>
+<tr class="even">
+<td align="left"><strong>SmokingStatus</strong></td>
+<td align="left">Smoking status: Current Former or Never.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="import-inspect" class="section level3">
+<h3>Import &amp; inspect</h3>
+<p>First, let’s load the dplyr and readr libraries.</p>
+<pre class="r"><code>library(readr)
+library(dplyr)</code></pre>
+<p>If you see a warning that looks like this: <code>Error in library(dplyr) : there is no package called 'dplyr'</code> (or similar with readr), then you don’t have the package installed correctly. See the <a href="setup.html">setup page</a>.</p>
+<p>Now, let’s actually load the data. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we’re going to be referring to this data a lot, let’s give it a short easy name to type. I’m going to call it <code>nh</code>. Once we’ve loaded it we can type the name of the object itself (<code>nh</code>) to see it printed to the screen.</p>
+<pre class="r"><code>nh &lt;- read_csv(file=&quot;data/nhanes.csv&quot;)
+nh</code></pre>
+<pre><code>## # A tibble: 5,000 x 32
+##       id Gender   Age    Race    Education MaritalStatus
+##    &lt;int&gt;  &lt;chr&gt; &lt;int&gt;   &lt;chr&gt;        &lt;chr&gt;         &lt;chr&gt;
+##  1 62163   male    14   Asian         &lt;NA&gt;          &lt;NA&gt;
+##  2 62172 female    43   Black  High School  NeverMarried
+##  3 62174   male    80   White College Grad       Married
+##  4 62174   male    80   White College Grad       Married
+##  5 62175   male     5   White         &lt;NA&gt;          &lt;NA&gt;
+##  6 62176 female    34   White College Grad       Married
+##  7 62178   male    80   White  High School       Widowed
+##  8 62180   male    35   White College Grad       Married
+##  9 62186 female    17   Black         &lt;NA&gt;          &lt;NA&gt;
+## 10 62190 female    15 Mexican         &lt;NA&gt;          &lt;NA&gt;
+## # ... with 4,990 more rows, and 26 more variables:
+## #   RelationshipStatus &lt;chr&gt;, Insured &lt;chr&gt;, Income &lt;int&gt;, Poverty &lt;dbl&gt;,
+## #   HomeRooms &lt;int&gt;, HomeOwn &lt;chr&gt;, Work &lt;chr&gt;, Weight &lt;dbl&gt;,
+## #   Height &lt;dbl&gt;, BMI &lt;dbl&gt;, Pulse &lt;int&gt;, BPSys &lt;int&gt;, BPDia &lt;int&gt;,
+## #   Testosterone &lt;dbl&gt;, HDLChol &lt;dbl&gt;, TotChol &lt;dbl&gt;, Diabetes &lt;chr&gt;,
+## #   DiabetesAge &lt;int&gt;, nPregnancies &lt;int&gt;, nBabies &lt;int&gt;,
+## #   SleepHrsNight &lt;int&gt;, PhysActive &lt;chr&gt;, PhysActiveDays &lt;int&gt;,
+## #   AlcoholDay &lt;int&gt;, AlcoholYear &lt;int&gt;, SmokingStatus &lt;chr&gt;</code></pre>
+<p>Take a look at that output. The nice thing about loading dplyr and reading data with readr functions is that data are displayed in a much more friendly way. This dataset has 5,000 rows and 32 columns. When you import/convert data this way and try to display the object in the console, instead of trying to display all 5,000 rows, you’ll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you’ll see at the bottom of the output which, if any, columns were hidden from view.</p>
+<blockquote>
+<p><em><strong>A note on characters versus factors:</strong></em> One thing that you immediately notice is that all the categorical variables are read in as <em>character</em> data types. This data type is used for storing strings of text, for example, IDs, names, descriptive text, etc. There’s another related data type called <em><strong>factors</strong></em>. Factor variables are used to represent categorical variables with two or more <em>levels</em>, e.g., “male” or “female” for Gender, or “Single” versus “Committed” for RelationshipStatus. For the most part, statistical analysis treats these two data types the same. It’s often easier to leave categorical variables as characters. However, in some cases you may get a warning message alerting you that a character variable was converted into a factor variable during analysis. Generally, these warnings are nothing to worry about. You can, if you like, convert individual variables to factor variables, or simply use dplyr’s <code>mutate_if</code> to convert all character vectors to factor variables:</p>
+</blockquote>
+<pre class="r"><code>nh &lt;- nh %&gt;% mutate_if(is.character, as.factor)
+nh</code></pre>
+<p>Now just take a look at just a few columns that are now factors. Remember, you can look at individual variables with the <code>mydataframe$specificVariable</code> syntax.</p>
+<pre class="r"><code>nh$RelationshipStatus
+nh$Race
+levels(nh$Race)</code></pre>
+<p>If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the <strong>Environment</strong> panel in RStudio. Or you could use the <code>View()</code> function (<em>with a capital V</em>).</p>
+<pre class="r"><code>View(nh)</code></pre>
+<p>Recall several built-in functions that are useful for working with data frames.</p>
+<ul>
+<li>Content:
+<ul>
+<li><code>head()</code>: shows the first few rows</li>
+<li><code>tail()</code>: shows the last few rows</li>
+</ul></li>
+<li>Size:
+<ul>
+<li><code>dim()</code>: returns a 2-element vector with the number of rows in the first element, and the number of columns as the second element (the dimensions of the object)</li>
+<li><code>nrow()</code>: returns the number of rows</li>
+<li><code>ncol()</code>: returns the number of columns</li>
+</ul></li>
+<li>Summary:
+<ul>
+<li><code>colnames()</code> (or just <code>names()</code>): returns the column names</li>
+<li><code>glimpse()</code> (from <strong>dplyr</strong>): Returns a glimpse of your data, telling you the structure of the dataset and information about the class, length and content of each column</li>
+</ul></li>
+</ul>
+<pre class="r"><code>head(nh)
+tail(nh)
+dim(nh)
+names(nh)
+glimpse(nh)</code></pre>
+</div>
+</div>
+<div id="descriptive-statistics" class="section level2">
+<h2>Descriptive statistics</h2>
+<p>We can access individual variables within a data frame using the <code>$</code> operator, e.g., <code>mydataframe$specificVariable</code>. Let’s print out all the <strong><code>Race</code></strong> values in the data. Let’s then see what are the <code>unique</code> values of each. Then let’s calculate the <code>mean</code>, <code>median</code>, and <code>range</code> of the <strong><code>Age</code></strong> variable.</p>
+<pre class="r"><code># Display all Race values
+nh$Race
+
+# Get the unique values of Race
+unique(nh$Race)
+length(unique(nh$Race))
+# Do the same thing the dplyr way
+nh$Race %&gt;% unique()
+nh$Race %&gt;% unique() %&gt;% length()
+
+# Age mean, median, range
+mean(nh$Age)
+median(nh$Age)
+range(nh$Age)</code></pre>
+<p>You could also do the last few operations using dplyr, but remember, this returns a single-row, single-column tibble, <em>not</em> a single scalar value like the above. This is only really useful in the context of grouping and summarizing.</p>
+<pre class="r"><code># Compute the mean age
+nh %&gt;% 
+  summarize(mean(Age))
+
+# Now grouped by other variables
+nh %&gt;% 
+  group_by(Gender, Race) %&gt;% 
+  summarize(mean(Age))</code></pre>
+<p>The <code>summary()</code> function (note, this is different from <strong>dplyr</strong>’s <code>summarize()</code>) works differently depending on which kind of object you pass to it. If you run <code>summary()</code> on a data frame, you get some very basic summary statistics on each variable in the data.</p>
+<pre class="r"><code>summary(nh)</code></pre>
+<div id="missing-data" class="section level3">
+<h3>Missing data</h3>
+<p>Let’s try taking the mean of a different variable, either the dplyr way or the simpler <code>$</code> way.</p>
+<pre class="r"><code># the dplyr way: returns a single-row single-column tibble/dataframe
+nh %&gt;% summarize(mean(Income))
+
+# returns a single value
+mean(nh$Income)</code></pre>
+<p>What happened there? <code>NA</code> indicates <em>missing data</em>. Take a look at the Income variable.</p>
+<pre class="r"><code># Look at just the Income variable
+nh$Income
+
+# Or view the dataset
+# View(nh)</code></pre>
+<p>Notice that there are lots of missing values for Income. Trying to get the mean a bunch of observations with some missing data returns a missing value by default. This is almost universally the case with all summary statistics – a single <code>NA</code> will cause the summary to return <code>NA</code>. Now look at the help for <code>?mean</code>. Notice the <code>na.rm</code> argument. This is a logical (i.e., <code>TRUE</code> or <code>FALSE</code>) value indicating whether or not missing values should be removed prior to computing the mean. By default, it’s set to <code>FALSE</code>. Now try it again.</p>
+<pre class="r"><code>mean(nh$Income, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 57077.66</code></pre>
+<p>The <code>is.na()</code> function tells you if a value is missing. Get the <code>sum()</code> of that vector, which adds up all the <code>TRUE</code>s to tell you how many of the values are missing.</p>
+<pre class="r"><code>is.na(nh$Income)
+sum(is.na(nh$Income))</code></pre>
+<p>There are a few handy functions in the <a href="https://cran.r-project.org/web/packages/Tmisc/index.html"><strong>Tmisc</strong> package</a> for summarizing missingness in a data frame. You can graphically display missingness in a data frame as holes on a black canvas with <strong><code>gg_na()</code></strong> (use ggplot2 to plot <code>NA</code> values), or show a table of all the variables and the missingness level with <strong><code>propmiss()</code></strong>.</p>
+<pre class="r"><code># Install if you don&#39;t have it already
+# install.packages(&quot;Tmisc&quot;)
+
+# Load Tmisc
+library(Tmisc)</code></pre>
+<pre class="r"><code>gg_na(nh)</code></pre>
+<p><img src="r-stats_files/figure-html/ggna-1.png" width="768" /></p>
+<pre class="r"><code>propmiss(nh)</code></pre>
+<pre><code>##                   var nmiss    n propmiss
+## 1                  id     0 5000   0.0000
+## 2              Gender     0 5000   0.0000
+## 3                 Age     0 5000   0.0000
+## 4                Race     0 5000   0.0000
+## 5           Education  1416 5000   0.2832
+## 6       MaritalStatus  1415 5000   0.2830
+## 7  RelationshipStatus  1415 5000   0.2830
+## 8             Insured     7 5000   0.0014
+## 9              Income   377 5000   0.0754
+## 10            Poverty   325 5000   0.0650
+## 11          HomeRooms    28 5000   0.0056
+## 12            HomeOwn    28 5000   0.0056
+## 13               Work  1158 5000   0.2316
+## 14             Weight    31 5000   0.0062
+## 15             Height   159 5000   0.0318
+## 16                BMI   166 5000   0.0332
+## 17              Pulse   718 5000   0.1436
+## 18              BPSys   719 5000   0.1438
+## 19              BPDia   719 5000   0.1438
+## 20       Testosterone   874 5000   0.1748
+## 21            HDLChol   775 5000   0.1550
+## 22            TotChol   775 5000   0.1550
+## 23           Diabetes    64 5000   0.0128
+## 24        DiabetesAge  4693 5000   0.9386
+## 25       nPregnancies  3735 5000   0.7470
+## 26            nBabies  3832 5000   0.7664
+## 27      SleepHrsNight  1166 5000   0.2332
+## 28         PhysActive   850 5000   0.1700
+## 29     PhysActiveDays  2614 5000   0.5228
+## 30         AlcoholDay  2503 5000   0.5006
+## 31        AlcoholYear  2016 5000   0.4032
+## 32      SmokingStatus  1413 5000   0.2826</code></pre>
+<p>Now, let’s talk about exploratory data analysis (EDA).</p>
+</div>
+<div id="eda" class="section level3">
+<h3>EDA</h3>
+<p>It’s always worth examining your data visually before you start any statistical analysis or hypothesis testing. We could spend an entire day on <strong><a href="https://en.wikipedia.org/wiki/Exploratory_data_analysis">exploratory data analysis</a></strong>. The <a href="r-viz-gapminder.html">data visualization lesson</a> covers this in much broader detail. Here we’ll just mention a few of the big ones: <strong>histograms</strong> and <strong>scatterplots</strong>.</p>
+<div id="histograms" class="section level4">
+<h4>Histograms</h4>
+<p>We can learn a lot from the data just looking at the value distributions of particular variables. Let’s make some histograms with ggplot2. Looking at BMI shows a few extreme outliers. Looking at weight initially shows us that the units are probably in kg. Replotting that in lbs with more bins shows a clear bimodal distribution. Are there kids in this data? The age distribution shows us the answer is <em>yes</em>.</p>
+<pre class="r"><code>library(ggplot2)
+ggplot(nh, aes(BMI)) + geom_histogram(bins=30)</code></pre>
+<p><img src="r-stats_files/figure-html/histograms-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(nh, aes(Weight)) + geom_histogram(bins=30)</code></pre>
+<p><img src="r-stats_files/figure-html/histograms-2.png" width="672" /></p>
+<pre class="r"><code># In pounds, more bins
+ggplot(nh, aes(Weight*2.2)) + geom_histogram(bins=80)</code></pre>
+<p><img src="r-stats_files/figure-html/histograms-3.png" width="672" /></p>
+<pre class="r"><code>ggplot(nh, aes(Age)) + geom_histogram(bins=30)</code></pre>
+<p><img src="r-stats_files/figure-html/histograms-4.png" width="672" /></p>
+</div>
+<div id="scatterplots" class="section level4">
+<h4>Scatterplots</h4>
+<p>Let’s look at how a few different variables relate to each other. E.g., height and weight:</p>
+<pre class="r"><code>ggplot(nh, aes(Height, Weight, col=Gender)) + geom_point()</code></pre>
+<p><img src="r-stats_files/figure-html/scatter_heightweight-1.png" width="672" /></p>
+<p>Let’s filter out all the kids, draw trend lines using a linear model:</p>
+<pre class="r"><code>nh %&gt;% 
+  filter(Age&gt;=18) %&gt;% 
+  ggplot(aes(Height, Weight, col=Gender)) + 
+    geom_point() + 
+    geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="r-stats_files/figure-html/scatter_heightweight_colgender-1.png" width="672" /></p>
+<p>Check out the <a href="r-viz-gapminder.html">data visualization lesson</a> for much more on this topic.</p>
+</div>
+</div>
+<div id="exercise-set-1" class="section level3">
+<h3>Exercise set 1</h3>
+<ol style="list-style-type: decimal">
+<li>What’s the mean 60-second pulse rate for all participants in the data?</li>
+</ol>
+<pre><code>## [1] 73.63382</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>What’s the range of values for diastolic blood pressure in all participants? (Hint: see help for <code>min()</code>, <code>max()</code>, and <code>range()</code> functions, e.g., enter <code>?range</code> without the parentheses to get help).</li>
+</ol>
+<pre><code>## [1]   0 116</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>What are the median, lower, and upper quartiles for the age of all participants? (Hint: see help for <code>median</code>, or better yet, <code>quantile</code>).</li>
+</ol>
+<pre><code>##   0%  25%  50%  75% 100% 
+##    0   17   36   54   80</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>What’s the variance and standard deviation for income among all participants?</li>
+</ol>
+<pre><code>## [1] 1121564068</code></pre>
+<pre><code>## [1] 33489.76</code></pre>
+</div>
+</div>
+<div id="continuous-variables" class="section level2">
+<h2>Continuous variables</h2>
+<div id="t-tests" class="section level3">
+<h3>T-tests</h3>
+<p>First let’s create a new dataset from <code>nh</code> called <code>nha</code> that only has adults. To prevent us from making any mistakes downstream, let’s remove the <code>nh</code> object.</p>
+<pre class="r"><code>nha &lt;- filter(nh, Age&gt;=18)
+rm(nh)
+# View(nha)</code></pre>
+<p>Let’s do a few two-sample t-tests to test for <em>differences in means between two groups</em>. The function for a t-test is <code>t.test()</code>. See the help for <code>?t.test</code>. We’ll be using the <em>forumla</em> method. The usage is <strong><code>t.test(response~group, data=myDataFrame)</code></strong>.</p>
+<ol style="list-style-type: decimal">
+<li>Are there differences in age for males versus females in this dataset?</li>
+<li>Does BMI differ between diabetics and non-diabetics?</li>
+<li>Do single or married/cohabitating people drink more alcohol? Is this relationship significant?</li>
+</ol>
+<pre class="r"><code>t.test(Age~Gender, data=nha)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  Age by Gender
+## t = 1.9122, df = 3697.2, p-value = 0.05593
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.02776814  2.22191122
+## sample estimates:
+## mean in group female   mean in group male 
+##             47.06412             45.96704</code></pre>
+<pre class="r"><code>t.test(BMI~Diabetes, data=nha)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  BMI by Diabetes
+## t = -11.379, df = 407.31, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -5.563596 -3.924435
+## sample estimates:
+##  mean in group No mean in group Yes 
+##          28.08753          32.83155</code></pre>
+<pre class="r"><code>t.test(AlcoholYear~RelationshipStatus, data=nha)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  AlcoholYear by RelationshipStatus
+## t = 5.4315, df = 2674.8, p-value = 6.09e-08
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  13.05949 27.81603
+## sample estimates:
+## mean in group Committed    mean in group Single 
+##                83.93416                63.49640</code></pre>
+<p>See the heading, <em>Welch Two Sample t-test</em>, and notice that the degrees of freedom might not be what we expected based on our sample size. Now look at the help for <code>?t.test</code> again, and look at the <code>var.equal</code> argument, which is by default set to <code>FALSE</code>. One of the assumptions of the t-test is <a href="https://en.wikipedia.org/wiki/Homoscedasticity">homoscedasticity</a>, or homogeneity of variance. This assumes that the variance in the outcome (e.g., BMI) is identical across both levels of the predictor (diabetic vs non-diabetic). Since this is rarely the case, the t-test defaults to using the <a href="https://en.wikipedia.org/wiki/Welch%27s_t-test">Welch correction</a>, which is a more reliable version of the t-test when the homoscedasticity assumption is violated.</p>
+<blockquote>
+<p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <em><strong>A note on one-tailed versus two-tailed tests:</strong></em> A two-tailed test is almost always more appropriate. The hypothesis you’re testing here is spelled out in the results (“alternative hypothesis: true difference in means is not equal to 0”). If the p-value is very low, you can reject the null hypothesis that there’s no difference in means. Because you typically don’t know <em>a priori</em> whether the difference in means will be positive or negative (e.g., we don’t know <em>a priori</em> whether Single people would be expected to drink more or less than those in a committed relationship), we want to do the two-tailed test. However, if we <em>only</em> wanted to test a very specific directionality of effect, we could use a one-tailed test and specify which direction we expect. This is more powerful if we “get it right”, but much less powerful for the opposite effect. Notice how the p-value changes depending on how we specify the hypothesis. Again, the <strong>two-tailed test is almost always more appropriate</strong>.</p>
+</blockquote>
+<pre class="r"><code># Two tailed
+t.test(AlcoholYear~RelationshipStatus, data=nha)
+
+# Difference in means is &gt;0 (committed drink more)
+t.test(AlcoholYear~RelationshipStatus, data=nha, alternative=&quot;greater&quot;)
+
+# Difference in means is &lt;0 (committed drink less)
+t.test(AlcoholYear~RelationshipStatus, data=nha, alternative=&quot;less&quot;)</code></pre>
+<blockquote>
+<p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <em><strong>A note on paired versus unpaired t-tests:</strong></em> The t-test we performed here was an unpaired test. Here the males and females are different people. The diabetics and nondiabetics are different samples. The single and committed individuals are completely independent, separate observations. In this case, an <em>unpaired</em> test is appropriate. An alternative design might be when data is derived from samples who have been measured at two different time points or locations, e.g., before versus after treatment, left versus right hand, etc. In this case, a <em><strong>paired t-test</strong></em> would be more appropriate. A paired test takes into consideration the intra and inter-subject variability, and is more powerful than the unpaired test. See the help for <code>?t.test</code> for more information on how to do this.</p>
+</blockquote>
+</div>
+<div id="wilcoxon-test" class="section level3">
+<h3>Wilcoxon test</h3>
+<p>Another assumption of the t-test is that data is normally distributed. Looking at the histogram for AlcoholYear shows that this data clearly isn’t.</p>
+<pre class="r"><code>ggplot(nha, aes(AlcoholYear)) + geom_histogram()</code></pre>
+<p><img src="r-stats_files/figure-html/alcoholhist-1.png" width="672" /></p>
+<p>The <a href="https://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U_test">Wilcoxon rank-sum test (a.k.a. Mann-Whitney <em>U</em> test)</a> is a nonparametric test of differences in mean that does not require normally distributed data. When data is perfectly normal, the t-test is uniformly more powerful. But when this assumption is violated, the t-test is unreliable. This test is called in a similar way as the t-test.</p>
+<pre class="r"><code>wilcox.test(AlcoholYear~RelationshipStatus, data=nha)</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  AlcoholYear by RelationshipStatus
+## W = 1068000, p-value = 0.0001659
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<p>The results are still significant, but much less than the p-value reported for the (incorrect) t-test above. Also note in the help for <code>?wilcox.test</code> that there’s a <code>paired</code> option here too.</p>
+</div>
+<div id="linear-models" class="section level3">
+<h3>Linear models</h3>
+<p><a href="slides/r-stats.html#(6)"><em>(See slides)</em></a></p>
+<blockquote>
+<p>Analysis of variance and linear modeling are complex topics that deserve an entire semester dedicated to theory, design, and interpretation. A very good resource is <a href="https://www.amazon.com/Introduction-Statistical-Learning-Applications-Statistics/dp/1461471370/ref=sr_1_1?ie=UTF8&amp;qid=1473087847&amp;sr=8-1&amp;keywords=introduction+statistical+learning&amp;tag=gettgenedone-20"><em>An Introduction to Statistical Learning: with Applications in R</em></a> by Gareth James, Daniela Witten, Trevor Hastie and Robert Tibshirani. The <a href="http://www-bcf.usc.edu/~gareth/ISL/ISLR%20Sixth%20Printing.pdf">PDF</a> of the book and all the R code used throughout are <a href="http://www-bcf.usc.edu/~gareth/ISL/">available <strong>free</strong> on the author’s website</a>. What follows is a necessary over-simplification with more focus on implementation, and less on theory and design.</p>
+</blockquote>
+<p>Where t-tests and their nonparametric substitutes are used for assessing the differences in means between two groups, ANOVA is used to assess the significance of differences in means between multiple groups. In fact, a t-test is just a specific case of ANOVA when you only have two groups. And both t-tests and ANOVA are just specific cases of linear regression, where you’re trying to fit a model describing how a continuous outcome (e.g., BMI) changes with some predictor variable (e.g., diabetic status, race, age, etc.). The distinction is largely semantic – with a linear model you’re asking, “do levels of a categorical variable affect the response?” where with ANOVA or t-tests you’re asking, “does the mean response differ between levels of a categorical variable?”</p>
+<p>Let’s examine the relationship between BMI and relationship status (<code>RelationshipStatus</code> was derived from <code>MaritalStatus</code>, coded as <em>Committed</em> if MaritalStatus is Married or LivePartner, and <em>Single</em> otherwise). Let’s first do this with a t-test, and for now, let’s assume that the variances between groups <em>are</em> equal.</p>
+<pre class="r"><code>t.test(BMI~RelationshipStatus, data=nha, var.equal=TRUE)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  BMI by RelationshipStatus
+## t = -1.5319, df = 3552, p-value = 0.1256
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.77817842  0.09552936
+## sample estimates:
+## mean in group Committed    mean in group Single 
+##                28.51343                28.85475</code></pre>
+<p>It looks like single people have a very slightly higher BMI than those in a committed relationship, but the magnitude of the difference is trivial, and the difference is not significant. Now, let’s do the same test in a linear modeling framework. First, let’s create the fitted model and store it in an object called <code>fit</code>.</p>
+<pre class="r"><code>fit &lt;- lm(BMI~RelationshipStatus, data=nha)</code></pre>
+<p>You can display the object itself, but that isn’t too interesting. You can get the more familiar ANOVA table by calling the <code>anova()</code> function on the <code>fit</code> object. More generally, the <code>summary()</code> function on a linear model object will tell you much more. (Note this is different from dplyr’s <strong>summarize</strong> function).</p>
+<pre class="r"><code>fit</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BMI ~ RelationshipStatus, data = nha)
+## 
+## Coefficients:
+##              (Intercept)  RelationshipStatusSingle  
+##                  28.5134                    0.3413</code></pre>
+<pre class="r"><code>anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: BMI
+##                      Df Sum Sq Mean Sq F value Pr(&gt;F)
+## RelationshipStatus    1     98  98.320  2.3467 0.1256
+## Residuals          3552 148819  41.897</code></pre>
+<pre class="r"><code>summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BMI ~ RelationshipStatus, data = nha)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -12.813  -4.613  -0.955   3.287  52.087 
+## 
+## Coefficients:
+##                          Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)               28.5134     0.1388 205.440   &lt;2e-16
+## RelationshipStatusSingle   0.3413     0.2228   1.532    0.126
+## 
+## Residual standard error: 6.473 on 3552 degrees of freedom
+##   (153 observations deleted due to missingness)
+## Multiple R-squared:  0.0006602,  Adjusted R-squared:  0.0003789 
+## F-statistic: 2.347 on 1 and 3552 DF,  p-value: 0.1256</code></pre>
+<p>Go back and re-run the t-test assuming equal variances as we did before. Now notice a few things:</p>
+<pre class="r"><code>t.test(BMI~RelationshipStatus, data=nha, var.equal=TRUE)</code></pre>
+<ol style="list-style-type: decimal">
+<li>The p-values from all three tests (t-test, ANOVA, and linear regression) are all identical (p=0.1256). This is because they’re all identical: a t-test is a specific case of ANOVA, which is a specific case of linear regression. There may be some rounding error, but we’ll talk about extracting the exact values from a model object later on.</li>
+<li>The test statistics are all related. The <em>t</em> statistic from the t-test is <strong>1.532</strong>, which is the same as the t-statistic from the linear regression. If you square that, you get <strong>2.347</strong>, the <em>F</em> statistic from the ANOVA.</li>
+<li>The <code>t.test()</code> output shows you the means for the two groups, Committed and Single. Just displaying the <code>fit</code> object itself or running <code>summary(fit)</code> shows you the coefficients for a linear model. Here, the model assumes the “baseline” RelationshipStatus level is <em>Committed</em>, and that the <em>intercept</em> in a regression model (e.g., <span class="math inline">\(\beta_{0}\)</span> in the model <span class="math inline">\(Y = \beta_{0} + \beta_{1}X\)</span>) is the mean of the baseline group. Being <em>Single</em> results in an increase in BMI of 0.3413. This is the <span class="math inline">\(\beta_{1}\)</span> coefficient in the model. You can easily change the ordering of the levels. See the help for <code>?factor</code>, and check out the new <a href="http://forcats.tidyverse.org/"><strong>forcats</strong> package</a>, which provides tools <strong>for</strong> manipulating <strong>cat</strong>egorical variables.</li>
+</ol>
+<pre class="r"><code># P-value computed on a t-statistic with 3552 degrees of freedom
+# (multiply times 2 because t-test is assuming two-tailed)
+2*(1-pt(1.532, df=3552))</code></pre>
+<pre><code>## [1] 0.1256115</code></pre>
+<pre class="r"><code># P-value computed on an F-test with 1 and 3552 degrees of freedom
+1-pf(2.347, df1=1, df2=3552)</code></pre>
+<pre><code>## [1] 0.1256134</code></pre>
+<blockquote>
+<p><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <em><strong>A note on dummy coding:</strong></em> If you have a <span class="math inline">\(k\)</span>-level factor, R creates <span class="math inline">\(k-1\)</span> dummy variables, or indicator variables, by default, using the alphabetically first level as baseline. For example, the levels of RelationshipStatus are “Committed” and “Single”. R creates a dummy variable called “RelationshipStatusSingle” that’s <strong>0</strong> if you’re committed, and <strong>1</strong> if you’re Single. The linear model is saying for every unit increase in RelationshipStatusSingle, i.e., going from committed to single, results in a 0.314-unit increase in BMI. You can change the ordering of the factors to change the interpretation of the model (e.g., treating Single as baseline and going from Single to Committed). We’ll do this in the next section.</p>
+</blockquote>
+</div>
+<div id="anova" class="section level3">
+<h3>ANOVA</h3>
+<p>Recap: t-tests are for assessing the differences in means between <em>two</em> groups. A t-test is a specific case of ANOVA, which is a specific case of a linear model. Let’s run ANOVA, but this time looking for differences in means between more than two groups.</p>
+<p>Let’s look at the relationship between smoking status (Never, Former, or Current), and BMI.</p>
+<pre class="r"><code>fit &lt;- lm(BMI~SmokingStatus, data=nha)
+anova(fit)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: BMI
+##                 Df Sum Sq Mean Sq F value   Pr(&gt;F)
+## SmokingStatus    2   1411  705.50  16.988 4.54e-08
+## Residuals     3553 147551   41.53</code></pre>
+<pre class="r"><code>summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BMI ~ SmokingStatus, data = nha)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -12.565  -4.556  -1.056   3.315  51.744 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)          27.3914     0.2446 111.975  &lt; 2e-16
+## SmokingStatusFormer   1.7736     0.3293   5.387 7.65e-08
+## SmokingStatusNever    1.4645     0.2838   5.161 2.60e-07
+## 
+## Residual standard error: 6.444 on 3553 degrees of freedom
+##   (151 observations deleted due to missingness)
+## Multiple R-squared:  0.009472,   Adjusted R-squared:  0.008915 
+## F-statistic: 16.99 on 2 and 3553 DF,  p-value: 4.54e-08</code></pre>
+<p>The F-test on the ANOVA table tells us that there <em>is</em> a significant difference in means between current, former, and never smokers (p=<span class="math inline">\(4.54 \times 10^{-8}\)</span>). However, the linear model output might not have been what we wanted. Because the default handling of categorical variables is to treat the alphabetical first level as the baseline, “Current” smokers are treated as baseline, and this mean becomes the intercept, and the coefficients on “Former” and “Never” describe how those groups’ means differ from current smokers.</p>
+<p>Back to dummy coding / indicator variables: SmokingStatus is “Current”, “Former”, and “Never.” By default, R will create <em>two</em> indicator variables here that in tandem will explain this variable.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Original SmokingStatus</th>
+<th align="right">Indicator: SmokingStatusFormer</th>
+<th align="right">Indicator: SmokingStatusNever</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><em>Current</em></td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left"><em>Former</em></td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="left"><em>Never</em></td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<p>What if we wanted “Never” smokers to be the baseline, followed by Former, then Current? Have a look at <code>?factor</code> to relevel the factor levels.</p>
+<pre class="r"><code># Look at nha$SmokingStatus
+nha$SmokingStatus
+
+# What happens if we relevel it? Let&#39;s see what that looks like.
+relevel(nha$SmokingStatus, ref=&quot;Never&quot;)
+
+# If we&#39;re happy with that, let&#39;s change the value of nha$SmokingStatus in place
+nha$SmokingStatus &lt;- relevel(nha$SmokingStatus, ref=&quot;Never&quot;)
+
+# Or we could do this the dplyr way
+nha &lt;- nha %&gt;% 
+  mutate(SmokingStatus=relevel(SmokingStatus, ref=&quot;Never&quot;))</code></pre>
+<pre class="r"><code># Re-fit the model
+fit &lt;- lm(BMI~SmokingStatus, data=nha)
+
+# Optionally, show the ANOVA table
+# anova(fit)
+
+# Print the full model statistics
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = BMI ~ SmokingStatus, data = nha)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -12.565  -4.556  -1.056   3.315  51.744 
+## 
+## Coefficients:
+##                      Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)           28.8558     0.1438 200.601  &lt; 2e-16
+## SmokingStatusCurrent  -1.4645     0.2838  -5.161  2.6e-07
+## SmokingStatusFormer    0.3091     0.2632   1.175     0.24
+## 
+## Residual standard error: 6.444 on 3553 degrees of freedom
+##   (151 observations deleted due to missingness)
+## Multiple R-squared:  0.009472,   Adjusted R-squared:  0.008915 
+## F-statistic: 16.99 on 2 and 3553 DF,  p-value: 4.54e-08</code></pre>
+<p>Notice that the p-value on the ANOVA/regression didn’t change, but the coefficients did. <em>Never</em> smokers are now treated as baseline. The intercept coefficient (28.856) is now the mean for <em>Never</em> smokers. The <code>SmokingStatusFormer</code> coefficient of .309 shows the apparent increase in BMI that former smokers have when compared to never smokers, but that difference is not significant (p=.24). The <code>SmokingStatusCurrent</code> coefficient of -1.464 shows that current smokers actually have a lower BMI than never smokers, and that this decrease is highly significant.</p>
+<p>Finally, you can do the typical post-hoc ANOVA procedures on the fit object. For example, the <code>TukeyHSD()</code> function will run <a href="https://en.wikipedia.org/wiki/Tukey%27s_range_test"><em>Tukey’s test</em></a> (also known as <em>Tukey’s range test</em>, the <em>Tukey method</em>, <em>Tukey’s honest significance test</em>, <em>Tukey’s HSD test</em> (honest significant difference), or the <em>Tukey-Kramer method</em>). Tukey’s test computes all pairwise mean difference calculation, comparing each group to each other group, identifying any difference between two groups that’s greater than the standard error, while controlling the type I error for all multiple comparisons. First run <code>aov()</code> (<strong>not</strong> <code>anova()</code>) on the fitted linear model object, then run <code>TukeyHSD()</code> on the resulting analysis of variance fit.</p>
+<pre class="r"><code>TukeyHSD(aov(fit))</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = fit)
+## 
+## $SmokingStatus
+##                      diff        lwr        upr     p adj
+## Current-Never  -1.4644502 -2.1298249 -0.7990756 0.0000008
+## Former-Never    0.3091076 -0.3079639  0.9261790 0.4685044
+## Former-Current  1.7735578  1.0015525  2.5455631 0.0000002</code></pre>
+<p>This shows that there isn’t much of a difference between former and never smokers, but that both of these differ significantly from current smokers, who have significantly lower BMI.</p>
+<p>Finally, let’s visualize the differences in means between these groups. The <strong>NA</strong> category, which is omitted from the ANOVA, contains all the observations who have missing or non-recorded Smoking Status.</p>
+<pre class="r"><code>ggplot(nha, aes(SmokingStatus, BMI)) + geom_boxplot() + theme_classic()</code></pre>
+<p><img src="r-stats_files/figure-html/smoking_boxplots-1.png" width="672" /></p>
+</div>
+<div id="linear-regression" class="section level3">
+<h3>Linear regression</h3>
+<p><a href="slides/r-stats.html#(7)"><em>(See slides)</em></a></p>
+<p>Linear models are mathematical representations of the process that (<em>we think</em>) gave rise to our data. The model seeks to explain the relationship between a variable of interest, our <em>Y</em>, <em>outcome</em>, <em>response</em>, or <em>dependent</em> variable, and one or more <em>X</em>, <em>predictor</em>, or <em>independent</em> variables. Previously we talked about t-tests or ANOVA in the context of a simple linear regression model with only a single predictor variable, <span class="math inline">\(X\)</span>:</p>
+<p><span class="math display">\[Y = \beta_{0} +  \beta_{1}X\]</span></p>
+<p>But you can have multiple predictors in a linear model that are all additive, accounting for the effects of the others:</p>
+<p><span class="math display">\[Y = \beta_{0} +  \beta_{1}X_{1} + \beta_{2}X_{2} + \epsilon\]</span></p>
+<ul>
+<li><span class="math inline">\(Y\)</span> is the response</li>
+<li><span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are the predictors</li>
+<li><span class="math inline">\(\beta_{0}\)</span> is the intercept, and <span class="math inline">\(\beta_{1}\)</span>, <span class="math inline">\(\beta_{2}\)</span> etc are <em>coefficients</em> that describe what 1-unit changes in <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> do to the outcome variable <span class="math inline">\(Y\)</span>.</li>
+<li><span class="math inline">\(\epsilon\)</span> is random error. Our model will not perfectly predict <span class="math inline">\(Y\)</span>. It will be off by some random amount. We assume this amount is a random draw from a Normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span>.</li>
+</ul>
+<p><em>Building a linear model</em> means we propose a linear model and then estimate the coefficients and the variance of the error term. Above, this means estimating <span class="math inline">\(\beta_{0}, \beta_{1}, \beta_{2}\)</span> and <span class="math inline">\(\sigma\)</span>. This is what we do in R.</p>
+<p>Let’s look at the relationship between height and weight.</p>
+<pre class="r"><code>fit &lt;- lm(Weight~Height, data=nha)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Weight ~ Height, data = nha)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -40.339 -13.109  -2.658   9.309 127.972 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept) -73.70590    5.08110  -14.51   &lt;2e-16
+## Height        0.91996    0.03003   30.63   &lt;2e-16
+## 
+## Residual standard error: 18.57 on 3674 degrees of freedom
+##   (31 observations deleted due to missingness)
+## Multiple R-squared:  0.2034, Adjusted R-squared:  0.2032 
+## F-statistic: 938.4 on 1 and 3674 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The relationship is highly significant (P&lt;<span class="math inline">\(2.2 \times 10^{-16}\)</span>). The intercept term is not very useful most of the time. Here it shows us what the value of Weight would be when Height=0, which could never happen. The Height coefficient is meaningful – each one unit increase in height results in a 0.92 increase in the corresponding unit of weight. Let’s visualize that relationship:</p>
+<pre class="r"><code>ggplot(nha, aes(x=Height, y=Weight)) + geom_point() + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<p><img src="r-stats_files/figure-html/scatter_height_weight_lm-1.png" width="672" /></p>
+<p>By default, this is only going to show the prediction over the range of the data. This is important! You never want to try to extrapolate response variables outside of the range of your predictor(s). For example, the linear model tells us that weight is -73.7kg when height is zero. We can extend the predicted model / regression line past the lowest value of the data down to height=0. The bands on the confidence interval tell us that the model is apparently confident within the regions defined by the gray boundary. But this is silly – we would never see a height of zero, and predicting past the range of the available training data is never a good idea.</p>
+<pre class="r"><code>ggplot(nha, aes(x=Height, y=Weight)) + 
+  geom_point() + 
+  geom_smooth(method=&quot;lm&quot;, fullrange=TRUE) + 
+  xlim(0, NA) + 
+  ggtitle(&quot;Friends don&#39;t let friends extrapolate.&quot;)</code></pre>
+<p><img src="r-stats_files/figure-html/scatter_height_weight_extrapolate-1.png" width="672" /></p>
+</div>
+<div id="multiple-regression" class="section level3">
+<h3>Multiple regression</h3>
+<p>Finally, let’s do a multiple linear regression analysis, where we attempt to model the effect of multiple predictor variables at once on some outcome. First, let’s look at the effect of physical activity on testosterone levels. Let’s do this with a t-test and linear regression, showing that you get the same results.</p>
+<pre class="r"><code>t.test(Testosterone~PhysActive, data=nha, var.equal=TRUE)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  Testosterone by PhysActive
+## t = -2.4298, df = 3436, p-value = 0.01516
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -34.813866  -3.720171
+## sample estimates:
+##  mean in group No mean in group Yes 
+##          207.5645          226.8315</code></pre>
+<pre class="r"><code>summary(lm(Testosterone~PhysActive, data=nha))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Testosterone ~ PhysActive, data = nha)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -224.5 -196.5 -115.9  167.0 1588.0 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)    207.565      5.873   35.34   &lt;2e-16
+## PhysActiveYes   19.267      7.929    2.43   0.0152
+## 
+## Residual standard error: 231.4 on 3436 degrees of freedom
+##   (269 observations deleted due to missingness)
+## Multiple R-squared:  0.001715,   Adjusted R-squared:  0.001425 
+## F-statistic: 5.904 on 1 and 3436 DF,  p-value: 0.01516</code></pre>
+<p>In both cases, the p-value is significant (p=0.01516), and the result suggest that increased physical activity is associated with increased testosterone levels. Does increasing your physical activity increase your testosterone levels? Or is it the other way – will increased testosterone encourage more physical activity? Or is it none of the above – is the apparent relationship between physical activity and testosterone levels only apparent because both are correlated with yet a third, unaccounted for variable? Let’s throw Age into the model as well.</p>
+<pre class="r"><code>summary(lm(Testosterone~PhysActive+Age, data=nha))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Testosterone ~ PhysActive + Age, data = nha)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -238.6 -196.8 -112.3  167.4 1598.1 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)   247.8828    13.0853  18.944  &lt; 2e-16
+## PhysActiveYes  13.6740     8.0815   1.692 0.090735
+## Age            -0.8003     0.2322  -3.447 0.000574
+## 
+## Residual standard error: 231 on 3435 degrees of freedom
+##   (269 observations deleted due to missingness)
+## Multiple R-squared:  0.005156,   Adjusted R-squared:  0.004577 
+## F-statistic: 8.901 on 2 and 3435 DF,  p-value: 0.0001394</code></pre>
+<p>This shows us that after accounting for age that the testosterone / physical activity link is no longer significant. Every 1-year increase in age results in a highly significant decrease in testosterone, and since increasing age is also likely associated with decreased physical activity, perhaps age is the confounder that makes this relationship apparent.</p>
+<p>Adding other predictors can also swing things the other way. We know that men have much higher testosterone levels than females. Sex is probably the single best predictor of testosterone levels in our dataset. By not accounting for this effect, our unaccounted-for variation remains very high. By accounting for Gender, we now reduce the residual error in the model, and the physical activity effect once again becomes significant. Also notice that our model fits much better (higher R-squared), and is much more significant overall.</p>
+<pre class="r"><code>summary(lm(Testosterone ~ PhysActive+Age+Gender, data=nha))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Testosterone ~ PhysActive + Age + Gender, data = nha)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -397.91  -31.01   -4.42   20.50 1400.90 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)    46.6931     7.5729   6.166 7.83e-10
+## PhysActiveYes   9.2749     4.4617   2.079   0.0377
+## Age            -0.5904     0.1282  -4.605 4.28e-06
+## Gendermale    385.1989     4.3512  88.526  &lt; 2e-16
+## 
+## Residual standard error: 127.5 on 3434 degrees of freedom
+##   (269 observations deleted due to missingness)
+## Multiple R-squared:  0.6969, Adjusted R-squared:  0.6966 
+## F-statistic:  2632 on 3 and 3434 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>We’ve only looked at the <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/summary.lm.html"><code>summary()</code></a> and <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/anova.lm.html"><code>anova()</code></a> functions for extracting information from an <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/lm.html"><code>lm</code> class object</a>. There are several other accessor functions that can be used on a linear model object. Check out the help page for each one of these to learn more.</p>
+<ul>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/coef.html"><code>coefficients()</code></a></li>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/predict.lm.html"><code>predict.lm()</code></a></li>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/fitted.values.html"><code>fitted.values()</code></a></li>
+<li><a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/residuals.html"><code>residuals()</code></a></li>
+</ul>
+</div>
+<div id="exercise-set-2" class="section level3">
+<h3>Exercise set 2</h3>
+<ol style="list-style-type: decimal">
+<li>Is the average BMI different in single people versus those in a committed relationship? Perform a t-test.</li>
+<li>The <code>Work</code> variable is coded “Looking” (n=159), “NotWorking” (n=1317), and “Working” (n=2230).
+<ul>
+<li>Fit a linear model of <code>Income</code> against <code>Work</code>. Assign this to an object called <code>fit</code>. What does the <code>fit</code> object tell you when you display it directly?</li>
+<li>Run an <code>anova()</code> to get the ANOVA table. Is the model significant?</li>
+<li>Run a Tukey test to get the pairwise contrasts. (Hint: <code>TukeyHSD()</code> on <code>aov()</code> on the fit). What do you conclude?</li>
+<li>Instead of thinking of this as ANOVA, think of it as a linear model. After you’ve thought about it, get some <code>summary()</code> statistics on the fit. Do these results jive with the ANOVA model?</li>
+</ul></li>
+<li>Examine the relationship between HDL cholesterol levels (<code>HDLChol</code>) and whether someone has diabetes or not (<code>Diabetes</code>).
+<ul>
+<li>Is there a difference in means between diabetics and nondiabetics? Perform a t-test <em>without</em> a Welch correction (that is, assuming equal variances – see <code>?t.test</code> for help).</li>
+<li>Do the same analysis in a linear modeling framework.</li>
+<li>Does the relationship hold when adjusting for <code>Weight</code>?</li>
+<li>What about when adjusting for <code>Weight</code>, <code>Age</code>, <code>Gender</code>, <code>PhysActive</code> (whether someone participates in moderate or vigorous-intensity sports, fitness or recreational activities, coded as yes/no). What is the effect of each of these explanatory variables?</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="discrete-variables" class="section level2">
+<h2>Discrete variables</h2>
+<p>Until now we’ve only discussed analyzing <em>continuous</em> outcomes / dependent variables. We’ve tested for differences in means between two groups with t-tests, differences among means between <em>n</em> groups with ANOVA, and more general relationships using linear regression. In all of these cases, the dependent variable, i.e., the outcome, or <span class="math inline">\(Y\)</span> variable, was <em>continuous</em>, and usually normally distributed. What if our outcome variable is <em>discrete</em>, e.g., “Yes/No”, “Mutant/WT”, “Case/Control”, etc.? Here we use a different set of procedures for assessing significant associations.</p>
+<div id="contingency-tables" class="section level3">
+<h3>Contingency tables</h3>
+<p>The <a href="http://stat.ethz.ch/R-manual/R-patched/library/stats/html/xtabs.html"><code>xtabs()</code></a> function is useful for creating contingency tables from categorical variables. Let’s create a gender by diabetes status contingency table, and assign it to an object called <strong><code>xt</code></strong>. After making the assignment, type the name of the object to view it.</p>
+<pre class="r"><code>xt &lt;- xtabs(~Gender+Diabetes, data=nha)
+xt</code></pre>
+<pre><code>##         Diabetes
+## Gender     No  Yes
+##   female 1692  164
+##   male   1653  198</code></pre>
+<p>There are two useful functions, <code>addmargins()</code> and <code>prop.table()</code> that add more information or manipulate how the data is displayed. By default, <code>prop.table()</code> will divide the number of observations in each cell by the total. But you may want to specify <em>which margin</em> you want to get proportions over. Let’s do this for the first (row) margin.</p>
+<pre class="r"><code># Add marginal totals
+addmargins(xt)</code></pre>
+<pre><code>##         Diabetes
+## Gender     No  Yes  Sum
+##   female 1692  164 1856
+##   male   1653  198 1851
+##   Sum    3345  362 3707</code></pre>
+<pre class="r"><code># Get the proportional table
+prop.table(xt)</code></pre>
+<pre><code>##         Diabetes
+## Gender           No        Yes
+##   female 0.45643377 0.04424063
+##   male   0.44591314 0.05341246</code></pre>
+<pre class="r"><code># That wasn&#39;t really what we wanted. 
+# Do this over the first (row) margin only.
+prop.table(xt, margin=1)</code></pre>
+<pre><code>##         Diabetes
+## Gender           No        Yes
+##   female 0.91163793 0.08836207
+##   male   0.89303079 0.10696921</code></pre>
+<p>Looks like men have slightly higher rates of diabetes than women. But is this significant?</p>
+<p>The chi-square test is used to assess the independence of these two factors. That is, if the null hypothesis that gender and diabetes are independent is true, the we would expect a proportionally equal number of diabetics across each sex. Males seem to be at slightly higher risk than females, but the difference is just short of statistically significant.</p>
+<pre class="r"><code>chisq.test(xt)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test with Yates&#39; continuity correction
+## 
+## data:  xt
+## X-squared = 3.4332, df = 1, p-value = 0.0639</code></pre>
+<p>An alternative to the chi-square test is <a href="https://en.wikipedia.org/wiki/Fisher%27s_exact_test">Fisher’s exact test</a>. Rather than relying on a critical value from a theoretical chi-square distribution, Fisher’s exact test calculates the <em>exact</em> probability of observing the contingency table as is. It’s especially useful when there are very small <em>n</em>’s in one or more of the contingency table cells. Both the chi-square and Fisher’s exact test give us p-values of approximately 0.06.</p>
+<pre class="r"><code>fisher.test(xt)</code></pre>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  xt
+## p-value = 0.05992
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  0.9883143 1.5466373
+## sample estimates:
+## odds ratio 
+##   1.235728</code></pre>
+<p>There’s a useful plot for visualizing contingency table data called a <em>mosaic</em> plot. Call the <code>mosaicplot()</code> function on the contingency table object. Note this is a built-in plot, <em>not</em> a ggplot2-style plot.</p>
+<pre class="r"><code>mosaicplot(xt, main=NA)</code></pre>
+<p><img src="r-stats_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>Let’s create a different contingency table, this time looking at the relationship between race and whether the person had health insurance. Display the table with marginal totals.</p>
+<pre class="r"><code>xt &lt;- xtabs(~Race+Insured, data=nha)
+addmargins(xt)</code></pre>
+<pre><code>##           Insured
+## Race         No  Yes  Sum
+##   Asian      46  169  215
+##   Black      86  330  416
+##   Hispanic   89  151  240
+##   Mexican   147  141  288
+##   Other      33   65   98
+##   White     307 2141 2448
+##   Sum       708 2997 3705</code></pre>
+<p>Let’s do the same thing as above, this time showing the proportion of people in each race category having health insurance.</p>
+<pre class="r"><code>prop.table(xt, margin=1)</code></pre>
+<pre><code>##           Insured
+## Race              No       Yes
+##   Asian    0.2139535 0.7860465
+##   Black    0.2067308 0.7932692
+##   Hispanic 0.3708333 0.6291667
+##   Mexican  0.5104167 0.4895833
+##   Other    0.3367347 0.6632653
+##   White    0.1254085 0.8745915</code></pre>
+<p>Now, let’s run a chi-square test for independence.</p>
+<pre class="r"><code>chisq.test(xt)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  xt
+## X-squared = 323.3, df = 5, p-value &lt; 2.2e-16</code></pre>
+<p>The result is <em>highly</em> significant. In fact, so significant, that the display rounds off the p-value to something like <span class="math inline">\(&lt;2.2 \times 10^{-16}\)</span>. If you look at the help for <a href="https://stat.ethz.ch/R-manual/R-patched/library/stats/html/chisq.test.html"><code>?chisq.test</code></a> you’ll see that displaying the test only shows you summary information, but other components can be accessed. For example, we can easily get the actual p-value, or the expected counts under the null hypothesis of independence.</p>
+<pre class="r"><code>chisq.test(xt)$p.value</code></pre>
+<pre><code>## [1] 9.754238e-68</code></pre>
+<pre class="r"><code>chisq.test(xt)$expected</code></pre>
+<pre><code>##           Insured
+## Race              No        Yes
+##   Asian     41.08502  173.91498
+##   Black     79.49474  336.50526
+##   Hispanic  45.86235  194.13765
+##   Mexican   55.03482  232.96518
+##   Other     18.72713   79.27287
+##   White    467.79595 1980.20405</code></pre>
+<p>We can also make a mosaic plot similar to above:</p>
+<pre class="r"><code>mosaicplot(xt, main=NA)</code></pre>
+<p><img src="r-stats_files/figure-html/unnamed-chunk-42-1.png" width="768" /></p>
+</div>
+<div id="logistic-regression" class="section level3">
+<h3>Logistic regression</h3>
+<p><a href="slides/r-stats.html#(8)"><em>(See slides)</em></a></p>
+<p>What if we wanted to model the discrete outcome, e.g., whether someone is insured, against several other variables, similar to how we did with multiple linear regression? We can’t use linear regression because the outcome isn’t continuous – it’s binary, either <em>Yes</em> or <em>No</em>. For this we’ll use <em>logistic regression</em> to model the <em>log odds</em> of binary response. That is, instead of modeling the outcome variable, <span class="math inline">\(Y\)</span>, directly against the inputs, we’ll model the <em>log odds</em> of the outcome variable.</p>
+<p>If <span class="math inline">\(p\)</span> is the probability that the individual is insured, then <span class="math inline">\(\frac{p}{1-p}\)</span> is the <a href="https://en.wikipedia.org/wiki/Odds"><em>odds</em></a> that person is insured. Then it follows that the linear model is expressed as:</p>
+<p><span class="math display">\[log(\frac{p}{1-p}) = \beta_0 + \beta_1 x_1 + \cdots + \beta_k x_k\]</span></p>
+<p>Where <span class="math inline">\(\beta_0\)</span> is the intercept, <span class="math inline">\(\beta_1\)</span> is the increase in the odds of the outcome for every unit increase in <span class="math inline">\(x_1\)</span>, and so on.</p>
+<p>Logistic regression is a type of <em>generalized linear model</em> (GLM). We fit GLM models in R using the <code>glm()</code> function. It works like the <code>lm()</code> function except we specify which GLM to fit using the <code>family</code> argument. Logistic regression requires <code>family=binomial</code>.</p>
+<p>The typical use looks like this:</p>
+<pre class="r"><code>mod &lt;- glm(y ~ x, data=yourdata, family=&#39;binomial&#39;)
+summary(mod)</code></pre>
+<p>Before we fit a logistic regression model let’s <em>relevel</em> the Race variable so that “White” is the baseline. We saw above that people who identify as “White” have the highest rates of being insured. When we run the logistic regression, we’ll get a separate coefficient (effect) for each level of the factor variable(s) in the model, telling you the increased odds that that level has, <em>as compared to the baseline group</em>.</p>
+<pre class="r"><code>#Look at Race. The default ordering is alphabetical
+nha$Race
+
+# Let&#39;s relevel that where the group with the highest rate of insurance is &quot;baseline&quot;
+relevel(nha$Race, ref=&quot;White&quot;)
+
+# If we&#39;re happy with that result, permanently change it
+nha$Race &lt;- relevel(nha$Race, ref=&quot;White&quot;)
+
+# Or do it the dplyr way
+nha &lt;- nha %&gt;% 
+  mutate(Race=relevel(Race, ref=&quot;White&quot;))</code></pre>
+<p>Now, let’s fit a logistic regression model assessing how the odds of being insured change with different levels of race.</p>
+<pre class="r"><code>fit &lt;- glm(Insured~Race, data=nha, family=&quot;binomial&quot;)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Insured ~ Race, family = &quot;binomial&quot;, data = nha)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0377   0.5177   0.5177   0.5177   1.1952  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)   1.94218    0.06103  31.825  &lt; 2e-16
+## RaceAsian    -0.64092    0.17715  -3.618 0.000297
+## RaceBlack    -0.59744    0.13558  -4.406 1.05e-05
+## RaceHispanic -1.41354    0.14691  -9.622  &lt; 2e-16
+## RaceMexican  -1.98385    0.13274 -14.946  &lt; 2e-16
+## RaceOther    -1.26430    0.22229  -5.688 1.29e-08
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 3614.6  on 3704  degrees of freedom
+## Residual deviance: 3336.6  on 3699  degrees of freedom
+##   (2 observations deleted due to missingness)
+## AIC: 3348.6
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<p>The <code>Estimate</code> column shows the log of the odds ratio – how the log odds of having health insurance changes at each level of race compared to White. The P-value for each coefficient is on the far right. This shows that <em>every</em> other race has <em>significantly less</em> rates of health insurance coverage. But, as in our multiple linear regression analysis above, are there other important variables that we’re leaving out that could alter our conclusions? Lets add a few more variables into the model to see if something else can explain the apparent Race-Insured association. Let’s add a few things likely to be involved (Age and Income), and something that’s probably irrelevant (hours slept at night).</p>
+<pre class="r"><code>fit &lt;- glm(Insured ~ Age+Income+SleepHrsNight+Race, data=nha, family=&quot;binomial&quot;)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Insured ~ Age + Income + SleepHrsNight + Race, 
+##     family = &quot;binomial&quot;, data = nha)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.4815   0.3025   0.4370   0.6252   1.6871  
+## 
+## Coefficients:
+##                 Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)   -3.501e-01  2.919e-01  -1.199    0.230
+## Age            3.371e-02  2.949e-03  11.431  &lt; 2e-16
+## Income         1.534e-05  1.537e-06   9.982  &lt; 2e-16
+## SleepHrsNight -1.763e-02  3.517e-02  -0.501    0.616
+## RaceAsian     -4.550e-01  2.031e-01  -2.241    0.025
+## RaceBlack     -2.387e-01  1.536e-01  -1.554    0.120
+## RaceHispanic  -1.010e+00  1.635e-01  -6.175 6.61e-10
+## RaceMexican   -1.404e+00  1.483e-01  -9.468  &lt; 2e-16
+## RaceOther     -9.888e-01  2.422e-01  -4.082 4.46e-05
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 3284.3  on 3395  degrees of freedom
+## Residual deviance: 2815.0  on 3387  degrees of freedom
+##   (311 observations deleted due to missingness)
+## AIC: 2833
+## 
+## Number of Fisher Scoring iterations: 5</code></pre>
+<p>A few things become apparent:</p>
+<ol style="list-style-type: decimal">
+<li>Age and income are both highly associated with whether someone is insured. Both of these variables are highly significant (<span class="math inline">\(P&lt;2.2 \times 10^{-16}\)</span>), and the coefficient (the <code>Estimate</code> column) is positive, meaning that for each unit increase in one of these variables, the odds of being insured increases by the corresponding amount.</li>
+<li>Hours slept per night is not meaningful at all.</li>
+<li>After accounting for age and income, several of the race-specific differences are no longer statistically significant, but others remain so.</li>
+<li>The absolute value of the test statistic (column called <code>z value</code>) can roughly be taken as an estimate of the “importance” of that variable to the overall model. So, age and income are the most important influences in this model; self-identifying as Hispanic or Mexican are also very highly important, hours slept per night isn’t important at all, and the other race categories fall somewhere in between.</li>
+</ol>
+<p>There is <em>much</em> more to go into with logistic regression. This lesson only scratches the surface. Missing from this lesson are things like regression diagnostics, model comparison approaches, penalization, interpretation of model coefficients, fitting interaction effects, and much more. Alan Agresti’s <a href="https://www.amazon.com/Categorical-Data-Analysis-Alan-Agresti/dp/0470463635/ref=sr_1_1?ie=UTF8&amp;qid=1473180895&amp;sr=8-1&amp;keywords=categorical+data+analysis&amp;tag=gettgenedone-20"><em>Categorical Data Analysis</em></a> has long been considered the definitive text on this topic. I also recommend Agresti’s <a href="https://www.amazon.com/Introduction-Categorical-Data-Analysis/dp/0471226181/ref=sr_1_3?ie=UTF8&amp;qid=1473180895&amp;sr=8-3&amp;keywords=categorical+data+analysis&amp;tag=gettgenedone-20"><em>Introduction to Categorical Data Analysis</em></a> (a.k.a. “Agresti lite”) for a gentler introduction.</p>
+</div>
+<div id="exercise-set-3" class="section level3">
+<h3>Exercise set 3</h3>
+<ol style="list-style-type: decimal">
+<li>What’s the relationship between diabetes and participating in rigorous physical activity or sports?
+<ul>
+<li>Create a contingency table with Diabetes status in rows and physical activity status in columns.</li>
+<li>Display that table with margins.</li>
+<li>Show the proportions of diabetics and nondiabetics, separately, who are physically active or not.</li>
+<li>Is this relationship significant?</li>
+<li>Create a mosaic plot to visualize the relationship.</li>
+</ul></li>
+<li>Model the same association in a logistic regression framework to assess the risk of diabetes using physical activity as a predictor. <!-- - First, make Diabetes a factor variable if you haven't already (`nha$Diabetes <- factor(nha$Diabetes)`). -->
+<ul>
+<li>Fit a model with just physical activity as a predictor, and display a model summary.</li>
+<li>Add gender to the model, and show a summary.</li>
+<li>Continue adding weight and age to the model. What happens to the gender association?</li>
+<li>Continue and add income to the model. What happens to the original association with physical activity?</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="power-sample-size" class="section level2">
+<h2>Power &amp; sample size</h2>
+<p><a href="slides/r-stats.html#(10)"><em>(See slides)</em></a></p>
+<p>This is a necessarily short introduction to the concept of power and sample size calculations. <a href="https://en.wikipedia.org/wiki/Statistical_power">Statistical power</a>, also sometimes called sensitivity, is defined as the probability that your test correctly rejects the null hypothesis when the alternative hypothesis is true. That is, if there really is an effect (difference in means, association between categorical variables, etc.), how likely are you to be able to <em>detect</em> that effect at a given statistical significance level, given certain assumptions. Generally there are a few moving pieces, and if you know all but one of them, you can calculate what that last one is.</p>
+<ol style="list-style-type: decimal">
+<li>Power: How likely are you to detect the effect? (Usually like to see 80% or greater).</li>
+<li>N: What is the sample size you have (or require)?</li>
+<li>Effect size: How big is the difference in means, odds ratio, etc?</li>
+</ol>
+<p>If we know we want 80% power to detect a certain magnitude of difference between groups, we can calculate our required sample size. Or, if we know we can only collect 5 samples, we can calculate how likely we are to detect a particular effect. Or, we can work to solve the last one - if we want 80% power and we have 5 samples, what’s the smallest effect we can hope to detect?</p>
+<p>All of these questions require certain assumptions about the data and the testing procedure. Which kind of test is being performed? What’s the true effect size (often unknown, or estimated from preliminary data), what’s the standard deviation of samples that will be collected (often unknown, or estimated from preliminary data), what’s the level of statistical significance needed (traditionally p&lt;0.05, but must consider multiple testing corrections).</p>
+<div id="t-test-powern" class="section level3">
+<h3>T-test power/N</h3>
+<p>The <code>power.t.test()</code> empirically estimates power or sample size of a t-test for differences in means. If we have 20 samples in each of two groups (e.g., control versus treatment), and the standard deviation for whatever we’re measuring is <strong>2.3</strong>, and we’re expecting a true difference in means between the groups of <strong>2</strong>, what’s the power to detect this effect?</p>
+<pre class="r"><code>power.t.test(n=20, delta=2, sd=2.3)</code></pre>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 20
+##           delta = 2
+##              sd = 2.3
+##       sig.level = 0.05
+##           power = 0.7641668
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>What’s the sample size we’d need to detect a difference of 0.8 given a standard deviation of 1.5, assuming we want 80% power?</p>
+<pre class="r"><code>power.t.test(power=.80, delta=.8, sd=1.5)</code></pre>
+<pre><code>## 
+##      Two-sample t test power calculation 
+## 
+##               n = 56.16413
+##           delta = 0.8
+##              sd = 1.5
+##       sig.level = 0.05
+##           power = 0.8
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+</div>
+<div id="proportions-powern" class="section level3">
+<h3>Proportions power/N</h3>
+<p>What about a two-sample proportion test (e.g., chi-square test)? If we have two groups (control and treatment), and we’re measuring some outcome (e.g., infected yes/no), and we know that the proportion of infected controls is 80% but 20% in treated, what’s the power to detect this effect in 5 samples per group?</p>
+<pre class="r"><code>power.prop.test(n=5, p1=0.8, p2=0.2)</code></pre>
+<pre><code>## 
+##      Two-sample comparison of proportions power calculation 
+## 
+##               n = 5
+##              p1 = 0.8
+##              p2 = 0.2
+##       sig.level = 0.05
+##           power = 0.4688159
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>How many samples would we need for 90% power?</p>
+<pre class="r"><code>power.prop.test(power=0.9, p1=0.8, p2=0.2)</code></pre>
+<pre><code>## 
+##      Two-sample comparison of proportions power calculation 
+## 
+##               n = 12.37701
+##              p1 = 0.8
+##              p2 = 0.2
+##       sig.level = 0.05
+##           power = 0.9
+##     alternative = two.sided
+## 
+## NOTE: n is number in *each* group</code></pre>
+<p>Also check out the <a href="https://cran.r-project.org/web/packages/pwr/"><strong>pwr</strong> package</a> which has power calculation functions for other statistical tests.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Power calculations for</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>pwr.2p.test()</code></td>
+<td>Two proportions (equal n)</td>
+</tr>
+<tr class="even">
+<td><code>pwr.2p2n.test()</code></td>
+<td>Two proportions (unequal n)</td>
+</tr>
+<tr class="odd">
+<td><code>pwr.anova.test()</code></td>
+<td>Balanced one way ANOVA</td>
+</tr>
+<tr class="even">
+<td><code>pwr.chisq.test()</code></td>
+<td>Chi-square test</td>
+</tr>
+<tr class="odd">
+<td><code>pwr.f2.test()</code></td>
+<td>General linear model</td>
+</tr>
+<tr class="even">
+<td><code>pwr.p.test()</code></td>
+<td>Proportion (one sample)</td>
+</tr>
+<tr class="odd">
+<td><code>pwr.r.test()</code></td>
+<td>Correlation</td>
+</tr>
+<tr class="even">
+<td><code>pwr.t.test()</code></td>
+<td>T-tests (one sample, 2 sample, paired)</td>
+</tr>
+<tr class="odd">
+<td><code>pwr.t2n.test()</code></td>
+<td>T-test (two samples with unequal n)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exercise-set-4" class="section level3">
+<h3>Exercise set 4</h3>
+<ol style="list-style-type: decimal">
+<li>You’re doing a gene expression experiment. What’s your power to detect a 2-fold change in a gene with a standard deviation of 0.7, given 3 samples? (Note - fold change is usually given on the <span class="math inline">\(log_2\)</span> scale, so a 2-fold change would be a <code>delta</code> of 1. That is, if the fold change is 2x, then <span class="math inline">\(log_2(2)=1\)</span>, and you should use 1 in the calculation, not 2).</li>
+</ol>
+<pre><code>## [1] 0.2709095</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>How many samples would you need to have 80% power to detect this effect?</li>
+</ol>
+<pre><code>## [1] 8.764711</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>You’re doing a population genome-wide association study (GWAS) looking at the effect of a SNP on disease X. Disease X has a baseline prevalence of 5% in the population, but you suspect the SNP might increase the risk of disease X by 10% (this is typical for SNP effects on common, complex diseases). Calculate the number of samples do you need to have 80% power to detect this effect, given that you want a genome-wide statistical significance of <span class="math inline">\(p&lt;5\times10^{-8}\)</span> to account for multiple testing.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> (Hint, you can expressed <span class="math inline">\(5\times10^{-8}\)</span> in R using <code>5e-8</code> instead of <code>.00000005</code>).</li>
+</ol>
+<pre><code>## [1] 157589.5</code></pre>
+</div>
+</div>
+<div id="tidying-models" class="section level2">
+<h2>Tidying models</h2>
+<p><a href="slides/r-stats.html#(11)"><em>(See slides)</em></a></p>
+<p>We spent a lot of time in <a href="r-tidy.html">other lessons</a> on <em>tidy <strong>data</strong></em>, where each column is a variable and each row is an observation. Tidy data is easy to filter observations based on values in a column (e.g., we could get just adult males with <code>filter(nha, Gender==&quot;male&quot; &amp; Age&gt;=18)</code>, and easy to select particular variables/features of interest by their column name.</p>
+<p>Even when we start with tidy <em>data</em>, we don’t end up with tidy <em>models</em>. The output from tests like <code>t.test</code> or <code>lm</code> are not data.frames, and it’s difficult to get the information out of the model object that we want. The <a href="https://github.com/dgrtwo/broom"><strong>broom</strong> package</a> bridges this gap.</p>
+<div class="figure">
+<img src="img/broom.jpg" />
+
+</div>
+<p>Depending on the type of model object you’re using, broom provides three methods that do different kinds of tidying:</p>
+<ol style="list-style-type: decimal">
+<li><code>tidy</code>: constructs a data frame that summarizes the model’s statistical findings like coefficients and p-values.</li>
+<li><code>augment</code>: add columns to the original data that was modeled, like predictions and residuals.</li>
+<li><code>glance</code>: construct a concise <em>one-row</em> summary of the model with information like <span class="math inline">\(R^2\)</span> that are computed once for the entire model.</li>
+</ol>
+<p>Let’s go back to our linear model example.</p>
+<pre class="r"><code># Try modeling Testosterone against Physical Activity, Age, and Gender.
+fit &lt;- lm(Testosterone~PhysActive+Age+Gender, data=nha)
+
+# See what that model looks like:
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Testosterone ~ PhysActive + Age + Gender, data = nha)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -397.91  -31.01   -4.42   20.50 1400.90 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)    46.6931     7.5729   6.166 7.83e-10
+## PhysActiveYes   9.2749     4.4617   2.079   0.0377
+## Age            -0.5904     0.1282  -4.605 4.28e-06
+## Gendermale    385.1989     4.3512  88.526  &lt; 2e-16
+## 
+## Residual standard error: 127.5 on 3434 degrees of freedom
+##   (269 observations deleted due to missingness)
+## Multiple R-squared:  0.6969, Adjusted R-squared:  0.6966 
+## F-statistic:  2632 on 3 and 3434 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>What if we wanted to pull out the coefficient for Age, or the P-value for PhysActive? It gets pretty gross. We first have to <code>coef(summary(lmfit))</code> to get a matrix of coefficients, the terms are still stored in row names, and the column names are inconsistent with other packages (e.g. <code>Pr(&gt;|t|)</code> compared to <code>p.value</code>). Yuck!</p>
+<pre class="r"><code>coef(summary(fit))[&quot;Age&quot;, &quot;Estimate&quot;]</code></pre>
+<pre><code>## [1] -0.5903616</code></pre>
+<pre class="r"><code>coef(summary(fit))[&quot;PhysActiveYes&quot;, &quot;Pr(&gt;|t|)&quot;]</code></pre>
+<pre><code>## [1] 0.03771185</code></pre>
+<p>Instead, you can use the <code>tidy</code> function, from the broom package, on the fit:</p>
+<pre class="r"><code># Install the package if you don&#39;t have it
+# install.packages(&quot;broom&quot;)
+
+library(broom)
+tidy(fit)</code></pre>
+<pre><code>##            term    estimate std.error statistic      p.value
+## 1   (Intercept)  46.6931314 7.5728848  6.165831 7.825833e-10
+## 2 PhysActiveYes   9.2749247 4.4617201  2.078778 3.771185e-02
+## 3           Age  -0.5903616 0.1282059 -4.604795 4.278461e-06
+## 4    Gendermale 385.1989414 4.3512332 88.526383 0.000000e+00</code></pre>
+<p>This gives you a data.frame with all your model results. The row names have been moved into a column called <code>term</code>, and the column names are simple and consistent (and can be accessed using <code>$</code>). These can be manipulated with dplyr just like any other data frame.</p>
+<pre class="r"><code>tidy(fit) %&gt;% 
+  filter(term!=&quot;(Intercept)&quot;) %&gt;% 
+  select(term, p.value) %&gt;% 
+  arrange(p.value)</code></pre>
+<pre><code>##            term      p.value
+## 1    Gendermale 0.000000e+00
+## 2           Age 4.278461e-06
+## 3 PhysActiveYes 3.771185e-02</code></pre>
+<p>Instead of viewing the coefficients, you might be interested in the fitted values and residuals for each of the original points in the regression. For this, use <code>augment</code>, which augments the original data with information from the model. New columns begins with a <code>.</code> (to avoid overwriting any of the original columns).</p>
+<pre class="r"><code># Augment the original data
+# IF you get a warning about deprecated... purrr..., ignore. It&#39;s a bug that&#39;ll be fixed soon.
+augment(fit) %&gt;% head</code></pre>
+<pre><code>##   .rownames Testosterone PhysActive Age Gender   .fitted  .se.fit
+## 1         1        47.53         No  43 female  21.30758 4.010694
+## 2         2       642.82         No  80   male 384.66314 5.480833
+## 3         3       642.82         No  80   male 384.66314 5.480833
+## 4         4        21.11        Yes  34 female  35.89576 3.885559
+## 5         5       562.78         No  80   male 384.66314 5.480833
+## 6         6       401.78         No  35   male 411.22942 4.363256
+##       .resid         .hat   .sigma      .cooksd  .std.resid
+## 1  26.222419 0.0009890871 127.5448 1.047551e-05  0.20572422
+## 2 258.156859 0.0018470928 127.4693 1.899317e-03  2.02620279
+## 3 258.156859 0.0018470928 127.4693 1.899317e-03  2.02620279
+## 4 -14.785760 0.0009283305 127.5453 3.125591e-06 -0.11599603
+## 5 178.116859 0.0018470928 127.5093 9.041494e-04  1.39799066
+## 6  -9.449415 0.0011706227 127.5455 1.610571e-06 -0.07414076</code></pre>
+<pre class="r"><code># Plot residuals vs fitted values for males, 
+# colored by Physical Activity, size scaled by age
+augment(fit) %&gt;% 
+  filter(Gender==&quot;male&quot;) %&gt;% 
+  ggplot(aes(.fitted, .resid, col=PhysActive, size=Age)) + geom_point()</code></pre>
+<p><img src="r-stats_files/figure-html/unnamed-chunk-58-1.png" width="672" /></p>
+<p>Finally, several summary statistics are computed for the entire regression, such as <span class="math inline">\(R^2\)</span> and the F-statistic. These can be accessed with <code>glance</code>:</p>
+<pre class="r"><code>glance(fit)</code></pre>
+<pre><code>##   r.squared adj.r.squared   sigma statistic p.value df    logLik      AIC
+## 1  0.696893     0.6966282 127.527  2631.777       0  4 -21544.86 43099.72
+##        BIC deviance df.residual
+## 1 43130.44 55847628        3434</code></pre>
+<p>The <strong>broom</strong> functions work on a pipe, so you can <code>%&gt;%</code> your model directly to any of the functions like <code>tidy()</code>. Let’s tidy up our t-test:</p>
+<pre class="r"><code>t.test(AlcoholYear~RelationshipStatus, data=nha)</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  AlcoholYear by RelationshipStatus
+## t = 5.4315, df = 2674.8, p-value = 6.09e-08
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  13.05949 27.81603
+## sample estimates:
+## mean in group Committed    mean in group Single 
+##                83.93416                63.49640</code></pre>
+<pre class="r"><code>t.test(AlcoholYear~RelationshipStatus, data=nha) %&gt;% tidy()</code></pre>
+<pre><code>##   estimate estimate1 estimate2 statistic      p.value parameter conf.low
+## 1 20.43776  83.93416   63.4964  5.431545 6.089562e-08   2674.82 13.05949
+##   conf.high                  method alternative
+## 1  27.81603 Welch Two Sample t-test   two.sided</code></pre>
+<p>…and our Mann-Whitney <em>U</em> test / Wilcoxon rank-sum test:</p>
+<pre class="r"><code>wilcox.test(AlcoholYear~RelationshipStatus, data=nha)</code></pre>
+<pre><code>## 
+##  Wilcoxon rank sum test with continuity correction
+## 
+## data:  AlcoholYear by RelationshipStatus
+## W = 1068000, p-value = 0.0001659
+## alternative hypothesis: true location shift is not equal to 0</code></pre>
+<pre class="r"><code>wilcox.test(AlcoholYear~RelationshipStatus, data=nha) %&gt;% tidy()</code></pre>
+<pre><code>##   statistic      p.value                                            method
+## 1   1067954 0.0001658551 Wilcoxon rank sum test with continuity correction
+##   alternative
+## 1   two.sided</code></pre>
+<p>…and our Fisher’s exact test on the cross-tabulated data:</p>
+<pre class="r"><code>xtabs(~Gender+Diabetes, data=nha) %&gt;% fisher.test()</code></pre>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  .
+## p-value = 0.05992
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  0.9883143 1.5466373
+## sample estimates:
+## odds ratio 
+##   1.235728</code></pre>
+<pre class="r"><code>xtabs(~Gender+Diabetes, data=nha) %&gt;% fisher.test() %&gt;% tidy()</code></pre>
+<pre><code>##   estimate    p.value  conf.low conf.high
+## 1 1.235728 0.05992352 0.9883143  1.546637
+##                               method alternative
+## 1 Fisher&#39;s Exact Test for Count Data   two.sided</code></pre>
+<p>…and finally, a logistic regression model:</p>
+<pre class="r"><code># fit the model and summarize it the usual way
+glmfit &lt;- glm(Insured~Race, data=nha, family=binomial)
+summary(glmfit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = Insured ~ Race, family = binomial, data = nha)
+## 
+## Deviance Residuals: 
+##     Min       1Q   Median       3Q      Max  
+## -2.0377   0.5177   0.5177   0.5177   1.1952  
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)   1.94218    0.06103  31.825  &lt; 2e-16
+## RaceAsian    -0.64092    0.17715  -3.618 0.000297
+## RaceBlack    -0.59744    0.13558  -4.406 1.05e-05
+## RaceHispanic -1.41354    0.14691  -9.622  &lt; 2e-16
+## RaceMexican  -1.98385    0.13274 -14.946  &lt; 2e-16
+## RaceOther    -1.26430    0.22229  -5.688 1.29e-08
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 3614.6  on 3704  degrees of freedom
+## Residual deviance: 3336.6  on 3699  degrees of freedom
+##   (2 observations deleted due to missingness)
+## AIC: 3348.6
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+<pre class="r"><code># tidy it up!
+tidy(glmfit)</code></pre>
+<pre><code>##           term   estimate  std.error  statistic       p.value
+## 1  (Intercept)  1.9421805 0.06102764  31.824604 2.956937e-222
+## 2    RaceAsian -0.6409232 0.17714581  -3.618055  2.968256e-04
+## 3    RaceBlack -0.5974352 0.13558235  -4.406438  1.050844e-05
+## 4 RaceHispanic -1.4135371 0.14691100  -9.621724  6.473720e-22
+## 5  RaceMexican -1.9838532 0.13273768 -14.945667  1.662182e-50
+## 6    RaceOther -1.2643008 0.22228811  -5.687667  1.287864e-08</code></pre>
+<pre class="r"><code># do whatever you want now
+tidy(glmfit) %&gt;% 
+  filter(term!=&quot;(Intercept)&quot;) %&gt;% 
+  mutate(logp=-1*log10(p.value)) %&gt;% 
+  ggplot(aes(term, logp)) + geom_bar(stat=&quot;identity&quot;) + coord_flip()</code></pre>
+<p><img src="r-stats_files/figure-html/unnamed-chunk-63-1.png" width="672" /></p>
+<p>Check out some of the other <a href="https://cran.r-project.org/web/packages/broom/index.html"><strong>broom</strong> vignettes on CRAN</a>, and also check out the <a href="http://bioconductor.org/packages/release/bioc/html/biobroom.html"><strong>biobroom</strong> package</a> on bioconductor for turning bioconductor objects and analytical results into tidy data frames.</p>
+</div>
+<div id="homework" class="section level2">
+<h2>Homework</h2>
+<div id="stress-tests-muscular-dystrophy-genetics" class="section level3">
+<h3>Stress tests &amp; muscular dystrophy genetics</h3>
+<p><strong><a href="r-stats-homework.html">Try this homework assignment</a>.</strong></p>
+<p>There are two parts to this assignment, each using data curated and hosted by the <a href="http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets">Vanderbilt Department of Biostatistics</a>. The first part looks at the effects of different doses of a drug used during echocardiograms called dobutamine. The second uses data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD).</p>
+</div>
+<div id="additional-topics-recommended-reading" class="section level3">
+<h3>Additional topics &amp; recommended reading</h3>
+<div id="batch-effects" class="section level4">
+<h4>1. Batch effects</h4>
+<p><em>Batch effects</em> are sources of technical variation introduced during an experiment, such as processing with different reagents, handling by a different technician, sequencing on a different flow cell, or processing samples in groups on different days. If these <em>batch effects</em> are strongly confounded with the study variable of interest, they can call into question the validity of your results, and in some cases, render collected data completely useless. The papers below discuss batch effects and how they can be mitigated.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Chapter 5</strong> of Scherer, Andreas. <em>Batch effects and noise in microarray experiments: sources and solutions.</em> Vol. 868. John Wiley &amp; Sons, 2009.
+<ul>
+<li>Chapter 5 only: <a href="http://onlinelibrary.wiley.com/doi/10.1002/9780470685983.ch5/pdf" class="uri">http://onlinelibrary.wiley.com/doi/10.1002/9780470685983.ch5/pdf</a>.</li>
+<li>Entire book: <a href="https://faculty.mu.edu.sa/public/uploads/1382673974.78419780470741382.pdf" class="uri">https://faculty.mu.edu.sa/public/uploads/1382673974.78419780470741382.pdf</a>.</li>
+</ul></li>
+<li>Leek, Jeffrey T., et al. “Tackling the widespread and critical impact of batch effects in high-throughput data.” <em>Nature Reviews Genetics</em> 11.10 (2010): 733-739. Available at <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880143/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880143/</a>.</li>
+</ol>
+</div>
+<div id="whats-my-n" class="section level4">
+<h4>2. What’s my <em>n</em>?</h4>
+<p>“What’s my <em>n</em>” isn’t always a straightforward question to answer, especially when it comes to cell culture expriments. The post and article below go into some of these details.</p>
+<ol style="list-style-type: decimal">
+<li>Statistics for Experimental Biologists: “What is ‘n’ in cell culture experiments?” Available at <a href="http://labstats.net/articles/cell_culture_n.html" class="uri">http://labstats.net/articles/cell_culture_n.html</a>.</li>
+<li>Vaux, David L., Fiona Fidler, and Geoff Cumming. “Replicates and repeats—what is the difference and is it significant?.” <em>EMBO reports</em> 13.4 (2012): 291-296. Available at <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3321166/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3321166/</a>.</li>
+</ol>
+</div>
+<div id="technical-versus-biological-replicates" class="section level4">
+<h4>3. Technical versus biological replicates</h4>
+<p>Technical replicates involve taking multiple measurements on the same sample. Biological replicates are different samples each with separate measurements/assays. While technical replicates can help calibrate the precision of an instrument or assay, biological replicates are necessary for statistical analysis to make inferences about a condition or treatment. Read the paper and note below for more information on technical vs biological replication.</p>
+<ol style="list-style-type: decimal">
+<li>Blainey, Paul, Martin Krzywinski, and Naomi Altman. “Points of significance: replication.” <em>Nature methods</em> 11.9 (2014): 879-880. Available at <a href="http://rdcu.be/yguA" class="uri">http://rdcu.be/yguA</a>.</li>
+<li>Illumina Technical Note: “The Power of Replicates.” Available at <a href="https://www.illumina.com/Documents/products/technotes/technote_power_replicates.pdf" class="uri">https://www.illumina.com/Documents/products/technotes/technote_power_replicates.pdf</a>.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://www.quora.com/Why-is-P-value-5x10-8-chosen-as-a-threshold-to-reach-genome-wide-significance" class="uri">https://www.quora.com/Why-is-P-value-5x10-8-chosen-as-a-threshold-to-reach-genome-wide-significance</a><a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+---
+output: 
+  slidy_presentation:
+    footer: "Data Visualization"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```
+
+## R Workshop: Data Visualization
+
+1. Sign in and pick up handout in the back.
+1. Download **`gapminder.csv`** data (**bioconnector.org** under **_Data_** heading)
+1. Start a new project, or new R script, saving to same folder as the data.
+1. Load required libraries and read in data:
+
+```r
+# Load packages
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# Read data into "gm" variable using readr::read_csv()
+gm <- read_csv("gapminder.csv")
+```
+
+_Let us know if you have any trouble_.
+
+## Agenda
+
+1. Review gapminder data
+1. **ggplot2** basics
+1. Bivariate data: continuous Y by continuous X
+    - Building plots layer-by-layer
+    - Faceting
+    - Saving plots
+1. Bivariate data: continuous Y by categorical X
+1. Univariate continuous data
+1. Publication-ready plots & themes
+
+## **ggplot2** basics
+
+### Vocabulary
+
+- **geoms** specifies how data are represented on the plot (points, lines, bars, etc.)
+- **aesthetics** map variables in the data to features of the plot (size, shape, color, etc.)
+- **stats** are statistical transformations or summaries of the data
+- **facets** allow the data to be divided into chunks on the basis of other categorical or continuous variables and the same plot drawn for each chunk.
+
+### A note on `qplot()`
+
+**_Don't use `qplot()`._** 
+
+<small>The `qplot()` function is a quick and dirty way of making ggplot2 plots. You might see reference to `qplot()` in forums or when getting help, but stay away. If you're used to making plots with built-in base graphics, `qplot()` syntax will feel familiar. But the sooner you abandon the `qplot()` syntax the sooner you'll start to really understand ggplot2's approach to building up plots layer by layer. So we're not going to use it at all in this class.</smaller>

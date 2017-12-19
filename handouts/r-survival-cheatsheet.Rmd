@@ -1,0 +1,58 @@
+---
+title: "Survival Analysis with R: Cheat Sheet"
+output: pdf_document
+fontsize: 8pt
+geometry: margin=.35in
+---
+
+\pagenumbering{gobble}
+
+## Packages
+
+The **dplyr**, **survival**, and **survminer** packages from CRAN are required for this lesson. For looking at TCGA data, you'll also need **RTCGA**, **RTCGA.clinical**, and **RTCGA.mRNA** from Bioconductor. Here's how to install them (do this once).
+
+\bigskip
+
+```r
+# Install from CRAN --------------------------
+install.packages("dplyr")
+install.packages("survminer")
+
+# Install from Bioconductor ------------------
+# Install Bioconductor core packages first
+source("http://bioconductor.org/biocLite.R")
+biocLite()
+# Next install RTCGA and RTCGA data packages
+biocLite("RTCGA")
+biocLite("RTCGA.clinical")
+biocLite("RTCGA.mRNA")
+```
+
+\bigskip
+
+After installing these packages, load them in each session you use them.
+
+\bigskip
+
+```r
+# CRAN Packages needed
+library(dplyr)     # loads dplyr
+library(survival)  # core survival analysis functions
+library(survminer) # recommended for visualizing survival curves
+
+# Bioconductor packages
+library(RTCGA)
+library(RTCGA.clinical)
+library(RTCGA.mRNA)
+```
+
+## Functions
+
+```{r, echo=FALSE, results="asis"}
+knitr::kable(read.csv("r-survival-cheatsheet.csv", check.names=FALSE))
+```
+
+## The pipe: **`%>%`**
+
+When you load the **dplyr** package you can use **`%>%`**, the _pipe_. Running **`x %>% f(args)`** is the same as **`f(x, args)`**. If you wanted to run function `f()` on data `x`, then run function `g()` on that, then run function `h()` on that result: instead of nesting multiple functions, **`h(g(f(x)))`**, it's preferable and more readable to create a chain or pipeline of functions: **`x %>% f %>% g %>% h`**. Pipelines can be spread across multiple lines, with each line ending in `%>%` until the pipeline terminates. The keyboard shortcut for inserting `%>%` is Cmd+Shift+M on Mac, Ctrl+Shift+M on Windows.
+

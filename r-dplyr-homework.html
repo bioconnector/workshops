@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Advanced Data Manipulation Homework</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Advanced Data Manipulation Homework</h1>
+
+</div>
+
+
+<p>(<em>Refer back to the <a href="r-dplyr-yeast.html">Advanced Data Manipulation lesson</a>).</em></p>
+<div id="key-concepts" class="section level3">
+<h3>Key Concepts</h3>
+<blockquote>
+<ul>
+<li><strong>dplyr</strong> verbs</li>
+<li>the pipe <code>%&gt;%</code></li>
+<li>variable creation</li>
+<li>multiple conditions</li>
+<li>properties of grouped data</li>
+<li>aggregation</li>
+<li>summary functions</li>
+<li>window functions</li>
+</ul>
+</blockquote>
+</div>
+<div id="getting-started" class="section level3">
+<h3>Getting Started</h3>
+<p>We’re going to work with a different dataset for the homework here. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download the <a href="data/gapminder.csv"><strong>gapminder.csv</strong> data by clicking here</a> or using the link above. Download it, and save it in a <code>data/</code> subfolder of the project directory where you can access it easily from R.</p>
+<p>Load the <strong>dplyr</strong> and <strong>readr</strong> packages, and read the gapminder data into R using the <code>read_csv()</code> function (n.b. <code>read_csv()</code> is <em>not</em> the same as <code>read.csv()</code>). Assign the data to an object called <code>gm</code>. Run <code>gm</code> to display it.</p>
+<p><em>Note, the code is available by hitting the “Code” button above each expected output, but try not to use it unless you’re stuck</em>.</p>
+<!-- In your submitted homework assignment, I would prefer you use the `read_csv()` function to read the data directly from the web (see below). This way I can run your R code without worrying about whether I have the `data/` directory or not. -->
+<pre class="r"><code># Load required libraries
+library(dplyr)
+library(readr)
+
+# Read the data
+gm &lt;- read_csv(&quot;data/gapminder.csv&quot;)
+
+# Take a look
+gm</code></pre>
+<pre><code>## # A tibble: 1,704 x 6
+##        country continent  year lifeExp      pop gdpPercap
+##          &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+##  1 Afghanistan      Asia  1952  28.801  8425333  779.4453
+##  2 Afghanistan      Asia  1957  30.332  9240934  820.8530
+##  3 Afghanistan      Asia  1962  31.997 10267083  853.1007
+##  4 Afghanistan      Asia  1967  34.020 11537966  836.1971
+##  5 Afghanistan      Asia  1972  36.088 13079460  739.9811
+##  6 Afghanistan      Asia  1977  38.438 14880372  786.1134
+##  7 Afghanistan      Asia  1982  39.854 12881816  978.0114
+##  8 Afghanistan      Asia  1987  40.822 13867957  852.3959
+##  9 Afghanistan      Asia  1992  41.674 16317921  649.3414
+## 10 Afghanistan      Asia  1997  41.763 22227415  635.3414
+## # ... with 1,694 more rows</code></pre>
+</div>
+<div id="problem-set" class="section level3">
+<h3>Problem set</h3>
+<p>Use <strong>dplyr</strong> functions to address the following questions:</p>
+<ol style="list-style-type: decimal">
+<li>How many unique countries are represented per continent? (<em>Hint:</em> <code>group_by</code> then summarize with a call to <code>n_distinct(...)</code>).</li>
+</ol>
+<pre class="r"><code>gm %&gt;% 
+  group_by(continent) %&gt;% 
+  summarize(n=n_distinct(country))</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   continent     n
+##       &lt;chr&gt; &lt;int&gt;
+## 1    Africa    52
+## 2  Americas    25
+## 3      Asia    33
+## 4    Europe    30
+## 5   Oceania     2</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>Which European nation had the lowest GDP per capita in 1997? (<em>Hint:</em> filter, arrange, <code>head(n=1)</code>)</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(continent == &quot;Europe&quot; &amp; year == 1997) %&gt;%
+    arrange(gdpPercap) %&gt;%
+    head(1)</code></pre>
+<pre><code>## # A tibble: 1 x 6
+##   country continent  year lifeExp     pop gdpPercap
+##     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+## 1 Albania    Europe  1997   72.95 3428038  3193.055</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>According to the data available, what was the average life expectancy across each continent in the 1980s? (<em>Hint:</em> filter, group_by, summarize)</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(year == 1982 | year == 1987) %&gt;%
+    group_by(continent) %&gt;%
+    summarize(mean_lifeExp = mean(lifeExp))</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   continent mean_lifeExp
+##       &lt;chr&gt;        &lt;dbl&gt;
+## 1    Africa     52.46883
+## 2  Americas     67.15978
+## 3      Asia     63.73456
+## 4    Europe     73.22428
+## 5   Oceania     74.80500</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li>What 5 countries have the highest total GDP over all years combined? (<em>Hint:</em> GDP per capita is simply GDP divided by the total population size. To get GDP back, you’d mutate to calculate GDP as the product of GDP per capita times the population size. Mutate, group_by, summarize, arrange, <code>head(n=5)</code>)</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    mutate(gdp = gdpPercap*pop) %&gt;%
+    group_by(country) %&gt;%
+    summarise(Total.GDP = sum(gdp)) %&gt;%
+    arrange(desc(Total.GDP)) %&gt;%
+    head(5)</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##          country    Total.GDP
+##            &lt;chr&gt;        &lt;dbl&gt;
+## 1  United States 7.676192e+13
+## 2          Japan 2.543482e+13
+## 3          China 2.039549e+13
+## 4        Germany 1.949689e+13
+## 5 United Kingdom 1.328937e+13</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>What countries and years had life expectancies of <em>at least</em> 80 years? <em>N.b. only output the columns of interest: country, life expectancy and year (in that order).</em></li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(lifeExp &gt;= 80) %&gt;%
+    select(country, lifeExp, year)</code></pre>
+<pre><code>## # A tibble: 22 x 3
+##             country lifeExp  year
+##               &lt;chr&gt;   &lt;dbl&gt; &lt;int&gt;
+##  1        Australia  80.370  2002
+##  2        Australia  81.235  2007
+##  3           Canada  80.653  2007
+##  4           France  80.657  2007
+##  5 Hong Kong, China  80.000  1997
+##  6 Hong Kong, China  81.495  2002
+##  7 Hong Kong, China  82.208  2007
+##  8          Iceland  80.500  2002
+##  9          Iceland  81.757  2007
+## 10           Israel  80.745  2007
+## # ... with 12 more rows</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    group_by(country) %&gt;%
+    summarise(cor = cor(lifeExp, gdpPercap)) %&gt;%
+    arrange(desc(abs(cor))) %&gt;%
+    head(10)</code></pre>
+<pre><code>## # A tibble: 10 x 2
+##           country       cor
+##             &lt;chr&gt;     &lt;dbl&gt;
+##  1         France 0.9962239
+##  2        Austria 0.9929642
+##  3        Belgium 0.9927496
+##  4         Norway 0.9921416
+##  5           Oman 0.9907526
+##  6 United Kingdom 0.9898930
+##  7          Italy 0.9897600
+##  8         Israel 0.9884894
+##  9        Denmark 0.9870896
+## 10      Australia 0.9864457</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Which combinations of continent (besides Asia) and year have the highest average population across all countries? <em>N.b. your output should include all results sorted by highest average population</em>. (<em>Hint:</em> filter where continent <code>!=</code> Asia, group by two variables, summarize, then arrange.)</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    filter(continent != &quot;Asia&quot;) %&gt;%
+    group_by(continent, year) %&gt;%
+    summarise(mean.pop = mean(pop)) %&gt;%
+    arrange(desc(mean.pop)) </code></pre>
+<pre><code>## # A tibble: 48 x 3
+## # Groups:   continent [4]
+##    continent  year mean.pop
+##        &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;
+##  1  Americas  2007 35954847
+##  2  Americas  2002 33990910
+##  3  Americas  1997 31876016
+##  4  Americas  1992 29570964
+##  5  Americas  1987 27310159
+##  6  Americas  1982 25211637
+##  7  Americas  1977 23122708
+##  8  Americas  1972 21175368
+##  9    Europe  2007 19536618
+## 10    Europe  2002 19274129
+## # ... with 38 more rows</code></pre>
+<ol start="8" style="list-style-type: decimal">
+<li>Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?</li>
+</ol>
+<pre class="r"><code>gm %&gt;%
+    group_by(country) %&gt;%
+    summarize(sd.pop = sd(pop)) %&gt;%
+    arrange(sd.pop) %&gt;%
+    head(3)</code></pre>
+<pre><code>## # A tibble: 3 x 2
+##                 country   sd.pop
+##                   &lt;chr&gt;    &lt;dbl&gt;
+## 1 Sao Tome and Principe 45906.14
+## 2               Iceland 48541.68
+## 3            Montenegro 99737.94</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li><strong><em>Bonus!</em></strong> Which observations indicate that the population of a country has <em>decreased</em> from the previous year <strong>and</strong> the life expectancy has <em>increased</em> from the previous year? See <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html">the vignette on window functions</a>.</li>
+</ol>
+<pre class="r"><code>gm %&gt;% 
+  arrange(country, year) %&gt;% 
+  group_by(country) %&gt;% 
+  filter(pop &lt; lag(pop) &amp; lifeExp &gt; lag(lifeExp))</code></pre>
+<pre><code>## # A tibble: 36 x 6
+## # Groups:   country [22]
+##                   country continent  year lifeExp      pop  gdpPercap
+##                     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;      &lt;dbl&gt;
+##  1            Afghanistan      Asia  1982  39.854 12881816   978.0114
+##  2 Bosnia and Herzegovina    Europe  1992  72.178  4256013  2546.7814
+##  3 Bosnia and Herzegovina    Europe  1997  73.244  3607000  4766.3559
+##  4               Bulgaria    Europe  2002  72.140  7661799  7696.7777
+##  5               Bulgaria    Europe  2007  73.005  7322858 10680.7928
+##  6                Croatia    Europe  1997  73.680  4444595  9875.6045
+##  7         Czech Republic    Europe  1997  74.010 10300707 16048.5142
+##  8         Czech Republic    Europe  2002  75.510 10256295 17596.2102
+##  9         Czech Republic    Europe  2007  76.486 10228744 22833.3085
+## 10      Equatorial Guinea    Africa  1977  42.024   192675   958.5668
+## # ... with 26 more rows</code></pre>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

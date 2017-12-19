@@ -1,0 +1,12 @@
+**Function**,**Description**
+`head(df)` ; `tail(df)`,Print first and last few rows of data frame `df`
+`View(df)`,View tabular data frame `df` in a graphical viewer
+"`filter(df, ..,)`",Filters data according to condition `...` (dplyr)
+"`Surv(df$time, df$event)`",Creates a survival object w/ right-censored data
+"`survfit(Surv(time, status)~x, data=df)`",Creates a survival curve against variable `x`
+"`summary(sfit, times=c(0,10,50))`",Shows life table for `sfit` object at specified times
+"`survdiff(Surv(time, status)~x, data=df)`",Log-rank test of differential survival by groups in `x`
+"`coxph(Surv(time, status)~x1+x2, data=df)`",Run a Cox PH model on variables `x1` and `x2`
+`tidy()` ; `augment()` ; `glance()`,Model tidying functions in the broom package
+"`survivalTCGA(..., extract.cols=...)`",Extract survival data from 1+ (R)TCGA clinical datasets
+"`expressionsTCGA(..., extract.cols=...)`",Extract gene expression data (R)TCGA mRNA datasets

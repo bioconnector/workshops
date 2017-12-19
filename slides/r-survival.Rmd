@@ -1,0 +1,41 @@
+---
+title: "**Survival Analysis with R**"
+author: "[bioconnector.org/workshops](http://bioconnector.org/workshops)"
+date: "_Please sign in & pick up **3** handouts.<br>Let me know if you need last-minute setup help._"
+output: 
+  slidy_presentation:
+    footer: "bioconnector.org | Survival Analysis"
+    font_adjustment: +3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Agenda
+
+1. Survival analysis overview, definitions
+1. Survival analysis in R using built-in data
+    - Survival curves + life tables
+    - Kaplan-Meier curves
+    - Cox proportional hazards regression
+1. Example with TCGA data _(if time allows)_
+
+## What this class is _not_
+
+**This is _not_ an introductory R class.** Pre-requisites: 
+
+- Basic R skills: data frames, installing/using packages, loading/saving data
+- Recommended: 
+    - Manipulating data with dplyr and `%>%`
+    - Tidy data & advanced manipulation
+    - Data Visualization with ggplot2
+
+**This is _not_ a statistics course.**
+
+## Course website: **[bioconnector.org](http://bioconnector.org)**
+
+- Setup instructions
+- Lessons dropdown: _Survival Analysis with TCGA data_
+- **`?`** dropdown: FAQs, resources, etc.
+

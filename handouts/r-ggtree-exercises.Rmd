@@ -1,0 +1,91 @@
+---
+title: "Phylogenetic trees with ggtree: Exercises"
+output: 
+  pdf_document: 
+    fig_height: 3
+    fig_width: 5
+# fontsize: 8pt
+# geometry: margin=.35in
+---
+
+## Exercise 1
+
+Look at the help again for `?ggtree`, specifically at the `layout=` option. By default, it produces a rectangular layout.
+
+1. Create a slanted phylogenetic tree.
+1. Create a circular phylogenetic tree.
+1. Create a circular unscaled cladogram with thick red lines.
+
+----
+
+```{r ex1, echo=FALSE, eval=TRUE}
+suppressWarnings(suppressPackageStartupMessages(library(ggtree)))
+tree <- read.tree(file.path(rprojroot::find_rstudio_root_file(), "data", "tree_newick.nwk"))
+ggtree(tree, layout="slanted")
+```
+
+```{r ex1b, echo=FALSE, eval=TRUE}
+ggtree(tree, layout="circular")
+ggtree(tree, layout="circular", branch.length="none", color="red", size=3)
+```
+
+\newpage
+
+## Exercise 2
+
+Similar to how we change the aesthetics for the tree inside the `ggtree()` call, we can also change the aesthetics of the points themselves by passing graphical parameters inside the `geom_nodepoint()` or `geom_tippoint()` calls. Create a phylogeny with the following aesthetic characteristics:
+
+- tips labeled in purple
+- purple-colored diamond-shape tip points (hint: Google search "R point characters")
+- large semitransparent yellow node points (hint: `alpha=`)
+- Add a title with `+ ggtitle(...)`
+
+----
+
+```{r ex2, echo=FALSE, warning=FALSE, message=FALSE}
+suppressWarnings(suppressPackageStartupMessages(library(ggtree)))
+tree <- read.tree(file.path(rprojroot::find_rstudio_root_file(), "data", "tree_newick.nwk"))
+p <- ggtree(tree) 
+p + 
+  geom_tiplab(color="darkorchid", size=5) + 
+  geom_tippoint(color="darkorchid", size=2, shape=18) + 
+  geom_nodepoint(color="goldenrod", size=4, alpha=1/2) + 
+  ggtitle("Exercise 2 Figure: Not the prettiest phylogenetic aesthetics, but it'll do.")
+```
+
+\newpage
+
+## Exercise 3
+
+Produce the figure below.
+
+1. First, find what the MRCA is for taxa **B+C**, and taxa **L+J**. You can do this in one of two ways:
+    a. Easiest: use `MRCA(tree, tip=c("taxon1", "taxon2"))` for B/C and L/J separately.
+    b. Alternatively: use `ggtree(tree) + geom_text(aes(label=node), hjust=-.3)` to see what the node labels are on the plot. You might also add tip labels here too. 
+1. Draw the tree with `ggtree(tree)`.
+1. Add tip labels.
+1. Highlight these clades with separate colors.
+1. Add a clade label to the larger superclade (node=17) that we saw before that includes A, B, C, D, and E. You'll probably need an offset to get this looking right.
+1. Link taxa C to E, and G to J with a dashed gray line (hint: get the geom working first, then try changing the aesthetics. You'll need `linetype=2` somewhere in the `geom_taxalink()`).
+1. Add a scale bar to the bottom by changing the theme.
+1. Add a title.
+1. Optionally, go back to the original `ggtree(tree, ...)` call and change the layout to `"circular"`.
+
+----
+
+```{r ex3, echo=FALSE, results="hide", warning=FALSE, message=FALSE, fig.width=8, fig.height=6.5}
+suppressWarnings(suppressPackageStartupMessages(library(ggtree)))
+tree <- read.tree(file.path(rprojroot::find_rstudio_root_file(), "data", "tree_newick.nwk"))
+MRCA(tree, c("B", "C"))
+MRCA(tree, c("L", "J"))
+ggtree(tree) + 
+  geom_tiplab() + 
+  geom_hilight(node=19, fill="blue3") + 
+  geom_hilight(node=23, fill="orange2") + 
+  geom_cladelabel(node=17, label="Superclade 17", color="red3", offset=.8) + 
+  geom_taxalink("C", "E", color="gray50", linetype=2) + 
+  geom_taxalink("G", "J", color="gray50", linetype=2) + 
+  theme_tree2(fgcolor="gray70") + 
+  ggtitle("Exercise 3 title: Not sure what we're trying to show here...")
+  
+```

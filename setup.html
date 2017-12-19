@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Setup Instructions</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Setup Instructions</h1>
+
+</div>
+
+
+<p>Please follow the instructions under <strong><em>Get Data</em></strong> and <strong><em>Core Software</em></strong> headings below. Depending on the class you’re taking, you may also need to follow additional setup instructions under the <a href="#electives"><strong><em>Electives</em></strong></a> heading.</p>
+<div id="get-data" class="section level2">
+<h2>Get Data</h2>
+<p>Click the <strong><a href="data.html"><i class="fa fa-download"></i> Data</a></strong> link on the navbar at the top. You can download all the data needed by downloading <strong><a href="data.zip">this zip file <i class="fa fa-file-archive-o" aria-hidden="true"></i></a></strong> or by downloading individual data sets as needed at the <strong><a href="data.html"><i class="fa fa-download"></i> Data</a></strong> page.</p>
+</div>
+<div id="core-lessons" class="section level2">
+<h2>Core Lessons</h2>
+<p>Install the following software regardless of which class(es) you’re taking.</p>
+<div id="r" class="section level3">
+<h3>R</h3>
+<p><strong>Install R.</strong> You’ll need R version <strong>3.4.0</strong> or higher.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Download and install R for <a href="http://cran.r-project.org/bin/windows/base/">Windows</a> or <a href="http://cran.r-project.org/bin/macosx/">Mac</a> (download the latest R-3.x.x.pkg file for your appropriate version of Mac OS).</p>
+</div>
+<div id="rstudio" class="section level3">
+<h3>RStudio</h3>
+<p>Download and install <strong><a href="https://www.rstudio.com/products/rstudio/download/">RStudio Desktop</a></strong> version &gt;= 1.0.143.</p>
+<p>R and RStudio are separate downloads and installations. <strong>R</strong> is the underlying statistical computing environment, but using R alone is no fun. <strong>RStudio</strong> is a graphical integrated development environment that makes using R much easier. You need R installed before you install RStudio.</p>
+</div>
+<div id="cran-packages" class="section level3">
+<h3>CRAN packages</h3>
+<p>We will need to install several core packages needed for most lessons. Launch RStudio (RStudio, <em>not R itself</em>). Ensure that you have internet access, then copy and paste the following commands, one-at-a-time, into the <strong>Console</strong> panel (usually the lower-left panel, by default) and hit the Enter/Return key. If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and <a href="people.html">email one of the instructors</a> <em>prior to class</em> with the command you typed and the error you received.</p>
+<pre class="r"><code>install.packages(&quot;dplyr&quot;)
+install.packages(&quot;readr&quot;)
+install.packages(&quot;tidyr&quot;)
+install.packages(&quot;ggplot2&quot;)</code></pre>
+<p><em>A few notes</em>:</p>
+<ul>
+<li>Commands are case-sensitive.</li>
+<li>You must be connected to the internet.</li>
+<li>Even if you’ve installed these packages in the past, do re-install the most recent version. Many of these packages are updated often, and we may use new features in the workshop that aren’t available in older versions.</li>
+<li>If you’re using Windows you might see errors about not having permission to modify the existing libraries – disregard these. You can avoid this by running RStudio as an administrator (right click the RStudio icon, then click “Run as Administrator”).</li>
+<li>These core packages are part of the “tidyverse” ecosystem (see <a href="https://www.tidyverse.org/">tidyverse.org</a>). There is a <a href="http://tidyverse.org/">tidyverse</a> package that’s kind of a meta-package that automatically installs/loads all of the above packages and several other commonly used packages for data analysis that all play well together.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> You could optionally install the tidyverse package instead of all these packages individually. See <a href="https://www.tidyverse.org/">tidyverse.org</a> for more.</li>
+</ul>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following command at the console window (don’t worry about any messages that look something like <code>the following objects are masked from ...</code><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>, or <code>Warning message: package ... was build under R version ...</code><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>):</p>
+<pre class="r"><code>library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)</code></pre>
+<p>This may produce some notes or other output, but as long as you don’t get an error message, you’re good to go. If you get a message that says something like: <code>Error in library(somePackageName) : there is no package called 'somePackageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to class</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
+</div>
+<div id="rmarkdown" class="section level3">
+<h3>RMarkdown</h3>
+<p>Several additional setup steps required for the reproducible research with RMarkdown class.</p>
+<ol style="list-style-type: decimal">
+<li>First, install R, RStudio, and the core CRAN packages as described above. Also install the knitr and rmarkdown packages.</li>
+</ol>
+<pre class="r"><code>install.packages(&quot;knitr&quot;)
+install.packages(&quot;rmarkdown&quot;)</code></pre>
+<ol style="list-style-type: decimal">
+<li>Next, launch RStudio (not R). Click File, New File, R Markdown. This may tell you that you need to install additional packages (<code>knitr</code>, <code>yaml</code>, <code>htmltools</code>, <code>caTools</code>, <code>bitops</code>, <code>rmarkdown</code>, and maybe a few others). Click “Yes” to install these.</li>
+<li><strong><em>Optional</em>:</strong> If you want to convert to PDF, you will need to install a <strong><span class="math inline">\(\LaTeX\)</span></strong> typesetting engine. This differs on Mac and Windows. <em>Note that this part of the installation may take up to several hours, and isn’t strictly required for the class.</em>
+<ul>
+<li><strong>Windows</strong>: Download and install MiKTeX: <a href="https://miktex.org/download" class="uri">https://miktex.org/download</a>. Read the installation tutorial first at <a href="https://miktex.org/howto/install-miktex" class="uri">https://miktex.org/howto/install-miktex</a>.</li>
+<li><strong>Mac</strong>: Download and install MacTeX.pkg at <a href="http://www.tug.org/mactex/mactex-download.html" class="uri">http://www.tug.org/mactex/mactex-download.html</a>. This is a very large download (&gt;2 gigabytes), and may take a while depending on your network speed. Do this <em>prior to the course</em>.</li>
+</ul></li>
+</ol>
+</div>
+<div id="bioconductor" class="section level3">
+<h3>Bioconductor</h3>
+<p>Install the core Bioconductor packages (<a href="https://www.bioconductor.org/install/">more information here</a>). These packages are installed differently than “regular” R packages from CRAN. Copy and paste these lines of code into your R console <strong>one at a time</strong>.</p>
+<pre class="r"><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite()</code></pre>
+<p>A few notes:</p>
+<ul>
+<li>We will be using the latest versions of Bioconductor from the 3.5 release. This requires R version 3.4.0 or higher. If you have R 3.4.0 installed, running the commands above will install Bioconductor 3.5. See <a href="http://bioconductor.org/news/bioc_3_5_release/" class="uri">http://bioconductor.org/news/bioc_3_5_release/</a>.</li>
+<li>If at any point in the Bioconductor package installations you get prompts in the console asking you to update any existing packages, type <code>n</code> at the prompt at hit enter.</li>
+<li>If you see a note long the lines of “<em>binary version available but the source version is later</em>”, followed by a question, “<em>Do you want to install from sources the package which needs compilation? y/n</em>”, type <strong><code>n</code> for no</strong>, and hit enter.</li>
+</ul>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following command at the console window:</p>
+<pre class="r"><code>library(BiocInstaller)</code></pre>
+<p>If you get a message that says something like: <code>Error in library(BiocInstaller) : there is no package called 'BiocInstaller'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to the course</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
+</div>
+</div>
+<div id="electives" class="section level2">
+<h2>Electives</h2>
+<p>The instructions below apply to additional “elective” classes, and are not strictly required as part of the core set of classes. Install these as necessary.</p>
+<div id="survival-analysis" class="section level3">
+<h3>Survival Analysis</h3>
+<p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. <em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, and to a lesser degree, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-viz-gapminder.html">data visualization with ggplot2</a>.</em></p>
+<p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a>, <a href="#cran-packages">CRAN packages</a>, and <a href="#bioconductor">Bioconductor</a>. See the sections above for full instructions and troubleshooting tips.</p>
+<p><em>For this class you’ll also need the <strong>survminer</strong> package from CRAN and the and <strong>RTCGA</strong>, <strong>RTCGA.clinical</strong>, <strong>RTCGA.mRNA</strong>, packages from Bioconductor.</em></p>
+<p>If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and <a href="people.html">email one of the instructors</a> <em>prior to class</em> with the command you typed and the error you received.</p>
+<pre class="r"><code># Install core CRAN packages:
+install.packages(&quot;dplyr&quot;)
+install.packages(&quot;readr&quot;)
+install.packages(&quot;tidyr&quot;)
+install.packages(&quot;ggplot2&quot;)
+
+# For this class, also install survminer from CRAN
+install.packages(&quot;survminer&quot;)
+
+
+# Install Bioconductor core packages:
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite()
+
+# For this class, you&#39;ll also need RTCGA and RTCGA data packages
+biocLite(&quot;RTCGA&quot;)
+biocLite(&quot;RTCGA.clinical&quot;)
+biocLite(&quot;RTCGA.mRNA&quot;)</code></pre>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane:</p>
+<pre class="r"><code># Test CRAN package installation:
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+
+# Test survminer
+library(survminer)
+
+# Test RTCGA:
+library(RTCGA)
+library(RTCGA.clinical)
+library(RTCGA.mRNA)</code></pre>
+<p>This may produce some notes or other output, but as long as you don’t get an error message, you’re good to go. If you get a message that says something like: <code>Error in library(somePackageName) : there is no package called 'somePackageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email me</a> <em>prior to class</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
+</div>
+<div id="predictive-modeling" class="section level3">
+<h3>Predictive modeling</h3>
+<p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. In addition to familiarity with R, this lesson also assumes familiarity with:</p>
+<ul>
+<li><a href="r-dplyr-yeast.html">Advanced data manipulating data with dplyr and <code>%&gt;%</code></a></li>
+<li><a href="r-tidy.html">Data tidying with tidyr</a></li>
+<li><a href="r-viz-gapminder.html">Advanced data visualization with ggplot2</a></li>
+</ul>
+<p>Some knowledge of statistics and resampling procedures is helpful, but not strictly required.</p>
+<p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a> and <a href="#cran-packages">CRAN packages</a>. For this class, you’ll also need several additional packages described below. If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and <a href="people.html">email me</a> <em>prior to class</em> with the command you typed and the error you received.</p>
+<p>First, install the <strong><a href="https://cran.r-project.org/package=caret">caret</a></strong> package, which provides a unified interface to hundreds of data mining and machine learning algorithms and a framework for model training and evaluation. This command will also install all the additional packages that <strong>caret</strong> recommends.</p>
+<pre class="r"><code>install.packages(&quot;caret&quot;, dependencies = c(&quot;Depends&quot;, &quot;Suggests&quot;))</code></pre>
+<p>When you do this, you may get a note asking you about installing source packages that need compilation. If you get this message, type <code>n</code> and hit <code>Enter</code> at the prompt for “no.”</p>
+<pre><code>There are binary versions available but the source versions are later:
+                binary  source  needs_compilation
+somePackage1    ....    ....               TRUE
+somePackage1    ....    ....               FALSE
+
+Do you want to install from sources the package which needs compilation?</code></pre>
+<p>Similarly, if you get a message that looks like this, type <code>n</code> and hit <code>Enter</code> for “no.”</p>
+<pre><code>Packages which are only available in source form, and may need compilation of C/C++/Fortran: ‘Rpoppler’ ‘Rmpi’
+Do you want to attempt to install these from sources?</code></pre>
+<p>The <strong>caret</strong> package provides the utilities for interfacing with many other packages’ machine learning algorithms. We’re going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages <a href="https://cran.r-project.org/package=randomForest">randomForest</a>, <a href="https://cran.r-project.org/package=gbm">gbm</a>, <a href="https://cran.r-project.org/package=kknn">kknn</a>, and <a href="https://cran.r-project.org/package=glmnet">glmnet</a>, respectively. We will also need the <a href="https://cran.r-project.org/package=mice">mice</a> package for multiple imputation. The following commands will install these packages.</p>
+<pre class="r"><code>install.packages(&quot;randomForest&quot;)
+install.packages(&quot;gbm&quot;)
+install.packages(&quot;kknn&quot;)
+install.packages(&quot;glmnet&quot;)
+install.packages(&quot;mice&quot;)</code></pre>
+<p>Finally, we’ll conclude with a demonstration of <em>forecasting</em>, for which we’ll need the <a href="https://cran.r-project.org/package=prophet">prophet</a> package.</p>
+<pre class="r"><code>install.packages(&quot;prophet&quot;)</code></pre>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane. If you get an error telling you that the package isn’t installed, try re-installing it as demonstrated above. If you’re still having trouble, <a href="people.html">email me</a> <em>prior to class</em> with the command you typed to install and the error(s) you received.</p>
+<pre class="r"><code>library(caret)
+library(randomForest)
+library(gbm)
+library(kknn)
+library(glmnet)
+library(mice)
+library(prophet)</code></pre>
+<p><strong>Download data we’ll use in class.</strong> You will need the following datasets from the <strong><a href="data.html">data</a></strong> page:</p>
+<ul>
+<li><strong><a href="data/h7n9.csv">h7n9.csv</a></strong>: The slightly processed raw dataset from an <a href="https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9">influenza A H7N9 outbreak in China in 2013</a>, published by <a href="https://www.ncbi.nlm.nih.gov/pubmed/24619563">Kucharski <em>et al</em> 2014</a>. Contains the original variables, with lots of missing data throughout.</li>
+<li><strong><a href="data/h7n9_analysisready.csv">h7n9_analysisready.csv</a></strong>: The “analysis-ready” dataset. This data has been cleaned up, with some “feature extraction” / variable recoding done to make the data more suitable to data mining / machine learning methods used in this class. We will start with the raw data above, but I provide this data in case you don’t make it all the way through the data cleaning and feature extraction steps we will need to perform.</li>
+<li><strong><a href="data/ilinet.csv">ilinet.csv</a></strong>: Historical flu tracking data from the CDC’s U.S. Outpatient <a href="https://wwwn.cdc.gov/ilinet/">Influenza-like Illness Surveillance Network</a> along with data from the <a href="https://gis.cdc.gov/grasp/fluview/mortality.html">National Center for Health Statistics (NCHS) Mortality Surveillance System</a>. This contains ILI totals from CDC and flu + pneumonia death data from NCHS through the end of October 2017.</li>
+</ul>
+<p><strong>Recommended reading</strong> prior to class:</p>
+<blockquote>
+<p><em>(check back later)</em></p>
+</blockquote>
+</div>
+<div id="rna-seq" class="section level3">
+<h3>RNA-seq</h3>
+<p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. <em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-viz-gapminder.html">data visualization with ggplot2</a>.</em></p>
+<p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a>, <a href="#cran-packages">CRAN packages</a>, and <a href="#bioconductor">Bioconductor</a>. See the sections above for full instructions and troubleshooting tips.</p>
+<p><em>For this class you’ll also need the <strong>DESeq2</strong> package.</em></p>
+<p>If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and <a href="people.html">email one of the instructors</a> <em>prior to class</em> with the command you typed and the error you received.</p>
+<pre class="r"><code># Install core CRAN packages:
+install.packages(&quot;dplyr&quot;)
+install.packages(&quot;readr&quot;)
+install.packages(&quot;tidyr&quot;)
+install.packages(&quot;ggplot2&quot;)
+
+# Install Bioconductor core packages:
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite()
+
+# For this class, you&#39;ll also need DESeq2:
+biocLite(&quot;DESeq2&quot;)</code></pre>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane:</p>
+<pre class="r"><code># Test CRAN package installation:
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+
+# Test DESeq2 installation:
+library(DESeq2)</code></pre>
+<p>This may produce some notes or other output, but as long as you don’t get an error message, you’re good to go. If you get a message that says something like: <code>Error in library(somePackageName) : there is no package called 'somePackageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to class</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
+<p><strong>Download data we’ll use in class.</strong> Create a new folder somewhere on your computer that’s easy to get to (e.g., your Desktop). Name it <code>bioconnector</code>. Inside that folder, make a folder called <code>data</code>, all lowercase. Download the 3 data files below, saving them to the new <code>bioconnector/data</code> folder you just made.</p>
+<ul>
+<li>Length-scaled count matrix (i.e., <code>countData</code>): <a href="data/airway_scaledcounts.csv">airway_scaledcounts.csv</a></li>
+<li>Sample metadata (i.e., <code>colData</code>): <a href="data/airway_metadata.csv">airway_metadata.csv</a></li>
+<li>Gene Annotation data: <a href="data/annotables_grch38.csv">annotables_grch38.csv</a></li>
+</ul>
+<p><strong>Recommended reading</strong> prior to class:</p>
+<ol style="list-style-type: decimal">
+<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8">Conesa et al. A survey of best practices for RNA-seq data analysis. <em>Genome Biology</em> 17:13 (2016)</a>.</li>
+<li><a href="https://f1000research.com/articles/4-1521/v2">Soneson et al. “Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences.” <em>F1000Research</em> 4 (2015)</a>.</li>
+<li>Abstract and introduction sections of <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625">Himes et al. “RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells.” <em>PLoS ONE</em> 9.6 (2014): e99625</a>.</li>
+</ol>
+</div>
+<div id="phylogenetic-trees" class="section level3">
+<h3>Phylogenetic trees</h3>
+<p><strong>Prerequisites!</strong> This is <em>not</em> an introductory R class. <em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and most importantly, <strong><a href="r-viz-gapminder.html">data visualization with ggplot2</a></strong>.</em></p>
+<p><strong>Software setup:</strong> Follow instructions above for <a href="#r">R+RStudio+Packages</a>, <a href="#cran-packages">CRAN packages</a>, and <a href="#bioconductor">Bioconductor</a>. See the sections above for full instructions and troubleshooting tips.</p>
+<p><em>For this class you’ll also need the <strong>ggtree</strong> and <strong>Biostrings</strong> packages from Bioconductor.</em></p>
+<p>If you receive an error message when trying to install any particular package, please make note of which one you had trouble with, and <a href="people.html">email one of the instructors</a> <em>prior to class</em> with the command you typed and the error you received.</p>
+<pre class="r"><code># Install core CRAN packages:
+install.packages(&quot;dplyr&quot;)
+install.packages(&quot;readr&quot;)
+install.packages(&quot;tidyr&quot;)
+install.packages(&quot;ggplot2&quot;)
+
+# Install Bioconductor core packages:
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite()
+
+# For this class, you&#39;ll also need ggtree and Biostrings:
+biocLite(&quot;ggtree&quot;)
+biocLite(&quot;Biostrings&quot;)</code></pre>
+<p>Check that you’ve installed everything correctly by closing and reopening RStudio and entering the following commands one-at-a-time in the console pane:</p>
+<pre class="r"><code># Test CRAN package installation:
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+
+# Test ggtree and Biostrings installation:
+library(ggtree)
+library(Biostrings)</code></pre>
+<p>This may produce some notes or other output, but as long as you don’t get an error message, you’re good to go. If you get a message that says something like: <code>Error in library(somePackageName) : there is no package called 'somePackageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to class</em> if you are still having difficulty. In this email, please copy and paste what you typed in the console, and all of the output that streams by in the console.</p>
+<p><strong>Download data we’ll use in class.</strong> Create a new folder somewhere on your computer that’s easy to get to (e.g., your Desktop). Name it <code>bioconnector</code>. Inside that folder, make a folder called <code>data</code>, all lowercase. Download the data files below, saving them to the new <code>bioconnector/data</code> folder you just made.</p>
+<ul>
+<li>A simple phylogenetic tree in Newick format: <a href="data/tree_newick.nwk">tree_newick.nwk</a></li>
+<li>A rooted, time-measured phylogeny with influenza virus data: <a href="data/flu_tree_beast.tree">flu_tree_beast.tree</a></li>
+<li>Amino acid sequences of flu samples in the data above: <a href="data/flu_aasequence.fasta">flu_aasequence.fasta</a></li>
+</ul>
+<p><strong>Recommended reading:</strong> This lesson does <em>not</em> cover methods and software for <em>generating</em> phylogenetic trees, nor does it it cover <em>interpreting</em> phylogenies. <strong><a href="http://epidemic.bio.ed.ac.uk/how_to_read_a_phylogeny">Here’s a quick primer on how to read a phylogeny</a></strong> that you should review prior to this lesson, but it is by no means extensive. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson.</p>
+</div>
+<div id="interactive-visualization" class="section level3">
+<h3>Interactive Visualization</h3>
+<p>The <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a> lesson requires installation of several R packages in addition to those mentioned above:</p>
+<pre class="r"><code>install.packages(&quot;highcharter&quot;)
+install.packages(&quot;d3heatmap&quot;)
+install.packages(&quot;leaflet&quot;)
+install.packages(&quot;visNetwork&quot;)
+install.packages(&quot;jsonlite&quot;)
+install.packages(&quot;threejs&quot;)
+install.packages(&quot;igraph&quot;)</code></pre>
+<p>To check that these are correctly installed, first close RStudio and then reopen it and run the following:</p>
+<pre class="r"><code>library(highcharter)
+library(d3heatmap)
+library(leaflet)
+library(visNetwork)
+library(jsonlite)
+library(threejs)
+library(igraph)</code></pre>
+<p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to the course</em> if you are still having difficulty.</p>
+</div>
+<div id="shiny" class="section level3">
+<h3>Shiny</h3>
+<p>The <a href="r-shiny.html">Building Shiny Web Apps in R</a> lesson requires installation of several R packages in addition to those mentioned above:</p>
+<pre class="r"><code>install.packages(&quot;shiny&quot;)
+install.packages(&quot;shinythemes&quot;)
+install.packages(&quot;lubridate&quot;)</code></pre>
+<p>To check that these are correctly installed, first close RStudio and then reopen it and run the following:</p>
+<pre class="r"><code>library(shiny)
+library(shinythemes)
+library(lubridate)</code></pre>
+<p>These commands may produce some notes or other output, but as long as they work without an error message, you’re good to go. If you get a message that says something like: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then the required packages did not install correctly. Please do not hesitate to <a href="people.html">email one of the instructors</a> <em>prior to the course</em> if you are still having difficulty.</p>
+<hr />
+<hr />
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>R version 3.4.0 was released April 2017. If you have not updated your R installation since then, you need to upgrade to a more recent version, since several of the required packages depend on a version at least this recent. You can check your R version with the <code>sessionInfo()</code> command.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Installing/loading the tidyverse <strong>tidyverse</strong> will install/load the core tidyverse packages that you are likely to use in almost every analysis: <strong>ggplot2</strong> (for data visualisation), <strong>dplyr</strong> (for data manipulation), <strong>tidyr</strong> (for data tidying), <strong>readr</strong> (for data import), <strong>purrr</strong> (for functional programming), and <strong>tibble</strong> (for tibbles, a modern re-imagining of data frames). It also installs a selection of other tidyverse packages that you’re likely to use frequently, but probably not in every analysis (these are installed, but you’ll have to load them separately with <code>library(packageName)</code>). This includes: <strong>hms</strong> (for times), <strong>stringr</strong> (for strings), <strong>lubridate</strong> (for date/times), <strong>forcats</strong> (for factors), <strong>DBI</strong> (for databases), <strong>haven</strong> (for SPSS, SAS and Stata files), <strong>httr</strong> (for web apis), <strong>jsonlite</strong> (or JSON), <strong>readxl</strong> (for .xls and .xlsx files), <strong>rvest</strong> (for web scraping), <strong>xml2</strong> (for XML), <strong>modelr</strong> (for modelling within a pipeline), and <strong>broom</strong> (for turning models into tidy data). After installing tidyverse with <code>install.packages(&quot;tidyverse&quot;)</code> and loading it with <code>library(tidyverse)</code>, you can use <code>tidyverse_update()</code> to update all the tidyverse packages installed on your system at once.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>We’ll talk about this in class. It’s not a concern.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>This means the version of R you have installed is older than the version that the package author used when they built the package you’re trying to use. 99% of the time it isn’t a problem, unless your R version is very old (you should be using 3.4.0 or later for this course).<a href="#fnref4">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

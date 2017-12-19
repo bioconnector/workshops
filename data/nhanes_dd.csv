@@ -1,0 +1,33 @@
+Variable,Definition
+id,A unique sample identifier
+Gender,Gender (sex) of study participant coded as male or female
+Age,Age in years at screening of study participant. Note: Subjects 80 years or older were recorded as 80.
+Race,"Reported race of study participant, including non-Hispanic Asian category: Mexican, Hispanic, White, Black, Asian, or Other. Not availale for 2009-10."
+Education,"Educational level of study participant Reported for participants aged 20 years or older. One of 8thGrade, 9-11thGrade, HighSchool, SomeCollege, or CollegeGrad."
+MaritalStatus,"Marital status of study participant. Reported for participants aged 20 years or older. One of Married, Widowed, Divorced, Separated, NeverMarried, or LivePartner (living with partner)."
+RelationshipStatus,"Simplification of MaritalStatus, coded as Committed if MaritalStatus is Married or LivePartner, and Single otherwise."
+Insured,Indicates whether the individual is covered by health insurance.
+Income,Numerical version of HHIncome derived from the middle income in each category
+Poverty,A ratio of family income to poverty guidelines. Smaller numbers indicate more poverty
+HomeRooms,How many rooms are in home of study participant (counting kitchen but not bathroom). 13 rooms = 13 or more rooms.
+HomeOwn,"One of Home, Rent, or Other indicating whether the home of study participant or someone in their family is owned, rented or occupied by some other arrangement."
+Work,Indicates whether the individual is current working or not.
+Weight,Weight in kg
+Height,Standing height in cm. Reported for participants aged 2 years or older.
+BMI,Body mass index (weight/height2 in kg/m2). Reported for participants aged 2 years or older.
+Pulse,60 second pulse rate
+BPSys,"Combined systolic blood pressure reading, following the procedure outlined for BPXSAR."
+BPDia,"Combined diastolic blood pressure reading, following the procedure outlined for BPXDAR."
+Testosterone,Testerone total (ng/dL). Reported for participants aged 6 years or older. Not available for 2009-2010.
+HDLChol,Direct HDL cholesterol in mmol/L. Reported for participants aged 6 years or older.
+TotChol,Total HDL cholesterol in mmol/L. Reported for participants aged 6 years or older.
+Diabetes,Study participant told by a doctor or health professional that they have diabetes. Reported for participants aged 1 year or older as Yes or No.
+DiabetesAge,Age of study participant when first told they had diabetes. Reported for participants aged 1 year or older.
+nPregnancies,How many times participant has been pregnant. Reported for female participants aged 20 years or older.
+nBabies,How many of participants deliveries resulted in live births. Reported for female participants aged 20 years or older.
+SleepHrsNight,Self-reported number of hours study participant usually gets at night on weekdays or workdays. Reported for participants aged 16 years and older.
+PhysActive,"Participant does moderate or vigorous-intensity sports, fitness or recreational activities (Yes or No). Reported for participants 12 years or older."
+PhysActiveDays,Number of days in a typical week that participant does moderate or vigorous-intensity activity. Reported for participants 12 years or older.
+AlcoholDay,Average number of drinks consumed on days that participant drank alcoholic beverages. Reported for participants aged 18 years or older.
+AlcoholYear,Estimated number of days over the past year that participant drank alcoholic beverages. Reported for participants aged 18 years or older.
+SmokingStatus,Smoking status: Current Former or Never.

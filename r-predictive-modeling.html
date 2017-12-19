@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Predictive Analytics: Predicting and Forecasting Influenza</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Predictive Analytics: Predicting and Forecasting Influenza</h1>
+
+</div>
+
+
+<p>This class will provide hands-on instruction for using machine learning algorithms to predict a disease outcome. We will cover data cleaning, feature extraction, imputation, and using a variety of models to try to predict disease outcome. We will use resampling strategies to assess the performance of predictive modeling procedures such as Random Forest, stochastic gradient boosting, elastic net regularized regression (LASSO), and k-nearest neighbors. We will also demonstrate demonstrate how to <em>forecast</em> future trends given historical infectious disease surveillance data using methodology that accounts for seasonality and nonlinearity.</p>
+<p><strong>Prerequisites: <em>This is not a beginner R class.</em></strong> <a href="r-basics.html">Familiarity with R</a>, installing/using packages, importing/saving results, expertise with <a href="r-dplyr-yeast.html">data manipulation using <strong>dplyr</strong></a> and <a href="r-viz-gapminder.html">visualization with <strong>ggplot2</strong></a> are all <em>required</em>.</p>
+<p><strong>You must <a href="setup.html#predictive_modeling">complete the setup here</a> <em>prior to class</em>.</strong> This includes installing R, RStudio, and the required packages under the <a href="setup.html#predictive_modeling">“Predictive modeling” heading</a>. Please <a href="people.html">contact me</a> <em>prior to class</em> if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.</p>
+<p><strong>Handout</strong>: Download and print out <strong><a href="handouts/r-predictive-modeling.pdf">this handout</a></strong> and bring it to class.</p>
+<!--
+**Slides**: [click here](slides/r-stats.html).
+-->
+<div id="predictive-modeling" class="section level2">
+<h2>Predictive Modeling</h2>
+<p>Here we’re going to use some epidemiological data collected during an influenza A (H7N9) outbreak in China in 2013. Of 134 cases with data, 31 died, 46 recovered, but 57 cases do not have a recorded outcome. We’ll develop models capable of predicting death or recovery from the unlabeled cases. Along the way, we will:</p>
+<ul>
+<li>Do some exploratory data analysis and data visualization to get an overall sense of the data we have.</li>
+<li>Extract and recode <em>features</em> from the raw data that are more amenable to data mining / machine learning algorithms.</li>
+<li>Impute missing data points from some of the predictor variables.</li>
+<li>Use a framework that enables consistent access to hundreds of classification and regression algorithms, and that facilitates automated parameter tuning using bootstrapping-based resampling for model assessment.</li>
+<li>We will develop models using several different approaches (Random Forest, stochastic gradient boosting, elastic net regularized logistic regression, <em>k</em>-nearest neighbor) by training and testing the models on the data where the outcome is known</li>
+<li>We will compare the performance of each of the models and apply the best to predict the outcome for cases where we didn’t know the outcome.</li>
+</ul>
+<div id="h7n9-outbreak-data" class="section level3">
+<h3>H7N9 Outbreak Data</h3>
+<p>The data we’re using here is from the 2013 outbreak of <a href="https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9">influenza A H7N9 in China</a>, analyzed by Kucharski et al., published in 2014.</p>
+<blockquote>
+<p><strong>Publication</strong>: A. Kucharski, H. Mills, A. Pinsent, C. Fraser, M. Van Kerkhove, C. A. Donnelly, and S. Riley. 2014. Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. <a href="http://doi.org/10.1371/currents.outbreaks.e1473d9bfc99d080ca242139a06c455f"><em>PLOS Currents Outbreaks</em> (2014) Mar 7 Edition 1</a>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Data</strong>: Kucharski A, Mills HL, Pinsent A, Fraser C, Van Kerkhove M, Donnelly CA, Riley S (2014) Data from: Distinguishing between reservoir exposure and human-to-human transmission for emerging pathogens using case onset data. <em>Dryad Digital Repository</em>. <a href="https://doi.org/10.5061/dryad.2g43n" class="uri">https://doi.org/10.5061/dryad.2g43n</a>.</p>
+</blockquote>
+<p>The data is made available in the <a href="https://cran.r-project.org/web/packages/outbreaks/index.html">outbreaks</a> package, which is a collection of several simulated and real outbreak datasets, and has been very <a href="https://github.com/bioconnector/workshops/blame/master/r-predictive-flu.Rmd#L20">slightly modified</a> for use here. The analysis we’ll do here is inspired by and modified in part from a <a href="https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post">similar analysis by Shirin Glander</a>.</p>
+<p>There are two datasets available to download on the <a href="data.html">data</a> page:</p>
+<ol style="list-style-type: decimal">
+<li><strong><a href="data/h7n9.csv">h7n9.csv</a></strong>: The original dataset. Contains the following variables, with lots of missing data throughout.
+<ul>
+<li><strong><code>case_id</code></strong>: the sample identifier</li>
+<li><strong><code>date_onset</code></strong>: date of onset of syptoms</li>
+<li><strong><code>date_hospitalization</code></strong>: date the patient was hospitalized, if available</li>
+<li><strong><code>date_outcome</code></strong>: date the outcome (recovery, death) was observed, if available</li>
+<li><strong><code>outcome</code></strong>: “Death” or “Recover,” if available</li>
+<li><strong><code>gender</code></strong>: male (m) or female (f)</li>
+<li><strong><code>age</code></strong>: age of the individual, if known</li>
+<li><strong><code>province</code></strong>: either Shanghai, Jiangsu, Zhejiang, or Other (lumps together less common provinces)</li>
+</ul></li>
+<li><strong><a href="data/h7n9_analysisready.csv">h7n9_analysisready.csv</a></strong>: The “analysis-ready” dataset. This data has been cleaned up, with some “feature extraction” / variable recoding done to make the data more suitable to data mining / machine learning methods used here. We still have the outcome variable, either <em>Death</em>, <em>Recover</em> or unknown (NA). Sex (m/f) has been recoded to a &quot;
+<ul>
+<li><strong><code>case_id</code></strong>: <em>(same as above)</em></li>
+<li><strong><code>outcome</code></strong>: <em>(same as above)</em></li>
+<li><strong><code>age</code></strong>: <em>(same as above, imputed if unknown)</em></li>
+<li><strong><code>male</code></strong>: Instead of sex (m/f), this is a 0/1 indicator, where 1=male, 0=female.</li>
+<li><strong><code>hospital</code></strong>: Indicator variable whether or not the patient was hospitalized</li>
+<li><strong><code>days_to_hospital</code></strong>: The number of days between onset and hospitalization</li>
+<li><strong><code>days_to_outcome</code></strong>: The number of days between onset and outcome (if available)</li>
+<li><strong><code>early_outcome</code></strong>: Whether or not the outcome was recorded prior to the median date of the outcome in the dataset</li>
+<li><strong><code>Jiangsu</code></strong>: Indicator variable: 1 = the patient was from the Jiangsu province.</li>
+<li><strong><code>Shanghai</code></strong>: Indicator variable: 1 = the patient was from the Shanghai province.</li>
+<li><strong><code>Zhejiang</code></strong>: Indicator variable: 1 = the patient was from the Zhejiang province.</li>
+<li><strong><code>Other</code></strong>: Indicator variable: 1 = the patient was from some other less common province.</li>
+</ul></li>
+</ol>
+</div>
+<div id="importing-h7n9-data" class="section level3">
+<h3>Importing H7N9 data</h3>
+<p>First, let’s load the packages we’ll need initially.</p>
+<pre class="r"><code>library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)</code></pre>
+<p>Now let’s read in the data and take a look. Notice that it correctly read in the dates as date-formatted variables. Later on, when we run functions such as <code>median()</code> on a date variable, it knows how to handle that properly. You’ll also notice that there are missing values throughout.</p>
+<pre class="r"><code># Read in data
+flu &lt;- read_csv(&quot;data/h7n9.csv&quot;)
+
+# View in RStudio (capital V)
+# View(flu)
+
+# Take a look
+flu</code></pre>
+<pre><code>## # A tibble: 134 x 8
+##    case_id date_onset date_hospitalization date_outcome outcome gender
+##      &lt;chr&gt;     &lt;date&gt;               &lt;date&gt;       &lt;date&gt;   &lt;chr&gt;  &lt;chr&gt;
+##  1  case_1 2013-02-19                   NA   2013-03-04   Death      m
+##  2  case_2 2013-02-27           2013-03-03   2013-03-10   Death      m
+##  3  case_3 2013-03-09           2013-03-19   2013-04-09   Death      f
+##  4  case_4 2013-03-19           2013-03-27           NA    &lt;NA&gt;      f
+##  5  case_5 2013-03-19           2013-03-30   2013-05-15 Recover      f
+##  6  case_6 2013-03-21           2013-03-28   2013-04-26   Death      f
+##  7  case_7 2013-03-20           2013-03-29   2013-04-09   Death      m
+##  8  case_8 2013-03-07           2013-03-18   2013-03-27   Death      m
+##  9  case_9 2013-03-25           2013-03-25           NA    &lt;NA&gt;      m
+## 10 case_10 2013-03-28           2013-04-01   2013-04-03   Death      m
+## # ... with 124 more rows, and 2 more variables: age &lt;int&gt;, province &lt;chr&gt;</code></pre>
+</div>
+<div id="exploratory-data-analysis" class="section level3">
+<h3>Exploratory data analysis</h3>
+<p>Let’s use ggplot2 to take a look at the data. Refer back to the <a href="r-viz-gapminder.html">ggplot2 class</a> if you need a refresher.</p>
+<p>The <strong>outcome</strong> variable is the thing we’re most interested in here – it’s the thing we want to eventually predict for the unknown cases. Let’s look at the distribution of that outcome variable (Death, Recover or unknown (NA)), by <strong>age</strong>. We’ll create a density distribution looking at age, with the fill of the distribution colored by outcome status.</p>
+<pre class="r"><code>ggplot(flu, aes(age)) + geom_density(aes(fill=outcome), alpha=1/3)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Let’s look at the counts of the number of deaths, recoveries, and unknowns by sex, then separately by province.</p>
+<pre class="r"><code>ggplot(flu, aes(gender)) +
+  geom_bar(aes(fill=outcome), position=&quot;dodge&quot;) </code></pre>
+<p>We can simply add a <code>facet_wrap</code> to split by province.</p>
+<pre class="r"><code>ggplot(flu, aes(gender)) +
+  geom_bar(aes(fill=outcome), position=&quot;dodge&quot;) +
+  facet_wrap(~province)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Let’s draw a boxplot showing the age distribution by province, by outcome. This shows that there’s a higher rate of death in older individuals but this is only observed in Jiangsu and Zhejiang provinces.</p>
+<pre class="r"><code># First just by age
+ggplot(flu, aes(province, age)) + geom_boxplot()
+# Then by age and outcome
+ggplot(flu, aes(province, age)) + geom_boxplot(aes(fill=outcome))</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Let’s try something a little bit more advanced. First, take a look at the data again.</p>
+<pre class="r"><code>flu</code></pre>
+<p>Notice how we have three different date variables: date of onset, hospitalization, and outcome. I’d like to draw a plot showing the date on the x-axis with a line connecting the three points from onset, to hospitalization, to outcome (if known) for each patient. I’ll put age on the y-axis so the individuals are separated, and I’ll do this faceted by province.</p>
+<p>First we need to use the <code>gather</code> function from the <strong>tidyr</strong> package to gather up all the <code>date_?</code> variables into a single column we’ll call <code>key</code>, with the actual values being put into a new column called <code>date</code>.</p>
+<pre class="r"><code># Gather the date columns
+flugather &lt;- flu %&gt;%
+  gather(key, date, starts_with(&quot;date_&quot;))
+
+# Look at the data as is
+# flugather
+
+# Better: Show the data arranged by case_id so you see the three entries
+flugather %&gt;% arrange(case_id)</code></pre>
+<pre><code>## # A tibble: 402 x 7
+##     case_id outcome gender   age province                  key       date
+##       &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;int&gt;    &lt;chr&gt;                &lt;chr&gt;     &lt;date&gt;
+##  1   case_1   Death      m    58 Shanghai           date_onset 2013-02-19
+##  2   case_1   Death      m    58 Shanghai date_hospitalization         NA
+##  3   case_1   Death      m    58 Shanghai         date_outcome 2013-03-04
+##  4  case_10   Death      m    20 Shanghai           date_onset 2013-03-28
+##  5  case_10   Death      m    20 Shanghai date_hospitalization 2013-04-01
+##  6  case_10   Death      m    20 Shanghai         date_outcome 2013-04-03
+##  7 case_100    &lt;NA&gt;      m    30 Zhejiang           date_onset 2013-04-16
+##  8 case_100    &lt;NA&gt;      m    30 Zhejiang date_hospitalization         NA
+##  9 case_100    &lt;NA&gt;      m    30 Zhejiang         date_outcome         NA
+## 10 case_101    &lt;NA&gt;      f    51 Zhejiang           date_onset 2013-04-13
+## # ... with 392 more rows</code></pre>
+<p>Now that we have this, let’s visualize the number of days that passed between onset, hospitalization and outcome, for each case. We see that there are lots of unconnected points, especially in Jiangsu and Zhejiang provinces, where one of these dates isn’t known.</p>
+<pre class="r"><code>ggplot(flugather, aes(date, y=age, color=outcome)) +
+  geom_point() +
+  geom_path(aes(group=case_id)) +
+  facet_wrap(~province)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
+</div>
+<div id="feature-extraction" class="section level3">
+<h3>Feature Extraction</h3>
+<p>The variables in our data are useful for summary statistics, visualization, EDA, etc. But we need to do some <em>feature extraction</em> or variable recoding to get the most out of machine learning models.</p>
+<ul>
+<li>Age: we’ll keep this one as is.</li>
+<li>Gender: instead of m/f, let’s convert this into a binary indicator variable where 0=female, 1=male.</li>
+<li>Province: along the same lines, let’s create binary classifiers that indicate Shanghai, Zhejiang, Jiangsu, or other provinces.</li>
+<li>Hospitalization: let’s create a binary classifier where 0=not hospitalized, 1=hospitalized.</li>
+<li>Early onset: let’s create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).</li>
+<li>Dates: Let’s also take the <em>dates</em> of onset, hospitalization, and outcome, and transform these into <em>days</em> between onset and hospitalization, and days from onset to outcome. The algorithms aren’t going to look at one column then another to do this math – we have to extract this feature ourselves.</li>
+</ul>
+<p>Let’s build up this pipeline one step at a time. If you want to skip ahead, you can simply read in the already extracted/recoded/imputed dataset at <a href="data/h7n9_analysisready.csv"><code>data/h7n9_analysisready.csv</code></a>.</p>
+<p>First, let’s make a backup of the original data in case we mess something up.</p>
+<pre class="r"><code>flu_orig &lt;- flu</code></pre>
+<div id="create-gender-hospitalization-indicators" class="section level4">
+<h4>Create gender / hospitalization indicators</h4>
+<p>Now let’s start recoding, one step at a time. First of all, when we mutate to add a new variable, we can put in a logical comparison to tell us whether a statement is TRUE or FALSE. For example, let’s look at the gender variable.</p>
+<pre class="r"><code>flu$gender</code></pre>
+<p>We can ask if gender is male (“m”) like this:</p>
+<pre class="r"><code>flu$gender==&quot;m&quot;</code></pre>
+<p>So we can do that with a mutate statement on a pipeline. Once we do that, we can remove the old gender variable. E.g.:</p>
+<pre class="r"><code>flu %&gt;%
+  mutate(male = gender==&quot;m&quot;) %&gt;% 
+  select(-gender)</code></pre>
+<p>Similarly, let’s get an indicator whether someone was hospitalized or not. If hospitalization is missing, this would return TRUE. If you want to ask whether they are <em>not</em> missing, you would use <code>!</code> to negate the logical question, i.e., <code>!is.na(flu$date_hospitalization)</code>.</p>
+<pre class="r"><code>flu$date_hospitalization
+is.na(flu$date_hospitalization)
+!is.na(flu$date_hospitalization)</code></pre>
+<p>So now, let’s add that to our pipeline from above.</p>
+<pre class="r"><code>flu %&gt;%
+  mutate(male = gender==&quot;m&quot;) %&gt;% 
+  select(-gender) %&gt;%
+  mutate(hospital = !is.na(date_hospitalization))</code></pre>
+</div>
+<div id="convert-dates-to-days-to-___" class="section level4">
+<h4>Convert dates to “days to ___”</h4>
+<p>Let’s continue to add days from onset to hospitalization and days to outcome by subtracting one date from the other, and converting the value to numeric. We’ll also create an early outcome binary variable indicating whether the date of the outcome was less than the median, after removing missing variables. We’ll finally remove all the variables that start with “date.” Finally, we’ll use the <code>mutate_if</code> function, which takes a predicate and an action function. We’ll ask – <em>if</em> the variable is logical (TRUE/FALSE), turn it into an integer (1/0).</p>
+<pre class="r"><code># What&#39;s the median outcome date?
+median(flu$date_outcome, na.rm=TRUE)
+
+# Run the whole pipeline
+flu %&gt;%
+  mutate(male = gender==&quot;m&quot;) %&gt;% 
+  select(-gender) %&gt;%
+  mutate(hospital = !is.na(date_hospitalization)) %&gt;%
+  mutate(days_to_hospital = as.numeric(date_hospitalization - date_onset)) %&gt;%
+  mutate(days_to_outcome  = as.numeric(date_outcome - date_onset)) %&gt;%
+  mutate(early_outcome = date_outcome &lt; median(date_outcome, na.rm=TRUE)) %&gt;%
+  select(-starts_with(&quot;date&quot;)) %&gt;%
+  mutate_if(is.logical, as.integer)</code></pre>
+<p>Once you’re satisfied your pipeline works, reassign the pipeline back to the <code>flu</code> object itself (remember, we created the backup above in case we messed something up here).</p>
+<pre class="r"><code># Make the assignment
+flu &lt;- flu %&gt;%
+  mutate(male = gender==&quot;m&quot;) %&gt;% 
+  select(-gender) %&gt;%
+  mutate(hospital = !is.na(date_hospitalization)) %&gt;%
+  mutate(days_to_hospital = as.numeric(date_hospitalization - date_onset)) %&gt;%
+  mutate(days_to_outcome  = as.numeric(date_outcome - date_onset)) %&gt;%
+  mutate(early_outcome = date_outcome &lt; median(date_outcome, na.rm=TRUE)) %&gt;%
+  select(-starts_with(&quot;date&quot;)) %&gt;%
+  mutate_if(is.logical, as.integer)
+
+# Take a look
+flu</code></pre>
+<pre><code>## # A tibble: 134 x 9
+##    case_id outcome   age province  male hospital days_to_hospital
+##      &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;    &lt;chr&gt; &lt;int&gt;    &lt;int&gt;            &lt;dbl&gt;
+##  1  case_1   Death    58 Shanghai     1        0               NA
+##  2  case_2   Death     7 Shanghai     1        1                4
+##  3  case_3   Death    11    Other     0        1               10
+##  4  case_4    &lt;NA&gt;    18  Jiangsu     0        1                8
+##  5  case_5 Recover    20  Jiangsu     0        1               11
+##  6  case_6   Death     9  Jiangsu     0        1                7
+##  7  case_7   Death    54  Jiangsu     1        1                9
+##  8  case_8   Death    14 Zhejiang     1        1               11
+##  9  case_9    &lt;NA&gt;    39 Zhejiang     1        1                0
+## 10 case_10   Death    20 Shanghai     1        1                4
+## # ... with 124 more rows, and 2 more variables: days_to_outcome &lt;dbl&gt;,
+## #   early_outcome &lt;int&gt;</code></pre>
+</div>
+<div id="create-indicators-for-province" class="section level4">
+<h4>Create indicators for province</h4>
+<p>Now, there’s one more thing we want to do. Instead of a single “province” variable that has multiple levels, we want to do the dummy coding ourselves. When we ran regression models R handled this internally without our intervention. But we need to be explicit here. Here’s one way to do it.</p>
+<p>First, there’s a built-in function called <code>model.matrix</code> that creates dummy codes. You have to give it a formula like you do in linear models, but here, I give it a <code>~0+variable</code> syntax so that it doesn’t try to create an intercept. That is, instead of <em>k-1</em> dummy variables, it’ll create <em>k</em>. Try it.</p>
+<pre class="r"><code>model.matrix(~0+province, data=flu)</code></pre>
+<p>There’s another built-in function called <code>cbind</code> that binds columns together. This can be dangerous to use if you’re not certain that rows are in the same order (there, it’s better to use an inner join). But here, we’re certain they’re in the same order. Try binding the results of that to the original data.</p>
+<pre class="r"><code>cbind(flu, model.matrix(~0+province, data=flu))</code></pre>
+<p>Finally, turn it into a tibble and select out the original province variable. Once you’ve run the pipeline, go back and make the assignment back to the <code>flu</code> object itself.</p>
+<pre class="r"><code>flu &lt;- cbind(flu, model.matrix(~0+province, data=flu)) %&gt;%
+  as_tibble() %&gt;%
+  select(-province)
+flu</code></pre>
+<pre><code>## # A tibble: 134 x 12
+##    case_id outcome   age  male hospital days_to_hospital days_to_outcome
+##  *   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+##  1  case_1   Death    58     1        0               NA              13
+##  2  case_2   Death     7     1        1                4              11
+##  3  case_3   Death    11     0        1               10              31
+##  4  case_4    &lt;NA&gt;    18     0        1                8              NA
+##  5  case_5 Recover    20     0        1               11              57
+##  6  case_6   Death     9     0        1                7              36
+##  7  case_7   Death    54     1        1                9              20
+##  8  case_8   Death    14     1        1               11              20
+##  9  case_9    &lt;NA&gt;    39     1        1                0              NA
+## 10 case_10   Death    20     1        1                4               6
+## # ... with 124 more rows, and 5 more variables: early_outcome &lt;int&gt;,
+## #   provinceJiangsu &lt;dbl&gt;, provinceOther &lt;dbl&gt;, provinceShanghai &lt;dbl&gt;,
+## #   provinceZhejiang &lt;dbl&gt;</code></pre>
+<p><em>Optional</em>: Notice how the new variables are provinceJiangsu, provinceOther, provinceShanghai, provinceZhejiang. If we want to strip off the “province” we can do that. There’s a built-in command called <code>gsub</code> that can help here. Take a look at the help for <code>?gsub</code>.</p>
+<pre class="r"><code># Take a look at the names of the flu dataset.
+names(flu)
+
+# Remove &quot;province&quot;
+gsub(&quot;province&quot;, &quot;&quot;, names(flu))
+
+# Now make the assignment back to names(flu)
+names(flu) &lt;- gsub(&quot;province&quot;, &quot;&quot;, names(flu))
+
+# Take a look
+flu</code></pre>
+</div>
+</div>
+<div id="imputation" class="section level3">
+<h3>Imputation</h3>
+<p>We have a lot of missing data points throughout. Most of the data mining algorithms we’re going to use later can’t handle missing data, so observations with any missing data are excluded from the model completely. If we have a large dataset and only a few missing values, it’s probably better to exclude them and proceed. But since we’ve already got a pretty low number of observations, we need to try to impute missing values to maximize our use of the data we have.</p>
+<p>There are lots of different imputation approaches. An overly simplistic method is simply a mean or median imputation – you simply plug in the mean value for that column for the missing sample’s value. This leaves the mean unchanged (good) but artificially decreases the variance (not good). We’re going to use the <strong>mice</strong> package for imputation (Multivariate Imputation by Chained Equations). This package gives you functions that can impute continuous, binary, and ordered/unordered categorical data, imputing each incomplete variable with a separate model. It tries to account for relations in the data and uncertainty about those relationships. The methods are described in the paper.</p>
+<blockquote>
+<p>Buuren, S., &amp; Groothuis-Oudshoorn, K. (2011). mice: Multivariate imputation by chained equations in R. <a href="https://www.jstatsoft.org/article/view/v045i03"><em>Journal of statistical software</em>, 45(3)</a>.</p>
+</blockquote>
+<p>Let’s load the mice package, and take a look at our data again.</p>
+<pre class="r"><code>library(mice)
+flu</code></pre>
+<pre><code>## # A tibble: 134 x 12
+##    case_id outcome   age  male hospital days_to_hospital days_to_outcome
+##  *   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+##  1  case_1   Death    58     1        0               NA              13
+##  2  case_2   Death     7     1        1                4              11
+##  3  case_3   Death    11     0        1               10              31
+##  4  case_4    &lt;NA&gt;    18     0        1                8              NA
+##  5  case_5 Recover    20     0        1               11              57
+##  6  case_6   Death     9     0        1                7              36
+##  7  case_7   Death    54     1        1                9              20
+##  8  case_8   Death    14     1        1               11              20
+##  9  case_9    &lt;NA&gt;    39     1        1                0              NA
+## 10 case_10   Death    20     1        1                4               6
+## # ... with 124 more rows, and 5 more variables: early_outcome &lt;int&gt;,
+## #   Jiangsu &lt;dbl&gt;, Other &lt;dbl&gt;, Shanghai &lt;dbl&gt;, Zhejiang &lt;dbl&gt;</code></pre>
+<p>Eventually we want to predict the outcome, so we don’t want to factor that into the imputation. We also don’t want to factor in the case ID, because that’s just an individual’s identifier. So let’s create a new dataset selecting out those two variables so we can try to impute everything else.</p>
+<pre class="r"><code>flu %&gt;% 
+  select(-1, -2)</code></pre>
+<p>The <code>mice()</code> function itself returns a special kind of object called a multiply imputed data set, and from this we can run mice’s <code>complete()</code> on the thing returned by <code>mice()</code> to complete the dataset that was passed to it. Here’s what we’ll do. We’ll take the flu data, select out the first two columns, create the imputation, then complete the original data, assigning that to a new dataset called <code>fluimp</code>. First let’s set the random number seed generator to some number (use the same as I do if you want identical results).</p>
+<pre class="r"><code>set.seed(42)
+fluimp &lt;- flu %&gt;%
+  select(-1, -2) %&gt;%
+  mice(print=FALSE) %&gt;%
+  complete()
+fluimp</code></pre>
+<p>Now, we need to put the data back together again. We do this by selecting the original two columns from the original flu data, and then using <code>cbind()</code> like above to mash the two datasets together side by side. Finally, we’ll turn it back into a tibble. Once you’ve run the pipeline and you like the result, assign it back to <code>fluimp</code>.</p>
+<pre class="r"><code># Run the pipeline successfully first before you reassign!
+fluimp &lt;- flu %&gt;%
+  select(1,2) %&gt;%
+  cbind(fluimp) %&gt;%
+  as_tibble()
+fluimp</code></pre>
+<pre><code>## # A tibble: 134 x 12
+##    case_id outcome   age  male hospital days_to_hospital days_to_outcome
+##  *   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;            &lt;dbl&gt;           &lt;dbl&gt;
+##  1  case_1   Death    58     1        0                4              13
+##  2  case_2   Death     7     1        1                4              11
+##  3  case_3   Death    11     0        1               10              31
+##  4  case_4    &lt;NA&gt;    18     0        1                8              46
+##  5  case_5 Recover    20     0        1               11              57
+##  6  case_6   Death     9     0        1                7              36
+##  7  case_7   Death    54     1        1                9              20
+##  8  case_8   Death    14     1        1               11              20
+##  9  case_9    &lt;NA&gt;    39     1        1                0              18
+## 10 case_10   Death    20     1        1                4               6
+## # ... with 124 more rows, and 5 more variables: early_outcome &lt;int&gt;,
+## #   Jiangsu &lt;dbl&gt;, Other &lt;dbl&gt;, Shanghai &lt;dbl&gt;, Zhejiang &lt;dbl&gt;</code></pre>
+<p>At this point we’re almost ready to do some predictive modeling! If you didn’t make it this far and you just want to read in the analysis ready dataset, you can do that too.</p>
+<pre class="r"><code>fluimp &lt;- read_csv(&quot;data/h7n9_analysisready.csv&quot;)</code></pre>
+</div>
+<div id="the-caret-package" class="section level3">
+<h3>The caret package</h3>
+<p>We’re going to use the <strong>caret</strong> package for building and testing predictive models using a variety of different data mining / ML algorithms. The package was published in JSS in 2008. Max Kuhn’s <a href="https://www.r-project.org/conferences/useR-2013/Tutorials/kuhn/user_caret_2up.pdf">slides from the 2013 useR! conference</a> are also a great resource, as is the <a href="https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf">caret package vignette</a>, and the <a href="http://topepo.github.io/caret/">detailed e-book documentation</a>.</p>
+<blockquote>
+<p>Kuhn, M. (2008). Building Predictive Models in R Using the caret Package. <em>Journal of Statistical Software</em>, 28(5), 1 - 26. doi: <a href="http://dx.doi.org/10.18637/jss.v028.i05" class="uri">http://dx.doi.org/10.18637/jss.v028.i05</a></p>
+</blockquote>
+<p>The <a href="http://cran.r-project.org/web/packages/caret/index.html"><strong>caret</strong></a> package (short for <strong>C</strong>lassification <strong>A</strong>nd <strong>RE</strong>gression <strong>T</strong>raining) is a set of functions that streamline the process for creating and testing a wide variety of predictive models with different resampling approaches, as well as estimating variable importance from developed models. There are many different modeling functions in R spread across many different packages, and they all have different syntax for model training and/or prediction. The <strong>caret</strong> package provides a uniform interface the functions themselves, as well as a way to standardize common tasks (such parameter tuning and variable importance).</p>
+<p>The <code>train</code> function from caret is used to:</p>
+<ul>
+<li>evaluate, using resampling, the effect of model tuning parameters on performance</li>
+<li>choose the “optimal” model across these parameters</li>
+<li>estimate model performance from a training set</li>
+</ul>
+<div id="models-available-in-caret" class="section level4">
+<h4>Models available in caret</h4>
+<p>First you have to choose a specific type of model or algorithm. Currently there are <strong>238</strong> different algorithms implemented in caret. Caret provides the interface to the method, but you still need the external package installed. For example, we’ll be fitting a Random Forest model, and for that we’ll need the <a href="https://cran.r-project.org/package=randomForest">randomForest</a> package installed. You can see all the methods that you can deploy by looking at the help for train.</p>
+<pre class="r"><code>library(caret)
+?train</code></pre>
+<p>From here, click on the link to see the <a href="http://topepo.github.io/caret/available-models.html">available models</a> or <a href="http://topepo.github.io/caret/train-models-by-tag.html">models by tag</a>. From here you can search for particular models by name. We’re going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages <a href="https://cran.r-project.org/package=randomForest">randomForest</a>, <a href="https://cran.r-project.org/package=gbm">gbm</a>, <a href="https://cran.r-project.org/package=kknn">kknn</a>, and <a href="https://cran.r-project.org/package=glmnet">glmnet</a>, respectively.</p>
+<p>Each of the models may have one or more <em>tuning parameters</em> – some value or option you can set to tweak how the algorithm develops. In k-nearest neighbors, we can try different values of <em>k</em>. With random forest, we can set the <span class="math inline">\(m_{\text{try}}\)</span> option – the algorithm will select <span class="math inline">\(m_{\text{try}}\)</span> number of predictors to attempt a split for classification. Caret attempts to do this using a procedure like this:</p>
+<div class="figure">
+<img src="img/caret-pseudocode.png" alt="The caret model training algorithm. Image from the caret paper." />
+<p class="caption"><em>The caret model training algorithm. Image from the caret paper.</em></p>
+</div>
+<p>That is, it sweeps through each possible parameter you can set for the particular type of model you choose, and uses some kind of resampling scheme with your training data, fitting the model on a subset and testing on the held-out samples.</p>
+</div>
+<div id="resampling" class="section level4">
+<h4>Resampling</h4>
+<p>The default resampling scheme caret uses is the <a href="https://en.wikipedia.org/wiki/Bootstrapping_(statistics)">bootstrap</a>. Bootstrapping takes a random sample <em>with replacement</em> from your data that’s the same size of the original data. Samples might be selected more than once, and some aren’t selected at all. On average, each sample has a ~63.2% chance of showing up at least once in a bootstrap sample. Some samples won’t show up at all, and these <em>held out</em> samples are the ones that are used for testing the performance of the trained model. You repeat this process many times (e.g., 25, 100, etc) to get an average performance estimate on unseen data. Here’s what it looks like in practice.</p>
+<div class="figure">
+<img src="img/caret-bootstrap.png" alt="Bootstrapping schematic. Image from Max Kuhn’s 2013 useR! talk." />
+<p class="caption"><em>Bootstrapping schematic. Image from Max Kuhn’s 2013 useR! talk.</em></p>
+</div>
+<p>Many alternatives exist. Another popular approach is cross-validation. Here, a subset of your data (e.g., 4/5ths, or 80%) is used for training, and the remaining 1/5th or 20% is used for performance assessment. You slide the cross-validation interval over and use the next 4/5ths for training and 1/5th for testing. You do this again for all 5ths of the data. You can optionally repeat this process many times (<em>repeated cross-validation</em>) to get an average cross validation prediction accuracy for a given model and set of tuning parameters.</p>
+<p>The <code>trainControl</code> option in the <code>train</code> function controls this, and you can learn more about this under the <a href="http://topepo.github.io/caret/model-training-and-tuning.html#basic-parameter-tuning">Basic Parameter Tuning</a> section of the caret documentation.</p>
+</div>
+</div>
+<div id="model-training" class="section level3">
+<h3>Model training</h3>
+<p>Let’s try it out! If you didn’t make it through the data preprocessing steps and you just want to read in the analysis ready dataset, you can do this:</p>
+<pre class="r"><code>fluimp &lt;- read_csv(&quot;data/h7n9_analysisready.csv&quot;)</code></pre>
+<div id="splitting-data-into-known-and-unknown-outcomes" class="section level4">
+<h4>Splitting data into known and unknown outcomes</h4>
+<p>Before we continue, let’s split the dataset into samples where we know the outcome, and those where we don’t. The unknown samples will be the ones where <code>is.na(outcome)</code> is TRUE. So you can use a filter statement.</p>
+<pre class="r"><code># Run the pipeline successfully first before you reassign!
+# These are samples with unknown data we&#39;ll use later to predict
+unknown &lt;- fluimp %&gt;%
+  filter(is.na(outcome))
+unknown</code></pre>
+<p>The known samples are the cases where <code>!is.na(outcome)</code> is TRUE, that is, cases where the outcome is not (<code>!</code>) missing. One thing we want to do here while we’re at it is remove the case ID. This is just an arbitrary numerically incrementing counter and we <em>don’t</em> want to use this in building a model!</p>
+<pre class="r"><code># Run the pipeline successfully first before you reassign!
+# Samples with known outcomes used for model training.
+known &lt;- fluimp %&gt;%
+  filter(!is.na(outcome)) %&gt;%
+  select(-case_id)
+known</code></pre>
+</div>
+<div id="a-note-on-reproducibility-and-set.seed" class="section level4">
+<h4>A note on reproducibility and <code>set.seed()</code></h4>
+<p>When we train a model using resampling, that sampling is going to happen <em>pseudo</em>-randomly. Try running this function which generates five numbers from a random uniform distribution between 0 and 1.</p>
+<pre class="r"><code>runif(5)</code></pre>
+<p>If you run that function over and over again, you’ll get different results. But, we can set the random number seed generator with any value we choose, and we’ll get the same result. Try setting the seed, drawing the random numbers, then re-setting the same seed, and re-running the <code>runif</code> function again. You should get identical results.</p>
+<pre class="r"><code>set.seed(22908)
+runif(5)</code></pre>
+<p>Eventually I’m going to compare different models to each other, so I want to set the random number seed generator to the same value for each model so the same random bootstrap samples are identical across models.</p>
+</div>
+<div id="random-forest" class="section level4">
+<h4>Random Forest</h4>
+<p>Let’s fit a <a href="https://en.wikipedia.org/wiki/Random_forest">random forest</a> model. See the help for <code>?train</code> and click on the link therein to see what abbreviations correspond to which model. First set the random number seed generator to some number, e.g., 8382, that we’ll use for all other models we make. The model forumula here takes the know data, and the <code>responseVar~.</code> syntax says “predict <code>responseVar</code> using every other variable in the data.” Finally, notice how when we call <code>train()</code> from the <strong>caret</strong> package using “rf” as the type of model, it automatically loads the <strong><a href="https://cran.r-project.org/package=randomForest">randomForest</a></strong> package that you installed. If you didn’t have it installed, it would probably ask you to install it first.</p>
+<pre class="r"><code># Set the random number seed generator
+set.seed(8382)
+
+# Fit a random forest model for outcome against everything in the model (~.)
+modrf &lt;- train(outcome~., data=known, method=&quot;rf&quot;)
+
+# Take a look at the output
+modrf</code></pre>
+<pre><code>## Random Forest 
+## 
+## 77 samples
+## 10 predictors
+##  2 classes: &#39;Death&#39;, &#39;Recover&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 77, 77, 77, 77, 77, 77, ... 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy  Kappa
+##    2    0.691     0.351
+##    6    0.706     0.390
+##   10    0.703     0.388
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 6.</code></pre>
+<p>Take a look at what that tells us. It tells us it’s fitting a Random Forest model using 77 samples, predicting a categorical outcome class (Death or Recover) based on 10 predictors. It’s not doing any pre-processing like centering or scaling, and it’s doing bootstrap resampling of 77 samples with replacement, repeated 25 times each. Random Forest has a single tuning parameter, <span class="math inline">\(m_{\text{try}}\)</span> – the algorithm will select <span class="math inline">\(m_{\text{try}}\)</span> number of predictors to attempt a split for classification when building a classification tree. The caret package does 25 bootstrap resamples for different values of <span class="math inline">\(m_{\text{try}}\)</span> (you can also control this too if you want), and computes <a href="https://en.wikipedia.org/wiki/Sensitivity_and_specificity#Confusion_matrix">accuracy</a> and <a href="https://en.wikipedia.org/wiki/Cohen%27s_kappa">kappa</a> measures of performance on the held-out samples.</p>
+<p>Accuracy is the number of true assignments to the correct class divided by the total number of samples. <a href="https://en.wikipedia.org/wiki/Cohen%27s_kappa">Kappa</a> takes into account the expected accuracy while considering chance agreement, and is useful for extremely imbalanced class distributions. For continuous outcomes, you can measure things like RMSE or correlation coefficients.</p>
+<blockquote>
+<p><strong><em>A bit about random forests.</em></strong> Random forests are an ensemble learning approach based on classification trees. The CART (classification and regression tree) method searches through all available predictors to try to find a value of a single variable that splits the data into two groups by minimizing the impurity of the outcome between the two groups. The process is repeated over and over again until a hierarchical (tree) structure is created. But trees don’t have great performance (prediction accuracy) compared to other models. Small changes in the data can drastically affect the structure of the tree.</p>
+<p>Tree algorithms are improved by ensemble approaches - instead of growing a single tree, grow many trees and aggregate (majority vote or averaging) the predictions made by the ensemble. The random forest algorithm is essentially:</p>
+<ol style="list-style-type: decimal">
+<li>From the training data of <em>n</em> samples, draw a bootstrap sample of size <em>n</em>.</li>
+<li>For each bootstrap sample, grow a classification tree, but with a small modification compared to the traditional algorithm: instead of selecting from all possible predictor variables to form a split, choose the best split among a randomly selected subset of <span class="math inline">\(m_{\text{try}}\)</span> predictors. Here, <span class="math inline">\(m_{\text{try}}\)</span> is the only tuning parameter. The trees are grown to their maximum size and not “pruned” back.</li>
+<li>Repeat the steps agove until a large number of trees is grown.</li>
+<li>Estimate the performance of the ensemble of trees using the “out-of-bag” samples - i.e., those that were never selected during the bootstrap procedure in step #1.</li>
+<li>Estimate the importance of each variable in the model by randomly permuting each predictor variable in testing on the out-of-bag samples. If a predictor is important, prediction accuracy will degrade. If the predictor isn’t that helpful, performance doesn’t deteriorate as much.</li>
+</ol>
+<p>Random forests are efficient compared to growing a single tree. For one, the RF algorithm only selects from <span class="math inline">\(m_{\text{try}}\)</span> predictors at each step, rather than all available predictors. Usually <span class="math inline">\(m_{\text{try}}\)</span> is by default somewhere close to the square root of the total number of available predictors, so the search is very fast. Second, while the traditional CART tree algorithm has to go through extensive cross-validation based pruning to avoid overfitting, the RF algorithm doesn’t do any pruning at all. In fact, building an RF model <em>can</em> be faster than building a single tree!</p>
+</blockquote>
+<p>Caret also provides a function for <a href="http://topepo.github.io/caret/variable-importance.html">assessing the importance of each variable</a>. The <code>varImp</code> function knows what kind of model was fitted and knows how to estimate variable importance. For Random Forest, it’s an estimate of how much worse the prediction gets after randomly shuffling the values of each predictor variable in turn. A variable that’s important will result in a much worse prediction than a variable that’s not as meaningful.</p>
+<pre class="r"><code>varImp(modrf, scale=TRUE)</code></pre>
+<pre><code>## rf variable importance
+## 
+##                  Overall
+## age              100.000
+## days_to_outcome   69.005
+## days_to_hospital  43.839
+## early_outcome     36.047
+## Other             15.664
+## hospital          10.250
+## male               4.906
+## Shanghai           3.966
+## Jiangsu            0.133
+## Zhejiang           0.000</code></pre>
+<p>You can also pass that whole thing to <code>plot()</code>, or wrap the statement in <code>plot()</code>, to see a graphical representation.</p>
+<pre class="r"><code>varImp(modrf, scale=TRUE) %&gt;% plot()</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+</div>
+<div id="stochastic-gradient-boosting" class="section level4">
+<h4>Stochastic Gradient Boosting</h4>
+<p>Let’s try a different method, <a href="https://en.wikipedia.org/wiki/Gradient_boosting">stochastic gradient boosting</a>, which uses a different method for building an ensemble of classification trees (see <a href="https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/">this post</a> for a discussion of bagging vs boosting). This requires the <strong><a href="https://cran.r-project.org/package=gbm">gbm</a></strong> package. Again, set the random seed generator.</p>
+<pre class="r"><code>set.seed(8382)
+modgbm &lt;- train(outcome~., data=known, method=&quot;gbm&quot;, verbose=FALSE)
+modgbm</code></pre>
+<pre><code>## Stochastic Gradient Boosting 
+## 
+## 77 samples
+## 10 predictors
+##  2 classes: &#39;Death&#39;, &#39;Recover&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 77, 77, 77, 77, 77, 77, ... 
+## Resampling results across tuning parameters:
+## 
+##   interaction.depth  n.trees  Accuracy  Kappa
+##   1                   50      0.622     0.219
+##   1                  100      0.634     0.244
+##   1                  150      0.622     0.224
+##   2                   50      0.635     0.242
+##   2                  100      0.644     0.259
+##   2                  150      0.638     0.249
+##   3                   50      0.625     0.221
+##   3                  100      0.647     0.272
+##   3                  150      0.639     0.255
+## 
+## Tuning parameter &#39;shrinkage&#39; was held constant at a value of 0.1
+## 
+## Tuning parameter &#39;n.minobsinnode&#39; was held constant at a value of 10
+## Accuracy was used to select the optimal model using  the largest value.
+## The final values used for the model were n.trees = 100,
+##  interaction.depth = 3, shrinkage = 0.1 and n.minobsinnode = 10.</code></pre>
+<p>Notice how stochastic gradient boosting has two different tuning parameters - interaction depth and n trees. There were others (shrinkage, and <code>n.minobsinnode</code>) that were held constant. The caret package automates the bootstrap resampling based performance assessment across all combinations of depth and ntrees, and it tells you where you got the best performance. Notice that the performance here doesn’t seem to be as good as random forest. We can also look at variable importance here too, and see similar rankings.</p>
+<pre class="r"><code>library(gbm) # needed because new version of caret doesn&#39;t load
+varImp(modgbm, scale=TRUE)
+varImp(modgbm, scale=TRUE) %&gt;% plot()</code></pre>
+</div>
+<div id="model-comparison-random-forest-vs-gradient-boosting" class="section level4">
+<h4>Model comparison: Random Forest vs Gradient Boosting</h4>
+<p>Let’s compare those two models. Because the random seed was set to the same number (8382), the bootstrap resamples were identical across each model. Let’s directly compare the results for the best models from each method.</p>
+<pre class="r"><code>modsum &lt;- resamples(list(gbm=modgbm, rf=modrf))
+summary(modsum)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = modsum)
+## 
+## Models: gbm, rf 
+## Number of resamples: 25 
+## 
+## Accuracy 
+##      Min. 1st Qu. Median  Mean 3rd Qu.  Max. NA&#39;s
+## gbm 0.500   0.594  0.645 0.647   0.714 0.793    0
+## rf  0.517   0.636  0.714 0.706   0.793 0.867    0
+## 
+## Kappa 
+##       Min. 1st Qu. Median  Mean 3rd Qu.  Max. NA&#39;s
+## gbm 0.0249   0.152  0.220 0.272   0.404 0.574    0
+## rf  0.0000   0.255  0.378 0.390   0.578 0.724    0</code></pre>
+<p>It appears that random forest is doing much better in terms of both accuracy and kappa. Let’s train a few other types of models.</p>
+</div>
+<div id="elastic-net-regularized-logistic-regression" class="section level4">
+<h4>Elastic net regularized logistic regression</h4>
+<p><a href="https://en.wikipedia.org/wiki/Elastic_net_regularization">Elastic net regularization</a> is a method that combines both the <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)">lasso</a> and <a href="https://en.wikipedia.org/wiki/Tikhonov_regularization">ridge</a> methods of reguarizing a model. <a href="https://en.wikipedia.org/wiki/Regularization_(mathematics)">Regularization</a> is a method for <em>penalizing</em> a model as it gains complexity with more predictors in an attempt to avoid overfitting. You’ll need the <strong><a href="https://cran.r-project.org/package=glmnet">glmnet</a></strong> package for this.</p>
+<pre class="r"><code>set.seed(8382)
+modglmnet &lt;- train(outcome~., data=known, method=&quot;glmnet&quot;)
+modglmnet</code></pre>
+<pre><code>## glmnet 
+## 
+## 77 samples
+## 10 predictors
+##  2 classes: &#39;Death&#39;, &#39;Recover&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 77, 77, 77, 77, 77, 77, ... 
+## Resampling results across tuning parameters:
+## 
+##   alpha  lambda    Accuracy  Kappa
+##   0.10   0.000391  0.586     0.150
+##   0.10   0.003908  0.589     0.154
+##   0.10   0.039077  0.602     0.171
+##   0.55   0.000391  0.586     0.150
+##   0.55   0.003908  0.592     0.162
+##   0.55   0.039077  0.623     0.215
+##   1.00   0.000391  0.587     0.152
+##   1.00   0.003908  0.592     0.162
+##   1.00   0.039077  0.629     0.225
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final values used for the model were alpha = 1 and lambda = 0.0391.</code></pre>
+</div>
+<div id="k-nearest-neighbor" class="section level4">
+<h4>k-nearest neighbor</h4>
+<p><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbor</a> attempts to assign samples to their closest labeled neighbors in high-dimensional space. You’ll need the <strong><a href="https://cran.r-project.org/package=kknn">kknn</a></strong> package for this.</p>
+<pre class="r"><code>set.seed(8382)
+modknn &lt;- train(outcome~., data=known, method=&quot;kknn&quot;)
+modknn</code></pre>
+<pre><code>## k-Nearest Neighbors 
+## 
+## 77 samples
+## 10 predictors
+##  2 classes: &#39;Death&#39;, &#39;Recover&#39; 
+## 
+## No pre-processing
+## Resampling: Bootstrapped (25 reps) 
+## Summary of sample sizes: 77, 77, 77, 77, 77, 77, ... 
+## Resampling results across tuning parameters:
+## 
+##   kmax  Accuracy  Kappa
+##   5     0.634     0.242
+##   7     0.634     0.242
+##   9     0.634     0.242
+## 
+## Tuning parameter &#39;distance&#39; was held constant at a value of 2
+## 
+## Tuning parameter &#39;kernel&#39; was held constant at a value of optimal
+## Accuracy was used to select the optimal model using  the largest value.
+## The final values used for the model were kmax = 9, distance = 2 and
+##  kernel = optimal.</code></pre>
+</div>
+<div id="compare-all-the-models" class="section level4">
+<h4>Compare all the models</h4>
+<p>Now let’s look at the performance characteristics for the best performing model across all four types of models we produced. It still looks like random forest is coming through as the winner.</p>
+<pre class="r"><code>modsum &lt;- resamples(list(gbm=modgbm, rf=modrf, glmnet=modglmnet, knn=modknn))
+summary(modsum)</code></pre>
+<pre><code>## 
+## Call:
+## summary.resamples(object = modsum)
+## 
+## Models: gbm, rf, glmnet, knn 
+## Number of resamples: 25 
+## 
+## Accuracy 
+##         Min. 1st Qu. Median  Mean 3rd Qu.  Max. NA&#39;s
+## gbm    0.500   0.594  0.645 0.647   0.714 0.793    0
+## rf     0.517   0.636  0.714 0.706   0.793 0.867    0
+## glmnet 0.440   0.606  0.636 0.638   0.655 0.905    0
+## knn    0.545   0.588  0.621 0.634   0.679 0.821    0
+## 
+## Kappa 
+##           Min. 1st Qu. Median  Mean 3rd Qu.  Max. NA&#39;s
+## gbm     0.0249   0.152  0.220 0.272   0.404 0.574    0
+## rf      0.0000   0.255  0.378 0.390   0.578 0.724    0
+## glmnet -0.0736   0.182  0.240 0.247   0.286 0.738    0
+## knn     0.0667   0.152  0.216 0.242   0.322 0.578    0</code></pre>
+<p>The <code>bwplot()</code> function can take this model summary object and visualize it.</p>
+<pre class="r"><code>bwplot(modsum)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+</div>
+</div>
+<div id="prediction-on-unknown-samples" class="section level3">
+<h3>Prediction on unknown samples</h3>
+<p>Once we have a model trained it’s fairly simple to predict the class of the unknown samples. Take a look at the unknown data again:</p>
+<pre class="r"><code>unknown</code></pre>
+<p>Now, since Random Forest worked best, let’s use that model to predict the outcome!</p>
+<pre class="r"><code>predict(modrf, newdata=unknown)</code></pre>
+<pre><code>##  [1] Recover Recover Death   Recover Death   Death   Recover Recover
+##  [9] Death   Recover Death   Recover Recover Recover Recover Death  
+## [17] Recover Death   Death   Death   Recover Recover Recover Recover
+## [25] Recover Recover Recover Recover Death   Death   Recover Recover
+## [33] Recover Recover Recover Recover Recover Recover Recover Recover
+## [41] Recover Recover Recover Death   Recover Recover Recover Death  
+## [49] Recover Recover Recover Recover Recover Recover Recover Recover
+## [57] Recover
+## Levels: Death Recover</code></pre>
+<p>This gives you a vector of values that would be the outcome for the individuals in the <code>unknown</code> dataset. From here it’s pretty simple to put them back in the data with a <code>mutate()</code>.</p>
+<pre class="r"><code>unknown %&gt;%
+  mutate(outcome=predict(modrf, newdata=unknown))</code></pre>
+<pre><code>## # A tibble: 57 x 12
+##    case_id outcome   age  male hospital days_to_hospital days_to_outcome
+##      &lt;chr&gt;  &lt;fctr&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;            &lt;int&gt;           &lt;int&gt;
+##  1  case_4 Recover    18     0        1                8              46
+##  2  case_9 Recover    39     1        1                0              18
+##  3 case_15   Death    34     0        0               11              38
+##  4 case_16 Recover    51     1        0                3              20
+##  5 case_22   Death    56     1        1                4              17
+##  6 case_28   Death    51     1        0                6               6
+##  7 case_31 Recover    43     1        0                4              21
+##  8 case_32 Recover    46     1        0                3              20
+##  9 case_38   Death    28     1        0                2               7
+## 10 case_39 Recover    38     1        1                0              18
+## # ... with 47 more rows, and 5 more variables: early_outcome &lt;int&gt;,
+## #   Jiangsu &lt;int&gt;, Other &lt;int&gt;, Shanghai &lt;int&gt;, Zhejiang &lt;int&gt;</code></pre>
+<p>Alternatively, you could pass in <code>type=&quot;prob&quot;</code> to get prediction probabilities instead of predicted classes.</p>
+<pre class="r"><code>predict(modrf, newdata=unknown, type=&quot;prob&quot;) %&gt;% head()</code></pre>
+<pre><code>##   Death Recover
+## 1 0.110   0.890
+## 2 0.036   0.964
+## 3 0.618   0.382
+## 4 0.156   0.844
+## 5 0.704   0.296
+## 6 0.962   0.038</code></pre>
+<p>You could also imagine going further to get the prediction probabilities out of each type of model we made. You could add up the prediction probabilities for Death and Recovery for each individual across model types, and then compute a ratio. If across all the models that ratio is, for example, 2x in favor of death, you could predict death, or if it’s 2x in favor of recovery, you predict recover, and if it’s in between, you might call it “uncertain.” This lets you not only reap the advantages of ensemble learning within a single algorithm, but also lets you use information across a variety of different algorithm types.</p>
+</div>
+</div>
+<div id="forecasting" class="section level2">
+<h2>Forecasting</h2>
+<div id="the-prophet-package" class="section level3">
+<h3>The Prophet Package</h3>
+<p>Forecasting is a common data science task that helps with things like capacity planning, goal setting, anomaly detection, and resource use projection. Forecasting can involve complex models, where overly simplistic models can be brittle and can be too inflexible to incorporate useful assumptions about the underlying data.</p>
+<p>Recently, the data science team at Facebook released as open-source a tool they developed for forecasting, called <strong>prophet</strong>, as both an R and python package.</p>
+<!-- - Release blog post: https://research.fb.com/prophet-forecasting-at-scale/ -->
+<ul>
+<li>Paper (preprint): <a href="https://peerj.com/preprints/3190/" class="uri">https://peerj.com/preprints/3190/</a></li>
+<li>Project homepage: <a href="https://facebook.github.io/prophet/" class="uri">https://facebook.github.io/prophet/</a></li>
+<li>Documentation: <a href="https://facebook.github.io/prophet/docs/quick_start.html" class="uri">https://facebook.github.io/prophet/docs/quick_start.html</a></li>
+<li>R package: <a href="https://cran.r-project.org/web/packages/prophet/index.html" class="uri">https://cran.r-project.org/web/packages/prophet/index.html</a></li>
+<li>Python package: <a href="https://pypi.python.org/pypi/fbprophet/" class="uri">https://pypi.python.org/pypi/fbprophet/</a></li>
+<li>Source code: <a href="https://github.com/facebook/prophet" class="uri">https://github.com/facebook/prophet</a></li>
+</ul>
+<p><small></p>
+<blockquote>
+<p>Google and Twitter have released as open-source similar packages: Google’s <strong>CausalImpact</strong> software (<a href="https://google.github.io/CausalImpact/" class="uri">https://google.github.io/CausalImpact/</a>) assists with inferring causal effects of a design intervention on a time series, and Twitter’s <strong>AnomalyDetection</strong> package (<a href="https://github.com/twitter/AnomalyDetection" class="uri">https://github.com/twitter/AnomalyDetection</a>) was designed to detect blips and anomalies in time series data given the presence of seasonality and underlying trends. See also Rob Hyndman’s <strong><a href="https://cran.r-project.org/package=forecast">forecast</a></strong> package in R.</p>
+</blockquote>
+<p></small></p>
+<p>Prophet is optimized for forecasting problems that have the following characteristics:</p>
+<ul>
+<li>Hourly, daily, or weekly observations with at least a few months (preferably a year) of history</li>
+<li>Strong multiple “human-scale” seasonalities: day of week and time of year</li>
+<li>Important holidays that occur at irregular intervals that are known in advance (e.g. the Super Bowl)</li>
+<li>A reasonable number of missing observations or large outliers</li>
+<li>Historical trend changes, for instance due to product launches or logging changes</li>
+<li>Trends that are non-linear growth curves, where a trend hits a natural limit or saturates</li>
+</ul>
+<p>These use cases are optimized for business forecasting problems encountered at Facebook, but many of the characteristics here apply well to other kinds of forecasting problems. Further, while the default settings can produce fairly high-quality forecasts, if the results aren’t satisfactory, you aren’t stuck with a completely automated model you can’t change. The prophet package allows you to tweak forecasts using different parameters. The process is summarized in the figure below.</p>
+<div class="figure">
+<img src="img/prophet.png" alt="Schematic view of the analyst-in-the-loop approach to forecasting at scale, which best makes use of human and automated tasks. Image from the Prophet preprint noted above." />
+<p class="caption"><em>Schematic view of the analyst-in-the-loop approach to forecasting at scale, which best makes use of human and automated tasks. Image from the Prophet preprint noted above.</em></p>
+</div>
+<p><strong><a href="https://cran.r-project.org/package=prophet">Prophet</a></strong> is a good replacement for the <strong><a href="https://cran.r-project.org/package=forecast">forecast</a></strong> package because:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Prophet makes it easy.</strong> The forecast package offers many different techniques, each with their own strengths, weaknesses, and tuning parameters. While the choice of parameter settings and model specification gives the expert user great flexibility, the downside is that choosing the wrong parameters as a non-expert can give you poor results. Prophet’s defaults work pretty well.</li>
+<li><strong>Prophet’s forecasts are intuitively customizable.</strong> You can choose smoothing parameters for seasonality that adjust how closely you fit historical cycles, and you can adjust how agressively to follow historical trend changes. You can manually specify the upper limit on growth curves, which allows for you to supplement the automatic forecast with your own prior information about how your forecast will grow (or decline). You can also specify irregular events or time points (e.g., election day, the Super Bowl, holiday travel times, etc) that can result in outlying data points.</li>
+</ol>
+<p>The prophet procedure is essentially a regression model with some additional components:</p>
+<ol style="list-style-type: decimal">
+<li>A piecewise linear or logistic growth curve trend. Prophet automatically detects changes in trends by selecting changepoints from the data.</li>
+<li>A yearly seasonal component modeled using Fourier series.</li>
+<li>A weekly seasonal component using dummy variables.</li>
+<li>A user-provided list of important holidays.</li>
+</ol>
+<p>See the prophet preprint for more.</p>
+<blockquote>
+<p>Taylor SJ, Letham B. (2017) Forecasting at scale. <em>PeerJ Preprints</em> 5:e3190v2 <a href="https://doi.org/10.7287/peerj.preprints.3190v2" class="uri">https://doi.org/10.7287/peerj.preprints.3190v2</a></p>
+</blockquote>
+</div>
+<div id="cdc-ili-time-series-data" class="section level3">
+<h3>CDC ILI time series data</h3>
+<p>Here we’re going to use historical flu tracking data from the CDC’s U.S. Outpatient <a href="https://wwwn.cdc.gov/ilinet/">Influenza-like Illness Surveillance Network</a> along with data from the <a href="https://gis.cdc.gov/grasp/fluview/mortality.html">National Center for Health Statistics (NCHS) Mortality Surveillance System</a>. This contains ILI totals from CDC and flu + pneumonia death data from NCHS through the end of October 2017. It’s the <strong><a href="data/ilinet.csv">ilinet.csv</a></strong> file on the <a href="data.html">data</a> page. Let’s read it in, then take a look. Notice that <code>week_start</code> was automatically read in as a date data type. What you see as <code>2003-01-06</code> is actually represented internally as a date, not a character.</p>
+<pre class="r"><code># Read in the ILI data.
+ili &lt;- read_csv(&quot;data/ilinet.csv&quot;)
+ili</code></pre>
+<pre><code>## # A tibble: 772 x 6
+##    week_start ilitotal total_patients fludeaths pneumoniadeaths all_deaths
+##        &lt;date&gt;    &lt;int&gt;          &lt;dbl&gt;     &lt;int&gt;           &lt;dbl&gt;      &lt;dbl&gt;
+##  1 2003-01-06     3260         171193        NA              NA         NA
+##  2 2003-01-13     3729         234513        NA              NA         NA
+##  3 2003-01-20     4204         231550        NA              NA         NA
+##  4 2003-01-27     5696         235566        NA              NA         NA
+##  5 2003-02-03     7079         246969        NA              NA         NA
+##  6 2003-02-10     7782         245751        NA              NA         NA
+##  7 2003-02-17     7649         253656        NA              NA         NA
+##  8 2003-02-24     7228         241110        NA              NA         NA
+##  9 2003-03-03     5606         241683        NA              NA         NA
+## 10 2003-03-10     4450         228549        NA              NA         NA
+## # ... with 762 more rows</code></pre>
+<p>We have information on ILI frequency since January 2003, but we don’t have information on death data until 2009. From here, we have data up through the end of October 2017.</p>
+<pre class="r"><code>tail(ili)</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##   week_start ilitotal total_patients fludeaths pneumoniadeaths all_deaths
+##       &lt;date&gt;    &lt;int&gt;          &lt;dbl&gt;     &lt;int&gt;           &lt;dbl&gt;      &lt;dbl&gt;
+## 1 2017-09-25     9065         730058        18            2582      46334
+## 2 2017-10-02    11970         959420        13            2594      45429
+## 3 2017-10-09    12429         943839        15            2480      43237
+## 4 2017-10-16    13195         966259        21            2441      41150
+## 5 2017-10-23    14555         945007        16            2256      37616
+## 6 2017-10-30    15494         934670        24            1894      34084</code></pre>
+</div>
+<div id="forecasting-with-prophet" class="section level3">
+<h3>Forecasting with prophet</h3>
+<p>Let’s load the prophet library then take a look at the help for <code>?prophet</code>.</p>
+<pre class="r"><code>library(prophet)
+# ?prophet</code></pre>
+<p>The help tells you that prophet requires a data frame containing columns named <code>ds</code> of type date and <code>y</code>, containing the time series data. Many other options are available. Let’s start with the data, select <code>week_start</code> calling it <code>ds</code>, and <code>ilitotal</code> calling it <code>y</code>.</p>
+<pre class="r"><code>ili %&gt;% 
+  select(week_start, ilitotal)
+
+ili %&gt;% 
+  select(ds=week_start, y=ilitotal)</code></pre>
+<p>Once we do that, we can simply pipe this to <code>prophet()</code> to produce the prophet forecast model.</p>
+<pre class="r"><code>pmod &lt;- ili %&gt;% 
+  select(ds=week_start, y=ilitotal) %&gt;% 
+  prophet()</code></pre>
+<p>Now, let’s make a “future” dataset to use to predict. Looking at <code>?make_future_dataframe</code> will tell you that this function takes the prophet model and the number of days forward to project.</p>
+<pre class="r"><code>future &lt;- make_future_dataframe(pmod, periods=365*5)
+tail(future)</code></pre>
+<p>Now, let’s forecast the future! Take a look - the <code>yhat</code>, <code>yhat_lower</code>, and <code>yhat_upper</code> columns are the predictions, lower, and upper confidence bounds. There are additional columns for seasonal and yearly trend effects.</p>
+<pre class="r"><code>forecast &lt;- predict(pmod, future)
+tail(forecast)</code></pre>
+<p>If we pass the prophet model and the forecast into the generic <code>plot()</code> function, it knows what kind of objects are being passed, and will visualize the data appropriately.</p>
+<pre class="r"><code>plot(pmod, forecast) + ggtitle(&quot;Five year ILI forecast&quot;)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<p>You can also use the <code>prophet_plot_components</code> function to see the forecast broken down into trend and yearly seasonality. We see an inflection point around 2010 where ILI reports seem to stop rising – if you go back to the previous plot you’ll see it there too. Perhaps this is due to a change in surveillance or reporting strategy. You also see the yearly trend, which makes sense for flu outbreaks. You also noticed that when we originally fit the model, daily and weekly seasonality was disabled. This makes sense for broad time-scale things like influenza surveillance over decades, but you might enable it for more granular time-series data.</p>
+<pre class="r"><code>prophet_plot_components(pmod, forecast)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<p>Try it with the flu death data. Look at both flu deaths and pneumonia deaths. First, limit the data frame to only include the latter portion where we have death surveillance data. Then use the same procedure.</p>
+<pre class="r"><code>pmod &lt;- ili %&gt;%
+  filter(!is.na(pneumoniadeaths)) %&gt;%
+  select(ds=week_start, y=pneumoniadeaths) %&gt;%
+  prophet()
+future &lt;- make_future_dataframe(pmod, periods=365*5)
+forecast &lt;- predict(pmod, future)
+plot(pmod, forecast) + ggtitle(&quot;Five year pneumonia death forecast&quot;)</code></pre>
+<p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>See the prophet preprint for more.</p>
+<blockquote>
+<p>Taylor SJ, Letham B. (2017) Forecasting at scale. <em>PeerJ Preprints</em> 5:e3190v2 <a href="https://doi.org/10.7287/peerj.preprints.3190v2" class="uri">https://doi.org/10.7287/peerj.preprints.3190v2</a></p>
+</blockquote>
+<hr />
+<hr />
+<p><small><strong><em>Attribution</em>:</strong> Course material inspired by and/or modified in part from <a href="https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post">Shirin Glander’s blog</a> and <a href="https://facebook.github.io/prophet/">Facebook’s Data Science team</a>.</p>
+</div>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

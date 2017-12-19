@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>List Manipulation</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">List Manipulation</h1>
+
+</div>
+
+
+<p>Formatting data as a list is sometimes necessary. However, retrieving this kind of non-tabular information for analysis can be challenging. This workshop will introduce students to the motivations and techniques for storing and parsing list objects in R. Some familiarity with R will be helpful.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Compared to the data frame, vector and matrix, the list is under-represented in many introductory R tutorials. This likely has less do with the relative importance of lists, and more to do with their potential complexity. However, an understanding of how to create, curate and manipulate objects of this type can prove immensely useful.</p>
+<p>The list is one of the most versatile data types in R thanks to its ability to accommodate heterogenous elements. A single list can contain multiple elements, regardless of their types or whether these elements contain further nested data. So you can have a list of a list of a list of a list of a list …</p>
+<p>Garrett Grolemund and Hadley Wickham’s <strong>R For Data Science</strong> includes a section on lists. They use a helpful simile for the list as a shaker filled with packets of pepper<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. To retrieve individual “grains” of pepper, you’d have to first access the shaker … then the packet inside the shaker … then the pepper inside the packet.</p>
+<p>Still confused? Here’s another way of thinking about it: the list is like a movie. Each movie has a cast, crew, budget, script, etc. These elements may have different dimensions (more cast members than crew) and be of different types (budget is a number, script is a series of characters), yet they are all part of the same movie.</p>
+<p>We’ll use a brief review of R basics as a vehicle to get started with lists.</p>
+</div>
+<div id="r-basics" class="section level2">
+<h2>R Basics</h2>
+<p>To do anything interesting in R, you must assign <em>values</em> (or experessions that produce values) to <em>objects</em>. The syntax for assignment is the name of the object followed by a <code>&lt;-</code> operator and the expression to be evaluated.</p>
+<pre class="r"><code>x &lt;- 3
+y &lt;- 2 + x</code></pre>
+<p>Although the two are mostly equivalent, the <code>&lt;-</code> should be used in place of the <code>=</code> to improve code legibility and reduce potential mistakes … we’ll see why this is important when we start creating “named” lists.</p>
+<p>Every object has a <em>class</em>, which can be accessed using the <code>class()</code> function. Certain functions are specific to a given class. Other functions can behave differently depending on the class of the input. The “list” class is what we are interested in for this tutorial.</p>
+<p>One of the most fundamental types of objects is the <em>vector</em>. A vector is a series of elements from 1 to n. Each element can be accessed by an identifier (“index”) using square brackets <code>y[1]</code>. We will make extensive use of a modifed version of this syntax in order to manipulate list items.</p>
+</div>
+<div id="creating-lists" class="section level2">
+<h2>Creating Lists</h2>
+<p>The most direct way to create a list is with the <code>list()</code> function.</p>
+<pre class="r"><code>slamwins &lt;- list(17,14,14,12,11)</code></pre>
+<p>To confirm that the object we’ve created is indeed a “list” we can use <code>class()</code> as described above.</p>
+<pre class="r"><code>class(slamwins)</code></pre>
+<pre><code>## [1] &quot;list&quot;</code></pre>
+<p>OK. Let’s see what a list looks like as printed output …</p>
+<pre class="r"><code>slamwins</code></pre>
+<pre><code>## [[1]]
+## [1] 17
+## 
+## [[2]]
+## [1] 14
+## 
+## [[3]]
+## [1] 14
+## 
+## [[4]]
+## [1] 12
+## 
+## [[5]]
+## [1] 11</code></pre>
+</div>
+<div id="indexing-lists" class="section level2">
+<h2>Indexing Lists</h2>
+<p>The printed output above isn’t pretty, but it does include some hints as to how we can isolate specific elements of the list. In this case there are <em>double</em> square brackets (e.g. [[1]]) as well as <em>single</em> square brackets (e.g. [1]). As with vectors, data frames and matrices, the bracket notation is used for indexing. However, a list can have mulitple levels of indices. The value in the <em>double</em> brackets represents the number of the parent element in the list. The value in the <em>single</em> brackets represents the number of the element <em>in that parent element</em> of the list. We can chain this notation together to access granular parts of our list.</p>
+<pre class="r"><code>slamwins[[2]][1]</code></pre>
+<pre><code>## [1] 14</code></pre>
+<p>If we’d prefer a more explicit way to access elements of a list, then we can give them names. When given a list as an argument, the <code>names()</code> function can let you assign a character vector of the same length as the list as the names for each corresponding element.</p>
+<pre class="r"><code>names(slamwins) &lt;- c(&quot;Federer&quot;, &quot;Sampras&quot;, &quot;Nadal&quot;, &quot;Djokovic&quot;, &quot;Borg&quot;)
+slamwins</code></pre>
+<pre><code>## $Federer
+## [1] 17
+## 
+## $Sampras
+## [1] 14
+## 
+## $Nadal
+## [1] 14
+## 
+## $Djokovic
+## [1] 12
+## 
+## $Borg
+## [1] 11</code></pre>
+<p>Another way to set names to is to do so while creating the list.</p>
+<pre class="r"><code>slamwins &lt;- list(Federer = 17, Sampras = 14, Nadal = 14, Djokovic = 12, Borg = 11)
+slamwins</code></pre>
+<pre><code>## $Federer
+## [1] 17
+## 
+## $Sampras
+## [1] 14
+## 
+## $Nadal
+## [1] 14
+## 
+## $Djokovic
+## [1] 12
+## 
+## $Borg
+## [1] 11</code></pre>
+<p>With our list named now we can use the <code>$</code> operator to extract specific values by key.</p>
+<pre class="r"><code>slamwins$Federer</code></pre>
+<pre><code>## [1] 17</code></pre>
+<pre class="r"><code># federer has ? more titles than borg
+slamwins$Federer - slamwins$Borg</code></pre>
+<pre><code>## [1] 6</code></pre>
+<p>The example above could be consider a minimal viable list … there’s a single level of named elements, which just as easily could have been stored as a vector. Let’s add another layer of data nested into our list object.</p>
+<pre class="r"><code>slamwins &lt;- 
+    list(
+        Federer = 
+            list(
+                AUS = 4, 
+                FR = 1,
+                WIM = 7,
+                US = 5),
+        Sampras = 
+            list(
+                AUS = 2,
+                FR = 0,
+                WIM = 7,
+                US = 5),
+        Nadal = 
+            list(
+                AUS = 1,
+                FR = 9,
+                WIM = 2,
+                US = 2),
+        Djokovic = 
+            list(
+                AUS = 6,
+                FR = 1,
+                WIM = 3,
+                US = 2),
+        Borg = 
+            list(
+                AUS = 0,
+                FR = 6,
+                WIM = 5,
+                US = 0)
+    )</code></pre>
+<p>In this case we have created a named list of 5 named lists each of which has 5 named values.</p>
+<p>But wait … we’re missing something … we have the number of slam wins by event but what about the total number of wins per player?</p>
+</div>
+<div id="editing-lists" class="section level2">
+<h2>Editing Lists</h2>
+<p>One way to solve the problem we’re encountering would be to use the indexing syntax discussed earlier to match our “totals” with the appropriate list item. That would basically amount to using a <em>for loop</em>:</p>
+<pre class="r"><code>totals &lt;- c(17, 14, 14, 12, 11)
+
+for (i in 1:length(slamwins)) {
+    
+    slamwins[[i]]$Total &lt;- totals[i]
+
+}
+
+slamwins</code></pre>
+<pre><code>## $Federer
+## $Federer$AUS
+## [1] 4
+## 
+## $Federer$FR
+## [1] 1
+## 
+## $Federer$WIM
+## [1] 7
+## 
+## $Federer$US
+## [1] 5
+## 
+## $Federer$Total
+## [1] 17
+## 
+## 
+## $Sampras
+## $Sampras$AUS
+## [1] 2
+## 
+## $Sampras$FR
+## [1] 0
+## 
+## $Sampras$WIM
+## [1] 7
+## 
+## $Sampras$US
+## [1] 5
+## 
+## $Sampras$Total
+## [1] 14
+## 
+## 
+## $Nadal
+## $Nadal$AUS
+## [1] 1
+## 
+## $Nadal$FR
+## [1] 9
+## 
+## $Nadal$WIM
+## [1] 2
+## 
+## $Nadal$US
+## [1] 2
+## 
+## $Nadal$Total
+## [1] 14
+## 
+## 
+## $Djokovic
+## $Djokovic$AUS
+## [1] 6
+## 
+## $Djokovic$FR
+## [1] 1
+## 
+## $Djokovic$WIM
+## [1] 3
+## 
+## $Djokovic$US
+## [1] 2
+## 
+## $Djokovic$Total
+## [1] 12
+## 
+## 
+## $Borg
+## $Borg$AUS
+## [1] 0
+## 
+## $Borg$FR
+## [1] 6
+## 
+## $Borg$WIM
+## [1] 5
+## 
+## $Borg$US
+## [1] 0
+## 
+## $Borg$Total
+## [1] 11</code></pre>
+<p>There are a couple of potential issues with this code. The main thing is that we need to know what the totals are ahead of time. It would be a lot better to calculate those <em>dynamically</em> in case our underlying data changes … or in case we’re performing a calculation that’s not as simple as a sum. Another problem with this approach is that it’s implemented with a for loop, which is a construct that works when programming R but can be problematic<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>.</p>
+<p>Enter the “apply” functions …</p>
+<p>For this lesson, the two most relevant members of this family of functions are <code>lapply()</code> and <code>sapply()</code>, both of which allow you to pass <em>other</em> functions to each element of a list.</p>
+<p>Before we start working with these functions, we need to restore our list the state it was in before we ran the loop to add the sums for each element. Assigning an element as <code>NULL</code> effectively deletes that element from the list.</p>
+<pre class="r"><code>for (i in 1:length(slamwins)) {
+    
+    slamwins[[i]]$Total &lt;- NULL
+    
+}</code></pre>
+<p>And because he have nested data (lists within lists within lists …) we also need to understand how to use <code>unlist()</code> in order to <em>apply</em> our functions appropriately. Unlist is simply returns a “flat” version of all of the elements in the list as a vector. You can specify this to be recursive (i.e. flatten out all lists of lists) and to either retain or discard any named identifiers you have for your list.</p>
+<p>In this context, we’ll use <code>unlist()</code> in conjunction with <code>lapply()</code> to reduce the complexity of our original list.</p>
+<pre class="r"><code>lapply(slamwins, unlist)</code></pre>
+<pre><code>## $Federer
+## AUS  FR WIM  US 
+##   4   1   7   5 
+## 
+## $Sampras
+## AUS  FR WIM  US 
+##   2   0   7   5 
+## 
+## $Nadal
+## AUS  FR WIM  US 
+##   1   9   2   2 
+## 
+## $Djokovic
+## AUS  FR WIM  US 
+##   6   1   3   2 
+## 
+## $Borg
+## AUS  FR WIM  US 
+##   0   6   5   0</code></pre>
+<p>The <code>lapply()</code> function will go to each element in the highest level of the list, and perform an arbitrary action. In this case, we’ve “unlisted” each of the player lists in our <code>slamwins</code> object. It is important to understand that <em><code>lapply()</code> always returns a list</em>. So essentially we’ve just created another list, which we could then use within another <code>lapply()</code> call.</p>
+<pre class="r"><code>lapply(lapply(slamwins, unlist), sum)</code></pre>
+<pre><code>## $Federer
+## [1] 17
+## 
+## $Sampras
+## [1] 14
+## 
+## $Nadal
+## [1] 14
+## 
+## $Djokovic
+## [1] 12
+## 
+## $Borg
+## [1] 11</code></pre>
+<p>Now that we’ve figured out how to calculate the values we’re interested in, we just need to append them to the original list. One of the keys here is appreciating that <code>lapply()</code> can take any function (including one that we write … an “anonymous function”<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>) and use that operation on each element in the list. Another point worth noting is that the <code>c()</code> function works on lists. Most introduction to R tutorials include examples of using <code>c()</code> to create a vector, and it works very similarly for lists. Essentially it appends either a single item or a list of items onto the list.</p>
+<pre class="r"><code>slamwins &lt;- lapply(lapply(slamwins, unlist), function(x) c(x, Total = sum(x)))
+slamwins</code></pre>
+<pre><code>## $Federer
+##   AUS    FR   WIM    US Total 
+##     4     1     7     5    17 
+## 
+## $Sampras
+##   AUS    FR   WIM    US Total 
+##     2     0     7     5    14 
+## 
+## $Nadal
+##   AUS    FR   WIM    US Total 
+##     1     9     2     2    14 
+## 
+## $Djokovic
+##   AUS    FR   WIM    US Total 
+##     6     1     3     2    12 
+## 
+## $Borg
+##   AUS    FR   WIM    US Total 
+##     0     6     5     0    11</code></pre>
+</div>
+<div id="converting-lists" class="section level2">
+<h2>Converting Lists</h2>
+<p>Using the subsetting and manipulation features above we can perform a wide variety of manipulations on our list object. But ultimately (especially if you’re familiar with the “Tidyverse” approach to using R) it may be helpful to cast list data in a tabular format … a data frame.</p>
+<pre class="r"><code>as.data.frame(slamwins)</code></pre>
+<pre><code>##       Federer Sampras Nadal Djokovic Borg
+## AUS         4       2     1        6    0
+## FR          1       0     9        1    6
+## WIM         7       7     2        3    5
+## US          5       5     2        2    0
+## Total      17      14    14       12   11</code></pre>
+<pre class="r"><code>datmat &lt;- do.call(rbind, slamwins)
+datdf &lt;- as.data.frame(datmat, row.names = FALSE)
+datdf$player &lt;- row.names(datmat)
+datdf</code></pre>
+<pre><code>##   AUS FR WIM US Total   player
+## 1   4  1   7  5    17  Federer
+## 2   2  0   7  5    14  Sampras
+## 3   1  9   2  2    14    Nadal
+## 4   6  1   3  2    12 Djokovic
+## 5   0  6   5  0    11     Borg</code></pre>
+</div>
+<div id="lists-in-the-wild" class="section level2">
+<h2>Lists “In The Wild”</h2>
+<p>The above is a contrived example. In practice, you’re much more likely to encounter lists written by other people (or applications) than to code out a list of your own. The example data we’ll use will be pulled from an Application Programming Interface (API) for the <a href="http://www.github.com">github.com</a> website<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. Like many other wep APIs, the data comes out in JavaScript Object Notation (JSON). JSON is a format for storing and transmitting “semi-structured” data<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>. Keys and values are paired together to facilitate parsing<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a>. When read into R, JSON is interpreted as a list.</p>
+<div id="example" class="section level3">
+<h3>Example</h3>
+<p>Github is a platform for sharing, storing and managing code. Projects can be defined in a “repository” structure. The example that follows will look at repositories for a single user: Hadley Wickham.</p>
+<p>To read the data into R, we can use the <code>fromJSON()</code> function the <strong>jsonlite</strong> package. For this example, we can pull each page of results (in this case, we know <em>a priori</em> that there are two pages) and make sure to pass the <code>simplifyVector = FALSE</code> argument after the url.</p>
+<pre class="r"><code>library(jsonlite)
+had1 &lt;- fromJSON(&quot;https://api.github.com/users/hadley/repos?page=1&amp;per_page=100&quot;, simplifyVector = FALSE)
+had2 &lt;- fromJSON(&quot;https://api.github.com/users/hadley/repos?page=2&amp;per_page=100&quot;, simplifyVector = FALSE)</code></pre>
+<p>The data are stored in two separate lists, so we need to combine them with the <code>c()</code> function. Since the original objects are no longer necessary (and may be large), it’s probably a good idea to remove them.</p>
+<pre class="r"><code>had &lt;- c(had1,had2)
+rm(had1, had2)</code></pre>
+<p>The first item of interest is to know how many elements are in this list:</p>
+<pre class="r"><code>length(had)</code></pre>
+<pre><code>## [1] 200</code></pre>
+<p>It’s also helpful to take a peek at the data structure:</p>
+<pre class="r"><code>had[[1]]</code></pre>
+<pre><code>## $id
+## [1] 40423928
+## 
+## $name
+## [1] &quot;15-state-of-the-union&quot;
+## 
+## $full_name
+## [1] &quot;hadley/15-state-of-the-union&quot;
+## 
+## $owner
+## $owner$login
+## [1] &quot;hadley&quot;
+## 
+## $owner$id
+## [1] 4196
+## 
+## $owner$avatar_url
+## [1] &quot;https://avatars3.githubusercontent.com/u/4196?v=4&quot;
+## 
+## $owner$gravatar_id
+## [1] &quot;&quot;
+## 
+## $owner$url
+## [1] &quot;https://api.github.com/users/hadley&quot;
+## 
+## $owner$html_url
+## [1] &quot;https://github.com/hadley&quot;
+## 
+## $owner$followers_url
+## [1] &quot;https://api.github.com/users/hadley/followers&quot;
+## 
+## $owner$following_url
+## [1] &quot;https://api.github.com/users/hadley/following{/other_user}&quot;
+## 
+## $owner$gists_url
+## [1] &quot;https://api.github.com/users/hadley/gists{/gist_id}&quot;
+## 
+## $owner$starred_url
+## [1] &quot;https://api.github.com/users/hadley/starred{/owner}{/repo}&quot;
+## 
+## $owner$subscriptions_url
+## [1] &quot;https://api.github.com/users/hadley/subscriptions&quot;
+## 
+## $owner$organizations_url
+## [1] &quot;https://api.github.com/users/hadley/orgs&quot;
+## 
+## $owner$repos_url
+## [1] &quot;https://api.github.com/users/hadley/repos&quot;
+## 
+## $owner$events_url
+## [1] &quot;https://api.github.com/users/hadley/events{/privacy}&quot;
+## 
+## $owner$received_events_url
+## [1] &quot;https://api.github.com/users/hadley/received_events&quot;
+## 
+## $owner$type
+## [1] &quot;User&quot;
+## 
+## $owner$site_admin
+## [1] FALSE
+## 
+## 
+## $private
+## [1] FALSE
+## 
+## $html_url
+## [1] &quot;https://github.com/hadley/15-state-of-the-union&quot;
+## 
+## $description
+## NULL
+## 
+## $fork
+## [1] FALSE
+## 
+## $url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union&quot;
+## 
+## $forks_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/forks&quot;
+## 
+## $keys_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/keys{/key_id}&quot;
+## 
+## $collaborators_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/collaborators{/collaborator}&quot;
+## 
+## $teams_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/teams&quot;
+## 
+## $hooks_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/hooks&quot;
+## 
+## $issue_events_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/issues/events{/number}&quot;
+## 
+## $events_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/events&quot;
+## 
+## $assignees_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/assignees{/user}&quot;
+## 
+## $branches_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/branches{/branch}&quot;
+## 
+## $tags_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/tags&quot;
+## 
+## $blobs_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/git/blobs{/sha}&quot;
+## 
+## $git_tags_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/git/tags{/sha}&quot;
+## 
+## $git_refs_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/git/refs{/sha}&quot;
+## 
+## $trees_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/git/trees{/sha}&quot;
+## 
+## $statuses_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/statuses/{sha}&quot;
+## 
+## $languages_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/languages&quot;
+## 
+## $stargazers_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/stargazers&quot;
+## 
+## $contributors_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/contributors&quot;
+## 
+## $subscribers_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/subscribers&quot;
+## 
+## $subscription_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/subscription&quot;
+## 
+## $commits_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/commits{/sha}&quot;
+## 
+## $git_commits_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/git/commits{/sha}&quot;
+## 
+## $comments_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/comments{/number}&quot;
+## 
+## $issue_comment_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/issues/comments{/number}&quot;
+## 
+## $contents_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/contents/{+path}&quot;
+## 
+## $compare_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/compare/{base}...{head}&quot;
+## 
+## $merges_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/merges&quot;
+## 
+## $archive_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/{archive_format}{/ref}&quot;
+## 
+## $downloads_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/downloads&quot;
+## 
+## $issues_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/issues{/number}&quot;
+## 
+## $pulls_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/pulls{/number}&quot;
+## 
+## $milestones_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/milestones{/number}&quot;
+## 
+## $notifications_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/notifications{?since,all,participating}&quot;
+## 
+## $labels_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/labels{/name}&quot;
+## 
+## $releases_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/releases{/id}&quot;
+## 
+## $deployments_url
+## [1] &quot;https://api.github.com/repos/hadley/15-state-of-the-union/deployments&quot;
+## 
+## $created_at
+## [1] &quot;2015-08-09T03:22:26Z&quot;
+## 
+## $updated_at
+## [1] &quot;2017-05-03T02:53:29Z&quot;
+## 
+## $pushed_at
+## [1] &quot;2015-08-10T20:29:10Z&quot;
+## 
+## $git_url
+## [1] &quot;git://github.com/hadley/15-state-of-the-union.git&quot;
+## 
+## $ssh_url
+## [1] &quot;git@github.com:hadley/15-state-of-the-union.git&quot;
+## 
+## $clone_url
+## [1] &quot;https://github.com/hadley/15-state-of-the-union.git&quot;
+## 
+## $svn_url
+## [1] &quot;https://github.com/hadley/15-state-of-the-union&quot;
+## 
+## $homepage
+## NULL
+## 
+## $size
+## [1] 4519
+## 
+## $stargazers_count
+## [1] 24
+## 
+## $watchers_count
+## [1] 24
+## 
+## $language
+## [1] &quot;R&quot;
+## 
+## $has_issues
+## [1] TRUE
+## 
+## $has_projects
+## [1] TRUE
+## 
+## $has_downloads
+## [1] TRUE
+## 
+## $has_wiki
+## [1] TRUE
+## 
+## $has_pages
+## [1] FALSE
+## 
+## $forks_count
+## [1] 7
+## 
+## $mirror_url
+## NULL
+## 
+## $open_issues_count
+## [1] 0
+## 
+## $forks
+## [1] 7
+## 
+## $open_issues
+## [1] 0
+## 
+## $watchers
+## [1] 24
+## 
+## $default_branch
+## [1] &quot;master&quot;</code></pre>
+<p>Some of the elements and sub-elements of this particular list are nested (lists of lists) … but overall this data is formatted in a friendly, parseable format. Each parent element has the same number of children, which are named and defined as “key : value” pairs.</p>
+<p>So if we wanted to extract a specific child element from one of its parents, we could use something like the following:</p>
+<pre class="r"><code>had[[5]]$language</code></pre>
+<pre><code>## [1] &quot;Python&quot;</code></pre>
+<p>We mentioned <code>sapply()</code> above, and now we can put it into action. This function will be useful in extracting the same child elements from different parents. To do so, we’ll need to define an anonymous function to apply across the list. Note that <em><code>sapply()</code> is similar to <code>lapply()</code> but always returns a vector, matrix or array rather than a list</em>.</p>
+<pre class="r"><code>sapply(had, function(x) x$watchers)</code></pre>
+<pre><code>##   [1]   24   13    0 1030    5   82   59   10    4  260    5   13    6    1
+##  [15]    0    8   12    1    0   15    6    6    5   35  117   21   22    4
+##  [29]   44  146    2    0   45    7 1545    5    3   17    1    0    1   91
+##  [43]    6  128    1    4   11    3    6   16    3   61    3    3    3   14
+##  [57]    8  407    5    4   72    7   26    3    8    9    0    6   28    3
+##  [71]    5    2    2    0   11    2    1   12    8   79    0    3    4   92
+##  [85]    3    0   32    6   23   10    5    2   11    8    0   41   14  287
+##  [99]   10    3    9   28   41    3   39    4    0  260  469    4   64    6
+## [113]   22   30    9  126   58    6    3   98   31  183   55    2    6    2
+## [127]  178  906    8    6    4    1    1    0    5    1    0    4    1   30
+## [141]    1   21    3   14    0  159    5    6   10    0    1    1   13    4
+## [155]   22   28    1   10    7  846    2    0    8   90   91   31    0    3
+## [169]   22    0   14   26    5    1    4    7    3    5  128    1    2    6
+## [183]  195    7    2    1   23   19    1   27    5    8    1    1    0    4
+## [197]    0    8    6    0</code></pre>
+<p>We’ve successfully extracted the child element of interest from each of the parent elements in the list. However, this vector could be hard to interpret since the elements are divorced from the larger context. One solution might be to assign names to the original list, which will give <code>sapply()</code> a named vector output.</p>
+<pre class="r"><code>names(had) &lt;- sapply(had, function(x) x$name)
+sapply(had, function(x) x$watchers)</code></pre>
+<pre><code>##  15-state-of-the-union      15-student-papers               500lines 
+##                     24                     13                      0 
+##                  adv-r                appdirs             assertthat 
+##                   1030                      5                     82 
+##              babynames         beautiful-data                  bench 
+##                     59                     10                      4 
+##                 bigvis         bigvis-infovis         boxplots-paper 
+##                    260                      5                     13 
+##                  broom                builder             cellranger 
+##                      6                      1                      0 
+##              classifly             clusterfly       cocktail-balance 
+##                      8                     12                      1 
+##             commonmark         cran-downloads        cran-logs-dplyr 
+##                      0                     15                      6 
+##          cran-packages              cranatics             crantastic 
+##                      6                      5                     35 
+##        data-baby-names          data-counties      data-fuel-economy 
+##                    117                     21                     22 
+##               data-gbd    data-housing-crisis            data-movies 
+##                      4                     44                    146 
+##            data-stride               datafest                decumar 
+##                      2                      0                     45 
+##             densityvis               devtools           directlabels 
+##                      7                   1545                      5 
+##              distpower                 docker                   docs 
+##                      3                     17                      1 
+##          dplyrimpaladb                   drat                 dtplyr 
+##                      0                      1                     91 
+##                eggnogr                    emo              example-r 
+##                      6                    128                      1 
+##              extrafont              fec-dplyr        fivethirtyeight 
+##                      4                     11                      3 
+##                fortify            fueleconomy                gdtools 
+##                      6                     16                      3 
+##                   gg2v             ggenealogy                  ggmap 
+##                     61                      3                      3 
+##                 ggplot                ggplot1        ggplot2-bayarea 
+##                      3                     14                      8 
+##           ggplot2-book           ggplot2-docs          ggplot2movies 
+##                    407                      5                      4 
+##                 ggstat               ggthemes                 gtable 
+##                     72                      7                     26 
+##              gun-sales              hadladdin      hadley.github.com 
+##                      3                      8                      9 
+##              hclpicker      healthyr_preamble                  helpr 
+##                      0                      6                     28 
+##     herndon-ash-pollin               hflights      highlighting-kate 
+##                      3                      5                      2 
+##                httpbin                 httpuv                  ideas 
+##                      2                      0                     11 
+##              imvisoned                 kmeans                   l1tf 
+##                      2                      1                     12 
+##                 layers               lazyeval                leaflet 
+##                      8                     79                      0 
+##          leaflet-shiny                legends               lineprof 
+##                      3                      4                     92 
+##                 linval                   lme4                 lobstr 
+##                      3                      0                     32 
+##               localmds                 lvplot           lvplot-paper 
+##                      6                     23                     10 
+##          maplight-data      markdown-licenses                 meifly 
+##                      5                      2                     11 
+##       mexico-mortality                minimal                 monads 
+##                      8                      0                     41 
+##                 mturkr             multidplyr                 mutatr 
+##                     14                    287                     10 
+##              mutatrGui            nasaweather                  neiss 
+##                      3                      9                     28 
+##           nycflights13               olctools            oldbookdown 
+##                     41                      3                     39 
+##                packman               PivotalR                pkgdown 
+##                      4                      0                    260 
+##                   plyr              pop-flows                 precis 
+##                    469                      4                     64 
+##          prodplotpaper           productplots                  profr 
+##                      6                     22                     30 
+##                  proto                   pryr               purrrlyr 
+##                      9                    126                     58 
+##          qtpaint-demos      r-devel-san-clang            r-internals 
+##                      6                      3                     98 
+##            r-on-github                 r-pkgs               r-python 
+##                     31                    183                     55 
+##               r-source               r-travis                 r-yaml 
+##                      2                      6                      2 
+##                   r2d3                   r4ds    ranking-correlation 
+##                    178                    906                      8 
+##              rastermap                rblocks                Rcereal 
+##                      6                      4                      1 
+##                   Rcpp           rcpp-gallery           RcppDateTime 
+##                      1                      0                      5 
+##           rcpplonglong           RcppProgress            rcrunchbase 
+##                      1                      0                      4 
+##                  RCurl          reactive-docs               ReadStat 
+##                      1                     30                      1 
+##                recipes    redesigned-barnacle                 remake 
+##                     21                      3                     14 
+##                 reprex                reshape                  rfmt2 
+##                      0                    159                      5 
+##               rifftron                    rio riotworkshop.github.io 
+##                      6                     10                      0 
+##                  rJava              rmarkdown                 rminds 
+##                      1                      1                     13 
+##               roxygen2               roxygen3                 rsmith 
+##                      4                     22                     28 
+##                RSQLite                 rtweet                    rv2 
+##                      1                     10                      7 
+##                  rvest              rworldmap                   rydn 
+##                    846                      2                      0 
+##            scagnostics                 scales                 secure 
+##                      8                     90                     91 
+##              sfhousing                    sfr                  shiny 
+##                     31                      0                      3 
+##           shinySignals               simpleS4               sinartra 
+##                     22                      0                     14 
+##                  sloop             spatialVis               sqlutils 
+##                     26                      5                      1 
+##       stat405-practice      stat405-resources  STAT545-UBC.github.io 
+##                      4                      7                      3 
+##             stationaRy                 strict              strptimer 
+##                      5                    128                      1 
+##                syuzhet              tanglekit              tidy-data 
+##                      2                      6                    195 
+##                toc-vis               unittest          USAboundaries 
+##                      7                      2                      1 
+##          usdanutrients                  vctrs                   vega 
+##                     23                     19                      1 
+##                vis-eda          vis-migration                   vita 
+##                     27                      5                      8 
+##                warncpp               webreadr                 webuse 
+##                      1                      1                      0 
+##                 weeder         weight-and-see            wesanderson 
+##                      4                      0                      8 
+##                whisker               wishlist 
+##                      6                      0</code></pre>
+</div>
+<div id="exercise" class="section level3">
+<h3>Exercise</h3>
+<ul>
+<li>How many times are these repositories forked on average?</li>
+<li>Is Hadley a “site_admin” on any of these repositories?</li>
+<li>Try reading the data from Github again. Make sure to use the <code>simplifyVector = TRUE</code> argument instead. What happened?</li>
+</ul>
+</div>
+</div>
+<div id="other-methods" class="section level2">
+<h2>Other Methods</h2>
+<p>There are many, many ways to work with lists. What follows is a very brief nod to a few features from packages that help address list complexity.</p>
+<div id="rlist" class="section level4">
+<h4>rlist</h4>
+<p><strong>rlist</strong> includes a set of very useful tools for list manipulation<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>.</p>
+<p>Some highlights:</p>
+<ul>
+<li><code>list.map()</code></li>
+<li><code>list.sort()</code></li>
+<li><code>list.filter()</code></li>
+<li><code>list.group()</code></li>
+<li><code>list.table()</code></li>
+</ul>
+<pre class="r"><code>library(rlist)
+list.map(had, created_at)
+list.sort(had, forks_count)
+list.filter(had, size &gt; 50000)
+list.group(had, language)
+list.table(had, fork)</code></pre>
+</div>
+<div id="purrr" class="section level4">
+<h4>purrr</h4>
+<p>According to its author, Hadley Wickham, the <strong>purrr</strong> package, “… fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr”<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>. This is especially useful for working with lists when using lists for <em>programmatic</em> purposes, like writing functions or packages. But there are applications for <em>interactive</em> list manipulation with <strong>purrr</strong> as well. The following are particularly helpful:</p>
+<ul>
+<li><code>map()</code>: allows functions to be passed to each element of the list (roughly analogous to <code>sapply()</code> or <code>lapply()</code>)</li>
+<li><code>flatten()</code>: simplifies a list to a vector (roughly analogous to <code>unlist()</code>)</li>
+<li><code>transpose()</code>: turns a list inside out (<code>transpose()</code> <em>then</em> <code>transpose()</code> will revert the list back to original state)</li>
+</ul>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://r4ds.had.co.nz/lists.html" class="uri">http://r4ds.had.co.nz/lists.html</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://yihui.name/en/2010/10/on-the-gory-loops-in-r/" class="uri">http://yihui.name/en/2010/10/on-the-gory-loops-in-r/</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions" class="uri">http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><a href="https://developer.github.com/v3/" class="uri">https://developer.github.com/v3/</a><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p><a href="https://en.wikipedia.org/wiki/Semi-structured_data" class="uri">https://en.wikipedia.org/wiki/Semi-structured_data</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="http://developers.squarespace.com/what-is-json/" class="uri">http://developers.squarespace.com/what-is-json/</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p><a href="https://renkun.me/rlist-tutorial/" class="uri">https://renkun.me/rlist-tutorial/</a><a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p><a href="https://blog.rstudio.org/2015/09/29/purrr-0-1-0/" class="uri">https://blog.rstudio.org/2015/09/29/purrr-0-1-0/</a><a href="#fnref8">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

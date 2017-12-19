@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Harvesting Data From NCBI</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Harvesting Data From NCBI</h1>
+
+</div>
+
+
+<p>The National Center for Biotechnology Information (NCBI) maintains biological and bibliographic databases including PubMed, GenBank, among many others. Although the data are hosted on NCBI servers, they are accesible through an application programming interface (API). This workshop will introduce a package called <strong>rentrez</strong>, which facilitates API calls for NCBI data via the R programming language. By the end of the class, students will be familiar with the syntax for retrieving, linking and analyzing records from NCBI databases.</p>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>NCBI houses a tremendous variety of biomedical data. From publication abstracts and keywords … to raw sequence data … to taxanomic names and lineages<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. These records are stored in disparate databases but can be searched, retrieved and even linked together with a common set of tools. The application programming interface (API) for NCBI is the conduit that provides this access. The API is sometimes referred to as <em>Entrez</em>, which is techincally the name of the global search system (including the web interface), or as <em>eUtils</em>.</p>
+<p>It’s probably worth noting that API tools can offer services at different levels of software development. More specifically, eUtils is a “Web API”<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. So from a computer connected to a network, you can execute a script that sends a “request” to the NCBI servers with a series of parameters in a pre-defined “endpoint” syntax. The “response” from this query can be returned in a variety of formats, but in this case will typically be in Extensible Markup Language (XML) structure<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>.</p>
+<p>XML is organized as a set of nodes, each of which usually has a individual fields.</p>
+<p>Let’s take a look at an example:</p>
+<pre><code>&lt;playlist&gt;
+    &lt;song&gt;
+        &lt;artist&gt;Prince&lt;/artist&gt;
+        &lt;title&gt;Kiss&lt;/title&gt;
+        &lt;album&gt;Parade&lt;/album&gt;
+        &lt;length&gt;3:38&lt;/length&gt;
+    &lt;/song&gt;
+    &lt;song&gt;
+        &lt;artist&gt;David Bowie&lt;/artist&gt;
+        &lt;title&gt;Modern Love&lt;/title&gt;
+        &lt;album&gt;Let&#39;s Dance&lt;/album&gt;
+        &lt;length&gt;4:48&lt;/length&gt;
+    &lt;/song&gt;
+    &lt;song&gt;
+        &lt;artist&gt;Talking Heads&lt;/artist&gt;
+        &lt;title&gt;Heaven&lt;/title&gt;
+        &lt;album&gt;Fear of Music&lt;/album&gt;
+        &lt;length&gt;4:03&lt;/length&gt;
+    &lt;/song&gt;
+&lt;/playlist&gt;</code></pre>
+<p>The value of the data housed in NCBI databases has driven the development of numerous API “clients” written and executed in various programming languages:</p>
+<ul>
+<li>Entrez Direct (EDirect)<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></li>
+<li>Bio.Entrez<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></li>
+<li>bionode<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+</ul>
+<p>As mentioned above, this tutorial will use <strong>rentrez</strong>, which is a package developed and maintained by David Winter<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>. Because it’s written in R, it’s possible to incorporate any of the language’s data manipulation or statistical analysis functionality.</p>
+<p>The package is available on the Comprehensive R Archive Network (CRAN). A stable release is available there. For the most recent development release (may include newer functions or versions of existing functions) you can install the package via Github:</p>
+<pre class="r"><code># install via CRAN
+install.packages(&quot;rentrez&quot;)
+
+# install via Github
+# nb you first need to install devtools
+# install.pacakges(&quot;devtools&quot;)
+devtools::install_github(&quot;ropensci/rentrez&quot;)</code></pre>
+<pre class="r"><code>library(rentrez)</code></pre>
+</div>
+<div id="entrez_dbs" class="section level2">
+<h2><code>entrez_dbs()</code></h2>
+<p>One of the requirements for performing programmatic searches via <strong>rentrez</strong> is specification of the NCBI database to be searched. This is defined in the value passed to the “db” argument to <code>entrez_search()</code>, which we’ll introduce in the next section. But note that the “db” must be an exact match to one of the searchable databases in NCBI. To view a full list and their respective abbreviations use <code>entrez_dbs()</code>.</p>
+<pre class="r"><code>entrez_dbs()</code></pre>
+<pre><code>##  [1] &quot;pubmed&quot;          &quot;protein&quot;         &quot;nuccore&quot;        
+##  [4] &quot;ipg&quot;             &quot;nucleotide&quot;      &quot;nucgss&quot;         
+##  [7] &quot;nucest&quot;          &quot;structure&quot;       &quot;sparcle&quot;        
+## [10] &quot;genome&quot;          &quot;annotinfo&quot;       &quot;assembly&quot;       
+## [13] &quot;bioproject&quot;      &quot;biosample&quot;       &quot;blastdbinfo&quot;    
+## [16] &quot;books&quot;           &quot;cdd&quot;             &quot;clinvar&quot;        
+## [19] &quot;clone&quot;           &quot;gap&quot;             &quot;gapplus&quot;        
+## [22] &quot;grasp&quot;           &quot;dbvar&quot;           &quot;gene&quot;           
+## [25] &quot;gds&quot;             &quot;geoprofiles&quot;     &quot;homologene&quot;     
+## [28] &quot;medgen&quot;          &quot;mesh&quot;            &quot;ncbisearch&quot;     
+## [31] &quot;nlmcatalog&quot;      &quot;omim&quot;            &quot;orgtrack&quot;       
+## [34] &quot;pmc&quot;             &quot;popset&quot;          &quot;probe&quot;          
+## [37] &quot;proteinclusters&quot; &quot;pcassay&quot;         &quot;biosystems&quot;     
+## [40] &quot;pccompound&quot;      &quot;pcsubstance&quot;     &quot;pubmedhealth&quot;   
+## [43] &quot;seqannot&quot;        &quot;snp&quot;             &quot;sra&quot;            
+## [46] &quot;taxonomy&quot;        &quot;biocollections&quot;  &quot;unigene&quot;        
+## [49] &quot;gencoll&quot;         &quot;gtr&quot;</code></pre>
+<p>Each of these databases is configured to receive complex queries based on specific fields. You can view a given databases “searchable fields” with <code>entrez_db_searchable()</code>.</p>
+<pre class="r"><code>entrez_db_searchable(db = &quot;snp&quot;)</code></pre>
+<pre><code>## Searchable fields for database &#39;snp&#39;
+##   ALL     All terms from all searchable fields 
+##   UID     Unique number assigned to publication 
+##   FILT    Limits the records 
+##   RS      Clustered SNP ID (rs) 
+##   CHR     chromosomes 
+##   GENE    locus link symbol 
+##   HAN     Submitter Handle 
+##   ACCN    nucleotide accessions 
+##   LLID    locus link UID 
+##   ORGN    Organism 
+##   FXN     Function class 
+##   GTYP    Genotype info 
+##   NREF    SNP not mapped to reference assembly 
+##   HETZ    Heterozygosity 
+##   MPWT    Map weight 
+##   VALI    Validation status 
+##   SRAT    Success rate 
+##   CBID    Original Build ID 
+##   UBID    Update Build ID 
+##   PDAT    SNP Publication date 
+##   MDAT    SNP modification date 
+##   PCLS    Population classification based on geographic location 
+##   MCLS    Assay Method 
+##   SS      Submitter ID 
+##   SID     Local SNP ID 
+##   VARI    Allele 
+##   SCLS    SNP class 
+##   GDSC    description of gene 
+##   CPOS    Chromosome base position 
+##   GPOS    Contig base position 
+##   WORD    Free text associated with record 
+##   WTAA    Reference Amino Acid 
+##   MTAA    Variant or Mutant Amino Acid 
+##   RSNP    Reference SNP 
+##   SIDX    SNP Index 
+##   ALOR    Allele originated from somatic or germline 
+##   SUSP    Variation suspected to be false based on evidence 
+##   CLIN    Variations with clinical effects or significances 
+##   GMAF    Minor Allele Frequency derived from global population (ie. 1000G)</code></pre>
+<pre class="r"><code>entrez_db_searchable(db = &quot;clinvar&quot;)</code></pre>
+<pre><code>## Searchable fields for database &#39;clinvar&#39;
+##   ALL     All terms from all searchable fields 
+##   UID     Unique number assigned to variation 
+##   FILT    Limits the records 
+##   TITL    Constructed from variant and phenotype names 
+##   WORD    Free text associated with record 
+##   ORGN    scientific and common names of organism 
+##   MDAT    The last date on which the record was updated 
+##   CHR     Chromosome number or numbers; also &#39;mitochondrial&#39;, &#39;unknown&#39; properties 
+##   GENE    Symbol or symbols of the gene 
+##   MIM     MIM number from OMIM 
+##   DIS     Diseases or traits associated with this record 
+##   ACCN    Accession of the genotype/phenotype assertion 
+##   VRID    Public ID of a variant 
+##   TRID    Public identifier for a trait (e.g. CUI, HPO) 
+##   PROP    Properties of ClinVar record 
+##   CDAT    The date on which this record first appeared 
+##   PMID    PubMed ids of accessions linked to the record 
+##   GID     Gene ID 
+##   TID     taxonomy id 
+##   CPOS    Chromosome base position 
+##   GFN     Gene full name 
+##   SBM     Submitter 
+##   VRNM    Names used for this allele 
+##   VRTP    Type of sequence change/variant call 
+##   MCNS    Consequence of the variation at the molecular level. 
+##   RVST    Review status 
+##   ALID    Unique identifier assigned to a specific sequence change at a location. 
+##   ORIG    Origin 
+##   SID     Submitter Batch 
+##   CYT     Cytogenetic location computed from sequence coordinates 
+##   GTRT    Accession for a test registered in GTR 
+##   STNM    Study Name 
+##   CMPL    Complexity 
+##   C37     Chromosome base position for assembly GRCh37 
+##   VLEN    Length of the variant defined as the difference between reference and alternate, except when there is no lenght difference (then the length of the allele itself) 
+##   ACCN    Nucleotide or protein accession 
+##   HGNC    Identifier for Gene assigned by HUGO Gene Nomenclature Committee (HGNC) 
+##   VID     Unique number assigned to variation 
+##   IMOD    The latest date for each interpretation of a variant</code></pre>
+<p><strong>nb</strong> in order to construct thorough, complex queries to these databases, you may be best served starting in a web browser and using the graphical “Advanced Search Builder” for the database of choice<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>.</p>
+</div>
+<div id="entrez_search" class="section level2">
+<h2><code>entrez_search()</code></h2>
+<p>For this example, let’s assume we want to use PubMed to find records for articles published in <em>PLoS Neglected Tropical Diseases</em> in 2015. The two fields of interest in this case will be publication date (PDAT) and journal (JOUR).</p>
+<p>The fundamental unit to retrieving data from any of the NCBI databases is the record ID. In fact, this is one of the first items returned in the query process. We’ll use <code>entrez_search()</code> to begin searching NCBI. At minimum, this function takes two arguments:</p>
+<ol style="list-style-type: decimal">
+<li>The database to search</li>
+<li>The search term(s)</li>
+</ol>
+<p>The search function goes out to an NCBI database (in this example “pubmed”) and returns the “hits” as IDs. The record itself is not contained in this identifier, but rather will be accessed later using <code>entrez_fetch()</code>.</p>
+<p><strong>nb</strong> we have to store the results of the search as an object in order to access the IDs later. This object is a named <em>list</em>, so we can access pieces of the results with the <code>$</code> operator followed by the name of the attribute.</p>
+<pre class="r"><code>res &lt;- entrez_search(db = &quot;pubmed&quot;, term = &quot;(PLoS Neglected Tropical Diseases[JOUR] AND 2015[PDAT])&quot;)</code></pre>
+<p>The “count” indicates the number of total results.</p>
+<pre class="r"><code>res$count</code></pre>
+<pre><code>## [1] 888</code></pre>
+<p>The “ids” are identifiers for records and will be useful when fetching the individual XML content for the articles in this case.</p>
+<pre class="r"><code>res$ids</code></pre>
+<pre><code>##  [1] &quot;26727257&quot; &quot;26720725&quot; &quot;26720603&quot; &quot;26720414&quot; &quot;26720278&quot; &quot;26720149&quot;
+##  [7] &quot;26720002&quot; &quot;26719978&quot; &quot;26719891&quot; &quot;26719888&quot; &quot;26713732&quot; &quot;26713614&quot;
+## [13] &quot;26709922&quot; &quot;26709822&quot; &quot;26709695&quot; &quot;26701750&quot; &quot;26701602&quot; &quot;26697878&quot;
+## [19] &quot;26694834&quot; &quot;26684831&quot;</code></pre>
+<p>By default, <code>entrez_search()</code> only returns 20 identifiers at a time. To change this, we can modify the “retmax” argument. It may be worth setting this to a high value to make sure as many IDs as possible are returned.</p>
+<pre class="r"><code>res &lt;- entrez_search(db = &quot;pubmed&quot;, term = &quot;(PLoS Neglected Tropical Diseases[JOUR] AND 2015[PDAT])&quot;, retmax = 9999, use_history = TRUE)</code></pre>
+<p>Note that the count doesn’t change … but there are many more IDs.</p>
+<p>Have we returned identifiers for all of the articles in which we’re interested?</p>
+<pre class="r"><code>length(res$ids) == res$count</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="entrez_fetch" class="section level2">
+<h2><code>entrez_fetch()</code></h2>
+<p>With the IDs for the articles, we can now access their full records. As its name suggests, <code>entrez_fetch()</code> will <em>fetch</em> the data. We’ll define this to be returned in XML format so we can parse the results.</p>
+<p>Note that NCBI does place restricitons on the size of queries. We’ll address how to get around this issue by using <code>web_history</code> (see <a href="#web_history">web_history</a>) … but for now we can just use a subset of the IDs.</p>
+<pre class="r"><code>recs &lt;- entrez_fetch(db = &quot;pubmed&quot;, id = res$ids[1:25], rettype = &quot;xml&quot;, parsed = TRUE)</code></pre>
+<p>Because we’ve set the “rettype” and asked the results to be parsed, if we were to print this object we’d see nicely formatted XML. From here we can use the <strong>XML</strong> R package to parse out individual features.</p>
+<pre class="r"><code>library(XML)</code></pre>
+<p>Two functions that could be particularly useful when working with this XML are <code>xpathSApply()</code> and <code>xmlToList()</code>:</p>
+<pre class="r"><code>?xpathSApply
+?xmlToList</code></pre>
+<p>XML documents are arranged as “trees” or “document object models (DOM)” … these must be traversed in order to find the information of interest. We need to define a starting point in that structure using XPath<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a>. The <code>//</code> and <code>/</code> syntax helps point the query to the appropriate context in the document.</p>
+<p><code>xpathSApply()</code> uses base R’s <code>sapply()</code> to iterate over a list and return a vector.</p>
+<pre class="r"><code>xpathSApply(recs, &quot;//MedlineCitation/Article/ArticleTitle&quot;, xmlValue)</code></pre>
+<p>Antoher workflow for parsing these results is to use <code>entrez_summary()</code> and <code>extract_from_esummary()</code>.</p>
+<pre class="r"><code>esums &lt;- entrez_summary(db = &quot;pubmed&quot;, id = res$ids[1:25])</code></pre>
+<p>Again, we’ve used just a subset of the PubMed IDs retrieved from our original <code>entrez_search()</code>. Printing <code>esums</code> will show all of the elements that could be extracted.</p>
+<pre class="r"><code>esums</code></pre>
+<pre><code>## List of  25 esummary records. First record:
+## 
+##  $`26727257`
+## esummary result with 42 items:
+##  [1] uid               pubdate           epubdate         
+##  [4] source            authors           lastauthor       
+##  [7] title             sorttitle         volume           
+## [10] issue             pages             lang             
+## [13] nlmuniqueid       issn              essn             
+## [16] pubtype           recordstatus      pubstatus        
+## [19] articleids        history           references       
+## [22] attributes        pmcrefcount       fulljournalname  
+## [25] elocationid       doctype           srccontriblist   
+## [28] booktitle         medium            edition          
+## [31] publisherlocation publishername     srcdate          
+## [34] reportnumber      availablefromurl  locationlabel    
+## [37] doccontriblist    docdate           bookname         
+## [40] chapter           sortpubdate       sortfirstauthor</code></pre>
+<p><code>extract_from_esummary()</code> will give us a vector named with the associated PubMed ID:</p>
+<pre class="r"><code>extract_from_esummary(esums, &quot;title&quot;)</code></pre>
+<pre><code>##                                                                                                                                                                                         26727257 
+##                                                                                 &quot;Correction: Carbohydrate Recognition Specificity of Trans-sialidase Lectin Domain from Trypanosoma congolense.&quot; 
+##                                                                                                                                                                                         26720725 
+##                                                                                                         &quot;Molecular Detection of Schistosome Infections with a Disposable Microfluidic Cassette.&quot; 
+##                                                                                                                                                                                         26720603 
+##                                                                                       &quot;Trichinella spiralis Paramyosin Binds Human Complement C1q and Inhibits Classical Complement Activation.&quot; 
+##                                                                                                                                                                                         26720414 
+##                                                                                                                                         &quot;Social Network Analysis As a Tool for Research Policy.&quot; 
+##                                                                                                                                                                                         26720278 
+##                                                                                                                                         &quot;Quantifying Poverty as a Driver of Ebola Transmission.&quot; 
+##                                                                                                                                                                                         26720149 
+##                                                                                &quot;Glycans from Fasciola hepatica Modulate the Host Immune Response and TLR-Induced Maturation of Dendritic Cells.&quot; 
+##                                                                                                                                                                                         26720002 
+##                                                                                    &quot;Plasmodium malariae Infection Associated with a High Burden of Anemia: A Hospital-Based Surveillance Study.&quot; 
+##                                                                                                                                                                                         26719978 
+##                                                                     &quot;Using Co-authorship Networks to Map and Analyse Global Neglected Tropical Disease Research with an Affiliation to Germany.&quot; 
+##                                                                                                                                                                                         26719891 
+##                                                              &quot;Schistosoma mansoni Egg, Adult Male and Female Comparative Gene Expression Analysis and Identification of Novel Genes by RNA-Seq.&quot; 
+##                                                                                                                                                                                         26719888 
+##                                                                                                                                                   &quot;The 1899 United States Kissing Bug Epidemic.&quot; 
+##                                                                                                                                                                                         26713732 
+##                                                                                        &quot;The Schistosoma mansoni Cytochrome P450 (CYP3050A1) Is Essential for Worm Survival and Egg Development.&quot; 
+##                                                                                                                                                                                         26713614 
+##                                                                     &quot;Pregnancy Outcomes after a Mass Vaccination Campaign with an Oral Cholera Vaccine in Guinea: A Retrospective Cohort Study.&quot; 
+##                                                                                                                                                                                         26709922 
+##                                         &quot;Systematic Review and Meta-analysis of the Impact of Chemical-Based Mollusciciding for Control of Schistosoma mansoni and S. haematobium Transmission.&quot; 
+##                                                                                                                                                                                         26709822 
+##                                                                                 &quot;Cissampelos pareira Linn: Natural Source of Potent Antiviral Activity against All Four Dengue Virus Serotypes.&quot; 
+##                                                                                                                                                                                         26709695 
+##                                                                               &quot;Whole Genome Sequencing of Field Isolates Reveals Extensive Genetic Diversity in Plasmodium vivax from Colombia.&quot; 
+##                                                                                                                                                                                         26701750 
+##                                                                                 &quot;Immucillins ImmA and ImmH Are Effective and Non-toxic in the Treatment of Experimental Visceral Leishmaniasis.&quot; 
+##                                                                                                                                                                                         26701602 
+##                                                                  &quot;A Library of Plasmodium vivax Recombinant Merozoite Proteins Reveals New Vaccine Candidates and Protein-Protein Interactions.&quot; 
+##                                                                                                                                                                                         26697878 
+##                                                                         &quot;Identification and Characterization of Microsatellite Markers Derived from the Whole Genome Analysis of Taenia solium.&quot; 
+##                                                                                                                                                                                         26694834 
+##                                                                                                                                      &quot;The Risk of Nosocomial Transmission of Rift Valley Fever.&quot; 
+##                                                                                                                                                                                         26684831 
+##                                                                                             &quot;Genomic and Proteomic Studies on the Mode of Action of Oxaboroles against the African Trypanosome.&quot; 
+##                                                                                                                                                                                         26684756 
+## &quot;Generation of a Novel Bacteriophage Library Displaying scFv Antibody Fragments from the Natural Buffalo Host to Identify Antigens from Adult Schistosoma japonicum for Diagnostic Development.&quot; 
+##                                                                                                                                                                                         26678393 
+##                                                                                                                      &quot;Earth Observation, Spatial Data Quality, and Neglected Tropical Diseases.&quot; 
+##                                                                                                                                                                                         26678263 
+##                                                                                                         &quot;A Spatiotemporal Database to Track Human Scrub Typhus Using the VectorMap Application.&quot; 
+##                                                                                                                                                                                         26671573 
+##                                                                                                                         &quot;Peridomestic Infection as a Determining Factor of Dengue Transmission.&quot; 
+##                                                                                                                                                                                         26659387 
+##                                         &quot;Characterization of the Paracoccidioides Hypoxia Response Reveals New Insights into Pathogenesis Mechanisms of This Important Human Pathogenic Fungus.&quot;</code></pre>
+</div>
+<div id="entrez_link" class="section level2">
+<h2><code>entrez_link()</code></h2>
+<p>One of the most fundamental advantages to using NCBI databases is the ability to connect data across repositories. This idea of “linking” is available in <strong>rentrez</strong> via the <code>entrez_link()</code> function.</p>
+<p>To demonstrate how this works, let’s say we want to retrieve sequence data for <em>Aedes aegypti</em>, which is the mosquito vector for Zika, Dengue fever and yellow fever. The first step is to retrieve the correct organism ID for the “yellow fever mosquito”:</p>
+<pre class="r"><code>yfm &lt;- entrez_search(db = &quot;taxonomy&quot;, term = &quot;yellow fever mosquito&quot;)
+yfm$ids</code></pre>
+<pre><code>## [1] &quot;7159&quot;</code></pre>
+<p>If we were interested in the taxonomic record for this species of mosquito, then we could run <code>entrez_fetch()</code> on the “taxonomy” database with this ID. However, since the goal is to retrieve sequences, we have to fetch from NCBI’s “nuccore” nucleotide database. But that will require a linkage of first taxonomy to genome, then genome to nuccore:</p>
+<pre class="r"><code>yfmlinks &lt;- entrez_link(dbfrom = &quot;taxonomy&quot;, id = yfm$ids, db = &quot;genome&quot;)
+genlinkid &lt;- yfmlinks$links$taxonomy_genome
+
+yfmlinks2 &lt;- entrez_link(dbfrom = &quot;genome&quot;, id = genlinkid, db = &quot;nuccore&quot;)
+nuclinkid &lt;- yfmlinks2$links$genome_nuccore</code></pre>
+<p><strong>nb</strong> the <code>entrez_link()</code> function requires a single “dbfrom” argument. However, for the “db” argument you can pass either pass a single database or specify “all” to retrieve link IDs from all databases that share links with the record(s) of interest.</p>
+<p>If you want to see which databases could possibly have links from a specific database, use <code>entrez_db_links()</code>:</p>
+<pre class="r"><code>entrez_db_links(db = &quot;taxonomy&quot;)</code></pre>
+<pre><code>## Databases with linked records for database &#39;taxonomy&#39;
+##  [1] assembly        bioproject      biosample       biosystems     
+##  [5] books           cdd             clone           dbvar          
+##  [9] gds             gene            genome          geoprofiles    
+## [13] homologene      mesh            nucest          nucgss         
+## [17] nuccore         pcassay         pccompound      pcsubstance    
+## [21] pmc             popset          probe           protein        
+## [25] protein         proteinclusters pubmed          pubmed         
+## [29] snp             sra             structure       unigene</code></pre>
+<p>There are 12 records for <em>Aedes aegypti</em> in NCBI’s nucleotide database … <code>entrez_fetch()</code> can pull down each in fasta format:</p>
+<pre class="r"><code>yfmfasta &lt;- entrez_fetch(db = &quot;nuccore&quot;, id = nuclinkid, rettype = &quot;fasta&quot;)</code></pre>
+<pre class="r"><code>strsplit(yfmfasta, &quot;&gt;&quot;)[[1]][1]</code></pre>
+</div>
+<div id="other-features" class="section level2">
+<h2>Other Features</h2>
+<p><strong>rentrez</strong> includes a number of features that extend the <strong>search -&gt; link -&gt; fetch</strong> workflow.</p>
+<div id="web_history" class="section level3">
+<h3>web_history</h3>
+<p>As mentioned above, NCBI places limits on large queries to its databases. However, the servers allow users to store long lists of IDs as “web history” objects. When we ran our original <code>entrez_search()</code> we toggled “use_history” to TRUE. Because we did that, our original search object contains a “web_history” element.</p>
+<pre class="r"><code>res$web_history</code></pre>
+<pre><code>## Web history object (QueryKey = 1, WebEnv = NCID_1_31327...)</code></pre>
+<p>So if we wanted to retrieve all records from our original search, regardless of how many there are, we can pass the web history object in the “web_history” argument to <code>entrez_fetch()</code> rather than a list of IDs.</p>
+<pre class="r"><code>recs &lt;- entrez_fetch(db = &quot;pubmed&quot;, web_history = res$web_history, rettype = &quot;xml&quot;, parsed = TRUE)</code></pre>
+<p>Did we get all of the titles?</p>
+<pre class="r"><code>plosidtitles &lt;- xpathSApply(recs, &quot;//MedlineCitation/Article/ArticleTitle&quot;, xmlValue)
+
+length(plosidtitles) == res$count</code></pre>
+</div>
+<div id="entrez_post" class="section level3">
+<h3><code>entrez_post()</code></h3>
+<p>Another way to store IDs on NCBI servers is with the <code>entrez_post()</code> function. This feature effectively also creats a web history object, but does so by explicitly using a POST protocol<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>.</p>
+<pre class="r"><code>res &lt;- entrez_search(db = &quot;clinvar&quot;, term= &quot;atherosclerosis[Disease/Phenotype]&quot;)
+postids &lt;- entrez_post(db = &quot;clinvar&quot;, res$ids)
+postids</code></pre>
+<pre><code>## Web history object (QueryKey = 1, WebEnv = NCID_1_27120...)</code></pre>
+</div>
+<div id="entrez_info" class="section level3">
+<h3><code>entrez_info()</code></h3>
+<p>For metadata about a specific database use <code>entrez_info()</code>:</p>
+<pre class="r"><code>entrez_info(db = &quot;mesh&quot;)</code></pre>
+<pre><code>## &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+## &lt;!DOCTYPE eInfoResult PUBLIC &quot;-//NLM//DTD einfo 20130322//EN&quot; &quot;https://eutils.ncbi.nlm.nih.gov/eutils/dtd/20130322/einfo.dtd&quot;&gt;
+## &lt;eInfoResult&gt;
+##   &lt;DbInfo&gt;
+##     &lt;DbName&gt;mesh&lt;/DbName&gt;
+##     &lt;MenuName&gt;MeSH&lt;/MenuName&gt;
+##     &lt;Description&gt;MeSH Database&lt;/Description&gt;
+##     &lt;DbBuild&gt;Build171017-0315.1&lt;/DbBuild&gt;
+##     &lt;Count&gt;273016&lt;/Count&gt;
+##     &lt;LastUpdate&gt;2017/10/17 03:52&lt;/LastUpdate&gt;
+##     &lt;FieldList&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;ALL&lt;/Name&gt;
+##         &lt;FullName&gt;All Fields&lt;/FullName&gt;
+##         &lt;Description&gt;All terms from all searchable fields&lt;/Description&gt;
+##         &lt;TermCount&gt;2335278&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;N&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;UID&lt;/Name&gt;
+##         &lt;FullName&gt;UID&lt;/FullName&gt;
+##         &lt;Description&gt;Unique number assigned to publication&lt;/Description&gt;
+##         &lt;TermCount&gt;0&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;Y&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;Y&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;FILT&lt;/Name&gt;
+##         &lt;FullName&gt;Filter&lt;/FullName&gt;
+##         &lt;Description&gt;Limits the records&lt;/Description&gt;
+##         &lt;TermCount&gt;16&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;Y&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;TN&lt;/Name&gt;
+##         &lt;FullName&gt;Tree Number&lt;/FullName&gt;
+##         &lt;Description&gt;Tree Number&lt;/Description&gt;
+##         &lt;TermCount&gt;302401&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;Y&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;MESH&lt;/Name&gt;
+##         &lt;FullName&gt;MeSH Terms&lt;/FullName&gt;
+##         &lt;Description&gt;MeSH Terms&lt;/Description&gt;
+##         &lt;TermCount&gt;216343&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;SUBS&lt;/Name&gt;
+##         &lt;FullName&gt;Substance Name&lt;/FullName&gt;
+##         &lt;Description&gt;Substance Name&lt;/Description&gt;
+##         &lt;TermCount&gt;582168&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;WORD&lt;/Name&gt;
+##         &lt;FullName&gt;Text Word&lt;/FullName&gt;
+##         &lt;Description&gt;Free text&lt;/Description&gt;
+##         &lt;TermCount&gt;1029749&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;ALSO&lt;/Name&gt;
+##         &lt;FullName&gt;See Also&lt;/FullName&gt;
+##         &lt;Description&gt;See Also&lt;/Description&gt;
+##         &lt;TermCount&gt;9769&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;Y&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;PREV&lt;/Name&gt;
+##         &lt;FullName&gt;Previous Indexing&lt;/FullName&gt;
+##         &lt;Description&gt;Previous Indexing&lt;/Description&gt;
+##         &lt;TermCount&gt;8392&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;Y&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;NOTE&lt;/Name&gt;
+##         &lt;FullName&gt;Scope Note&lt;/FullName&gt;
+##         &lt;Description&gt;Scope Note&lt;/Description&gt;
+##         &lt;TermCount&gt;446780&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;REG&lt;/Name&gt;
+##         &lt;FullName&gt;Registry Number&lt;/FullName&gt;
+##         &lt;Description&gt;Registry Number&lt;/Description&gt;
+##         &lt;TermCount&gt;100605&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;MULT&lt;/Name&gt;
+##         &lt;FullName&gt;Multi&lt;/FullName&gt;
+##         &lt;Description&gt;Multi&lt;/Description&gt;
+##         &lt;TermCount&gt;798468&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;Y&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;TYPE&lt;/Name&gt;
+##         &lt;FullName&gt;Record Type&lt;/FullName&gt;
+##         &lt;Description&gt;Record type - main heading, subheading, pharmacological action, substance name, publication type&lt;/Description&gt;
+##         &lt;TermCount&gt;6&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##       &lt;Field&gt;
+##         &lt;Name&gt;MHUI&lt;/Name&gt;
+##         &lt;FullName&gt;MeSH Unique ID&lt;/FullName&gt;
+##         &lt;Description&gt;NLM MeSH Browser Unique ID&lt;/Description&gt;
+##         &lt;TermCount&gt;272456&lt;/TermCount&gt;
+##         &lt;IsDate&gt;N&lt;/IsDate&gt;
+##         &lt;IsNumerical&gt;N&lt;/IsNumerical&gt;
+##         &lt;SingleToken&gt;Y&lt;/SingleToken&gt;
+##         &lt;Hierarchy&gt;N&lt;/Hierarchy&gt;
+##         &lt;IsHidden&gt;N&lt;/IsHidden&gt;
+##       &lt;/Field&gt;
+##     &lt;/FieldList&gt;
+##     &lt;LinkList&gt;
+##       &lt;Link&gt;
+##         &lt;Name&gt;mesh_gap&lt;/Name&gt;
+##         &lt;Menu&gt;dbGaP Links&lt;/Menu&gt;
+##         &lt;Description&gt;dbGaP Links&lt;/Description&gt;
+##         &lt;DbTo&gt;gap&lt;/DbTo&gt;
+##       &lt;/Link&gt;
+##       &lt;Link&gt;
+##         &lt;Name&gt;mesh_medgen&lt;/Name&gt;
+##         &lt;Menu&gt;MedGen&lt;/Menu&gt;
+##         &lt;Description&gt;Related information in MedGen&lt;/Description&gt;
+##         &lt;DbTo&gt;medgen&lt;/DbTo&gt;
+##       &lt;/Link&gt;
+##       &lt;Link&gt;
+##         &lt;Name&gt;mesh_pccompound&lt;/Name&gt;
+##         &lt;Menu&gt;PubChem Compound Links&lt;/Menu&gt;
+##         &lt;Description&gt;Related PubChem Compound with MeSH&lt;/Description&gt;
+##         &lt;DbTo&gt;pccompound&lt;/DbTo&gt;
+##       &lt;/Link&gt;
+##       &lt;Link&gt;
+##         &lt;Name&gt;mesh_taxonomy&lt;/Name&gt;
+##         &lt;Menu&gt;Taxonomy Links&lt;/Menu&gt;
+##         &lt;Description&gt;Related Organisms&lt;/Description&gt;
+##         &lt;DbTo&gt;taxonomy&lt;/DbTo&gt;
+##       &lt;/Link&gt;
+##     &lt;/LinkList&gt;
+##   &lt;/DbInfo&gt;
+## &lt;/eInfoResult&gt;
+## </code></pre>
+<p><strong>nb</strong> this information comes back as XML, so you’ll have to use XPATH parsing to extract specific fields.</p>
+</div>
+</div>
+<div id="acknowledgments" class="section level2">
+<h2>Acknowledgments</h2>
+<p>Many of the examples and workflows presented in this lesson are heavily inspired by the developer of <strong>rentrez</strong>, David Winter, and his awesome vignette for the package<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="http://www.ncbi.nlm.nih.gov/guide/all/" class="uri">http://www.ncbi.nlm.nih.gov/guide/all/</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Web_API" class="uri">https://en.wikipedia.org/wiki/Web_API</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="https://en.wikipedia.org/wiki/XML" class="uri">https://en.wikipedia.org/wiki/XML</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><a href="http://www.ncbi.nlm.nih.gov/books/NBK179288/" class="uri">http://www.ncbi.nlm.nih.gov/books/NBK179288/</a><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p><a href="http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html" class="uri">http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="https://github.com/bionode/bionode-ncbi" class="uri">https://github.com/bionode/bionode-ncbi</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p><a href="https://cran.r-project.org/web/packages/rentrez/index.html" class="uri">https://cran.r-project.org/web/packages/rentrez/index.html</a><a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p><a href="https://www.ncbi.nlm.nih.gov/gquery/?term" class="uri">https://www.ncbi.nlm.nih.gov/gquery/?term</a>=<a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p><a href="http://www.w3schools.com/xml/xml_xpath.asp" class="uri">http://www.w3schools.com/xml/xml_xpath.asp</a><a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p><a href="https://en.wikipedia.org/wiki/POST_(HTTP)" class="uri">https://en.wikipedia.org/wiki/POST_(HTTP)</a><a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p><a href="https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html" class="uri">https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html</a><a href="#fnref11">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

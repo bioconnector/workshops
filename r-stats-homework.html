@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Essential Statistics Homework</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Essential Statistics Homework</h1>
+
+</div>
+
+
+<p>(<em>Refer back to the <a href="r-stats.html">Essential Statistics lesson</a>).</em></p>
+<div id="key-concepts" class="section level2">
+<h2>Key Concepts</h2>
+<blockquote>
+<ul>
+<li>Descriptive statistics</li>
+<li>Hypothesis testing</li>
+<li>Normality assumptions</li>
+<li>Cross tabulation</li>
+<li>Logistic regression</li>
+<li>Interpreting model summaries</li>
+</ul>
+</blockquote>
+<p>The datasets we’ll be using for this assignment are both curated and hosted by the <a href="http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets">Vanderbilt Department of Biostatistics</a>.</p>
+</div>
+<div id="stress-tests" class="section level2">
+<h2>Stress Tests</h2>
+<p>Dobutamine is a drug that is used during echocardiograms (aka “stress tests”), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a <a href="https://www.ncbi.nlm.nih.gov/pubmed/10080472">study published in 1999</a>. We’ll be using the data behind this paper to answer the questions that follow.</p>
+<pre class="coffee"><code># Load libraries
+library(readr)
+library(dplyr)
+
+# Read data
+stress &lt;- read_csv(&quot;data/stressEcho.csv&quot;)
+
+# Take a look
+stress</code></pre>
+<pre><code>## # A tibble: 558 x 32
+##       id   bhr basebp basedp  pkhr   sbp    dp  dose maxhr pctMphr   mbp
+##    &lt;int&gt; &lt;int&gt;  &lt;int&gt;  &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt; &lt;int&gt;
+##  1     1    92    103   9476   114    86  9804    40   100      74   121
+##  2     2    62    139   8618   120   158 18960    40   120      82   158
+##  3     3    62    139   8618   120   157 18840    40   120      82   157
+##  4     4    93    118  10974   118   105 12390    30   118      72   105
+##  5     5    89    103   9167   129   173 22317    40   129      69   176
+##  6     6    58    100   5800   123   140 17220    40   123      83   140
+##  7     7    63    120   7560    98   130 12740    40    98      71   130
+##  8     8    86    161  13846   144   157 22608    40   144     111   157
+##  9     9    69    143   9867   115   118 13570    40   113      81   151
+## 10    10    76    105   7980   126   125 15750    40   126      94   125
+## # ... with 548 more rows, and 21 more variables: dpmaxdo &lt;int&gt;,
+## #   dobdose &lt;int&gt;, age &lt;int&gt;, gender &lt;chr&gt;, baseEF &lt;int&gt;, dobEF &lt;int&gt;,
+## #   chestpain &lt;int&gt;, restwma &lt;int&gt;, posSE &lt;int&gt;, newMI &lt;int&gt;,
+## #   newPTCA &lt;int&gt;, newCABG &lt;int&gt;, death &lt;int&gt;, hxofHT &lt;int&gt;, hxofDM &lt;int&gt;,
+## #   hxofCig &lt;chr&gt;, hxofMI &lt;int&gt;, hxofPTCA &lt;int&gt;, hxofCABG &lt;int&gt;,
+## #   any.event &lt;int&gt;, ecg &lt;chr&gt;</code></pre>
+<p>Note that in addition measuring dobutamine dosages during each stress test, the authors collected information on other variables including: resting heart rate, max heart rate, blood pressure, age and (most importantly) whether or not the patient experienced any cardiac event in the 12 months that followed the test.</p>
+<p><em>Before answering the questions, make sure to review the data dictionary</em>:</p>
+<p><a href="http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html" class="uri">http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html</a></p>
+<p><em>Note that the data were originally coded by the authors of the study but were then partially recoded when curated. Pay particular attention to the <code>any.event</code> variable (did the subject experience any cardiac event over 12 months following the stress test), which should be interpeted as 0=NO, 1=YES. The top of the data dicionary makes this clear that all event variables are recoded such that 0=no and 1=yes, which is more conventional.</em></p>
+<ol style="list-style-type: decimal">
+<li>What is the highest maximum heart rate double product with Dobutamine (<code>dpmaxdo</code>)?</li>
+</ol>
+<pre class="r"><code>max(stress$dpmaxdo)</code></pre>
+<pre><code>## [1] 45114</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>What is the cutoff for the 99th percentile for the measurment above?</li>
+</ol>
+<p><strong>HINT</strong>: The <code>quantile()</code> function defaults to 0, 0.25, .5, .75 and 1 but can accept arbitrary threshholds. See <code>?quantile</code> and look for the <code>probs</code> argument.</p>
+<pre class="r"><code>quantile(stress$dpmaxdo, probs = 0.99)</code></pre>
+<pre><code>##      99% 
+## 31948.56</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li>Use <strong>ggplot2</strong> to create a histogram showing the distribution of the <code>dpmaxdo</code> values.</li>
+</ol>
+<pre class="r"><code>library(ggplot2)
+ggplot(stress, aes(dpmaxdo)) +
+  geom_histogram()</code></pre>
+<p><img src="r-stats-homework_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>The plot above indicates that the distribution is approximately normal, with the except of a few outliers at the right tail. With the normality assumption satisfied, perform a two sample t-test to compare the mean double product max heart values between those who did or did not experience any cardiac event (<code>any.event</code>). Assume equal variances between these groups.</li>
+</ol>
+<pre class="r"><code>t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)</code></pre>
+<pre><code>## 
+##  Two Sample t-test
+## 
+## data:  dpmaxdo by any.event
+## t = 2.0707, df = 556, p-value = 0.03885
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##    60.12983 2279.88469
+## sample estimates:
+## mean in group 0 mean in group 1 
+##        18736.49        17566.48</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>What is the p-value for this test? Make sure this is accessed from the results (using the <code>$</code> operator) rather than simply re-typing the value. Feel free to extract the p-value directly from the t-test, or first use <strong>broom::tidy()</strong> to tidy the model first.</li>
+</ol>
+<pre class="r"><code>t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)$p.value</code></pre>
+<pre><code>## [1] 0.03885185</code></pre>
+<ol start="6" style="list-style-type: decimal">
+<li>The smoking history column (<code>hxofCig</code>) is represented categorically as “heavy”, “moderate” and “non-smoker”. Create a margin table showing the total counts of individuals in each smoking history category, for all individuals who either did or did not have any cardiac event by smoking status. Next, show proportions over the row margin (what percentage of each category had any cardiac event?).</li>
+</ol>
+<pre class="r"><code>xt &lt;- xtabs(~ hxofCig + any.event, data = stress)
+addmargins(xt)</code></pre>
+<pre><code>##             any.event
+## hxofCig        0   1 Sum
+##   heavy       98  24 122
+##   moderate   115  23 138
+##   non-smoker 256  42 298
+##   Sum        469  89 558</code></pre>
+<pre class="r"><code>round(prop.table(xt, margin=1), 3)</code></pre>
+<pre><code>##             any.event
+## hxofCig          0     1
+##   heavy      0.803 0.197
+##   moderate   0.833 0.167
+##   non-smoker 0.859 0.141</code></pre>
+<ol start="7" style="list-style-type: decimal">
+<li>Create a mosaic plot to explore the tabulated counts visually.</li>
+</ol>
+<pre class="r"><code>mosaicplot(xt)</code></pre>
+<p><img src="r-stats-homework_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<ol start="8" style="list-style-type: decimal">
+<li>Now use a chi-squared test for the independence of smoking history and cardiac event.</li>
+</ol>
+<pre class="r"><code>chisq.test(xt)</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  xt
+## X-squared = 2.0794, df = 2, p-value = 0.3536</code></pre>
+<ol start="9" style="list-style-type: decimal">
+<li>Load the <strong>broom</strong> package and “tidy” the model output above. If you don’t have the broom package, install it first.</li>
+</ol>
+<pre class="r"><code># If you don&#39;t have broom installed:
+# install.packages(&quot;broom&quot;)
+
+library(broom)
+tidy(chisq.test(xt))</code></pre>
+<pre><code>##   statistic   p.value parameter                     method
+## 1  2.079445 0.3535527         2 Pearson&#39;s Chi-squared test</code></pre>
+</div>
+<div id="muscular-dystrophy-genetics" class="section level2">
+<h2>Muscular Dystrophy Genetics</h2>
+<p>The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a <a href="https://www.ncbi.nlm.nih.gov/pubmed/7137219">1985 paper</a>. In particular, the authors were interested in whether a woman’s DMD carrier status (<code>carrier</code>) was related to the blood serum markers creatine kinase (<code>ck</code>), hemopexin (<code>h</code>), pyruvate kinase (<code>pk</code>) and lactate dehydrogenase (<code>ld</code>).</p>
+<p>Use the following to read and store the data:</p>
+<pre class="coffee"><code>dmd &lt;- read_csv(&quot;data/dmd.csv&quot;)</code></pre>
+<p>For more information on the data set see:</p>
+<p><a href="http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.html" class="uri">http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.html</a></p>
+<ol style="list-style-type: decimal">
+<li>What is the average value for lactate dehydrogenase?</li>
+</ol>
+<pre class="r"><code>mean(dmd$ld, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 198.5891</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li>The four serum markers (creatine kinase, hemopexin, pyruvate kinase and lactate dehydrogenase) are all predictors of interest in this case. Use <strong>ggplot2</strong> to create histograms to assess the normality of the distribution for each of these variables.</li>
+</ol>
+<p><strong>HINT</strong>: The plot below uses <code>gather()</code> from <strong>tidyr</strong> to transform the data so all histograms can be rendered in a single “facet wrapped” plot. Feel free to give this a shot or create separate histograms for each variable. Either method is acceptable.</p>
+<pre class="r"><code>library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+dmd %&gt;%
+  gather(marker, value,ck:ld) %&gt;%
+  ggplot(aes(value)) +
+  geom_histogram(bins = 25) +
+  facet_wrap(~marker, scales = &quot;free&quot;)</code></pre>
+<p><img src="r-stats-homework_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<ol start="3" style="list-style-type: decimal">
+<li>All of these columns have outliers and are (at least slightly) skewed. But <code>ck</code> seems to require the most attention. Try using a log transformation on that column and create another histogram.</li>
+</ol>
+<pre class="r"><code>dmd %&gt;%
+  mutate(logck = log(ck)) %&gt;%
+  ggplot(aes(logck)) +
+  geom_histogram(bins = 25)</code></pre>
+<p><img src="r-stats-homework_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<ol start="4" style="list-style-type: decimal">
+<li>Even when transformed, the cytokine kinase is a little skewed. Assuming we can tolerate this, let’s try fitting a binary logistic regression model that predicts the mother’s status as carrier based on the values of the four blood serum markers. Don’t forget to use the log version of <code>ck</code>, and to use <code>summary()</code> on the model object to view the coefficients.</li>
+</ol>
+<pre class="r"><code>fit &lt;- glm(carrier ~ log(ck) + h + pk + ld, data = dmd, family= &quot;binomial&quot;)
+summary(fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = carrier ~ log(ck) + h + pk + ld, family = &quot;binomial&quot;, 
+##     data = dmd)
+## 
+## Deviance Residuals: 
+##      Min        1Q    Median        3Q       Max  
+## -2.35125  -0.41514  -0.15394   0.08287   2.40056  
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -25.958905   4.287090  -6.055 1.40e-09
+## log(ck)       2.862509   0.656316   4.361 1.29e-05
+## h             0.112805   0.028248   3.993 6.51e-05
+## pk            0.103212   0.043780   2.358   0.0184
+## ld            0.012836   0.005259   2.441   0.0147
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 250.077  on 193  degrees of freedom
+## Residual deviance:  99.005  on 189  degrees of freedom
+##   (15 observations deleted due to missingness)
+## AIC: 109.01
+## 
+## Number of Fisher Scoring iterations: 7</code></pre>
+<ol start="5" style="list-style-type: decimal">
+<li>The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Exponentiate the estimates to make them more interpretable (i.e. the odds ratio for each 1-unit increase in the predictor variable).</li>
+</ol>
+<pre class="r"><code>round(exp(fit$coefficients), 4)</code></pre>
+<pre><code>## (Intercept)     log(ck)           h          pk          ld 
+##      0.0000     17.5054      1.1194      1.1087      1.0129</code></pre>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

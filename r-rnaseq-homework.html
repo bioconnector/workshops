@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>RNA-Seq Homework</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">RNA-Seq Homework</h1>
+
+</div>
+
+
+<p>(<em>Refer back to the <a href="r-rnaseq-airway.html">RNA-seq data analysis lesson</a>).</em></p>
+<div id="recount" class="section level2">
+<h2>Recount</h2>
+<p>Take a look at the preprint: <strong>Collado-Torres, Leonardo, et al. “recount: A large-scale resource of analysis-ready RNA-seq expression data.” <em>bioRxiv</em> (2016): 068478.</strong> It’s available at <a href="http://biorxiv.org/content/early/2016/08/08/068478" class="uri">http://biorxiv.org/content/early/2016/08/08/068478</a>.</p>
+<p>Here’s the abstract:</p>
+<blockquote>
+<p>recount is a resource of processed and summarized expression data spanning nearly 60,000 human RNA-seq samples from the Sequence Read Archive (SRA). The associated recount Bioconductor package provides a convenient API for querying, downloading, and analyzing the data. Each processed study consists of meta/phenotype data, the expression levels of genes and their underlying exons and splice junctions, and corresponding genomic annotation. We also provide data summarization types for quantifying novel transcribed sequence including base-resolution coverage and potentially unannotated splice junctions. We present workflows illustrating how to use recount to perform differential expression analysis including meta-analysis, annotation-free base-level analysis, and replication of smaller studies using data from larger studies. recount provides a valuable and user-friendly resource of processed RNA-seq datasets to draw additional biological insights from existing public data. The resource is available at <a href="https://jhubiostatistics.shinyapps.io/recount/" class="uri">https://jhubiostatistics.shinyapps.io/recount/</a>.</p>
+</blockquote>
+<p>This preprint describes an incredible resource. The authors here have downloaded and pre-processed several thousand RNA-seq studies from the raw data available in the SRA. They make this data available through a web application<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> at where you can browse, search, and sort the studies they’ve processed, and it gives you direct links to download analysis-ready pre-processed count data and metadata. As the abstract mentions, you can access recount at <strong><a href="https://jhubiostatistics.shinyapps.io/recount/">jhubiostatistics.shinyapps.io/recount/</a></strong>.</p>
+</div>
+<div id="get-some-data" class="section level2">
+<h2>Get some data</h2>
+<p>In the accession search box, search for <strong>SRP026387</strong>. This has some pre-processed data from a study looking at the Wnt/Beta-catenin pathway and how that’s affected by androgen deprivation therapy in treating prostate cancer. You can learn more about the <a href="https://trace.ncbi.nlm.nih.gov/Traces/sra/?study=SRP026387">data</a> and the <a href="https://www.ncbi.nlm.nih.gov/pubmed/24054872">study</a> by clicking the accession number hyperlink.</p>
+<blockquote>
+<p>Androgen ablation therapy (AAT) is standard treatment for locally-advanced/metastatic prostate cancer (PCa). Many patients develop castration-resistance (CRPCa) after ~2-3 years, with a poor prognosis. The molecular mechanisms underlying CRPCa progression are unclear. mRNA-Seq was performed on tumours from 7 patients with locally-advanced/metastatic PCa before and ~22 weeks after AAT initiation. Differentially regulated genes were identified in treatment pairs. Overall design: Tumour biopsies from 7 patients were taken before and after AAT treatment.</p>
+</blockquote>
+<p>You could get the gene-level counts and metadata by clicking the appropriate links. I downloaded the data and and cleaned up the metadata and gene identifiers a bit, and made that data available on the <strong><a href="data.html">Data page</a></strong>. The files are called <strong><a href="data/SRP026387_scaledcounts.csv">SRP026387_scaledcounts.csv</a></strong> and <strong><a href="data/SRP026387_metadata.csv">SRP026387_metadata.csv</a></strong>.</p>
+<p>Go to the <a href="data.html">Data page</a>, download these data files, and load them into R. As we did in the <a href="r-rnaseq-airway.html">original lesson</a>) under the <a href="r-rnaseq-airway.html#importing_data">importing data</a> heading, you can load the <strong>readr</strong> and <strong>dplyr</strong>, and libraries and load them with <code>read_csv()</code>, but before you can import them into a DESeqDataSet you’ll have to convert them back to a regular data frame. You could alternatively use base R’s <code>read.csv()</code> function and not have to worry about it.</p>
+<pre class="r"><code># Load the count data and metadata. Here, the &quot;data&quot; folder
+# is relative to my current working directory. 
+mycounts &lt;- read.csv(&quot;data/SRP026387_scaledcounts.csv&quot;)
+metadata &lt;- read.csv(&quot;data/SRP026387_metadata.csv&quot;)</code></pre>
+<p>Take a look at the metadata:</p>
+<pre class="r"><code>metadata</code></pre>
+<pre><code>##           id replicate prepost
+## 1  SRR923920        R1     Pre
+## 2  SRR923921        R2     Pre
+## 3  SRR923923        R4     Pre
+## 4  SRR923924        R5     Pre
+## 5  SRR923925        R6     Pre
+## 6  SRR923927        R1    Post
+## 7  SRR923926        R7     Pre
+## 8  SRR923929        R3    Post
+## 9  SRR923928        R2    Post
+## 10 SRR923930        R4    Post
+## 11 SRR923931        R5    Post
+## 12 SRR923933        R7    Post
+## 13 SRR923932        R6    Post</code></pre>
+<p>And the first few rows of the count data:</p>
+<pre class="r"><code>head(mycounts)</code></pre>
+<pre><code>##           ensgene SRR923920 SRR923921 SRR923923 SRR923924 SRR923925
+## 1 ENSG00000000003       159      1508      2062      1369      1625
+## 2 ENSG00000000005         0         0        17         7         0
+## 3 ENSG00000000419       416       312       505       404       609
+## 4 ENSG00000000457       529       507       718       851       687
+## 5 ENSG00000000460       214       197       330       279       249
+## 6 ENSG00000000938       170       278       100       142       174
+##   SRR923927 SRR923926 SRR923929 SRR923928 SRR923930 SRR923931 SRR923933
+## 1       401      2024      1075       719      1104      1441      1125
+## 2         0         0         7         8         0         6         6
+## 3       376       754       387       324       454       652       640
+## 4       722       599       705       689       855      1016       883
+## 5       213       217       281       220       184       379       383
+## 6       537       214       206       255       110       253       147
+##   SRR923932
+## 1      1376
+## 2         2
+## 3       620
+## 4       671
+## 5       269
+## 6       185</code></pre>
+<p>Finally, load the annotation data (best to do this with dplyr’s <code>read_csv()</code> because it’s pretty big).</p>
+<pre class="r"><code>library(readr)
+library(dplyr)
+anno &lt;- read_csv(&quot;data/annotables_grch38.csv&quot;)
+anno</code></pre>
+<pre><code>## # A tibble: 66,531 x 9
+##            ensgene entrez   symbol   chr     start       end strand
+##              &lt;chr&gt;  &lt;int&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;int&gt;     &lt;int&gt;  &lt;int&gt;
+##  1 ENSG00000000003   7105   TSPAN6     X 100627109 100639991     -1
+##  2 ENSG00000000005  64102     TNMD     X 100584802 100599885      1
+##  3 ENSG00000000419   8813     DPM1    20  50934867  50958555     -1
+##  4 ENSG00000000457  57147    SCYL3     1 169849631 169894267     -1
+##  5 ENSG00000000460  55732 C1orf112     1 169662007 169854080      1
+##  6 ENSG00000000938   2268      FGR     1  27612064  27635277     -1
+##  7 ENSG00000000971   3075      CFH     1 196651878 196747504      1
+##  8 ENSG00000001036   2519    FUCA2     6 143494811 143511690     -1
+##  9 ENSG00000001084   2729     GCLC     6  53497341  53616970     -1
+## 10 ENSG00000001167   4800     NFYA     6  41072945  41099976      1
+## # ... with 66,521 more rows, and 2 more variables: biotype &lt;chr&gt;,
+## #   description &lt;chr&gt;</code></pre>
+</div>
+<div id="what-genes-are-de" class="section level2">
+<h2>What genes are DE?</h2>
+<ol style="list-style-type: decimal">
+<li>After you’ve loaded the data, load the DESeq2 library and <a href="r-rnaseq-airway.html#importing_data">import your data</a> into a DESeqDataSet using the <code>tidy=TRUE</code> argument, with the design formula being the <code>prepost</code> variable from the metadata.</li>
+<li>Run the <a href="r-rnaseq-airway.html#deseq_pipeline">DESeq pipeline</a>.</li>
+<li><a href="r-rnaseq-airway.html#getting_results">Get the results</a> for the pre vs post analysis.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
+<li>Arrange these results by p-value, and join the results to the annotation data (hint: <code>%&gt;% inner_join(anno, by=c(&quot;row&quot;=&quot;ensgene&quot;))</code>).</li>
+<li>Print out the top 10 differentially expressed genes, their fold changes, p-values, adjusted p-values, annotated with the gene symbol and the description from the annotation data.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></li>
+</ol>
+<p><strong>Here’s what your results should look like</strong>. I’m showing actual values for the first few genes so you can check to see if your results are close. Don’t worry about rounding errors.</p>
+<pre><code>## # A tibble: 10 x 6
+##                row log2FoldChange   pvalue     padj     symbol description
+##              &lt;chr&gt;          &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;
+##  1 ENSG00000151503           3.46 3.78e-37 1.03e-32     NCAPD3           ?
+##  2 ENSG00000249599           3.62 1.41e-29 1.93e-25 BMPR1B-AS1           ?
+##  3 ENSG00000228278           7.48 4.04e-28 3.68e-24       ORM2           ?
+##  4               ?              ?        ?        ?          ?           ?
+##  5               ?              ?        ?        ?          ?           ?
+##  6               ?              ?        ?        ?          ?           ?
+##  7               ?              ?        ?        ?          ?           ?
+##  8               ?              ?        ?        ?          ?           ?
+##  9               ?              ?        ?        ?          ?           ?
+## 10               ?              ?        ?        ?          ?           ?</code></pre>
+<hr />
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Incidentally, the web application itself was built with R using the Shiny framework (<a href="https://shiny.rstudio.com/" class="uri">https://shiny.rstudio.com/</a>). <a href="r-shiny.html">Pete teaches a workshop on this!</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Note that without further specifying to the <code>results()</code> function, the default is to treat the alphabetically first condition as the control, and the alphabetically second condition as the experimental group. Therefore, the differential expression values will be comparing “Pre” versus “Post”, since “Post” comes first.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Note that you may need to explicitly call <code>select()</code> from the dplyr library using <code>dplyr::select()</code>, because loading DESeq2 will mask dplyr’s select if you loaded dplyr first.<a href="#fnref3">↩</a></p></li>
+</ol>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

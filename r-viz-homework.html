@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Advanced Data Visualization Homework</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Advanced Data Visualization Homework</h1>
+
+</div>
+
+
+<p>(<em>Refer back to the <a href="r-viz-gapminder.html">Advanced Data Visualization lesson</a>).</em></p>
+<div id="key-concepts" class="section level3">
+<h3>Key Concepts</h3>
+<blockquote>
+<ul>
+<li>geoms</li>
+<li>aesthetic mappings</li>
+<li>statistical layers</li>
+<li>scales</li>
+<li>ggthemes</li>
+<li>ggsave</li>
+</ul>
+</blockquote>
+</div>
+<div id="getting-started" class="section level3">
+<h3>Getting Started</h3>
+<p>The data we’re going to look at is cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Raise or lower their expression in response to growth rate</strong>. Growth-rate dependent expression patterns can tell us a lot about cell cycle control, and how the cell responds to stress. The authors found that expression of &gt;25% of all yeast genes is linearly correlated with growth rate, independent of the limiting nutrient. They also found that the subset of negatively growth-correlated genes is enriched for peroxisomal functions, and positively correlated genes mainly encode ribosomal functions.</li>
+<li><strong>Respond differently when different nutrients are being limited</strong>. If you see particular genes that respond very differently when a nutrient is sharply restricted, these genes might be involved in the transport or metabolism of that specific nutrient.</li>
+</ol>
+<p>You can download the cleaned up version of the data at <a href="data.html">the link above</a>. The file is called <a href="data/brauer2007_tidy.csv"><strong>brauer2007_tidy.csv</strong></a>. Load the <strong>ggplot2</strong>, <strong>dplyr</strong>, <strong>readr</strong> packages, and read the tidy <em>Brauer</em> data into R using the <code>read_csv()</code> function (<em>note, <strong>not</strong> <code>read.csv()</code></em>). Assign the data to an object called <code>ydat</code>.</p>
+<p><em>Note, the code is available by hitting the “Code” button above each expected output, but try not to use it unless you’re stuck</em>.</p>
+<pre class="r"><code># Load required libraries
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+# Read data from file
+ydat &lt;- read_csv(&quot;data/brauer2007_tidy.csv&quot;)
+
+# Display the data
+ydat</code></pre>
+<pre><code>## # A tibble: 198,430 x 7
+##    symbol systematic_name nutrient  rate expression
+##     &lt;chr&gt;           &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
+##  1   SFB2         YNL049C  Glucose  0.05      -0.24
+##  2   &lt;NA&gt;         YNL095C  Glucose  0.05       0.28
+##  3   QRI7         YDL104C  Glucose  0.05      -0.02
+##  4   CFT2         YLR115W  Glucose  0.05      -0.33
+##  5   SSO2         YMR183C  Glucose  0.05       0.05
+##  6   PSP2         YML017W  Glucose  0.05      -0.69
+##  7   RIB2         YOL066C  Glucose  0.05      -0.55
+##  8  VMA13         YPR036W  Glucose  0.05      -0.75
+##  9   EDC3         YEL015W  Glucose  0.05      -0.24
+## 10   VPS5         YOR069W  Glucose  0.05      -0.16
+## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
+</div>
+<div id="problem-set" class="section level3">
+<h3>Problem Set</h3>
+<p>Follow the prompts and use <strong>ggplot2</strong> to reproduce the plots below.</p>
+<div id="part-1" class="section level4">
+<h4>Part 1</h4>
+<p>We can start by taking a look at the distribution of the expression values.</p>
+<ol style="list-style-type: decimal">
+<li>Plot a histogram of the expression variable, and set the bin number equal to 100.</li>
+</ol>
+<pre class="r"><code>ggplot(ydat, aes(x = expression)) +
+    geom_histogram(bins = 100) </code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<ol start="2" style="list-style-type: decimal">
+<li>Check the distribution of each nutrient in the data set by adjusting the fill aesthetic. Use the same bin number for this histogram.</li>
+</ol>
+<pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
+    geom_histogram(bins = 100)</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Wow. That’s ugly. Might be a candidate for <a href="http://accidental-art.tumblr.com/">accidental aRt</a> but not very helpful for our analysis.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Now split off the same histogram into a faceted display with 3 columns.</li>
+</ol>
+<pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
+    geom_histogram(bins = 100) +
+    facet_wrap(~ nutrient, ncol = 3)</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>The basic exploratory process above confirms that the overall distribution (as well each distribution by nutrient) is normal.</p>
+</div>
+<div id="part-2" class="section level4">
+<h4>Part 2</h4>
+<p>Let’s compare the genes with the highest and lowest average expression values.</p>
+<p>We can figure out which these are using some familiar logic:</p>
+<ol style="list-style-type: decimal">
+<li>Take the original <em>ydat</em> data frame …</li>
+<li>Then <em>group by</em> symbol …</li>
+<li>Then <em>summarize</em> mean of all expression values for that symbol …</li>
+<li>Then <em>arrange</em> descending by the mean …</li>
+<li>Then <em>filter</em> for the first or last row.</li>
+</ol>
+<p>The code below implements that pipeline in <strong>dplyr</strong> syntax:</p>
+<pre class="r"><code>ydat %&gt;%
+    group_by(symbol) %&gt;%
+    summarise(meanexp = mean(expression)) %&gt;%
+    arrange(desc(meanexp)) %&gt;%
+    filter(row_number() == 1 | row_number() == n())</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   symbol meanexp
+##    &lt;chr&gt;   &lt;dbl&gt;
+## 1   HXT3    4.01
+## 2   HXT6   -2.68</code></pre>
+<p>The output tells us that the gene with the highest mean expression is <em>HXT3</em>, while the gene with the lowest mean expression is <em>HXT6</em>.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Subset the data to only include these genes, and create a stripplot that has expression values as “jittered” points on the y-axis and the gene symbols the x-axis.</li>
+</ol>
+<blockquote>
+<p><strong>HINT</strong> you can add a “jitter” position to <code>geom_point()</code> but it’s easier to control width of the effect if you use <code>geom_jitter()</code></p>
+</blockquote>
+<pre class="r"><code>gene_exp &lt;- 
+    ydat %&gt;%
+    filter(symbol == &quot;HXT3&quot; | symbol == &quot;HXT6&quot;)
+
+ggplot(gene_exp, aes(x = symbol, y = expression)) +
+    geom_jitter(width = 0.1)</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<ol start="5" style="list-style-type: decimal">
+<li>Now map each observation to its nutrient by color and adjust the size of the points to be 2.</li>
+</ol>
+<pre class="r"><code>ggplot(gene_exp, aes(x = symbol, y = expression)) +
+    geom_jitter(aes(col = nutrient), width = 0.1, size = 2)</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Although these two genes are on opposite ends of the distribution of average expression values, they both seem to express similar amounts when Glucose is the restricted nutrient.</p>
+</div>
+<div id="part-3" class="section level4">
+<h4>Part 3</h4>
+<p>Now let’s try to make something that has a little bit more of a polished look.</p>
+<ol start="6" style="list-style-type: decimal">
+<li>Using <strong>dplyr</strong> logic, create a data frame that has the mean expression values for all combinations of rate and nutrient (<em>hint</em>: use <code>group_by()</code> and <code>summarize()</code>). Create a plot of this data with rate on the x-axis and mean expression on the y-axis and lines colored by nutrient.</li>
+</ol>
+<pre class="r"><code>nutrient_rates &lt;-
+    ydat %&gt;%
+    group_by(rate, nutrient) %&gt;%
+    summarise(meanexp = mean(expression)) 
+
+ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + geom_line(aes(col=nutrient))</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<ol start="7" style="list-style-type: decimal">
+<li>Add black dotted line (lty=3) that represents the smoothed mean of expression across all combinations of nutrients and rates.</li>
+</ol>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, lty=3, se = FALSE) </code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<ol start="8" style="list-style-type: decimal">
+<li>Change the scale to include breaks for <em>all</em> of the rates.</li>
+</ol>
+<blockquote>
+<p><strong>HINT</strong> The <code>read_csv()</code> function read in the rate variable as continuous rather than discrete. There are a few ways to remedy this, but first see if you can set the scale for the x axis variable without changing the dataframe.</p>
+</blockquote>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate)</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<ol start="9" style="list-style-type: decimal">
+<li>By default <code>ggplot()</code> will name the x and y axes with names of their respective variables. You might want to apply more meaningful labels. Change the name of the x-axis to “Rate”, the name of the y-axis to “Mean Expression” and the plot title to “Mean Expression By Rate (Brauer)”</li>
+</ol>
+<blockquote>
+<p><strong>HINT</strong> <code>?labs</code> will pull up the <strong>ggplot2</strong> documentation on axes labels and plot titles.</p>
+</blockquote>
+<pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;)</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<ol start="10" style="list-style-type: decimal">
+<li>Add a theme from the <strong>ggthemes</strong> package. The plot below is based on Edward Tufte’s book <em>The Visual Display of Quantitative Information</em>. Choose a theme that you like, but choose wisely – some of these themes will override other adjustments you’ve made to your plot above, including axis labels.</li>
+</ol>
+<blockquote>
+<p><strong>HINT 1</strong>: <code>library(ggthemes)</code> not working for you? <a href="https://github.com/jrnold/ggthemes#install">Install the package first</a>.</p>
+</blockquote>
+<blockquote>
+<p><strong>HINT 2</strong> You can either do this by trial-and-error or check out the package vignette to get an idea of what each theme looks like: <a href="https://github.com/jrnold/ggthemes" class="uri">https://github.com/jrnold/ggthemes</a></p>
+</blockquote>
+<pre class="r"><code>library(ggthemes)
+ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;) + 
+  theme_tufte()</code></pre>
+<p><img src="r-viz-homework_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<ol start="11" style="list-style-type: decimal">
+<li>The last step is to save the plot you’ve created. Write your plot to a 10 X 6 PDF using a <strong>ggplot2</strong> function.</li>
+</ol>
+<pre class="r"><code>p &lt;- ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
+  geom_line(aes(col=nutrient), lty=1) + 
+  geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
+  scale_x_continuous(breaks = nutrient_rates$rate) + 
+  ylab(&quot;Mean Expression&quot;) + 
+  ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;) + 
+  theme_tufte()
+
+ggsave(p, filename = &quot;plot.pdf&quot;, width = 10, height = 6)</code></pre>
+</div>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

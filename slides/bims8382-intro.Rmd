@@ -1,0 +1,121 @@
+---
+title: "**BIMS8382**"
+author: "<small>Spring 2018, Feb 12 - Mar26<br>Mondays, 2:00-5:00pm</small>"
+date: "_Please sign in and let me know if you had installation issues._"
+output: 
+  slidy_presentation:
+    footer: "http://bims.fun | BIMS 8382"
+    font_adjustment: +2
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Logistics
+
+### Meetings
+
+- Mondays, Feb 13 - Mar 27
+- 2-5pm in this room (BIMS education center)
+
+### Instructors
+
+Stephen Turner (Bioinformatics Core Director, PHS)  
+<turner@virginia.edu>
+
+Pete Nagraj (Data Scientist, SOM Research Computing)  
+<vpn7n@virginia.edu>
+
+### Course Website
+
+**[http://bims.fun](http://bims.fun)**
+
+## Agenda
+
+Subject to change!
+
+1. Week 1 (Feb 13): Intro to R
+1. Week 2 (Feb 20): Advanced Data Manipulation & Tidy Data
+1. Week 3 (Feb 27): Advanced Data Visualization with ggplot2
+1. Week 4 (Mar 6): Reproducible Research & Dynamic Documents
+1. Week 5 (Mar 13): Essential Statistics
+1. Week 6 (Mar 20): Survival Analysis
+1. Week 7 (Mar 27): Introduction to RNA-seq Data Analysis
+
+Friday, March 24, 2-5pm is reserved as a make-up day (snow, etc.)
+
+
+## Week 1 (today!): Intro to R
+
+Novice-level introduction to the R, RStudio, and basic functionality such as creating variables, getting help, using data frames, basic plotting, and reading/writing files.
+
+**Why R?**
+
+- Free
+- Huge community support
+- 10,000+ free add-on packages
+- [Bioconductor](http://bioconductor.org): huge resource for bioinformatics-specific functionality, packages, data, ...
+- [Amazing graphics](https://www.google.com/search?q=ggplot2&tbm=isch)
+- Reproducible research (Week 4)
+- Tons of resources ([StackOverflow](http://stackoverflow.com/questions/tagged/r), [Coursera](https://www.coursera.org/specializations/jhu-data-science), ...)
+
+## Week 2 (Feb 20): Advanced Data Manipulation & Tidy Data
+
+**[Janitor work](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html):** Filtering, reshaping, subsetting, split-apply-combine, joining, etc.
+
+<img height=800, src="../img/dplyr-cheatsheet.png">
+
+## Week 3 (Feb 27): Advanced Data Visualization with ggplot2
+
+<img height=800, src="../img/ggplot2-cheatsheet.png">
+
+## Week 4 (Mar 6): Reproducible Research & Dynamic Documents {.bigger}
+
+- What's reproducible research all about?
+- How to do it with **[RMarkdown](http://rmarkdown.rstudio.com/)**.
+
+## Week 5 (Mar 13): Essential Statistics
+
+1. Descriptive statistics & Exploratory data analysis (EDA)
+1. Continuous variable statistics
+    - T-tests
+    - Wilcoxon / Mann-Whitney U tests
+    - ANOVA
+    - Linear models & multiple regression
+1. Discrete variable statistics
+    - Contingency tables
+    - Chi-square & Fisher exact tests
+    - Logistic regression
+1. _If time allows_: Power & sample size analysis
+1. _Bonus_: Model tidying and extraction
+
+
+## Week 6 (Mar 20): Survival Analysis
+
+1. Survival analysis overview, definitions
+1. Survival analysis in R using built-in data
+    - Survival curves + life tables
+    - Kaplan-Meier curves
+    - Cox proportional hazards regression
+1. Example with TCGA data
+
+## Week 7 (Mar 27): Introduction to RNA-seq Data Analysis
+
+1. Our data: source, pre-processing, structure
+1. Importing & exploring
+1. Processing and analysis with [DESeq2](http://bioconductor.org/packages/DESeq2)
+    - Structuring the count data and metadata
+    - Running the analysis (normalization, dispersion estimation, model fitting)
+    - Extracting results
+1. Data visualization
+1. Alternative approaches
+1. Pathway analysis
+
+## Rubric
+
+- Pass/fail. 
+- Assignments will be given out at the end of each period.
+- Upload programming assignments to Collab.
+- We'll review the homework at the beginning of the next period.

@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Visualizing and Annotating Phylogenetic Trees with R+ggtree</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<!-- Font Awesome -->
+<!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
+<!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
+
+<!-- Google fonts -->
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic|Oswald:400,700' rel='stylesheet' type='text/css'>
+
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+<!-- Google analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-8298649-8', 'auto');
+  ga('send', 'pageview');
+</script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">BIOCONNECTOR</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li>
+  <a href="setup.html">
+    <span class="fa fa-cog"></span>
+     
+    Setup
+  </a>
+</li>
+<li>
+  <a href="data.html">
+    <span class="fa fa-download"></span>
+     
+    Data
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-book"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-lists.html">List Manipulation</a>
+    </li>
+    <li>
+      <a href="r-interactive-viz.html">Interactive Visualization with JavaScript and R</a>
+    </li>
+    <li>
+      <a href="r-shiny.html">Building Shiny Web Apps in R</a>
+    </li>
+    <li>
+      <a href="r-ncbi.html">Harvesting Data from NCBI</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-university"></span>
+     
+    THRIV
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="thriv.html">
+        <span class="fa fa-graduation-cap"></span>
+         
+        Syllabus
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Lessons ---</li>
+    <li>
+      <a href="r-basics.html">R Basics</a>
+    </li>
+    <li>
+      <a href="r-dataframes.html">Data Frames</a>
+    </li>
+    <li>
+      <a href="r-dplyr-yeast.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-tidy.html">Tidying data</a>
+    </li>
+    <li>
+      <a href="r-viz-gapminder.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats.html">Essential Statistics with R</a>
+    </li>
+    <li>
+      <a href="r-survival.html">Survival Analysis with TCGA Data</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">--- Homework ---</li>
+    <li>
+      <a href="r-dplyr-homework.html">Data Manipulation</a>
+    </li>
+    <li>
+      <a href="r-viz-homework.html">Data Visualization</a>
+    </li>
+    <li>
+      <a href="r-rmarkdown-homework.html">Reproducible Research &amp; RMarkdown</a>
+    </li>
+    <li>
+      <a href="r-stats-homework.html">Essential Statistics</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-question fa-lg"></span>
+     
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="people.html">People</a>
+    </li>
+    <li>
+      <a href="help.html">Further resources</a>
+    </li>
+    <li>
+      <a href="https://github.com/bioconnector/workshops">Source code for this site</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Visualizing and Annotating Phylogenetic Trees with R+ggtree</h1>
+
+</div>
+
+
+<p>This lesson demonstrates how to use <strong>ggtree</strong>, an extension of the ggplot2 package to visualize and annotate phylogenetic trees. Many of the examples here were modified from the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">ggtree vignettes</a>.</p>
+<p><em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and most importantly, <strong><a href="r-viz-gapminder.html">data visualization with ggplot2</a></strong>.</em></p>
+<p>This lesson does <em>not</em> cover methods and software for <em>generating</em> phylogenetic trees, nor does it it cover <em>interpreting</em> phylogenies. <strong><a href="http://epidemic.bio.ed.ac.uk/how_to_read_a_phylogeny">Here’s a quick primer on how to read a phylogeny</a></strong> that you should definitely review prior to this lesson, but it is by no means extensive. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson.</p>
+<div id="the-ggtree-package" class="section level2">
+<h2>The <code>ggtree</code> Package</h2>
+<p><strong>ggtree</strong> is an R package that extends ggplot2 for visualizating and annotating phylogenetic trees with their covariates and other associated data. It is available from <a href="http://www.bioconductor.org/">Bioconductor</a>. Bioconductor is a project to provide tools for analyzing and annotating various kinds of genomic data. You can search and browse Bioconductor packages <a href="http://www.bioconductor.org/packages/release/BiocViews.html#___Software">here</a>.</p>
+<ol style="list-style-type: decimal">
+<li><strong>ggtree Bioconductor page</strong>: <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">bioconductor.org/packages/ggtree</a>.</li>
+<li><strong>ggtree homepage</strong>: <a href="https://guangchuangyu.github.io/ggtree/">guangchuangyu.github.io/ggtree</a> (contains more information about the package, more documentation, a gallery of beautiful images, and links to related resources).</li>
+<li><strong>ggtree publication</strong>: Yu, Guangchuang, et al. “ggtree: an r package for visualization and annotation of phylogenetic trees with their covariates and other associated data.” <em>Methods in Ecology and Evolution</em> (2016) <a href="http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12628/full">DOI:10.1111/2041-210X.12628</a>.</li>
+</ol>
+<p>Bioconductor packages usually have great documentation in the form of <em>vignettes</em>. Take a look at the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">landing page for ggtree</a> – about halfway down the page under the “Documentation” heading there are multiple walkthrough tutorials directed to different applications and functionalities of ggtree, chock full of runnable examples and explanations.</p>
+<p>Just like R packages from CRAN, you only need to install Bioconductor packages once (<a href="setup.html#bioconductor">instructions here</a>), then load them every time you start a new R session.</p>
+<pre class="r"><code>library(ggtree)</code></pre>
+<p><em>A note on masked functions</em>: If you already loaded a package like <strong>dplyr</strong>, take a second and look through some of the output that you see when you load <strong>ggtree</strong> after <strong>dplyr</strong>. When you first installed ggtree it may have taken a while, because ggtree <em>depends</em> on a number of other R packages. Each of these, in turn, may depend on other packages. These are all loaded into your working environment when you load ggtree. Also notice the lines that start with <code>The following objects are masked from 'package:...</code>. One example of this is the <code>collapse()</code> function from dplyr. When ggtree was loaded, it loaded it’s own function called <code>collapse()</code>. Now, if you wanted to use dplyr’s collapse function, you’ll have to call it explicitly using this kind of syntax: <code>dplyr::collapse()</code>. <a href="http://stackoverflow.com/questions/4879377/r-masked-functions">See this Q&amp;A thread for more</a>.</p>
+</div>
+<div id="tree-import" class="section level2">
+<h2>Tree Import</h2>
+<p>From the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">ggtree landing page</a> take a look at the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeImport.html">Tree Data Import vignette</a>. There are many different software packages for creating phylogenetic trees from different types of data, and there are many formats for storing the resulting phylogenetic trees they produce.</p>
+<p>Most tree viewer software (including <code>R</code> packages) focus on <strong>Newick</strong> and <strong>Nexus</strong> file formats, and other evolution analysis software might also contain supporting evidence within the file that are ready for annotating a phylogenetic tree. ggtree supports several file formats, including:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Newick_format">Newick</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Nexus_file">Nexus</a></li>
+<li><a href="https://en.wikipedia.org/wiki/PHYLIP">Phylip</a></li>
+<li><a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009">Jplace</a></li>
+<li><a href="https://home.cc.umanitoba.ca/~psgendb/doc/atv/NHX.pdf">New Hampshire eXtended format (NHX)</a></li>
+</ul>
+<p>and software output from:</p>
+<ul>
+<li><a href="http://beast2.org/">BEAST</a></li>
+<li><a href="http://sco.h-its.org/exelixis/web/software/epa/index.html">EPA</a></li>
+<li><a href="http://hyphy.org/w/index.php/Main_Page">HYPHY</a></li>
+<li><a href="http://abacus.gene.ucl.ac.uk/software/paml.html">PAML</a></li>
+<li><a href="http://pbil.univ-lyon1.fr/software/phyldog/">PHYLDOG</a></li>
+<li><a href="http://matsen.fhcrc.org/pplacer/">pplacer</a></li>
+<li><a href="http://loco.biosci.arizona.edu/r8s/">r8s</a></li>
+<li><a href="http://sco.h-its.org/exelixis/web/software/raxml/">RAxML</a></li>
+<li><a href="http://revbayes.github.io/intro.html">RevBayes</a></li>
+</ul>
+<p>The <code>ggtree</code> package implement several parser functions, including:</p>
+<ul>
+<li><code>read.tree</code> for reading Newick files.</li>
+<li><code>read.phylip</code> for reading Phylip files.</li>
+<li><code>read.jplace</code> for reading Jplace files.</li>
+<li><code>read.nhx</code> for reading NHX files.</li>
+<li><code>read.beast</code> for parsing output of <a href="http://beast2.org/">BEAST</a></li>
+<li><code>read.codeml</code> for parsing output of <a href="http://abacus.gene.ucl.ac.uk/software/paml.html">CODEML</a> (<code>rst</code> and <code>mlc</code> files)</li>
+<li><code>read.codeml_mlc</code> for parsing <code>mlc</code> file (output of <code>CODEML</code>)</li>
+<li><code>read.hyphy</code> for parsing output of <a href="http://hyphy.org/w/index.php/Main_Page">HYPHY</a></li>
+<li><code>read.jplace</code> for parsing <code>jplace</code> file including output from <a href="http://sco.h-its.org/exelixis/web/software/epa/index.html">EPA</a> and <a href="http://matsen.fhcrc.org/pplacer/">pplacer</a></li>
+<li><code>read.nhx</code> for parsing <code>NHX</code> file including output from <a href="http://pbil.univ-lyon1.fr/software/phyldog/">PHYLODOG</a> and <a href="http://revbayes.github.io/intro.html">RevBayes</a></li>
+<li><code>read.paml_rst</code> for parsing <code>rst</code> file (output of <code>BASEML</code> and <code>CODEML</code>)</li>
+<li><code>read.r8s</code> for parsing output of <a href="loco.biosci.arizona.edu/r8s/">r8s</a></li>
+<li><code>read.raxml</code> for parsing output of <a href="http://sco.h-its.org/exelixis/web/software/raxml/">RAxML</a></li>
+</ul>
+</div>
+<div id="basic-trees" class="section level2">
+<h2>Basic trees</h2>
+<p>Let’s first import our tree data. We’re going to work with a made-up phylogeny with 13 samples (“tips”). Download the <a href="data/tree_newick.nwk"><strong>tree_newick.nwk</strong> data by clicking here</a> or using the link above. Let’s load the libraries you’ll need if you haven’t already, and then import the tree using <code>read.tree()</code>. Displaying the object itself really isn’t useful. The output just tells you a little bit about the tree itself.</p>
+<pre class="r"><code>library(ggtree)
+
+tree &lt;- read.tree(&quot;data/tree_newick.nwk&quot;)
+tree</code></pre>
+<p>Just like with ggplot2 we created a basic canvas with <code>ggplot(...)</code> and added layers with <code>+geom_???()</code>, we can do the same here. The ggtree package gives us a <code>geom_tree()</code> function. Because ggtree is built on top of ggplot2, you get ggplot2’s default gray theme with white lines. You can override this with a theme from the ggtree package.</p>
+<p>Because you’ll almost always want to add a tree geom and remove the default background and axes, the <code>ggtree()</code> function is essentially a shortcut for <code>ggplot(...) + geom_tree() + theme_tree()</code>.</p>
+<pre class="r"><code># build a ggplot with a geom_tree
+ggplot(tree) + geom_tree() + theme_tree()
+
+# This is convenient shorthand
+ggtree(tree)</code></pre>
+<p><img src="r-ggtree_files/figure-html/first_tree-1.png" width="672" /></p>
+<p>There’s also the treescale geom, which adds a scale bar, or alternatively, you can change the default <code>ggtree()</code> theme to <code>theme_tree2()</code>, which adds a scale on the x-axis. The horizontal dimension in this plot shows the amount of genetic change, and the branches and represent evolutionary lineages changing over time. The longer the branch in the horizonal dimension, the larger the amount of change, and the scale tells you this. The units of branch length are usually nucleotide substitutions per site – that is, the number of changes or substitutions divided by the length of the sequence (alternatively, it could represent the percent change, i.e., the number of changes per 100 bases). See <a href="http://epidemic.bio.ed.ac.uk/how_to_read_a_phylogeny">this article</a> for more.</p>
+<pre class="r"><code># add a scale
+ggtree(tree) + geom_treescale()
+
+# or add the entire scale to the x axis with theme_tree2()
+ggtree(tree) + theme_tree2()</code></pre>
+<p><img src="r-ggtree_files/figure-html/scales-1.png" width="672" /></p>
+<p>The default is to plot a phylogram, where the x-axis shows the genetic change / evolutionary distance. If you want to disable scaling and produce a cladogram instead, set the <code>branch.length=&quot;none&quot;</code> option inside the <code>ggtree()</code> call. See <code>?ggtree</code> for more.</p>
+<pre class="r"><code>ggtree(tree, branch.length=&quot;none&quot;)</code></pre>
+<p><img src="r-ggtree_files/figure-html/cladogram-1.png" width="672" /></p>
+<p>The <code>...</code> option in the help for <code>?ggtree</code> represents additional options that are further passed to <code>ggplot()</code>. You can use this to change aesthetics of the plot. Let’s draw a cladogram (no branch scaling) using thick blue dotted lines (note that I’m not mapping these aesthetics to features of the data with <code>aes()</code> – we’ll get to that later).</p>
+<pre class="r"><code>ggtree(tree, branch.length=&quot;none&quot;, color=&quot;blue&quot;, size=2, linetype=3)</code></pre>
+<p><img src="r-ggtree_files/figure-html/aesthetics-1.png" width="672" /></p>
+<hr />
+<!-- ### Exercise 1 -->
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
+<p>Look at the help again for <code>?ggtree</code>, specifically at the <code>layout=</code> option. By default, it produces a rectangular layout.</p>
+<ol style="list-style-type: decimal">
+<li>Create a slanted phylogenetic tree.</li>
+<li>Create a circular phylogenetic tree.</li>
+<li>Create a circular unscaled cladogram with thick red lines.</li>
+</ol>
+<hr />
+</div>
+<div id="other-tree-geoms" class="section level3">
+<h3>Other tree geoms</h3>
+<p>Let’s add additional layers. As we did in the <a href="r-viz-gapminder.html">ggplot2 lesson</a>, we can create a plot object, e.g., <code>p</code>, to store the basic layout of a ggplot, and add more layers to it as we desire. Let’s add node and tip points. Let’s finally label the tips.</p>
+<pre class="r"><code># create the basic plot
+p &lt;- ggtree(tree)
+
+# add node points
+p + geom_nodepoint()
+
+# add tip points
+p + geom_tippoint()
+
+# Label the tips
+p + geom_tiplab()</code></pre>
+<hr />
+<!-- ### Exercise 2 -->
+</div>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
+<p>Similar to how we change the aesthetics for the tree inside the <code>ggtree()</code> call, we can also change the aesthetics of the points themselves by passing graphical parameters inside the <code>geom_nodepoint()</code> or <code>geom_tippoint()</code> calls. Create a phylogeny with the following aesthetic characteristics:</p>
+<ul>
+<li>tips labeled in purple</li>
+<li>purple-colored diamond-shape tip points (hint: Google search “R point characters”)</li>
+<li>large semitransparent yellow node points (hint: <code>alpha=</code>)</li>
+<li>Add a title with <code>+ ggtitle(...)</code></li>
+</ul>
+<p><img src="r-ggtree_files/figure-html/ex2-1.png" width="672" /></p>
+<hr />
+</div>
+</div>
+<div id="tree-annotation" class="section level2">
+<h2>Tree annotation</h2>
+<p>The <code>geom_tiplab()</code> function adds some very rudimentary annotation. Let’s take annotation a bit further. See the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeAnnotation.html">tree annotation</a> and <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/advanceTreeAnnotation.html">advanced tree annotation</a> vignettes for more.</p>
+<div id="internal-node-number" class="section level3">
+<h3>Internal node number</h3>
+<p>Before we can go further we need to understand how ggtree is handling the tree structure internally. Some of the functions in ggtree for annotating clades need a parameter specifying the internal node number. To get the internal node number, user can use <code>geom_text</code> to display it, where the label is an aesthetic mapping to the “node variable” stored inside the tree object (think of this like the continent variable inside the gapminder object). We also supply the <code>hjust</code> option so that the labels aren’t sitting right on top of the nodes. Read more about this process in the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeManipulation.html#internal-node-number">ggtree manipulation vignette</a>.</p>
+<pre class="r"><code>ggtree(tree) + geom_text(aes(label=node), hjust=-.3)</code></pre>
+<p><img src="r-ggtree_files/figure-html/nodenumber-1.png" width="672" /></p>
+<p>Another way to get the internal node number is using <code>MRCA()</code> function by providing a vector of taxa names (created using <code>c(&quot;taxon1&quot;, &quot;taxon2&quot;)</code>).. The function will return node number of input taxa’s most recent commond ancestor (MRCA). First, re-create the plot so you can choose which taxa you want to grab the MRCA from.</p>
+<pre class="r"><code>ggtree(tree) + geom_tiplab()</code></pre>
+<p><img src="r-ggtree_files/figure-html/tiplab_for_mrca-1.png" width="672" /></p>
+<p>Let’s grab the most recent common ancestor for taxa C+E, and taxa G+H. We can use <code>MRCA()</code> to get the internal node numbers. Go back to the node-labeled plot from before to confirm this.</p>
+<pre class="r"><code>MRCA(tree, tip=c(&quot;C&quot;, &quot;E&quot;))</code></pre>
+<pre><code>## [1] 17</code></pre>
+<pre class="r"><code>MRCA(tree, tip=c(&quot;G&quot;, &quot;H&quot;))</code></pre>
+<pre><code>## [1] 21</code></pre>
+</div>
+<div id="labeling-clades" class="section level3">
+<h3>Labeling clades</h3>
+<p>We can use <code>geom_cladelabel()</code> to add another geom layer to annotate a selected clade with a bar indicating the clade with a corresponding label. You select the clades using the internal node number for the node that connects all the taxa in that clade. See the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeAnnotation.html#annotate-clades">tree annotation vignette</a> for more.</p>
+<p>Let’s annotate the clade with the most recent common ancestor between taxa C and E (internal node 17). Let’s make the annotation red. See <code>?geom_cladelabel</code> help for more.</p>
+<pre class="r"><code>ggtree(tree) + 
+  geom_cladelabel(node=17, label=&quot;Some random clade&quot;, color=&quot;red&quot;)</code></pre>
+<p>Let’s add back in the tip labels. Notice how now the clade label is too close to the tip labels. Let’s add an offset to adjust the position. You might have to fiddle with this number to get it looking right.</p>
+<pre class="r"><code>ggtree(tree) + 
+  geom_tiplab() + 
+  geom_cladelabel(node=17, label=&quot;Some random clade&quot;, 
+                  color=&quot;red2&quot;, offset=.8)</code></pre>
+<p>Now let’s add another label for the clade connecting taxa G and H (internal node 21).</p>
+<pre class="r"><code>ggtree(tree) + 
+  geom_tiplab() + 
+  geom_cladelabel(node=17, label=&quot;Some random clade&quot;, 
+                  color=&quot;red2&quot;, offset=.8) + 
+  geom_cladelabel(node=21, label=&quot;A different clade&quot;, 
+                  color=&quot;blue&quot;, offset=.8)</code></pre>
+<p>Uh oh. Now we have two problems. First, the labels would look better if they were aligned. That’s simple. Pass <code>align=TRUE</code> to <code>geom_cladelabel()</code> (see <code>?geom_cladelabel</code> help for more). But now, the labels are falling off the edge of the plot. That’s because <code>geom_cladelabel()</code> is just adding it this layer onto the end of the existing canvas that was originally layed out in the ggtree call. This default layout tried to optimize by plotting the entire tree over the entire region of the plot. Here’s how we’ll fix this.</p>
+<ol style="list-style-type: decimal">
+<li>First create the generic layout of the plot with <code>ggtree(tree)</code>.</li>
+<li>Add some tip labels.</li>
+<li>Add each clade label.</li>
+<li>Remember <strong><code>theme_tree2()</code></strong>? We used it way back to add a scale to the x-axis showing the genetic distance. This is the unit of the x-axis. We need to set the limits on the x-axis. Google around for something like “ggplot2 x axis limits” and you’ll wind up on <a href="https://stackoverflow.com/q/3606697/654296">this StackOverflow page</a> that tells you exactly how to solve it – just add on a <code>+ xlim(..., ...)</code> layer. Here let’s extend out the axis a bit further to the right.</li>
+<li>Finally, if we want, we can either <em>comment out</em> the <code>theme_tree2()</code> segment of the code, or we could just add another theme layer on top of the plot altogether, which will override the theme that was set before. <code>theme_tree()</code> doesn’t have the scale.</li>
+</ol>
+<pre class="r"><code>ggtree(tree) + 
+  geom_tiplab() + 
+  geom_cladelabel(node=17, label=&quot;Some random clade&quot;, 
+                  color=&quot;red2&quot;, offset=.8, align=TRUE) + 
+  geom_cladelabel(node=21, label=&quot;A different clade&quot;, 
+                  color=&quot;blue&quot;, offset=.8, align=TRUE) + 
+  theme_tree2() + 
+  xlim(0, 70) + 
+  theme_tree()</code></pre>
+<p><img src="r-ggtree_files/figure-html/geom_cladelabel_final-1.png" width="768" /></p>
+<p>Alternatively, we could highlight the entire clade with <code>geom_hilight()</code>. See the help for options to tweak.</p>
+<pre class="r"><code>ggtree(tree) + 
+  geom_tiplab() + 
+  geom_hilight(node=17, fill=&quot;gold&quot;) + 
+  geom_hilight(node=21, fill=&quot;purple&quot;)</code></pre>
+<p><img src="r-ggtree_files/figure-html/geom_hilight-1.png" width="672" /></p>
+</div>
+<div id="connecting-taxa" class="section level3">
+<h3>Connecting taxa</h3>
+<p>Some evolutionary events (e.g. reassortment, horizontal gene transfer) can be visualized with some simple annotations on a tree. The <code>geom_taxalink()</code> layer draws straight or curved lines between any of two nodes in the tree, allow it to show evolutionary events by connecting taxa. Take a look at the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeAnnotation.html#taxa-connection">tree annotation vignette</a> and <code>?geom_taxalink</code> for more.</p>
+<pre class="r"><code>ggtree(tree) + 
+  geom_tiplab() + 
+  geom_taxalink(&quot;E&quot;, &quot;H&quot;, color=&quot;blue3&quot;) +
+  geom_taxalink(&quot;C&quot;, &quot;G&quot;, color=&quot;orange2&quot;, curvature=-.9)</code></pre>
+<p><img src="r-ggtree_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<hr />
+<!-- ### Exercise 3 -->
+</div>
+</div>
+<div id="exercise-3" class="section level2">
+<h2>Exercise 3</h2>
+<p>Produce the figure below.</p>
+<ol style="list-style-type: decimal">
+<li>First, find what the MRCA is for taxa <strong>B+C</strong>, and taxa <strong>L+J</strong>. You can do this in one of two ways:
+<ol style="list-style-type: lower-alpha">
+<li>Easiest: use <code>MRCA(tree, tip=c(&quot;taxon1&quot;, &quot;taxon2&quot;))</code> for B/C and L/J separately.</li>
+<li>Alternatively: use <code>ggtree(tree) + geom_text(aes(label=node), hjust=-.3)</code> to see what the node labels are on the plot. You might also add tip labels here too.</li>
+</ol></li>
+<li>Draw the tree with <code>ggtree(tree)</code>.</li>
+<li>Add tip labels.</li>
+<li>Highlight these clades with separate colors.</li>
+<li>Add a clade label to the larger superclade (node=17) that we saw before that includes A, B, C, D, and E. You’ll probably need an offset to get this looking right.</li>
+<li>Link taxa C to E, and G to J with a dashed gray line (hint: get the geom working first, then try changing the aesthetics. You’ll need <code>linetype=2</code> somewhere in the <code>geom_taxalink()</code>).</li>
+<li>Add a scale bar to the bottom by changing the theme.</li>
+<li>Add a title.</li>
+<li>Optionally, go back to the original <code>ggtree(tree, ...)</code> call and change the layout to <code>&quot;circular&quot;</code>.</li>
+</ol>
+<p><img src="r-ggtree_files/figure-html/ex3-1.png" width="768" /></p>
+<hr />
+</div>
+<div id="advanced-tree-annotation" class="section level2">
+<h2>Advanced tree annotation</h2>
+<p>Let’s use a previously published dataset from this paper:</p>
+<p>Liang et al. “Expansion of genotypic diversity and establishment of 2009 H1N1 pandemic-origin internal genes in pigs in China.” <em>Journal of virology</em> (2014): <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4178866/">88(18):10864-74</a>.</p>
+<p>This data was reanalyzed in the <a href="http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12628/full">ggtree paper</a>.</p>
+<p>The subset of the data used here contains 76 H3 hemagglutinin gene sequences of a lineage containing both swine and human influenza A viruses. The sequence data set was re-analyzed by using BEAST (available at <a href="http://beast.bio.ed.ac.uk/" class="uri">http://beast.bio.ed.ac.uk/</a>). BEAST (Bayesian Evolutionary Analysis Sampling Trees) can give you rooted, time-measured phylogenies inferred using molecular clock models.</p>
+<p>For this you’ll need the <code>flu_tree_beast.tree</code> output file from BEAST and the <code>flu_aasequence.fasta</code> FASTA file with the multiple sequence alignment. These are both available on the <a href="data.html">data downloads page</a>. First let’s read in the tree with <code>read.beast()</code> (instead of the <code>read.tree()</code> we used before). Let’s add a scale bar with theme_tree2(). This gives you genetic distance. But, we have time measured here with molecular clock models. We’ve only estimated the <em>relative</em> time between branching events, so if we want to actually see <em>dates</em> on the x-axis, we need to supply the most recent sampling date to the <code>ggtree()</code> call. Do this by setting <code>mrsd=&quot;YYYY-MM-DD&quot;</code> inside <code>ggtree()</code>.</p>
+<p>Finally, let’s add some tip labels. We’ll want to right-align them, and by default the dotted line is a little too thick. Let’s reduce the <code>linesize</code> a bit. Now, some of the labels might be falling off the margin. Set the <code>xlim</code> to limit the axis to show between 1990 and 2020. You could get MRCAs and node numbers and do all the annotations that we did before the same way here.</p>
+<pre class="r"><code># Read the data
+tree &lt;- read.beast(&quot;data/flu_tree_beast.tree&quot;)
+
+# supply a most recent sampling date so you get the dates
+# and add a scale bar
+ggtree(tree, mrsd=&quot;2013-01-01&quot;) + 
+  theme_tree2() 
+
+# Finally, add tip labels and adjust axis
+ggtree(tree, mrsd=&quot;2013-01-01&quot;) + 
+  theme_tree2() + 
+  geom_tiplab(align=TRUE, linesize=.5) + 
+  xlim(1990, 2020)</code></pre>
+<p><img src="r-ggtree_files/figure-html/beastplot-1.png" width="1056" /></p>
+<p>Finally, let’s look at <code>?msaplot</code>. This puts the multiple sequence alignment and the tree side-by-side. The function takes a tree object (produced with <code>ggtree()</code>) and the path to the FASTA multiple sequence alignment. You can do it with the entire MSA, or you could restrict to just a window. Want something interesting-looking, but maybe not all that useful? Try changing the coordinate system of the plot itself by passing <code>+ coord_polar(theta=&quot;y&quot;)</code> to the end of the command!</p>
+<pre class="r"><code>msaplot(p=ggtree(tree), fasta=&quot;data/flu_aasequence.fasta&quot;, window=c(150, 175))</code></pre>
+<p><img src="r-ggtree_files/figure-html/msaplot-1.png" width="1056" /></p>
+<p>Take a look at the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/advanceTreeAnnotation.html">advanced tree annotation vignette</a> for much, much more!</p>
+</div>
+<div id="bonus" class="section level2">
+<h2>Bonus!</h2>
+<p>See the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">ggtree vignettes</a> for more details on how these work.</p>
+<div id="many-trees" class="section level3">
+<h3>Many trees</h3>
+<p>ggtree will let you plot many trees at once, and you can facet them the normal ggplot2 way. Let’s generate 3 replicates each of 4 random trees with 10, 25, 50, and 100 tips, plotting them all.</p>
+<pre class="r"><code>set.seed(42)
+trees &lt;- lapply(rep(c(10, 25, 50, 100), 3), rtree)
+class(trees) &lt;- &quot;multiPhylo&quot;
+ggtree(trees) + facet_wrap(~.id, scale=&quot;free&quot;, ncol=4) + ggtitle(&quot;Many trees. Such phylogenetics. Wow.&quot;)</code></pre>
+<p><img src="r-ggtree_files/figure-html/faceted-1.png" width="960" /></p>
+</div>
+<div id="plot-tree-with-other-data" class="section level3">
+<h3>Plot tree with other data</h3>
+<p>For showing a phylogenetic tree alongside other panels with your own data, the <code>facet_plot()</code> function accepts a input data.frame and a <code>geom</code> function to draw the input data.</p>
+<pre class="r"><code># Generate a random tree with 30 tips
+tree &lt;- rtree(30)
+
+# Make the original plot
+p &lt;- ggtree(tree)
+
+# generate some random values for each tip label in the data
+d1 &lt;- data.frame(id=tree$tip.label, val=rnorm(30, sd=3))
+
+# Make a second plot with the original, naming the new plot &quot;dot&quot;, 
+# using the data you just created, with a point geom.
+p2 &lt;- facet_plot(p, panel=&quot;dot&quot;, data=d1, geom=geom_point, aes(x=val), color=&#39;red3&#39;)
+
+# Make some more data with another random value.
+d2 &lt;- data.frame(id=tree$tip.label, value = abs(rnorm(30, mean=100, sd=50)))
+
+# Now add to that second plot, this time using the new d2 data above, 
+# This time showing a bar segment, size 3, colored blue.
+p3 &lt;- facet_plot(p2, panel=&#39;bar&#39;, data=d2, geom=geom_segment, 
+           aes(x=0, xend=value, y=y, yend=y), size=3, color=&#39;blue4&#39;) 
+
+# Show all three plots with a scale
+p3 + theme_tree2()</code></pre>
+<p><img src="r-ggtree_files/figure-html/assocdata-1.png" width="768" /></p>
+</div>
+<div id="overlay-organism-silouhettes" class="section level3">
+<h3>Overlay organism silouhettes</h3>
+<p><a href="http://phylopic.org/">phylopic.org</a> hosts free silhouette images of animals, plants, and other life forms, all under Creative Commons or Public Domain. You can use ggtree to overlay a phylopic image on your plot at a node of your choosing. Let’s show some gram-negative bacteria over the whole plot, and put a <em>Homo sapiens</em> and a dog on those clades we’re working with.</p>
+<pre class="r"><code>read.tree(&quot;data/tree_newick.nwk&quot;) %&gt;% 
+  ggtree() %&gt;% 
+  phylopic(&quot;ba0a446e-18d7-4db9-9937-5adec24721b5&quot;, 
+           color=&quot;gold2&quot;, alpha = .25) %&gt;% 
+  phylopic(&quot;c089caae-43ef-4e4e-bf26-973dd4cb65c5&quot;, 
+           color=&quot;purple3&quot;, alpha = .5, node=17) %&gt;% 
+  phylopic(&quot;6c9cb19d-1d8a-4215-88ba-d49cd4917a5e&quot;, 
+           color=&quot;purple3&quot;, alpha = .5, node=21)</code></pre>
+<p><img src="r-ggtree_files/figure-html/phylopic-1.png" width="960" /></p>
+</div>
+</div>
+
+<div class="footer">
+This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
+For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
+<a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
+<!--
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss fa-lg"></i></a>&nbsp;
+-->
+</div>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
