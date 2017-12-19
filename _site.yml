@@ -75,8 +75,8 @@ navbar:
           href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
           href: r-survival.html
-#        - text: "Predictive Analytics & Forecasting Influenza"
-#          href: r-flu.html
+        - text: "Predictive Analytics & Forecasting Influenza"
+          href: r-predictive-modeling.html
         - text: "----"
         - text: "--- Homework ---"
         - text: "Data Manipulation"
