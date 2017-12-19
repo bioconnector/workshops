@@ -112,12 +112,9 @@ This class will provide hands-on instruction for using machine learning algorith
 
 **You must [complete the setup here](setup.html#predictive_modeling) _prior to class_.** This includes installing R, RStudio, and the required packages under the ["Predictive modeling" heading](setup.html#predictive_modeling). Please [contact me](people.html) _prior to class_ if you are having difficulty with any of the setup. Please bring your laptop and charger cable to class.
 
+**Handout**: Download and print out __[this handout](handouts/r-predictive-modeling.pdf)__ and bring it to class.
+
 <!--
-**Handouts**: Download and print out these handouts and bring them to class:
-
-- [Cheat sheet](handouts/r-stats-cheatsheet.pdf)
-- [Exercises handout](handouts/r-stats-exercises.pdf)
-
 **Slides**: [click here](slides/r-stats.html).
 -->
 
