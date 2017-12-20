@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -463,16 +466,16 @@ div.tocify {
 
 <p>This is an introduction to RNAseq analysis involving reading in quantitated gene expression data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 package. This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, and <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>. See also the <a href="setup.html#bioconductor"><em>Bioconductor</em> heading on the setup page</a> – you’ll need a few additional packages that are available through Bioconductor, not CRAN (the installation process is slightly different).</p>
 <p><strong>Recommended reading prior to class:</strong></p>
-<ol type="1">
-<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8">Conesa et al. A survey of best practices for RNA-seq data analysis. <em>Genome Biology</em> 17:13 (2016)</a>.</li>
+<ol style="list-style-type: decimal">
+<li><a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8">Conesa et al. A survey of best practices for RNA-seq data analysis. <em>Genome Biology</em> 17:13 (2016)</a>.</li>
 <li><a href="https://f1000research.com/articles/4-1521/v2">Soneson et al. “Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences.” <em>F1000Research</em> 4 (2015)</a>.</li>
 <li>Abstract and introduction sections of <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0099625">Himes et al. “RNA-Seq transcriptome profiling identifies CRISPLD2 as a glucocorticoid responsive gene that modulates cytokine function in airway smooth muscle cells.” <em>PLoS ONE</em> 9.6 (2014): e99625</a>.</li>
 <li>Review the <a href="http://r4ds.had.co.nz/tibbles.html#introduction-4"><em>Introduction</em> (10.1)</a>, <a href="http://r4ds.had.co.nz/tibbles.html#tibbles-vs.data.frame"><em>Tibbles vs. data.frame</em> (10.3)</a>, and <a href="http://r4ds.had.co.nz/tibbles.html#interacting-with-older-code"><em>Interacting with Older Code</em> (10.4)</a> sections of the <a href="http://r4ds.had.co.nz/tibbles.html"><strong><em>R for Data Science</em> book</strong></a>. We will initially be using the <code>read_*</code> functions from the <a href="http://readr.tidyverse.org/"><strong>readr</strong> package</a>. These functions load data into a <em>tibble</em> instead of R’s traditional data.frame. Tibbles are data frames, but they tweak some older behaviors to make life a little easier. These sections explain the few key small differences between traditional data.frames and tibbles.</li>
 </ol>
 <p><strong>Slides</strong>: <a href="slides/r-rnaseq-airway.pdf">click here</a>.</p>
-<section id="review" class="level2">
+<div id="review" class="section level2">
 <h2>Review</h2>
-<section id="prerequsite-skills" class="level3">
+<div id="prerequsite-skills" class="section level3">
 <h3>Prerequsite skills</h3>
 <ul>
 <li><a href="r-basics.html">R basics</a></li>
@@ -481,19 +484,19 @@ div.tocify {
 <li><a href="r-tidy.html">Tidy data &amp; advanced manipulation</a></li>
 <li><a href="r-viz-gapminder.html">Data Visualization with ggplot2</a></li>
 </ul>
-</section>
-<section id="data-needed" class="level3">
+</div>
+<div id="data-needed" class="section level3">
 <h3>Data needed</h3>
 <ul>
 <li>Length-scaled count matrix (i.e., <code>countData</code>): <a href="data/airway_scaledcounts.csv">airway_scaledcounts.csv</a></li>
 <li>Sample metadata (i.e., <code>colData</code>): <a href="data/airway_metadata.csv">airway_metadata.csv</a></li>
 <li>Gene Annotation data: <a href="data/annotables_grch38.csv">annotables_grch38.csv</a></li>
 </ul>
-</section>
-</section>
-<section id="background" class="level2">
+</div>
+</div>
+<div id="background" class="section level2">
 <h2>Background</h2>
-<section id="the-biology" class="level3">
+<div id="the-biology" class="section level3">
 <h3>The biology</h3>
 <p>The data for this lesson comes from:</p>
 <blockquote>
@@ -501,29 +504,32 @@ div.tocify {
 </blockquote>
 <p>Glucocorticoids are potent inhibitors of inflammatory processes, and are widely used to treat asthma because of their anti-inflammatory effects on airway smooth muscle (ASM) cells. But what’s the molecular mechanism? This study used RNA-seq to profile gene expression changes in four different ASM cell lines treated with dexamethasone, a synthetic glucocorticoid molecule. They found a number of differentially expressed genes comparing dexamethasone-treated ASM cells to control cells, but focus much of the discussion on a gene called CRISPLD2. This gene encodes a secreted protein known to be involved in lung development, and SNPs in this gene in previous GWAS studies are associated with inhaled corticosteroid resistance and bronchodilator response in asthma patients. They confirmed the upregulated CRISPLD2 mRNA expression with qPCR and increased protein expression using Western blotting.</p>
 <p>They did their analysis using <a href="http://rdcu.be/gk0S">Tophat and Cufflinks</a>. We’re taking a different approach and using an R package called <a href="https://bioconductor.org/packages/release/bioc/html/DESeq2.html">DESeq2</a>. <a href="help.html#rna-seq-resources">Click here</a> to read more on DESeq2 and other approaches.</p>
-</section>
-<section id="data-pre-processing" class="level3">
+</div>
+<div id="data-pre-processing" class="section level3">
 <h3>Data pre-processing</h3>
 <p>Analyzing an RNAseq experiment begins with sequencing reads. There are many ways to begin analyzing this data, and you should check out the three papers below to get a sense of other analysis strategies. In the workflow we’ll use here, sequencing reads were pseudoaligned to a reference transcriptome and the abundance of each transcript quantified using <strong>kallisto</strong> (<a href="https://pachterlab.github.io/kallisto/about">software</a>, <a href="http://www.nature.com/nbt/journal/v34/n5/full/nbt.3519.html">paper</a>). Transcript-level abundance estimates were then summarized to the gene level to produce length-scaled counts using <strong>txImport</strong> (<a href="https://bioconductor.org/packages/tximport">software</a>, <a href="https://f1000research.com/articles/4-1521/v2">paper</a>), suitable for using in count-based analysis tools like DESeq. This is the starting point - a “count matrix,” where each cell indicates the number of reads mapping to a particular gene (in rows) for each sample (in columns). This is one of several potential workflows, and relies on having a well-annotated reference transcriptome. However, there are many well-established alternative analysis paths, and the goal here is to provide a reference point to acquire fundamental skills that will be applicable to other bioinformatics tools and workflows.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Conesa, A. et al. “A survey of best practices for RNA-seq data analysis.” <a href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-0881-8"><em>Genome Biology</em> 17:13</a> (2016).</li>
 <li>Soneson, C., Love, M. I. &amp; Robinson, M. D. “Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences.” <a href="https://f1000research.com/articles/4-1521/v2"><em>F1000Res.</em> 4:1521</a> (2016).</li>
 <li>Griffith, Malachi, et al. “Informatics for RNA sequencing: a web resource for analysis on the cloud.” <a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004393"><em>PLoS Comput Biol</em> 11.8: e1004393</a> (2015).</li>
 </ol>
 <p>This data was downloaded from GEO (<a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52778">GSE:GSE52778</a>). You can read more about how the data was processed by going over the <a href="slides/r-rnaseq-airway.pdf">slides</a>. If you’d like to see the code used for the upstream pre-processing with kallisto and txImport, see <a href="https://github.com/bioconnector/workshops/blob/0785f9ffbab87f451f35d52bf48f2fa228e8327a/_dev/airway_kallisto/airway_kallisto_tximport.R">the code</a>.</p>
-</section>
-<section id="data-structure" class="level3">
+</div>
+<div id="data-structure" class="section level3">
 <h3>Data structure</h3>
 <p>We’ll come back to this again later, but the data at our starting point looks like this (<em>note: this is a generic schematic - our genes are not actually <code>geneA</code> and <code>geneB</code>, and our samples aren’t called <code>ctrl_1</code>, <code>ctrl_2</code>, etc.</em>):</p>
-<p><img src="img/countdatacoldata.png" /></p>
+<div class="figure">
+<img src="img/countdatacoldata.png" />
+
+</div>
 <p>That is, we have <strong>two tables</strong>:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>The “count matrix” (called the <code>countData</code> in DESeq-speak) – where <em>genes</em> are in <em>rows</em> and <em>samples</em> are in <em>columns</em>, and the number in each cell is the number of reads that mapped to exons in that gene for that sample: <strong><a href="data/airway_scaledcounts.csv">airway_scaledcounts.csv</a></strong>.</li>
-<li>The sample metadata (called the <code>colData</code> in DESeq-speak) – where <em>samples</em> are in <em>rows</em> and <em>metadata</em> about those samples are in <em>columns</em>: <strong><a href="data/airway_metadata.csv">airway_metadata.csv</a></strong>. It’s called the <code>colData</code> because this table supplies metadata/information about the columns of the <code>countData</code> matrix. Notice that the first column of <code>colData</code> must match the column names of <code>countData</code> (except the first, which is the gene ID column).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
+<li>The sample metadata (called the <code>colData</code> in DESeq-speak) – where <em>samples</em> are in <em>rows</em> and <em>metadata</em> about those samples are in <em>columns</em>: <strong><a href="data/airway_metadata.csv">airway_metadata.csv</a></strong>. It’s called the <code>colData</code> because this table supplies metadata/information about the columns of the <code>countData</code> matrix. Notice that the first column of <code>colData</code> must match the column names of <code>countData</code> (except the first, which is the gene ID column).<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
 </ol>
-</section>
-</section>
-<section id="import-data" class="level2">
+</div>
+</div>
+<div id="import-data" class="section level2">
 <h2>Import data</h2>
 <p>First, let’s load the <strong>readr</strong>, <strong>dplyr</strong>, and <strong>ggplot2</strong> packages. Then let’s import our data <a href="r-dataframes.html">with <strong>readr</strong>’s <code>read_csv()</code> function</a> (<em>note</em>: not <code>read.csv()</code>). Let’s read in the actual count data and the experimental metadata.</p>
 <pre class="r"><code>library(readr)
@@ -562,13 +568,13 @@ metadata &lt;-  read_csv(&quot;data/airway_metadata.csv&quot;)</code></pre>
 ## 7 SRR1039520 control  N061011 GSM1275874
 ## 8 SRR1039521 treated  N061011 GSM1275875</code></pre>
 <p>Notice something here. The sample IDs in the metadata sheet (SRR1039508, SRR1039509, etc.) exactly match the column names of the countdata, except for the first column, which contains the Ensembl gene ID. This is important, and we’ll get more strict about it later on.</p>
-</section>
-<section id="poor-mans-dge" class="level2">
+</div>
+<div id="poor-mans-dge" class="section level2">
 <h2>Poor man’s DGE</h2>
 <p>Let’s look for differential gene expression. <strong><em>Note: this analysis is for demonstration only. NEVER do differential expression analysis this way!</em></strong></p>
 <p>Let’s start with an exercise.</p>
 <hr />
-<section id="exercise-1" class="level3">
+<div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
 <p>If we look at our metadata, we see that the control samples are SRR1039508, SRR1039512, SRR1039516, and SRR1039520. This bit of code will take the <code>mycounts</code> data, <code>mutate()</code> it to add a column called <code>controlmean</code>, then <code>select()</code> only the gene name and this newly created column, and assigning the result to a new object called <code>meancounts</code>. (<em>Hint</em>: <code>mycounts %&gt;% mutate(...) %&gt;% select(...)</code>)</p>
 <pre class="r"><code>meancounts &lt;- mycounts %&gt;% 
@@ -589,7 +595,7 @@ meancounts</code></pre>
 ##  9 ENSG00000001084      755.75
 ## 10 ENSG00000001167      527.75
 ## # ... with 38,684 more rows</code></pre>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Build off of this code, <code>mutate()</code> it once more (prior to the <code>select()</code>) function, to add another column called <code>treatedmean</code> that takes the mean of the expression values of the treated samples. Then <code>select()</code> only the <code>ensgene</code>, <code>controlmean</code> and <code>treatedmean</code> columns, assigning it to a new object called meancounts.</li>
 </ol>
 <pre><code>## # A tibble: 38,694 x 3
@@ -606,7 +612,7 @@ meancounts</code></pre>
 ##  9 ENSG00000001084      755.75       578.0
 ## 10 ENSG00000001167      527.75       348.2
 ## # ... with 38,684 more rows</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Directly comparing the raw counts is going to be problematic if we just happened to sequence one group at a higher depth than another. Later on we’ll do this analysis properly, normalizing by sequencing depth per sample using a better approach. But for now, <code>summarize()</code> the data to show the <code>sum</code> of the mean counts across all genes for each group. Your answer should look like this:</li>
 </ol>
 <pre><code>## # A tibble: 1 x 2
@@ -616,14 +622,14 @@ meancounts</code></pre>
 <hr />
 <p>How about another?</p>
 <hr />
-</section>
-<section id="exercise-2" class="level3">
+</div>
+<div id="exercise-2" class="section level3">
 <h3>Exercise 2</h3>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Create a scatter plot showing the mean of the treated samples against the mean of the control samples.</li>
 </ol>
 <p><img src="r-rnaseq-airway_files/figure-html/simplescatter-1.png" width="672" /></p>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Wait a sec. There are 60,000-some rows in this data, but I’m only seeing a few dozen dots at most outside of the big clump around the origin. Try plotting both axes on a log scale (<em>hint</em>: <code>... + scale_..._log10()</code>)</li>
 </ol>
 <p><img src="r-rnaseq-airway_files/figure-html/simplescatterlog-1.png" width="672" /></p>
@@ -697,8 +703,8 @@ meancounts</code></pre>
 ## # ... with 357 more rows</code></pre>
 <p>In total, we’ve got 617 differentially expressed genes, in either direction.</p>
 <hr />
-</section>
-<section id="exercise-3" class="level3">
+</div>
+<div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
 <p>Look up help on <code>?inner_join</code> or Google around for help for using <strong>dplyr</strong>’s <code>inner_join()</code> to join two tables by a common column/key. You downloaded <a href="data/annotables_grch38.csv">annotables_grch38.csv</a> from <a href="data.html">the data downloads page</a>. Load this data with <code>read_csv()</code> into an object called <code>anno</code>. Pipe it to <code>View()</code> or click on the object in the Environment pane to view the entire dataset. This table links the unambiguous Ensembl gene ID to things like the gene symbol, full gene name, location, Entrez gene ID, etc.</p>
 <pre class="r"><code>anno &lt;- read_csv(&quot;data/annotables_grch38.csv&quot;)
@@ -718,7 +724,7 @@ anno</code></pre>
 ## 10 ENSG00000001167   4800     NFYA     6  41072945  41099976      1
 ## # ... with 66,521 more rows, and 2 more variables: biotype &lt;chr&gt;,
 ## #   description &lt;chr&gt;</code></pre>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Take our newly created <code>meancounts</code> object, and <code>arrange()</code> it <code>desc</code>ending by the absolute value (<code>abs()</code>) of the <code>log2fc</code> column. The first few rows should look like this:</li>
 </ol>
 <pre><code>## # A tibble: 3 x 4
@@ -727,7 +733,7 @@ anno</code></pre>
 ## 1 ENSG00000179593        0.25       129.5   9.02
 ## 2 ENSG00000277196        0.50        63.8   6.99
 ## 3 ENSG00000109906       14.75       808.8   5.78</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Continue on that pipeline, and <code>inner_join()</code> it to the <code>anno</code> data by the <code>ensgene</code> column. Either assign it to a temporary object or pipe the whole thing to <code>View</code> to take a look. What do you notice? Would you trust these results? Why or why not?</li>
 </ol>
 <pre><code>## # A tibble: 21,995 x 12
@@ -746,11 +752,11 @@ anno</code></pre>
 ## # ... with 21,985 more rows, and 6 more variables: chr &lt;chr&gt;, start &lt;int&gt;,
 ## #   end &lt;int&gt;, strand &lt;int&gt;, biotype &lt;chr&gt;, description &lt;chr&gt;</code></pre>
 <hr />
-</section>
-</section>
-<section id="deseq2-analysis" class="level2">
+</div>
+</div>
+<div id="deseq2-analysis" class="section level2">
 <h2>DESeq2 analysis</h2>
-<section id="deseq2-package" class="level3">
+<div id="deseq2-package" class="section level3">
 <h3>DESeq2 package</h3>
 <p>Let’s do this the right way. DESeq2 is an R package for analyzing count-based NGS data like RNA-seq. It is available from <a href="http://www.bioconductor.org/">Bioconductor</a>. Bioconductor is a project to provide tools for analysing high-throughput genomic data including RNA-seq, ChIP-seq and arrays. You can explore Bioconductor packages <a href="http://www.bioconductor.org/packages/release/BiocViews.html#___Software">here</a>.</p>
 <p>Bioconductor packages usually have great documentation in the form of <em>vignettes</em>. For a great example, take a look at the <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf">DESeq2 vignette for analyzing count data</a>. This 40+ page manual is packed full of examples on using DESeq2, importing data, fitting models, creating visualizations, references, etc.</p>
@@ -758,12 +764,15 @@ anno</code></pre>
 <pre class="r"><code>library(DESeq2)
 citation(&quot;DESeq2&quot;)</code></pre>
 <p>Take a second and read through all the stuff that flies by the screen when you load the DESeq2 package. When you first installed DESeq2 it may have taken a while, because DESeq2 <em>depends</em> on a number of other R packages (S4Vectors, BiocGenerics, parallel, IRanges, etc.) Each of these, in turn, may depend on other packages. These are all loaded into your working environment when you load DESeq2. Also notice the lines that start with <code>The following objects are masked from 'package:...</code>. One example of this is the <code>rename()</code> function from the dplyr package. When the S4Vectors package was loaded, it loaded it’s own function called <code>rename()</code>. Now, if you wanted to use dplyr’s rename function, you’ll have to call it explicitly using this kind of syntax: <code>dplyr::rename()</code>. <a href="http://stackoverflow.com/questions/4879377/r-masked-functions">See this Q&amp;A thread for more</a>.</p>
-</section>
-<section id="importing-data" class="level3">
+</div>
+<div id="importing-data" class="section level3">
 <h3>Importing data</h3>
 <p>DESeq works on a particular type of object called a DESeqDataSet. The DESeqDataSet is a single object that contains input values, intermediate calculations like how things are normalized, and all results of a differential expression analysis. You can construct a DESeqDataSet from a count matrix, a metadata file, and a formula indicating the design of the experiment. See the help for <code>?DESeqDataSetFromMatrix</code>. If you read through the <a href="http://www.bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.pdf">DESeq2 vignette</a> you’ll read about the structure of the data that you need to construct a DESeqDataSet object.</p>
 <p><code>DESeqDataSetFromMatrix</code> requires the count matrix (<code>countData</code> argument) to be a matrix or numeric data frame. either the row names or the first column of the <code>countData</code> must be the identifier you’ll use for each gene. The column names of <code>countData</code> are the sample IDs, and they must match the row names of <code>colData</code> (or the first column when <code>tidy=TRUE</code>). <code>colData</code> is an additional dataframe describing sample metadata. Both <code>colData</code> and <code>countData</code> must be regular <code>data.frame</code> objects – they can’t have the special <code>tbl</code> class wrapper created when importing with <code>readr::read_*</code>.</p>
-<p><img src="img/countdatacoldata.png" /></p>
+<div class="figure">
+<img src="img/countdatacoldata.png" />
+
+</div>
 <p>Let’s look at our mycounts and metadata again.</p>
 <pre class="r"><code>mycounts</code></pre>
 <pre><code>## # A tibble: 38,694 x 9
@@ -830,8 +839,8 @@ dds</code></pre>
 ## rowData names(0):
 ## colnames(8): SRR1039508 SRR1039509 ... SRR1039520 SRR1039521
 ## colData names(4): id dex celltype geo_id</code></pre>
-</section>
-<section id="deseq-pipeline" class="level3">
+</div>
+<div id="deseq-pipeline" class="section level3">
 <h3>DESeq pipeline</h3>
 <p>Next, let’s run the DESeq pipeline on the dataset, and reassign the resulting object back to the same variable. Before we start, <code>dds</code> is a bare-bones DESeqDataSet. The <code>DESeq()</code> function takes a DESeqDataSet and returns a DESeqDataSet, but with lots of other information filled in (normalization, dispersion estimates, differential expression results, etc). Notice how if we try to access these objects before running the analysis, nothing exists.</p>
 <pre class="r"><code>sizeFactors(dds)</code></pre>
@@ -842,12 +851,12 @@ dds</code></pre>
 <pre><code>## Error in results(dds): couldn&#39;t find results. you should first run DESeq()</code></pre>
 <p>Here, we’re running the DESeq pipeline on the <code>dds</code> object, and reassigning the whole thing back to <code>dds</code>, which will now be a DESeqDataSet populated with all those values. Get some help on <code>?DESeq</code> (notice, no “2” on the end). This function calls a number of other functions within the package to essentially run the entire pipeline (normalizing by library size by estimating the “size factors,” estimating dispersion for the negative binomial model, and fitting models and getting statistics for each gene for the design specified when you imported the data).</p>
 <pre class="r"><code>dds &lt;- DESeq(dds)</code></pre>
-</section>
-<section id="getting-results" class="level3">
+</div>
+<div id="getting-results" class="section level3">
 <h3>Getting results</h3>
 <p>Since we’ve got a fairly simple design (single factor, two groups, treated versus control), we can get results out of the object simply by calling the <code>results()</code> function on the DESeqDataSet that has been run through the pipeline. The help page for <code>?results</code> and the vignette both have extensive documentation about how to pull out the results for more complicated models (multi-factor experiments, specific contrasts, interaction terms, time courses, etc.).</p>
 <p>Note two things:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>We’re passing the <code>tidy=TRUE</code> argument, which tells DESeq2 to output the results table with rownames as a first column called ‘row.’ If we didn’t do this, the gene names would be stuck in the row.names, and we’d have a hard time filtering or otherwise using that column.</li>
 <li>This returns a regular old data frame. Try displaying it to the screen by just typing <code>res</code>. You’ll see that it doesn’t print as nicly as the data we read in with <code>read_csv</code>. We can add this “special” attribute to the raw data returned which just tells R to print it nicely.</li>
 </ol>
@@ -873,10 +882,10 @@ res</code></pre>
 <p>The goal of independent filtering is to filter out those tests from the procedure that have no, or little chance of showing significant evidence, without even looking at the statistical result. Genes with very low counts are not likely to see significant differences typically due to high dispersion. This results in increased detection power at the same experiment-wide type I error [<em>i.e., better FDRs</em>].</p>
 </blockquote>
 <hr />
-</section>
-<section id="exercise-4" class="level3">
+</div>
+<div id="exercise-4" class="section level3">
 <h3>Exercise 4</h3>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Using a <code>%&gt;%</code>, <code>arrange</code> the results by the adjusted p-value.</li>
 </ol>
 <pre><code>## # A tibble: 38,694 x 7
@@ -893,7 +902,7 @@ res</code></pre>
 ##  9 ENSG00000134686     2934           1.44 0.1058  13.6 3.88e-42 6.53e-39
 ## 10 ENSG00000101347    14135           3.85 0.2849  13.5 1.28e-41 1.94e-38
 ## # ... with 38,684 more rows</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Continue piping to <code>inner_join()</code>, joining the results to the <code>anno</code> object. See the help for <code>?inner_join</code>, specifically the <code>by=</code> argument. You’ll have to do something like <code>... %&gt;% inner_join(anno, by=c(&quot;row&quot;=&quot;ensgene&quot;))</code>. Once you’re happy with this result, reassign the result back to <code>res</code>. It’ll look like this.</li>
 </ol>
 <pre><code>##               row baseMean log2FoldChange  lfcSE  stat   pvalue     padj
@@ -917,7 +926,7 @@ res</code></pre>
 ## 4                               monoamine oxidase A [Source:HGNC Symbol;Acc:HGNC:6833]
 ## 5                    dual specificity phosphatase 1 [Source:HGNC Symbol;Acc:HGNC:3064]
 ## 6                                          stomatin [Source:HGNC Symbol;Acc:HGNC:3383]</code></pre>
-<ol start="3" type="1">
+<ol start="3" style="list-style-type: decimal">
 <li>How many are significant with an adjusted p-value &lt;0.05? (Pipe to <code>filter()</code>).</li>
 </ol>
 <pre><code>## [1] 2187</code></pre>
@@ -927,11 +936,11 @@ res</code></pre>
   filter(padj&lt;0.05) %&gt;% 
   write_csv(&quot;sigresults.csv&quot;)</code></pre>
 <p>You can open this file in Excel or any text editor (try it now).</p>
-</section>
-</section>
-<section id="data-visualization" class="level2">
+</div>
+</div>
+<div id="data-visualization" class="section level2">
 <h2>Data Visualization</h2>
-<section id="plotting-counts" class="level3">
+<div id="plotting-counts" class="section level3">
 <h3>Plotting counts</h3>
 <p>DESeq2 offers a function called <code>plotCounts()</code> that takes a DESeqDataSet that has been run through the pipeline, the name of a gene, and the name of the variable in the <code>colData</code> that you’re interested in, and plots those values. See the help for <code>?plotCounts</code>. Let’s first see what the gene ID is for the CRISPLD2 gene using <code>res %&gt;% filter(symbol==&quot;CRISPLD2&quot;)</code>. Now, let’s plot the counts, where our <code>intgroup</code>, or “interesting group” variable is the “dex” column.</p>
 <pre class="r"><code>plotCounts(dds, gene=&quot;ENSG00000103196&quot;, intgroup=&quot;dex&quot;)</code></pre>
@@ -952,8 +961,8 @@ plotCounts(dds, gene=&quot;ENSG00000103196&quot;, intgroup=&quot;dex&quot;, retu
 plotCounts(dds, gene=&quot;ENSG00000103196&quot;, intgroup=&quot;dex&quot;, returnData=TRUE) %&gt;% 
   ggplot(aes(dex, count)) + geom_boxplot(aes(fill=dex)) + scale_y_log10() + ggtitle(&quot;CRISPLD2&quot;)</code></pre>
 <p><img src="r-rnaseq-airway_files/figure-html/plotCounts2-1.png" width="672" /></p>
-</section>
-<section id="ma-volcano-plots" class="level3">
+</div>
+<div id="ma-volcano-plots" class="section level3">
 <h3>MA &amp; Volcano plots</h3>
 <p>Let’s make some commonly produced visualizations from this data. First, let’s mutate our results object to add a column called <code>sig</code> that evaluates to <code>TRUE</code> if padj&lt;0.05, and FALSE if not, and NA if padj is also NA.</p>
 <pre class="r"><code># Create the new column
@@ -970,40 +979,40 @@ res %&gt;%
 ## 2  TRUE  2187
 ## 3    NA 23665</code></pre>
 <hr />
-</section>
-<section id="exercise-5" class="level3">
+</div>
+<div id="exercise-5" class="section level3">
 <h3>Exercise 5</h3>
 <p>Look up the Wikipedia articles on <a href="https://en.wikipedia.org/wiki/MA_plot">MA plots</a> and <a href="https://en.wikipedia.org/wiki/Volcano_plot_(statistics)">volcano plots</a>. An MA plot shows the average expression on the X-axis and the log fold change on the y-axis. A volcano plot shows the log fold change on the X-axis, and the <span class="math inline">\(-log_{10}\)</span> of the p-value on the Y-axis (the more significant the p-value, the larger the <span class="math inline">\(-log_{10}\)</span> of that value will be).</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Make an MA plot. Use a <span class="math inline">\(log_{10}\)</span>-scaled x-axis, color-code by whether the gene is significant, and give your plot a title. It should look like this. What’s the deal with the gray points? Why are they missing? Go to the DESeq2 website on Bioconductor and look through the vignette for “Independent Filtering.”</li>
 </ol>
 <p><img src="r-rnaseq-airway_files/figure-html/maplot-1.png" width="672" /></p>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Make a volcano plot. Similarly, color-code by whether it’s significant or not.</li>
 </ol>
 <p><img src="r-rnaseq-airway_files/figure-html/volcanoplot-1.png" width="672" /></p>
 <hr />
-</section>
-<section id="transformation" class="level3">
+</div>
+<div id="transformation" class="section level3">
 <h3>Transformation</h3>
 <p>To test for differential expression we operate on raw counts. But for other downstream analyses like heatmaps, PCA, or clustering, we need to work with transformed versions of the data, because it’s not clear how to best compute a distance metric on untransformed counts. The go-to choice might be a log transformation. But because many samples have a zero count (and <span class="math inline">\(log(0)=-\infty\)</span>, you might try using pseudocounts, i. e. <span class="math inline">\(y = log(n + 1)\)</span> or more generally, <span class="math inline">\(y = log(n + n_0)\)</span>, where <span class="math inline">\(n\)</span> represents the count values and <span class="math inline">\(n_0\)</span> is some positive constant.</p>
 <p>But there are other approaches that offer better theoretical justification and a rational way of choosing the parameter equivalent to <span class="math inline">\(n_0\)</span>, and they produce transformed data on the log scale that’s normalized to library size. One is called a <em>variance stabilizing transformation</em> (VST), and it also removes the dependence of the variance on the mean, particularly the high variance of the log counts when the mean is low.</p>
 <pre class="r"><code>vsdata &lt;- vst(dds, blind=FALSE)</code></pre>
-</section>
-<section id="pca" class="level3">
+</div>
+<div id="pca" class="section level3">
 <h3>PCA</h3>
 <p>Let’s do some exploratory plotting of the data using principal components analysis on the variance stabilized data from above. Let’s use the DESeq2-provided <code>plotPCA</code> function. See the help for <code>?plotPCA</code> and notice that it also has a <code>returnData</code> option, just like <code>plotCounts</code>.</p>
 <pre class="r"><code>plotPCA(vsdata, intgroup=&quot;dex&quot;)</code></pre>
 <p><img src="r-rnaseq-airway_files/figure-html/plotPCA-1.png" width="672" /></p>
 <p>Principal Components Analysis (PCA) is a dimension reduction and visualization technique that is here used to project the multivariate data vector of each sample into a two-dimensional plot, such that the spatial arrangement of the points in the plot reflects the overall data (dis)similarity between the samples. In essence, principal component analysis distills all the global variation between samples down to a few variables called <em>principal components</em>. The majority of variation between the samples can be summarized by the first principal component, which is shown on the x-axis. The second principal component summarizes the residual variation that isn’t explained by PC1. PC2 is shown on the y-axis. The percentage of the global variation explained by each principal component is given in the axis labels. In a two-condition scenario (e.g., mutant vs WT, or treated vs control), you might expect PC1 to separate the two experimental conditions, so for example, having all the controls on the left and all experimental samples on the right (or vice versa - the units and directionality isn’t important). The secondary axis may separate other aspects of the design - cell line, time point, etc. Very often the experimental design is reflected in the PCA plot, and in this case, it is. But this kind of diagnostic can be useful for finding outliers, investigating batch effects, finding sample swaps, and other technical problems with the data. <a href="https://youtu.be/_UVHneBUBW0">This YouTube video</a> from the Genetics Department at UNC gives a very accessible explanation of what PCA is all about in the context of a gene expression experiment, without the need for an advanced math background. Take a look.</p>
-</section>
-<section id="bonus-heatmaps" class="level3">
+</div>
+<div id="bonus-heatmaps" class="section level3">
 <h3>Bonus: Heatmaps</h3>
 <p><a href="http://www.opiniomics.org/you-probably-dont-understand-heatmaps/">Heatmaps are complicated, and are often poorly understood</a>. It’s a type of visualization used very often in high-throughput biology where data are clustered on rows and columns, and the actual data is displayed as tiles on a grid, where the values are mapped to some color spectrum. Our R useRs group MeetUp had a session on making heatmaps, which I summarized in <a href="http://www.gettinggeneticsdone.com/2015/04/r-user-group-recap-heatmaps-and-using.html">this blog post</a>. Take a look at <a href="https://github.com/UVa-R-Users-Group/meetup/blob/master/2015-02-19-heat-maps/heatmaps.R">the code from that meetup</a>, and the <a href="http://nmf.r-forge.r-project.org/aheatmap.html">documentation for the <code>aheatmap</code> function in the NMF package</a> to see if you can re-create this image. Here, I’m clustering all samples using the top 25 most differentially regulated genes, labeling the rows with the gene symbol, and putting two annotation color bars across the top of the main heatmap panel showing treatment and cell line annotations from our metadata. Take a look at the <a href="https://github.com/bioconnector/bims8382/blame/10667525b2798d4f79af616d936ecac0b58c9622/r-rnaseq-airway.Rmd#L406">Rmarkdown source for this lesson</a> for the code.</p>
 <p><img src="r-rnaseq-airway_files/figure-html/NMFaheatmap-1.png" width="672" /></p>
-</section>
-</section>
-<section id="record-sessioninfo" class="level2">
+</div>
+</div>
+<div id="record-sessioninfo" class="section level2">
 <h2>Record <code>sessionInfo()</code></h2>
 <p>The <code>sessionInfo()</code> prints version information about R and any attached packages. It’s a good practice to always run this command at the end of your R session and record it for the sake of reproducibility in the future.</p>
 <pre class="r"><code>sessionInfo()</code></pre>
@@ -1072,36 +1081,42 @@ res %&gt;%
 ## [73] stringi_1.1.5           Rcpp_0.12.13           
 ## [75] geneplotter_1.54.0      rpart_4.1-11           
 ## [77] acepack_1.4.1</code></pre>
-</section>
-<section id="pathway-analysis" class="level2">
+</div>
+<div id="pathway-analysis" class="section level2">
 <h2>Pathway Analysis</h2>
 <p><em>Pathway analysis</em> or <em>gene set analysis</em> means many different things, general approaches are nicely reviewed in: Khatri, et al. “Ten years of pathway analysis: current approaches and outstanding challenges.” <a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1002375"><em>PLoS Comput Biol</em> 8.2 (2012): e1002375</a>.</p>
-<p>There are many freely available tools for pathway or over-representation analysis. Bioconductor alone has over <a href="http://bioconductor.org/packages/release/BiocViews.html#___GeneSetEnrichment">70 packages categorized under <em>gene set enrichment</em></a> and <a href="http://bioconductor.org/packages/release/BiocViews.html#___Pathways">over 100 packages categorized under <em>pathways</em></a>. I wrote <a href="http://www.gettinggeneticsdone.com/2015/12/tutorial-rna-seq-differential.html">this tutorial</a> in 2015 showing how to use the GAGE (Generally Applicable Gene set Enrichment)<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> package to do KEGG pathway enrichment analysis on differential expression results.</p>
+<p>There are many freely available tools for pathway or over-representation analysis. Bioconductor alone has over <a href="http://bioconductor.org/packages/release/BiocViews.html#___GeneSetEnrichment">70 packages categorized under <em>gene set enrichment</em></a> and <a href="http://bioconductor.org/packages/release/BiocViews.html#___Pathways">over 100 packages categorized under <em>pathways</em></a>. I wrote <a href="http://www.gettinggeneticsdone.com/2015/12/tutorial-rna-seq-differential.html">this tutorial</a> in 2015 showing how to use the GAGE (Generally Applicable Gene set Enrichment)<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> package to do KEGG pathway enrichment analysis on differential expression results.</p>
 <p>While there are many freely available tools to do this, and some are truly fantastic, many of them are poorly maintained or rarely updated. The <a href="https://david.ncifcrf.gov/">DAVID</a> tool that a lot of folks use wasn’t updated at all between Jan 2010 and Oct 2016.</p>
 <p>UVA has a site license to <a href="https://www.qiagenbioinformatics.com/products/ingenuity-pathway-analysis/">Ingenuity Pathway Analysis</a>. Statistically, IPA isn’t doing anything revolutionary methodologically, but the real value comes in with its (1) ease of use, and (2) highly curated knowledgebase. You can get access to IPA through the Health Sciences Library <a href="https://www.bioconnector.virginia.edu/content/ingenuity-pathway-analysis-0">at this link</a>, and there are also links to UVA support resources for using IPA.</p>
 <p><strong><a href="img/r-rnaseq-airway-ipa-all.pdf">This summary report</a></strong> is the first thing you would get out of IPA after running a core analysis on the results of this analysis. Open it up and take a look.</p>
 <p>It shows, among other things, that the endothelial nitric-oxide synthase signaling pathway is highly over-represented among the most differentially expressed genes. For this, or any pathway you’re interested in, IPA will give you a <a href="img/r-rnaseq-airway-ipa-enos-report.pdf">report like this one for eNOS</a> with a very detailed description of the pathway, what kind of diseases it’s involved in, which molecules are in the pathway, what drugs might perturb the pathway, and more. If you’re logged into IPA, clicking any of the links will take you to IPA’s knowledge base where you can learn more about the connection between that molecule, the pathway, and a disease, and further overlay any of your gene expression data on top of the pathway.</p>
-<p><img src="img/r-rnaseq-airway-ipa-enos-pathway.jpg" /></p>
+<div class="figure">
+<img src="img/r-rnaseq-airway-ipa-enos-pathway.jpg" />
+
+</div>
 <p>The report also shows us some <a href="img/r-rnaseq-airway-ipa-upstream.csv">upstream regulators</a>, which serves as a great positive control that this stuff actually works, because it’s inferring that dexamethasone might be an upstream regulator based on the target molecules that are dysregulated in our data.</p>
 <p>You can also start to visualize networks in the context of biology and how your gene expression data looks in those molecules. Here’s a network related to “Connective Tissue Disorders, Inflammatory Disease, Inflammatory Response” showing dysregulation of some of the genes in our data.</p>
-<p><img src="img/r-rnaseq-airway-ipa-inflam-network.jpg" /></p>
-</section>
-<section id="homework" class="level2">
+<div class="figure">
+<img src="img/r-rnaseq-airway-ipa-inflam-network.jpg" />
+
+</div>
+</div>
+<div id="homework" class="section level2">
 <h2>Homework</h2>
 <p>Looking for some extra practice? <a href="r-rnaseq-homework.html">Try the homework</a>.</p>
 <hr />
-</section>
-<section class="footnotes">
+</div>
+<div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>This only works when using the argument <code>tidy=TRUE</code> when creating the <code>DESeqDataSetFromMatrix()</code>.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Luo, W. et al., 2009. GAGE: generally applicable gene set enrichment for pathway analysis. <a href="https://www.ncbi.nlm.nih.gov/pubmed/19473525"><em>BMC bioinformatics</em>, 10:161</a>. Package: <a href="http://bioconductor.org/packages/gage">bioconductor.org/packages/gage</a>.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>This only works when using the argument <code>tidy=TRUE</code> when creating the <code>DESeqDataSetFromMatrix()</code>.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Luo, W. et al., 2009. GAGE: generally applicable gene set enrichment for pathway analysis. <a href="https://www.ncbi.nlm.nih.gov/pubmed/19473525"><em>BMC bioinformatics</em>, 10:161</a>. Package: <a href="http://bioconductor.org/packages/gage">bioconductor.org/packages/gage</a>.<a href="#fnref2">↩</a></p></li>
 </ol>
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

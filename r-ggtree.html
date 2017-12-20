@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -464,10 +467,10 @@ div.tocify {
 <p>This lesson demonstrates how to use <strong>ggtree</strong>, an extension of the ggplot2 package to visualize and annotate phylogenetic trees. Many of the examples here were modified from the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">ggtree vignettes</a>.</p>
 <p><em>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and most importantly, <strong><a href="r-viz-gapminder.html">data visualization with ggplot2</a></strong>.</em></p>
 <p>This lesson does <em>not</em> cover methods and software for <em>generating</em> phylogenetic trees, nor does it it cover <em>interpreting</em> phylogenies. <strong><a href="http://epidemic.bio.ed.ac.uk/how_to_read_a_phylogeny">Here’s a quick primer on how to read a phylogeny</a></strong> that you should definitely review prior to this lesson, but it is by no means extensive. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson.</p>
-<section id="the-ggtree-package" class="level2">
+<div id="the-ggtree-package" class="section level2">
 <h2>The <code>ggtree</code> Package</h2>
 <p><strong>ggtree</strong> is an R package that extends ggplot2 for visualizating and annotating phylogenetic trees with their covariates and other associated data. It is available from <a href="http://www.bioconductor.org/">Bioconductor</a>. Bioconductor is a project to provide tools for analyzing and annotating various kinds of genomic data. You can search and browse Bioconductor packages <a href="http://www.bioconductor.org/packages/release/BiocViews.html#___Software">here</a>.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><strong>ggtree Bioconductor page</strong>: <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">bioconductor.org/packages/ggtree</a>.</li>
 <li><strong>ggtree homepage</strong>: <a href="https://guangchuangyu.github.io/ggtree/">guangchuangyu.github.io/ggtree</a> (contains more information about the package, more documentation, a gallery of beautiful images, and links to related resources).</li>
 <li><strong>ggtree publication</strong>: Yu, Guangchuang, et al. “ggtree: an r package for visualization and annotation of phylogenetic trees with their covariates and other associated data.” <em>Methods in Ecology and Evolution</em> (2016) <a href="http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12628/full">DOI:10.1111/2041-210X.12628</a>.</li>
@@ -476,8 +479,8 @@ div.tocify {
 <p>Just like R packages from CRAN, you only need to install Bioconductor packages once (<a href="setup.html#bioconductor">instructions here</a>), then load them every time you start a new R session.</p>
 <pre class="r"><code>library(ggtree)</code></pre>
 <p><em>A note on masked functions</em>: If you already loaded a package like <strong>dplyr</strong>, take a second and look through some of the output that you see when you load <strong>ggtree</strong> after <strong>dplyr</strong>. When you first installed ggtree it may have taken a while, because ggtree <em>depends</em> on a number of other R packages. Each of these, in turn, may depend on other packages. These are all loaded into your working environment when you load ggtree. Also notice the lines that start with <code>The following objects are masked from 'package:...</code>. One example of this is the <code>collapse()</code> function from dplyr. When ggtree was loaded, it loaded it’s own function called <code>collapse()</code>. Now, if you wanted to use dplyr’s collapse function, you’ll have to call it explicitly using this kind of syntax: <code>dplyr::collapse()</code>. <a href="http://stackoverflow.com/questions/4879377/r-masked-functions">See this Q&amp;A thread for more</a>.</p>
-</section>
-<section id="tree-import" class="level2">
+</div>
+<div id="tree-import" class="section level2">
 <h2>Tree Import</h2>
 <p>From the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">ggtree landing page</a> take a look at the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeImport.html">Tree Data Import vignette</a>. There are many different software packages for creating phylogenetic trees from different types of data, and there are many formats for storing the resulting phylogenetic trees they produce.</p>
 <p>Most tree viewer software (including <code>R</code> packages) focus on <strong>Newick</strong> and <strong>Nexus</strong> file formats, and other evolution analysis software might also contain supporting evidence within the file that are ready for annotating a phylogenetic tree. ggtree supports several file formats, including:</p>
@@ -516,8 +519,8 @@ div.tocify {
 <li><code>read.r8s</code> for parsing output of <a href="loco.biosci.arizona.edu/r8s/">r8s</a></li>
 <li><code>read.raxml</code> for parsing output of <a href="http://sco.h-its.org/exelixis/web/software/raxml/">RAxML</a></li>
 </ul>
-</section>
-<section id="basic-trees" class="level2">
+</div>
+<div id="basic-trees" class="section level2">
 <h2>Basic trees</h2>
 <p>Let’s first import our tree data. We’re going to work with a made-up phylogeny with 13 samples (“tips”). Download the <a href="data/tree_newick.nwk"><strong>tree_newick.nwk</strong> data by clicking here</a> or using the link above. Let’s load the libraries you’ll need if you haven’t already, and then import the tree using <code>read.tree()</code>. Displaying the object itself really isn’t useful. The output just tells you a little bit about the tree itself.</p>
 <pre class="r"><code>library(ggtree)
@@ -547,17 +550,17 @@ ggtree(tree) + theme_tree2()</code></pre>
 <p><img src="r-ggtree_files/figure-html/aesthetics-1.png" width="672" /></p>
 <hr />
 <!-- ### Exercise 1 -->
-<section id="exercise-1" class="level3">
+<div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
 <p>Look at the help again for <code>?ggtree</code>, specifically at the <code>layout=</code> option. By default, it produces a rectangular layout.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Create a slanted phylogenetic tree.</li>
 <li>Create a circular phylogenetic tree.</li>
 <li>Create a circular unscaled cladogram with thick red lines.</li>
 </ol>
 <hr />
-</section>
-<section id="other-tree-geoms" class="level3">
+</div>
+<div id="other-tree-geoms" class="section level3">
 <h3>Other tree geoms</h3>
 <p>Let’s add additional layers. As we did in the <a href="r-viz-gapminder.html">ggplot2 lesson</a>, we can create a plot object, e.g., <code>p</code>, to store the basic layout of a ggplot, and add more layers to it as we desire. Let’s add node and tip points. Let’s finally label the tips.</p>
 <pre class="r"><code># create the basic plot
@@ -573,8 +576,8 @@ p + geom_tippoint()
 p + geom_tiplab()</code></pre>
 <hr />
 <!-- ### Exercise 2 -->
-</section>
-<section id="exercise-2" class="level3">
+</div>
+<div id="exercise-2" class="section level3">
 <h3>Exercise 2</h3>
 <p>Similar to how we change the aesthetics for the tree inside the <code>ggtree()</code> call, we can also change the aesthetics of the points themselves by passing graphical parameters inside the <code>geom_nodepoint()</code> or <code>geom_tippoint()</code> calls. Create a phylogeny with the following aesthetic characteristics:</p>
 <ul>
@@ -585,12 +588,12 @@ p + geom_tiplab()</code></pre>
 </ul>
 <p><img src="r-ggtree_files/figure-html/ex2-1.png" width="672" /></p>
 <hr />
-</section>
-</section>
-<section id="tree-annotation" class="level2">
+</div>
+</div>
+<div id="tree-annotation" class="section level2">
 <h2>Tree annotation</h2>
 <p>The <code>geom_tiplab()</code> function adds some very rudimentary annotation. Let’s take annotation a bit further. See the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeAnnotation.html">tree annotation</a> and <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/advanceTreeAnnotation.html">advanced tree annotation</a> vignettes for more.</p>
-<section id="internal-node-number" class="level3">
+<div id="internal-node-number" class="section level3">
 <h3>Internal node number</h3>
 <p>Before we can go further we need to understand how ggtree is handling the tree structure internally. Some of the functions in ggtree for annotating clades need a parameter specifying the internal node number. To get the internal node number, user can use <code>geom_text</code> to display it, where the label is an aesthetic mapping to the “node variable” stored inside the tree object (think of this like the continent variable inside the gapminder object). We also supply the <code>hjust</code> option so that the labels aren’t sitting right on top of the nodes. Read more about this process in the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeManipulation.html#internal-node-number">ggtree manipulation vignette</a>.</p>
 <pre class="r"><code>ggtree(tree) + geom_text(aes(label=node), hjust=-.3)</code></pre>
@@ -603,8 +606,8 @@ p + geom_tiplab()</code></pre>
 <pre><code>## [1] 17</code></pre>
 <pre class="r"><code>MRCA(tree, tip=c(&quot;G&quot;, &quot;H&quot;))</code></pre>
 <pre><code>## [1] 21</code></pre>
-</section>
-<section id="labeling-clades" class="level3">
+</div>
+<div id="labeling-clades" class="section level3">
 <h3>Labeling clades</h3>
 <p>We can use <code>geom_cladelabel()</code> to add another geom layer to annotate a selected clade with a bar indicating the clade with a corresponding label. You select the clades using the internal node number for the node that connects all the taxa in that clade. See the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeAnnotation.html#annotate-clades">tree annotation vignette</a> for more.</p>
 <p>Let’s annotate the clade with the most recent common ancestor between taxa C and E (internal node 17). Let’s make the annotation red. See <code>?geom_cladelabel</code> help for more.</p>
@@ -623,7 +626,7 @@ p + geom_tiplab()</code></pre>
   geom_cladelabel(node=21, label=&quot;A different clade&quot;, 
                   color=&quot;blue&quot;, offset=.8)</code></pre>
 <p>Uh oh. Now we have two problems. First, the labels would look better if they were aligned. That’s simple. Pass <code>align=TRUE</code> to <code>geom_cladelabel()</code> (see <code>?geom_cladelabel</code> help for more). But now, the labels are falling off the edge of the plot. That’s because <code>geom_cladelabel()</code> is just adding it this layer onto the end of the existing canvas that was originally layed out in the ggtree call. This default layout tried to optimize by plotting the entire tree over the entire region of the plot. Here’s how we’ll fix this.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>First create the generic layout of the plot with <code>ggtree(tree)</code>.</li>
 <li>Add some tip labels.</li>
 <li>Add each clade label.</li>
@@ -646,8 +649,8 @@ p + geom_tiplab()</code></pre>
   geom_hilight(node=17, fill=&quot;gold&quot;) + 
   geom_hilight(node=21, fill=&quot;purple&quot;)</code></pre>
 <p><img src="r-ggtree_files/figure-html/geom_hilight-1.png" width="672" /></p>
-</section>
-<section id="connecting-taxa" class="level3">
+</div>
+<div id="connecting-taxa" class="section level3">
 <h3>Connecting taxa</h3>
 <p>Some evolutionary events (e.g. reassortment, horizontal gene transfer) can be visualized with some simple annotations on a tree. The <code>geom_taxalink()</code> layer draws straight or curved lines between any of two nodes in the tree, allow it to show evolutionary events by connecting taxa. Take a look at the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/treeAnnotation.html#taxa-connection">tree annotation vignette</a> and <code>?geom_taxalink</code> for more.</p>
 <pre class="r"><code>ggtree(tree) + 
@@ -657,14 +660,14 @@ p + geom_tiplab()</code></pre>
 <p><img src="r-ggtree_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
 <hr />
 <!-- ### Exercise 3 -->
-</section>
-</section>
-<section id="exercise-3" class="level2">
+</div>
+</div>
+<div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
 <p>Produce the figure below.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>First, find what the MRCA is for taxa <strong>B+C</strong>, and taxa <strong>L+J</strong>. You can do this in one of two ways:
-<ol type="a">
+<ol style="list-style-type: lower-alpha">
 <li>Easiest: use <code>MRCA(tree, tip=c(&quot;taxon1&quot;, &quot;taxon2&quot;))</code> for B/C and L/J separately.</li>
 <li>Alternatively: use <code>ggtree(tree) + geom_text(aes(label=node), hjust=-.3)</code> to see what the node labels are on the plot. You might also add tip labels here too.</li>
 </ol></li>
@@ -679,8 +682,8 @@ p + geom_tiplab()</code></pre>
 </ol>
 <p><img src="r-ggtree_files/figure-html/ex3-1.png" width="768" /></p>
 <hr />
-</section>
-<section id="advanced-tree-annotation" class="level2">
+</div>
+<div id="advanced-tree-annotation" class="section level2">
 <h2>Advanced tree annotation</h2>
 <p>Let’s use a previously published dataset from this paper:</p>
 <p>Liang et al. “Expansion of genotypic diversity and establishment of 2009 H1N1 pandemic-origin internal genes in pigs in China.” <em>Journal of virology</em> (2014): <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4178866/">88(18):10864-74</a>.</p>
@@ -706,11 +709,11 @@ ggtree(tree, mrsd=&quot;2013-01-01&quot;) +
 <pre class="r"><code>msaplot(p=ggtree(tree), fasta=&quot;data/flu_aasequence.fasta&quot;, window=c(150, 175))</code></pre>
 <p><img src="r-ggtree_files/figure-html/msaplot-1.png" width="1056" /></p>
 <p>Take a look at the <a href="http://bioconductor.org/packages/release/bioc/vignettes/ggtree/inst/doc/advanceTreeAnnotation.html">advanced tree annotation vignette</a> for much, much more!</p>
-</section>
-<section id="bonus" class="level2">
+</div>
+<div id="bonus" class="section level2">
 <h2>Bonus!</h2>
 <p>See the <a href="http://bioconductor.org/packages/release/bioc/html/ggtree.html">ggtree vignettes</a> for more details on how these work.</p>
-<section id="many-trees" class="level3">
+<div id="many-trees" class="section level3">
 <h3>Many trees</h3>
 <p>ggtree will let you plot many trees at once, and you can facet them the normal ggplot2 way. Let’s generate 3 replicates each of 4 random trees with 10, 25, 50, and 100 tips, plotting them all.</p>
 <pre class="r"><code>set.seed(42)
@@ -718,8 +721,8 @@ trees &lt;- lapply(rep(c(10, 25, 50, 100), 3), rtree)
 class(trees) &lt;- &quot;multiPhylo&quot;
 ggtree(trees) + facet_wrap(~.id, scale=&quot;free&quot;, ncol=4) + ggtitle(&quot;Many trees. Such phylogenetics. Wow.&quot;)</code></pre>
 <p><img src="r-ggtree_files/figure-html/faceted-1.png" width="960" /></p>
-</section>
-<section id="plot-tree-with-other-data" class="level3">
+</div>
+<div id="plot-tree-with-other-data" class="section level3">
 <h3>Plot tree with other data</h3>
 <p>For showing a phylogenetic tree alongside other panels with your own data, the <code>facet_plot()</code> function accepts a input data.frame and a <code>geom</code> function to draw the input data.</p>
 <pre class="r"><code># Generate a random tree with 30 tips
@@ -746,8 +749,8 @@ p3 &lt;- facet_plot(p2, panel=&#39;bar&#39;, data=d2, geom=geom_segment,
 # Show all three plots with a scale
 p3 + theme_tree2()</code></pre>
 <p><img src="r-ggtree_files/figure-html/assocdata-1.png" width="768" /></p>
-</section>
-<section id="overlay-organism-silouhettes" class="level3">
+</div>
+<div id="overlay-organism-silouhettes" class="section level3">
 <h3>Overlay organism silouhettes</h3>
 <p><a href="http://phylopic.org/">phylopic.org</a> hosts free silhouette images of animals, plants, and other life forms, all under Creative Commons or Public Domain. You can use ggtree to overlay a phylopic image on your plot at a node of your choosing. Let’s show some gram-negative bacteria over the whole plot, and put a <em>Homo sapiens</em> and a dog on those clades we’re working with.</p>
 <pre class="r"><code>read.tree(&quot;data/tree_newick.nwk&quot;) %&gt;% 
@@ -759,12 +762,12 @@ p3 + theme_tree2()</code></pre>
   phylopic(&quot;6c9cb19d-1d8a-4215-88ba-d49cd4917a5e&quot;, 
            color=&quot;purple3&quot;, alpha = .5, node=21)</code></pre>
 <p><img src="r-ggtree_files/figure-html/phylopic-1.png" width="960" /></p>
-</section>
-</section>
+</div>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

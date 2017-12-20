@@ -92,8 +92,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -419,6 +419,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -479,7 +482,7 @@ div.tocify {
 
 
 <p>(<em>Refer back to the <a href="r-stats.html">Essential Statistics lesson</a>).</em></p>
-<section id="key-concepts" class="level2">
+<div id="key-concepts" class="section level2">
 <h2>Key Concepts</h2>
 <blockquote>
 <ul>
@@ -492,8 +495,8 @@ div.tocify {
 </ul>
 </blockquote>
 <p>The datasets we’ll be using for this assignment are both curated and hosted by the <a href="http://biostat.mc.vanderbilt.edu/wiki/Main/DataSets">Vanderbilt Department of Biostatistics</a>.</p>
-</section>
-<section id="stress-tests" class="level2">
+</div>
+<div id="stress-tests" class="section level2">
 <h2>Stress Tests</h2>
 <p>Dobutamine is a drug that is used during echocardiograms (aka “stress tests”), which are clinical tests used to estimate heart function. The treatment causes heart rate to increase, and its effects at different dosages were measured in a <a href="https://www.ncbi.nlm.nih.gov/pubmed/10080472">study published in 1999</a>. We’ll be using the data behind this paper to answer the questions that follow.</p>
 <pre class="coffee"><code># Load libraries
@@ -528,26 +531,26 @@ stress</code></pre>
 <p><em>Before answering the questions, make sure to review the data dictionary</em>:</p>
 <p><a href="http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html" class="uri">http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/stressEcho.html</a></p>
 <p><em>Note that the data were originally coded by the authors of the study but were then partially recoded when curated. Pay particular attention to the <code>any.event</code> variable (did the subject experience any cardiac event over 12 months following the stress test), which should be interpeted as 0=NO, 1=YES. The top of the data dicionary makes this clear that all event variables are recoded such that 0=no and 1=yes, which is more conventional.</em></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>What is the highest maximum heart rate double product with Dobutamine (<code>dpmaxdo</code>)?</li>
 </ol>
 <pre class="r"><code>max(stress$dpmaxdo)</code></pre>
 <pre><code>## [1] 45114</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>What is the cutoff for the 99th percentile for the measurment above?</li>
 </ol>
 <p><strong>HINT</strong>: The <code>quantile()</code> function defaults to 0, 0.25, .5, .75 and 1 but can accept arbitrary threshholds. See <code>?quantile</code> and look for the <code>probs</code> argument.</p>
 <pre class="r"><code>quantile(stress$dpmaxdo, probs = 0.99)</code></pre>
 <pre><code>##      99% 
 ## 31948.56</code></pre>
-<ol start="3" type="1">
+<ol start="3" style="list-style-type: decimal">
 <li>Use <strong>ggplot2</strong> to create a histogram showing the distribution of the <code>dpmaxdo</code> values.</li>
 </ol>
 <pre class="r"><code>library(ggplot2)
 ggplot(stress, aes(dpmaxdo)) +
   geom_histogram()</code></pre>
 <p><img src="r-stats-homework_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<ol start="4" type="1">
+<ol start="4" style="list-style-type: decimal">
 <li>The plot above indicates that the distribution is approximately normal, with the except of a few outliers at the right tail. With the normality assumption satisfied, perform a two sample t-test to compare the mean double product max heart values between those who did or did not experience any cardiac event (<code>any.event</code>). Assume equal variances between these groups.</li>
 </ol>
 <pre class="r"><code>t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)</code></pre>
@@ -562,12 +565,12 @@ ggplot(stress, aes(dpmaxdo)) +
 ## sample estimates:
 ## mean in group 0 mean in group 1 
 ##        18736.49        17566.48</code></pre>
-<ol start="5" type="1">
+<ol start="5" style="list-style-type: decimal">
 <li>What is the p-value for this test? Make sure this is accessed from the results (using the <code>$</code> operator) rather than simply re-typing the value. Feel free to extract the p-value directly from the t-test, or first use <strong>broom::tidy()</strong> to tidy the model first.</li>
 </ol>
 <pre class="r"><code>t.test(dpmaxdo ~ any.event, data = stress, var.equal = TRUE)$p.value</code></pre>
 <pre><code>## [1] 0.03885185</code></pre>
-<ol start="6" type="1">
+<ol start="6" style="list-style-type: decimal">
 <li>The smoking history column (<code>hxofCig</code>) is represented categorically as “heavy”, “moderate” and “non-smoker”. Create a margin table showing the total counts of individuals in each smoking history category, for all individuals who either did or did not have any cardiac event by smoking status. Next, show proportions over the row margin (what percentage of each category had any cardiac event?).</li>
 </ol>
 <pre class="r"><code>xt &lt;- xtabs(~ hxofCig + any.event, data = stress)
@@ -584,12 +587,12 @@ addmargins(xt)</code></pre>
 ##   heavy      0.803 0.197
 ##   moderate   0.833 0.167
 ##   non-smoker 0.859 0.141</code></pre>
-<ol start="7" type="1">
+<ol start="7" style="list-style-type: decimal">
 <li>Create a mosaic plot to explore the tabulated counts visually.</li>
 </ol>
 <pre class="r"><code>mosaicplot(xt)</code></pre>
 <p><img src="r-stats-homework_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<ol start="8" type="1">
+<ol start="8" style="list-style-type: decimal">
 <li>Now use a chi-squared test for the independence of smoking history and cardiac event.</li>
 </ol>
 <pre class="r"><code>chisq.test(xt)</code></pre>
@@ -598,7 +601,7 @@ addmargins(xt)</code></pre>
 ## 
 ## data:  xt
 ## X-squared = 2.0794, df = 2, p-value = 0.3536</code></pre>
-<ol start="9" type="1">
+<ol start="9" style="list-style-type: decimal">
 <li>Load the <strong>broom</strong> package and “tidy” the model output above. If you don’t have the broom package, install it first.</li>
 </ol>
 <pre class="r"><code># If you don&#39;t have broom installed:
@@ -608,20 +611,20 @@ library(broom)
 tidy(chisq.test(xt))</code></pre>
 <pre><code>##   statistic   p.value parameter                     method
 ## 1  2.079445 0.3535527         2 Pearson&#39;s Chi-squared test</code></pre>
-</section>
-<section id="muscular-dystrophy-genetics" class="level2">
+</div>
+<div id="muscular-dystrophy-genetics" class="section level2">
 <h2>Muscular Dystrophy Genetics</h2>
 <p>The questions that follow are based on a data collected to examine several blood serum markers believed to be associated with genetics for a specific kind of muscular dystrophy (DMD). The data were analyzed and results reported in a <a href="https://www.ncbi.nlm.nih.gov/pubmed/7137219">1985 paper</a>. In particular, the authors were interested in whether a woman’s DMD carrier status (<code>carrier</code>) was related to the blood serum markers creatine kinase (<code>ck</code>), hemopexin (<code>h</code>), pyruvate kinase (<code>pk</code>) and lactate dehydrogenase (<code>ld</code>).</p>
 <p>Use the following to read and store the data:</p>
 <pre class="coffee"><code>dmd &lt;- read_csv(&quot;data/dmd.csv&quot;)</code></pre>
 <p>For more information on the data set see:</p>
 <p><a href="http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.html" class="uri">http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/dmd.html</a></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>What is the average value for lactate dehydrogenase?</li>
 </ol>
 <pre class="r"><code>mean(dmd$ld, na.rm = TRUE)</code></pre>
 <pre><code>## [1] 198.5891</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>The four serum markers (creatine kinase, hemopexin, pyruvate kinase and lactate dehydrogenase) are all predictors of interest in this case. Use <strong>ggplot2</strong> to create histograms to assess the normality of the distribution for each of these variables.</li>
 </ol>
 <p><strong>HINT</strong>: The plot below uses <code>gather()</code> from <strong>tidyr</strong> to transform the data so all histograms can be rendered in a single “facet wrapped” plot. Feel free to give this a shot or create separate histograms for each variable. Either method is acceptable.</p>
@@ -635,7 +638,7 @@ dmd %&gt;%
   geom_histogram(bins = 25) +
   facet_wrap(~marker, scales = &quot;free&quot;)</code></pre>
 <p><img src="r-stats-homework_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<ol start="3" type="1">
+<ol start="3" style="list-style-type: decimal">
 <li>All of these columns have outliers and are (at least slightly) skewed. But <code>ck</code> seems to require the most attention. Try using a log transformation on that column and create another histogram.</li>
 </ol>
 <pre class="r"><code>dmd %&gt;%
@@ -643,7 +646,7 @@ dmd %&gt;%
   ggplot(aes(logck)) +
   geom_histogram(bins = 25)</code></pre>
 <p><img src="r-stats-homework_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
-<ol start="4" type="1">
+<ol start="4" style="list-style-type: decimal">
 <li>Even when transformed, the cytokine kinase is a little skewed. Assuming we can tolerate this, let’s try fitting a binary logistic regression model that predicts the mother’s status as carrier based on the values of the four blood serum markers. Don’t forget to use the log version of <code>ck</code>, and to use <code>summary()</code> on the model object to view the coefficients.</li>
 </ol>
 <pre class="r"><code>fit &lt;- glm(carrier ~ log(ck) + h + pk + ld, data = dmd, family= &quot;binomial&quot;)
@@ -673,17 +676,17 @@ summary(fit)</code></pre>
 ## AIC: 109.01
 ## 
 ## Number of Fisher Scoring iterations: 7</code></pre>
-<ol start="5" type="1">
+<ol start="5" style="list-style-type: decimal">
 <li>The coefficient (estimate) for each explanatory variable gives us the log of the odds ratio. Exponentiate the estimates to make them more interpretable (i.e. the odds ratio for each 1-unit increase in the predictor variable).</li>
 </ol>
 <pre class="r"><code>round(exp(fit$coefficients), 4)</code></pre>
 <pre><code>## (Intercept)     log(ck)           h          pk          ld 
 ##      0.0000     17.5054      1.1194      1.1087      1.0129</code></pre>
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

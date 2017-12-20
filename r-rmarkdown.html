@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -463,10 +466,10 @@ div.tocify {
 
 <p>Contemporary life science is plagued by reproducibility issues. This workshop covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this workshop we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents.</p>
 <p>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>, and <a href="r-viz-gapminder.html">plotting with ggplot2</a>. It also assumes that you’ve successfully installed all packages on the <a href="setup.html">R setup page</a>, including the <a href="setup.html#rmarkdown">additional steps</a> needed specifically for this class.</p>
-<section id="before-class" class="level2">
+<div id="before-class" class="section level2">
 <h2>Before class</h2>
 <p>Prior to class, spend a few minutes to learn a little bit about <em>Markdown</em>. All you really need to know is that Markdown is a lightweight markup language that lets you create styled text (like <strong>bold</strong>, <em>italics</em>, <a href="http://bioconnector.github.io/markdown">links</a>, etc.) using a very lightweight plain-text syntax: <code>(like **bold**, _italics_, [links](http://bioconnector.github.io/markdown), etc.)</code>. The resulting text file can be <em>rendered</em> into many downstream formats, like PDF (for printing) or HTML (websites).</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><em>(30 seconds)</em> Read the summary paragraph on the <a href="https://en.wikipedia.org/wiki/Markdown">Wikipedia page</a>.</li>
 <li><em>(1 minute)</em> Bookmark and refer to this markdown reference: <a href="http://commonmark.org/help/" class="uri">http://commonmark.org/help/</a>.</li>
 <li><em>(5-10 minutes)</em> Run through this 10-minute in-browser markdown tutorial: <a href="http://commonmark.org/help/tutorial/" class="uri">http://commonmark.org/help/tutorial/</a>.</li>
@@ -474,20 +477,20 @@ div.tocify {
 <li><em>(10 minutes)</em> See RStudio’s excellent documentation on Rmarkdown at <a href="http://rmarkdown.rstudio.com/" class="uri">http://rmarkdown.rstudio.com/</a>. Click “Getting Started” and watch the 1 minute video on the <a href="http://rmarkdown.rstudio.com/lesson-1.html">Introduction page</a>. Continue reading through each section here on the navigation bar to the left (<em>Introduction</em> through <em>Cheatsheets</em>, and optionally download and print out the cheat sheet). Finally, browse through the <a href="http://rmarkdown.rstudio.com/gallery.html">RMarkdown Gallery</a>. <!-- 1. _(5-10 minutes)_ Take a look at the Markdown/Rmarkdown reference for this course: <http://bioconnector.github.io/markdown>. Scroll through the Markdown reference, which you've already seen by this point, then click the RMarkdown link at the top and skim through this.  --></li>
 <li><em>(0 seconds)</em> No need to look now, but don’t forget that the course <a href="help.html">help page</a> has some <a href="help.html#markdown-rmarkdown-resources">useful resources on Markdown+RMarkdown</a>.</li>
 </ol>
-</section>
-<section id="who-cares-about-reproducible-research" class="level2">
+</div>
+<div id="who-cares-about-reproducible-research" class="section level2">
 <h2>Who cares about reproducible research?</h2>
 <p>Science is plagued by reproducibility problems. Especially genomics!</p>
 <ul>
-<li>Scientists in the United States spend <a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165">$28 billion</a> each year on basic biomedical research that cannot be repeated successfully.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
-<li>A reproducibility study in psychology found that only <a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433">39 of 100 studies could be reproduced</a>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
-<li>The Journal <em>Nature</em> on the <a href="http://www.nature.com/news/reproducibility-1.17552">issue of reproducibility</a>:<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
+<li>Scientists in the United States spend <a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165">$28 billion</a> each year on basic biomedical research that cannot be repeated successfully.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
+<li>A reproducibility study in psychology found that only <a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433">39 of 100 studies could be reproduced</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
+<li>The Journal <em>Nature</em> on the <a href="http://www.nature.com/news/reproducibility-1.17552">issue of reproducibility</a>:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>
 <ul>
 <li>“<em>Nature</em> and the Nature research journals will introduce editorial measures to address the problem by improving the consistency and quality of reporting in life-sciences articles… <strong>we will give more space to methods sections. We will examine statistics more closely and encourage authors to be transparent, for example by including their raw data.</strong>”<br />
 </li>
 <li><em>Nature</em> also released a <a href="http://www.nature.com/authors/policies/checklist.pdf">checklist</a>, unfortunately with <em>wimpy</em> computational check <em>(see #18)</em>.</li>
 </ul></li>
-<li>On microarray reproducibility:<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>
+<li>On microarray reproducibility:<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>
 <ul>
 <li>18 Nat. Genet. microarray experiments</li>
 <li>Less than 50% reproducible</li>
@@ -498,7 +501,7 @@ div.tocify {
 <li>Missing method/processing details (66%)</li>
 </ul></li>
 </ul></li>
-<li>NGS: run-of-the-mill variant calling (align, process, call variants):<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>
+<li>NGS: run-of-the-mill variant calling (align, process, call variants):<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>
 <ul>
 <li>299 articles published in 2011 citing the 1000 Genomes project pilot publication</li>
 <li>Only 19 were NGS studies with similar design</li>
@@ -507,7 +510,10 @@ div.tocify {
 </ul></li>
 </ul>
 <p>Consider this figure:</p>
-<p><img src="img/gm-lifeexp-vs-gdp.png" /></p>
+<div class="figure">
+<img src="img/gm-lifeexp-vs-gdp.png" />
+
+</div>
 <p>How do we reproduce it? What do we need?</p>
 <ul>
 <li>The data.
@@ -531,16 +537,16 @@ div.tocify {
 <em>—Vince Buffalo, author of Bioinformatics Data Skills (2015)</em>.</li>
 <li><strong>Reproducible research</strong> can be repeated by other researchers with the same results.</li>
 </ul>
-<section id="reproducibility-is-hard" class="level3">
+<div id="reproducibility-is-hard" class="section level3">
 <h3>Reproducibility is hard!</h3>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Genomics data is too large and high dimensional to easily inspect or visualize. Workflows involve multiple steps and it’s hard to inspect every step.</li>
 <li>Unlike in the wet lab, we don’t always know what to expect of our genomics data analysis.</li>
 <li>It can be hard to distinguish <em>good</em> from <em>bad</em> results.</li>
 <li>Scientific code is usually only run once to generate results for a publication, and is more likely to contain silent bugs. (code that may produces unknowingly incorrect output rather than stopping with an error message).</li>
 </ol>
-</section>
-<section id="whats-in-it-for-you" class="level3">
+</div>
+<div id="whats-in-it-for-you" class="section level3">
 <h3>What’s in it for <em>you?</em></h3>
 <p>Yeah, it takes a lot of effort to be robust and reproducible. However, <em>it will make your life (and science) easier!</em></p>
 <ul>
@@ -552,17 +558,17 @@ div.tocify {
 </li>
 <li>Reproducibility makes you easier to work and collaborate with.</li>
 </ul>
-</section>
-<section id="some-recommendations-for-reproducible-research" class="level3">
+</div>
+<div id="some-recommendations-for-reproducible-research" class="section level3">
 <h3>Some recommendations for reproducible research</h3>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><strong>Write code for humans, write data for computers.</strong>
 <ul>
 <li>Code should be broken down into small chunks that may be re-used.<br />
 </li>
 <li>Make names/variables consistent, distinctive and meaningful.<br />
 </li>
-<li>Adopt a <a href="http://adv-r.had.co.nz/Style.html">style</a> be consistent.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></li>
+<li>Adopt a <a href="http://adv-r.had.co.nz/Style.html">style</a> be consistent.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
 <li>Write concise and clear comments.</li>
 </ul></li>
 <li><strong>Make incremental changes.</strong> Work in small steps with frequent feedback. Use version control. See <a href="http://swcarpentry.github.io/git-novice/" class="uri">http://swcarpentry.github.io/git-novice/</a> for resources on version control.</li>
@@ -595,30 +601,33 @@ div.tocify {
 <li>Use dynamic documentation to make your life easier.</li>
 </ul></li>
 </ol>
-</section>
-</section>
-<section id="rmarkdown" class="level2">
+</div>
+</div>
+<div id="rmarkdown" class="section level2">
 <h2>RMarkdown</h2>
 <p>RMarkdown is a variant of Markdown that lets you embed R code chunks that execute when you compile the document. What, what? Markdown? Compile? What’s all this about?</p>
-<section id="markdown" class="level3">
+<div id="markdown" class="section level3">
 <h3>Markdown</h3>
 <p>Ever heard of HTML? It’s what drives the internet. HTML is a <em>markup language</em> - that’s what the <em>ML</em> stands for. The terminology evolved from “marking up” paper manuscripts by editors, where the editor would instruct an author or typesetter how to render the resulting text. Markup languages let you annotate <strong>text</strong> that you want to display with instructions about how to display it.</p>
 <p>I emphasize <strong>text</strong> because this is fundamentally different than word processing. When you use MS Word, for example, you’re creating a special proprietary binary file (the .docx) file that shows you how a document looks. By contrast, writing in a markup language like HTML or Markdown, you’re writing plain old text, using a text editor. The toolchain used to render the markup text into what you see on a display or in a PDF has always been and will always bee free and open.</p>
 <p>You can learn Markdown in about 5 minutes. Visit <strong><a href="http://bioconnector.github.io/markdown">bioconnector.github.io/markdown</a></strong> for a quick-start reference and links to other resources. Let’s open up a web-based Markdown editor like <a href="http://dillinger.io/" class="uri">http://dillinger.io/</a> or use a desktop Markdown editor like <a href="http://markdownpad.com/">MarkdownPad</a> (Windows) or <a href="http://macdown.uranusjr.com/">MacDown</a> (Mac).</p>
-</section>
-<section id="rmarkdown-workflow" class="level3">
+</div>
+<div id="rmarkdown-workflow" class="section level3">
 <h3>RMarkdown workflow</h3>
 <p>RMarkdown is an enhanced version of Markdown that lets you embed R code into the document. When the document is compiled/rendered, the R code is executed by R, the output is then automatically rendered as Markdown with the rest of the document. The Markdown is then further processed to final output formats like HTML, PDF, DOCX, etc.</p>
-<p><img src="img/rmarkdown-workflow.png" /></p>
+<div class="figure">
+<img src="img/rmarkdown-workflow.png" />
+
+</div>
 <p>Visit <strong><a href="http://bioconnector.github.io/markdown/#!rmarkdown.md">bioconnector.github.io/markdown</a></strong> for a quick reference on RMarkdown.</p>
-</section>
-</section>
-<section id="authoring-rmarkdown-documents" class="level2">
+</div>
+</div>
+<div id="authoring-rmarkdown-documents" class="section level2">
 <h2>Authoring RMarkdown documents</h2>
 <blockquote>
 <p><strong><em>Note</em></strong>: Before going any further, open up the options (Tools, Global Options), click the RMarkdown section, and <strong>uncheck</strong> the box, <em>“Show output inline for all R Markdown documents.”</em></p>
 </blockquote>
-<section id="from-scratch" class="level3">
+<div id="from-scratch" class="section level3">
 <h3>From scratch</h3>
 <p>First, open RStudio. Create a new project. Quit RStudio, then launch RStudio using the project file (.Rproj) you just created.</p>
 <p>Next, download the gapminder data from <a href="data.html">the data page</a>. Put this file in your R project directory. Maybe put it in a subdirectory called “data.” Importantly, now your code and data will live in the same place.</p>
@@ -684,8 +693,8 @@ The mean life expectancy is 59.4744394 years.
 
 The years surveyed in this data include: 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002, 2007.</code></pre>
 <!-- end markdown -->
-</section>
-<section id="from-a-template-with-yaml-metadata" class="level3">
+</div>
+<div id="from-a-template-with-yaml-metadata" class="section level3">
 <h3>From a template with YAML metadata</h3>
 <p>Go ahead and start a new R Markdown document. Fill in some title and author information.</p>
 <p>This is going to put a YAML header in the file that looks something like this:</p>
@@ -719,8 +728,8 @@ output:
    scale_x_log10() +  
    aes(col=continent) 
  ``` </code></pre>
-</section>
-<section id="chunk-options" class="level3">
+</div>
+<div id="chunk-options" class="section level3">
 <h3>Chunk options</h3>
 <p>You can modify the behavior of an R chunk with <a href="http://yihui.name/knitr/options/">options</a>. Options are passed in after a comma on the fence, as shown below.</p>
 <pre><code> ```{r optionalChunkName, echo=TRUE, results=&#39;hide&#39;} 
@@ -747,8 +756,8 @@ output:
  ``` </code></pre>
 <p>See the full list of options here: <a href="http://yihui.name/knitr/options/" class="uri">http://yihui.name/knitr/options/</a>. There are lots!</p>
 <p>A special note about <strong>caching</strong>: The <code>cache=</code> option is automatically set to <code>FALSE</code>. That is, every time you render the Rmd, all the R code is run again from scratch. If you use <code>cache=TRUE</code>, for this chunk, knitr will save the results of the evaluation into a directory that you specify. When you re-render the document, knitr will first check if there are previously cached results under the cache directory before really evaluating the chunk; if cached results exist and this code chunk has not been changed since last run (use MD5 sum to verify), the cached results will be (lazy-) loaded, otherwise new cache will be built; if a cached chunk depends on other chunks (see the <code>dependson</code> option) and any one of these chunks has changed, this chunk must be forcibly updated (old cache will be purged). <strong>See <a href="http://yihui.name/knitr/demo/cache/">the documentation for caching</a>.</strong></p>
-</section>
-<section id="tables" class="level3">
+</div>
+<div id="tables" class="section level3">
 <h3>Tables</h3>
 <p>Read about printing tables at <a href="http://bioconnector.github.io/markdown/#!rmarkdown.md#Printing_tables_nicely">bioconnector.github.io/markdown</a>.</p>
 <p>The <a href="http://yihui.name/knitr/">knitr</a> package that runs the RMarkdown document in the background also has a function called <code>kable</code> that helps with printing tables nicely. It’s only useful when you set <code>echo=FALSE</code> and <code>results='asis'</code>. Try this.</p>
@@ -760,13 +769,13 @@ output:
  library(knitr) 
  kable(head(gm)) 
  ``` </code></pre>
-</section>
-<section id="changing-output-formats" class="level3">
+</div>
+<div id="changing-output-formats" class="section level3">
 <h3>Changing output formats</h3>
 <p>Now try this. If you were successfully able to get a LaTeX distribution installed, you can render this document as a PDF instead of HTML. Try changing the line in the metadata from <code>html_document</code> to <code>pdf_document</code>. Notice how the <em>Knit HTML</em> button in RStudio now changes to <em>Knit PDF</em>. Try it. If you didn’t get a LaTeX engine installed this won’t work. Go back to the setup instructions after class to give this a try.</p>
-</section>
-</section>
-<section id="distributing-analyses-rpubs" class="level2">
+</div>
+</div>
+<div id="distributing-analyses-rpubs" class="section level2">
 <h2>Distributing Analyses: Rpubs</h2>
 <p><a href="http://rpubs.com/">RPubs.com</a> is a free service from RStudio that allows you to seamlessly publish the results of your R analyses online. Sign up for an account at <a href="http://rpubs.com/">RPubs.com</a>, then sign in on your browser.</p>
 <p>Make sure your RMarkdown metadata is set to render to HTML rather than PDF. Render the document. Now notice the little <strong>Publish</strong> button in the HTML viewer pane. Click this. Sign in when asked, and give your document a name (usually the same name as the title of your Rmd).</p>
@@ -777,31 +786,31 @@ output:
 <li><a href="http://rpubs.com/turnersd/anscombe" class="uri">http://rpubs.com/turnersd/anscombe</a>: Analysis of <em>Anscombe’s Quartet</em> data.</li>
 </ul>
 <p><strong>Note how RPubs doesn’t share your code!</strong> RPubs is a great way to share your analysis but doesn’t let you share the source code. This is a huge barrier to reproducibility. There are plenty of ways to do this. One way is to go to <a href="https://gist.github.com">gist.github.com</a> and upload your code as a text file, then link back to the gist in your republished RPubs document.</p>
-</section>
-<section id="further-resources" class="level2">
+</div>
+<div id="further-resources" class="section level2">
 <h2>Further resources</h2>
 <p>See <a href="help.html#markdown__rmarkdown_resources">the (R)markdown section on this course’s help page</a> for links to getting more help with reproducible research, Markdown, and RMarkdown. Need further motivation? See <a href="https://youtu.be/s3JldKoA0zw">this video</a>.</p>
-</section>
-<section id="homework" class="level2">
+</div>
+<div id="homework" class="section level2">
 <h2>Homework</h2>
 <p>Looking for more practice? <a href="r-rmarkdown-homework.html">Try this homework assignment</a>.</p>
 <hr />
-</section>
-<section class="footnotes">
+</div>
+<div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Freedman, et al. “The economics of reproducibility in preclinical research.” <em>PLoS Biol</em> 13.6 (2015): e1002165.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p><a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433" class="uri">http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p><a href="http://www.nature.com/news/reproducibility-1.17552" class="uri">http://www.nature.com/news/reproducibility-1.17552</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>Ioannidis, John PA, et al. “Repeatability of published microarray gene expression analyses.” <em>Nature genetics</em> 41.2 (2009): 149-155.<a href="#fnref4" class="footnote-back">↩</a></p></li>
-<li id="fn5"><p>Nekrutenko, Anton, and James Taylor. “Next-generation sequencing data interpretation: enhancing reproducibility and accessibility.” <em>Nature Reviews Genetics</em> 13.9 (2012): 667-672.<a href="#fnref5" class="footnote-back">↩</a></p></li>
-<li id="fn6"><p><a href="http://adv-r.had.co.nz/Style.html" class="uri">http://adv-r.had.co.nz/Style.html</a><a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>Freedman, et al. “The economics of reproducibility in preclinical research.” <em>PLoS Biol</em> 13.6 (2015): e1002165.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433" class="uri">http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="http://www.nature.com/news/reproducibility-1.17552" class="uri">http://www.nature.com/news/reproducibility-1.17552</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Ioannidis, John PA, et al. “Repeatability of published microarray gene expression analyses.” <em>Nature genetics</em> 41.2 (2009): 149-155.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Nekrutenko, Anton, and James Taylor. “Next-generation sequencing data interpretation: enhancing reproducibility and accessibility.” <em>Nature Reviews Genetics</em> 13.9 (2012): 667-672.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="http://adv-r.had.co.nz/Style.html" class="uri">http://adv-r.had.co.nz/Style.html</a><a href="#fnref6">↩</a></p></li>
 </ol>
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

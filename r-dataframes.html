@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -464,27 +467,27 @@ div.tocify {
 <p>There are <em>lots</em> of different basic data structures in R. If you take any kind of longer introduction to R you’ll probably learn about arrays, lists, matrices, etc. Let’s skip straight to the data structure you’ll probably use most – the <strong>data frame</strong>. We use data frames to store heterogeneous tabular data in R: tabular, meaning that individuals or observations are typically represented in rows, while variables or features are represented as columns; heterogeneous, meaning that columns/features/variables can be different classes (on variable, e.g. age, can be numeric, while another, e.g., cause of death, can be text).</p>
 <p><strong>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>.</strong></p>
 <p><strong>Recommended reading:</strong> Review the <a href="http://r4ds.had.co.nz/tibbles.html#introduction-4"><em>Introduction</em> (10.1)</a> and <a href="http://r4ds.had.co.nz/tibbles.html#tibbles-vs.data.frame"><em>Tibbles vs. data.frame</em> (10.3)</a> sections of the <a href="http://r4ds.had.co.nz/tibbles.html"><strong><em>R for Data Science</em> book</strong></a>. We will initially be using the <code>read_*</code> functions from the <a href="http://readr.tidyverse.org/"><strong>readr</strong> package</a>. These functions load data into a <em>tibble</em> instead of R’s traditional data.frame. Tibbles are data frames, but they tweak some older behaviors to make life a little easier. These sections explain the few key small differences between traditional data.frames and tibbles.</p>
-<section id="our-data" class="level2">
+<div id="our-data" class="section level2">
 <h2>Our data</h2>
 <!-- There are some built-in data frames that ship with R that you'll often see people referencing in help forums or other places to demonstrate some functionality. The `mtcars` data frame has data extracted from the 1974 _Motor Trend_ magazine giving statistics about design and performance for 32 different vehicles. You can just type `mtcars` to look at the whole dataset. -->
-<p>The data we’re going to look at is cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
-<ol type="1">
+<p>The data we’re going to look at is cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
+<ol style="list-style-type: decimal">
 <li><strong>Raise or lower their expression in response to growth rate</strong>. Growth-rate dependent expression patterns can tell us a lot about cell cycle control, and how the cell responds to stress. The authors found that expression of &gt;25% of all yeast genes is linearly correlated with growth rate, independent of the limiting nutrient. They also found that the subset of negatively growth-correlated genes is enriched for peroxisomal functions, and positively correlated genes mainly encode ribosomal functions.</li>
 <li><strong>Respond differently when different nutrients are being limited</strong>. If you see particular genes that respond very differently when a nutrient is sharply restricted, these genes might be involved in the transport or metabolism of that specific nutrient.</li>
 </ol>
 <p>You can download the cleaned up version of the data at <a href="data.html">the link above</a>. The file is called <a href="data/brauer2007_tidy.csv"><strong>brauer2007_tidy.csv</strong></a>. Later on we’ll actually start with the original raw data (minimally processed) and manipulate it so that we can make it more amenable for analysis.</p>
-</section>
-<section id="reading-in-data" class="level2">
+</div>
+<div id="reading-in-data" class="section level2">
 <h2>Reading in data</h2>
-<section id="dplyr-and-readr" class="level3">
+<div id="dplyr-and-readr" class="section level3">
 <h3>dplyr and readr</h3>
 <p>There are some built-in functions for reading in data in text files. These functions are <em>read-dot-something</em> – for example, <code>read.csv()</code> reads in comma-delimited text data; <code>read.delim()</code> reads in tab-delimited text, etc. We’re going to read in data a little bit differently here using the <a href="http://readr.tidyverse.org/">readr</a> package. When you load the readr package, you’ll have access to very similar looking functions, named <em>read-underscore-something</em> – e.g., <code>read_csv()</code>. You have to have the readr package installed to access these functions. Compared to the base functions, they’re <em>much</em> faster, they’re good at guessing the types of data in the columns, they don’t do some of the other silly things that the base functions do. We’re going to use another package later on called <a href="https://cran.r-project.org/web/packages/dplyr/index.html">dplyr</a>, and if you have the dplyr package loaded as well, and you read in the data with readr, the data will display nicely.</p>
 <p>First let’s load those packages.</p>
 <pre class="r"><code>library(readr)
 library(dplyr)</code></pre>
 <p>If you see a warning that looks like this: <code>Error in library(packageName) : there is no package called 'packageName'</code>, then you don’t have the package installed correctly. See the <a href="setup.html">setup page</a>.</p>
-</section>
-<section id="read_csv" class="level3">
+</div>
+<div id="read_csv" class="section level3">
 <h3><code>read_csv()</code></h3>
 <p>Now, let’s actually load the data. You can get help for the import function with <code>?read_csv</code>. When we load data we assign it to a variable just like any other, and we can choose a name for that data. Since we’re going to be referring to this data a lot, let’s give it a short easy name to type. I’m going to call it <code>ydat</code>. Once we’ve loaded it we can type the name of the object itself (<code>ydat</code>) to see it printed to the screen.</p>
 <pre class="r"><code>ydat &lt;- read_csv(file=&quot;data/brauer2007_tidy.csv&quot;)
@@ -505,9 +508,9 @@ ydat</code></pre>
 ## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
 <p>Take a look at that output. The nice thing about loading dplyr and reading in data with readr is that data frames are displayed in a much more friendly way. This dataset has nearly 200,000 rows and 7 columns. When you import data this way and try to display the object in the console, instead of trying to display all 200,000 rows, you’ll only see about 10 by default. Also, if you have so many columns that the data would wrap off the edge of your screen, those columns will not be displayed, but you’ll see at the bottom of the output which, if any, columns were hidden from view. If you want to see the whole dataset, there are two ways to do this. First, you can click on the name of the data.frame in the <strong>Environment</strong> panel in RStudio. Or you could use the <code>View()</code> function (<em>with a capital V</em>).</p>
 <pre class="r"><code>View(ydat)</code></pre>
-</section>
-</section>
-<section id="inspecting-data.frame-objects" class="level2">
+</div>
+</div>
+<div id="inspecting-data.frame-objects" class="section level2">
 <h2>Inspecting data.frame objects</h2>
 <p>There are several built-in functions that are useful for working with data frames.</p>
 <ul>
@@ -599,8 +602,8 @@ ydat</code></pre>
 ##  Mean   : 0.00                                        
 ##  3rd Qu.: 0.29                                        
 ##  Max.   : 6.64</code></pre>
-</section>
-<section id="accessing-variables-subsetting-data-frames" class="level2">
+</div>
+<div id="accessing-variables-subsetting-data-frames" class="section level2">
 <h2>Accessing variables &amp; subsetting data frames</h2>
 <p>We can access individual variables within a data frame using the <code>$</code> operator, e.g., <code>mydataframe$specificVariable</code>. Let’s print out all the gene names in the data. Then let’s calculate the average expression across all conditions, all genes (using the built-in <code>mean()</code> function).</p>
 <pre class="r"><code># display all gene symbols
@@ -648,13 +651,13 @@ mean(ydat$expression)</code></pre>
 <p>We might be interested in the average expression of genes with a particular biological function, and how that changes over different growth rates restricted by particular nutrients. This is the kind of thing we’re going to do in the next section.</p>
 <hr />
 <p><strong>EXERCISE 1</strong></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>What’s the standard deviation expression (hint: get help on the <code>sd</code> function with <code>?sd</code>).</li>
 <li>What’s the range of rate represented in the data? (hint: <code>range()</code>).</li>
 </ol>
 <hr />
-</section>
-<section id="bonus-preview-to-advanced-manipulation" class="level2">
+</div>
+<div id="bonus-preview-to-advanced-manipulation" class="section level2">
 <h2>BONUS: Preview to advanced manipulation</h2>
 <p>What if we wanted show the mean expression, standard deviation, and correlation between growth rate and expression, separately for each limiting nutrient, separately for each gene, for all genes involved in the leucine biosynthesis pathway?</p>
 <pre class="r"><code>ydat %&gt;% 
@@ -664,191 +667,191 @@ mean(ydat$expression)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th style="text-align: left;">nutrient</th>
-<th style="text-align: left;">symbol</th>
-<th style="text-align: right;">mean</th>
-<th style="text-align: right;">sd</th>
-<th style="text-align: right;">r</th>
+<th align="left">nutrient</th>
+<th align="left">symbol</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">r</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Ammonia</td>
-<td style="text-align: left;">LEU1</td>
-<td style="text-align: right;">-0.82</td>
-<td style="text-align: right;">0.39</td>
-<td style="text-align: right;">0.66</td>
+<td align="left">Ammonia</td>
+<td align="left">LEU1</td>
+<td align="right">-0.82</td>
+<td align="right">0.39</td>
+<td align="right">0.66</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Ammonia</td>
-<td style="text-align: left;">LEU2</td>
-<td style="text-align: right;">-0.54</td>
-<td style="text-align: right;">0.38</td>
-<td style="text-align: right;">-0.19</td>
+<td align="left">Ammonia</td>
+<td align="left">LEU2</td>
+<td align="right">-0.54</td>
+<td align="right">0.38</td>
+<td align="right">-0.19</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Ammonia</td>
-<td style="text-align: left;">LEU4</td>
-<td style="text-align: right;">-0.37</td>
-<td style="text-align: right;">0.56</td>
-<td style="text-align: right;">-0.67</td>
+<td align="left">Ammonia</td>
+<td align="left">LEU4</td>
+<td align="right">-0.37</td>
+<td align="right">0.56</td>
+<td align="right">-0.67</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Ammonia</td>
-<td style="text-align: left;">LEU9</td>
-<td style="text-align: right;">-1.01</td>
-<td style="text-align: right;">0.64</td>
-<td style="text-align: right;">0.87</td>
+<td align="left">Ammonia</td>
+<td align="left">LEU9</td>
+<td align="right">-1.01</td>
+<td align="right">0.64</td>
+<td align="right">0.87</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Glucose</td>
-<td style="text-align: left;">LEU1</td>
-<td style="text-align: right;">-0.55</td>
-<td style="text-align: right;">0.41</td>
-<td style="text-align: right;">0.98</td>
+<td align="left">Glucose</td>
+<td align="left">LEU1</td>
+<td align="right">-0.55</td>
+<td align="right">0.41</td>
+<td align="right">0.98</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Glucose</td>
-<td style="text-align: left;">LEU2</td>
-<td style="text-align: right;">-0.39</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.90</td>
+<td align="left">Glucose</td>
+<td align="left">LEU2</td>
+<td align="right">-0.39</td>
+<td align="right">0.33</td>
+<td align="right">0.90</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Glucose</td>
-<td style="text-align: left;">LEU4</td>
-<td style="text-align: right;">1.09</td>
-<td style="text-align: right;">1.01</td>
-<td style="text-align: right;">-0.97</td>
+<td align="left">Glucose</td>
+<td align="left">LEU4</td>
+<td align="right">1.09</td>
+<td align="right">1.01</td>
+<td align="right">-0.97</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Glucose</td>
-<td style="text-align: left;">LEU9</td>
-<td style="text-align: right;">-0.16</td>
-<td style="text-align: right;">0.35</td>
-<td style="text-align: right;">0.35</td>
+<td align="left">Glucose</td>
+<td align="left">LEU9</td>
+<td align="right">-0.16</td>
+<td align="right">0.35</td>
+<td align="right">0.35</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Leucine</td>
-<td style="text-align: left;">LEU1</td>
-<td style="text-align: right;">2.70</td>
-<td style="text-align: right;">1.08</td>
-<td style="text-align: right;">-0.95</td>
+<td align="left">Leucine</td>
+<td align="left">LEU1</td>
+<td align="right">2.70</td>
+<td align="right">1.08</td>
+<td align="right">-0.95</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Leucine</td>
-<td style="text-align: left;">LEU2</td>
-<td style="text-align: right;">0.28</td>
-<td style="text-align: right;">1.16</td>
-<td style="text-align: right;">-0.97</td>
+<td align="left">Leucine</td>
+<td align="left">LEU2</td>
+<td align="right">0.28</td>
+<td align="right">1.16</td>
+<td align="right">-0.97</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Leucine</td>
-<td style="text-align: left;">LEU4</td>
-<td style="text-align: right;">0.80</td>
-<td style="text-align: right;">1.06</td>
-<td style="text-align: right;">-0.97</td>
+<td align="left">Leucine</td>
+<td align="left">LEU4</td>
+<td align="right">0.80</td>
+<td align="right">1.06</td>
+<td align="right">-0.97</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Leucine</td>
-<td style="text-align: left;">LEU9</td>
-<td style="text-align: right;">0.39</td>
-<td style="text-align: right;">0.18</td>
-<td style="text-align: right;">-0.77</td>
+<td align="left">Leucine</td>
+<td align="left">LEU9</td>
+<td align="right">0.39</td>
+<td align="right">0.18</td>
+<td align="right">-0.77</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Phosphate</td>
-<td style="text-align: left;">LEU1</td>
-<td style="text-align: right;">-0.43</td>
-<td style="text-align: right;">0.27</td>
-<td style="text-align: right;">0.95</td>
+<td align="left">Phosphate</td>
+<td align="left">LEU1</td>
+<td align="right">-0.43</td>
+<td align="right">0.27</td>
+<td align="right">0.95</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Phosphate</td>
-<td style="text-align: left;">LEU2</td>
-<td style="text-align: right;">-0.26</td>
-<td style="text-align: right;">0.19</td>
-<td style="text-align: right;">0.70</td>
+<td align="left">Phosphate</td>
+<td align="left">LEU2</td>
+<td align="right">-0.26</td>
+<td align="right">0.19</td>
+<td align="right">0.70</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Phosphate</td>
-<td style="text-align: left;">LEU4</td>
-<td style="text-align: right;">-0.99</td>
-<td style="text-align: right;">0.11</td>
-<td style="text-align: right;">0.24</td>
+<td align="left">Phosphate</td>
+<td align="left">LEU4</td>
+<td align="right">-0.99</td>
+<td align="right">0.11</td>
+<td align="right">0.24</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Phosphate</td>
-<td style="text-align: left;">LEU9</td>
-<td style="text-align: right;">-1.12</td>
-<td style="text-align: right;">0.53</td>
-<td style="text-align: right;">0.90</td>
+<td align="left">Phosphate</td>
+<td align="left">LEU9</td>
+<td align="right">-1.12</td>
+<td align="right">0.53</td>
+<td align="right">0.90</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Sulfate</td>
-<td style="text-align: left;">LEU1</td>
-<td style="text-align: right;">-1.17</td>
-<td style="text-align: right;">0.34</td>
-<td style="text-align: right;">0.98</td>
+<td align="left">Sulfate</td>
+<td align="left">LEU1</td>
+<td align="right">-1.17</td>
+<td align="right">0.34</td>
+<td align="right">0.98</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Sulfate</td>
-<td style="text-align: left;">LEU2</td>
-<td style="text-align: right;">-0.96</td>
-<td style="text-align: right;">0.30</td>
-<td style="text-align: right;">0.57</td>
+<td align="left">Sulfate</td>
+<td align="left">LEU2</td>
+<td align="right">-0.96</td>
+<td align="right">0.30</td>
+<td align="right">0.57</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Sulfate</td>
-<td style="text-align: left;">LEU4</td>
-<td style="text-align: right;">-0.24</td>
-<td style="text-align: right;">0.43</td>
-<td style="text-align: right;">-0.60</td>
+<td align="left">Sulfate</td>
+<td align="left">LEU4</td>
+<td align="right">-0.24</td>
+<td align="right">0.43</td>
+<td align="right">-0.60</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Sulfate</td>
-<td style="text-align: left;">LEU9</td>
-<td style="text-align: right;">-1.24</td>
-<td style="text-align: right;">0.55</td>
-<td style="text-align: right;">0.99</td>
+<td align="left">Sulfate</td>
+<td align="left">LEU9</td>
+<td align="right">-1.24</td>
+<td align="right">0.55</td>
+<td align="right">0.99</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Uracil</td>
-<td style="text-align: left;">LEU1</td>
-<td style="text-align: right;">-0.74</td>
-<td style="text-align: right;">0.73</td>
-<td style="text-align: right;">0.89</td>
+<td align="left">Uracil</td>
+<td align="left">LEU1</td>
+<td align="right">-0.74</td>
+<td align="right">0.73</td>
+<td align="right">0.89</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Uracil</td>
-<td style="text-align: left;">LEU2</td>
-<td style="text-align: right;">0.18</td>
-<td style="text-align: right;">0.13</td>
-<td style="text-align: right;">-0.07</td>
+<td align="left">Uracil</td>
+<td align="left">LEU2</td>
+<td align="right">0.18</td>
+<td align="right">0.13</td>
+<td align="right">-0.07</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Uracil</td>
-<td style="text-align: left;">LEU4</td>
-<td style="text-align: right;">-0.65</td>
-<td style="text-align: right;">0.44</td>
-<td style="text-align: right;">0.77</td>
+<td align="left">Uracil</td>
+<td align="left">LEU4</td>
+<td align="right">-0.65</td>
+<td align="right">0.44</td>
+<td align="right">0.77</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Uracil</td>
-<td style="text-align: left;">LEU9</td>
-<td style="text-align: right;">-1.02</td>
-<td style="text-align: right;">0.91</td>
-<td style="text-align: right;">0.94</td>
+<td align="left">Uracil</td>
+<td align="left">LEU9</td>
+<td align="right">-1.02</td>
+<td align="right">0.91</td>
+<td align="right">0.94</td>
 </tr>
 </tbody>
 </table>
 <p>Neat eh? We’ll learn how to do that in the advanced manipulation with dplyr lesson.</p>
 <!-- Neat eh? Let's learn how to do that in the [advanced manipulation with dplyr lesson](r-dplyr-yeast.html). -->
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

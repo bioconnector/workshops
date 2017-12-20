@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -462,15 +465,15 @@ div.tocify {
 
 
 <p>Formatting data as a list is sometimes necessary. However, retrieving this kind of non-tabular information for analysis can be challenging. This workshop will introduce students to the motivations and techniques for storing and parsing list objects in R. Some familiarity with R will be helpful.</p>
-<section id="introduction" class="level2">
+<div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>Compared to the data frame, vector and matrix, the list is under-represented in many introductory R tutorials. This likely has less do with the relative importance of lists, and more to do with their potential complexity. However, an understanding of how to create, curate and manipulate objects of this type can prove immensely useful.</p>
 <p>The list is one of the most versatile data types in R thanks to its ability to accommodate heterogenous elements. A single list can contain multiple elements, regardless of their types or whether these elements contain further nested data. So you can have a list of a list of a list of a list of a list …</p>
-<p>Garrett Grolemund and Hadley Wickham’s <strong>R For Data Science</strong> includes a section on lists. They use a helpful simile for the list as a shaker filled with packets of pepper<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. To retrieve individual “grains” of pepper, you’d have to first access the shaker … then the packet inside the shaker … then the pepper inside the packet.</p>
+<p>Garrett Grolemund and Hadley Wickham’s <strong>R For Data Science</strong> includes a section on lists. They use a helpful simile for the list as a shaker filled with packets of pepper<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. To retrieve individual “grains” of pepper, you’d have to first access the shaker … then the packet inside the shaker … then the pepper inside the packet.</p>
 <p>Still confused? Here’s another way of thinking about it: the list is like a movie. Each movie has a cast, crew, budget, script, etc. These elements may have different dimensions (more cast members than crew) and be of different types (budget is a number, script is a series of characters), yet they are all part of the same movie.</p>
 <p>We’ll use a brief review of R basics as a vehicle to get started with lists.</p>
-</section>
-<section id="r-basics" class="level2">
+</div>
+<div id="r-basics" class="section level2">
 <h2>R Basics</h2>
 <p>To do anything interesting in R, you must assign <em>values</em> (or experessions that produce values) to <em>objects</em>. The syntax for assignment is the name of the object followed by a <code>&lt;-</code> operator and the expression to be evaluated.</p>
 <pre class="r"><code>x &lt;- 3
@@ -478,8 +481,8 @@ y &lt;- 2 + x</code></pre>
 <p>Although the two are mostly equivalent, the <code>&lt;-</code> should be used in place of the <code>=</code> to improve code legibility and reduce potential mistakes … we’ll see why this is important when we start creating “named” lists.</p>
 <p>Every object has a <em>class</em>, which can be accessed using the <code>class()</code> function. Certain functions are specific to a given class. Other functions can behave differently depending on the class of the input. The “list” class is what we are interested in for this tutorial.</p>
 <p>One of the most fundamental types of objects is the <em>vector</em>. A vector is a series of elements from 1 to n. Each element can be accessed by an identifier (“index”) using square brackets <code>y[1]</code>. We will make extensive use of a modifed version of this syntax in order to manipulate list items.</p>
-</section>
-<section id="creating-lists" class="level2">
+</div>
+<div id="creating-lists" class="section level2">
 <h2>Creating Lists</h2>
 <p>The most direct way to create a list is with the <code>list()</code> function.</p>
 <pre class="r"><code>slamwins &lt;- list(17,14,14,12,11)</code></pre>
@@ -502,8 +505,8 @@ y &lt;- 2 + x</code></pre>
 ## 
 ## [[5]]
 ## [1] 11</code></pre>
-</section>
-<section id="indexing-lists" class="level2">
+</div>
+<div id="indexing-lists" class="section level2">
 <h2>Indexing Lists</h2>
 <p>The printed output above isn’t pretty, but it does include some hints as to how we can isolate specific elements of the list. In this case there are <em>double</em> square brackets (e.g. [[1]]) as well as <em>single</em> square brackets (e.g. [1]). As with vectors, data frames and matrices, the bracket notation is used for indexing. However, a list can have mulitple levels of indices. The value in the <em>double</em> brackets represents the number of the parent element in the list. The value in the <em>single</em> brackets represents the number of the element <em>in that parent element</em> of the list. We can chain this notation together to access granular parts of our list.</p>
 <pre class="r"><code>slamwins[[2]][1]</code></pre>
@@ -584,8 +587,8 @@ slamwins$Federer - slamwins$Borg</code></pre>
     )</code></pre>
 <p>In this case we have created a named list of 5 named lists each of which has 5 named values.</p>
 <p>But wait … we’re missing something … we have the number of slam wins by event but what about the total number of wins per player?</p>
-</section>
-<section id="editing-lists" class="level2">
+</div>
+<div id="editing-lists" class="section level2">
 <h2>Editing Lists</h2>
 <p>One way to solve the problem we’re encountering would be to use the indexing syntax discussed earlier to match our “totals” with the appropriate list item. That would basically amount to using a <em>for loop</em>:</p>
 <pre class="r"><code>totals &lt;- c(17, 14, 14, 12, 11)
@@ -680,7 +683,7 @@ slamwins</code></pre>
 ## 
 ## $Borg$Total
 ## [1] 11</code></pre>
-<p>There are a couple of potential issues with this code. The main thing is that we need to know what the totals are ahead of time. It would be a lot better to calculate those <em>dynamically</em> in case our underlying data changes … or in case we’re performing a calculation that’s not as simple as a sum. Another problem with this approach is that it’s implemented with a for loop, which is a construct that works when programming R but can be problematic<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</p>
+<p>There are a couple of potential issues with this code. The main thing is that we need to know what the totals are ahead of time. It would be a lot better to calculate those <em>dynamically</em> in case our underlying data changes … or in case we’re performing a calculation that’s not as simple as a sum. Another problem with this approach is that it’s implemented with a for loop, which is a construct that works when programming R but can be problematic<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>.</p>
 <p>Enter the “apply” functions …</p>
 <p>For this lesson, the two most relevant members of this family of functions are <code>lapply()</code> and <code>sapply()</code>, both of which allow you to pass <em>other</em> functions to each element of a list.</p>
 <p>Before we start working with these functions, we need to restore our list the state it was in before we ran the loop to add the sums for each element. Assigning an element as <code>NULL</code> effectively deletes that element from the list.</p>
@@ -727,7 +730,7 @@ slamwins</code></pre>
 ## 
 ## $Borg
 ## [1] 11</code></pre>
-<p>Now that we’ve figured out how to calculate the values we’re interested in, we just need to append them to the original list. One of the keys here is appreciating that <code>lapply()</code> can take any function (including one that we write … an “anonymous function”<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>) and use that operation on each element in the list. Another point worth noting is that the <code>c()</code> function works on lists. Most introduction to R tutorials include examples of using <code>c()</code> to create a vector, and it works very similarly for lists. Essentially it appends either a single item or a list of items onto the list.</p>
+<p>Now that we’ve figured out how to calculate the values we’re interested in, we just need to append them to the original list. One of the keys here is appreciating that <code>lapply()</code> can take any function (including one that we write … an “anonymous function”<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>) and use that operation on each element in the list. Another point worth noting is that the <code>c()</code> function works on lists. Most introduction to R tutorials include examples of using <code>c()</code> to create a vector, and it works very similarly for lists. Essentially it appends either a single item or a list of items onto the list.</p>
 <pre class="r"><code>slamwins &lt;- lapply(lapply(slamwins, unlist), function(x) c(x, Total = sum(x)))
 slamwins</code></pre>
 <pre><code>## $Federer
@@ -749,8 +752,8 @@ slamwins</code></pre>
 ## $Borg
 ##   AUS    FR   WIM    US Total 
 ##     0     6     5     0    11</code></pre>
-</section>
-<section id="converting-lists" class="level2">
+</div>
+<div id="converting-lists" class="section level2">
 <h2>Converting Lists</h2>
 <p>Using the subsetting and manipulation features above we can perform a wide variety of manipulations on our list object. But ultimately (especially if you’re familiar with the “Tidyverse” approach to using R) it may be helpful to cast list data in a tabular format … a data frame.</p>
 <pre class="r"><code>as.data.frame(slamwins)</code></pre>
@@ -770,11 +773,11 @@ datdf</code></pre>
 ## 3   1  9   2  2    14    Nadal
 ## 4   6  1   3  2    12 Djokovic
 ## 5   0  6   5  0    11     Borg</code></pre>
-</section>
-<section id="lists-in-the-wild" class="level2">
+</div>
+<div id="lists-in-the-wild" class="section level2">
 <h2>Lists “In The Wild”</h2>
-<p>The above is a contrived example. In practice, you’re much more likely to encounter lists written by other people (or applications) than to code out a list of your own. The example data we’ll use will be pulled from an Application Programming Interface (API) for the <a href="http://www.github.com">github.com</a> website<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Like many other wep APIs, the data comes out in JavaScript Object Notation (JSON). JSON is a format for storing and transmitting “semi-structured” data<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>. Keys and values are paired together to facilitate parsing<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a>. When read into R, JSON is interpreted as a list.</p>
-<section id="example" class="level3">
+<p>The above is a contrived example. In practice, you’re much more likely to encounter lists written by other people (or applications) than to code out a list of your own. The example data we’ll use will be pulled from an Application Programming Interface (API) for the <a href="http://www.github.com">github.com</a> website<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. Like many other wep APIs, the data comes out in JavaScript Object Notation (JSON). JSON is a format for storing and transmitting “semi-structured” data<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>. Keys and values are paired together to facilitate parsing<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a>. When read into R, JSON is interpreted as a list.</p>
+<div id="example" class="section level3">
 <h3>Example</h3>
 <p>Github is a platform for sharing, storing and managing code. Projects can be defined in a “repository” structure. The example that follows will look at repositories for a single user: Hadley Wickham.</p>
 <p>To read the data into R, we can use the <code>fromJSON()</code> function the <strong>jsonlite</strong> package. For this example, we can pull each page of results (in this case, we know <em>a priori</em> that there are two pages) and make sure to pass the <code>simplifyVector = FALSE</code> argument after the url.</p>
@@ -1203,22 +1206,22 @@ sapply(had, function(x) x$watchers)</code></pre>
 ##                      4                      0                      8 
 ##                whisker               wishlist 
 ##                      6                      0</code></pre>
-</section>
-<section id="exercise" class="level3">
+</div>
+<div id="exercise" class="section level3">
 <h3>Exercise</h3>
 <ul>
 <li>How many times are these repositories forked on average?</li>
 <li>Is Hadley a “site_admin” on any of these repositories?</li>
 <li>Try reading the data from Github again. Make sure to use the <code>simplifyVector = TRUE</code> argument instead. What happened?</li>
 </ul>
-</section>
-</section>
-<section id="other-methods" class="level2">
+</div>
+</div>
+<div id="other-methods" class="section level2">
 <h2>Other Methods</h2>
 <p>There are many, many ways to work with lists. What follows is a very brief nod to a few features from packages that help address list complexity.</p>
-<section id="rlist" class="level4">
+<div id="rlist" class="section level4">
 <h4>rlist</h4>
-<p><strong>rlist</strong> includes a set of very useful tools for list manipulation<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>.</p>
+<p><strong>rlist</strong> includes a set of very useful tools for list manipulation<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>.</p>
 <p>Some highlights:</p>
 <ul>
 <li><code>list.map()</code></li>
@@ -1233,37 +1236,37 @@ list.sort(had, forks_count)
 list.filter(had, size &gt; 50000)
 list.group(had, language)
 list.table(had, fork)</code></pre>
-</section>
-<section id="purrr" class="level4">
+</div>
+<div id="purrr" class="section level4">
 <h4>purrr</h4>
-<p>According to its author, Hadley Wickham, the <strong>purrr</strong> package, “… fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr”<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. This is especially useful for working with lists when using lists for <em>programmatic</em> purposes, like writing functions or packages. But there are applications for <em>interactive</em> list manipulation with <strong>purrr</strong> as well. The following are particularly helpful:</p>
+<p>According to its author, Hadley Wickham, the <strong>purrr</strong> package, “… fills in the missing pieces in R’s functional programming tools: it’s designed to make your pure functions purrr”<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>. This is especially useful for working with lists when using lists for <em>programmatic</em> purposes, like writing functions or packages. But there are applications for <em>interactive</em> list manipulation with <strong>purrr</strong> as well. The following are particularly helpful:</p>
 <ul>
 <li><code>map()</code>: allows functions to be passed to each element of the list (roughly analogous to <code>sapply()</code> or <code>lapply()</code>)</li>
 <li><code>flatten()</code>: simplifies a list to a vector (roughly analogous to <code>unlist()</code>)</li>
 <li><code>transpose()</code>: turns a list inside out (<code>transpose()</code> <em>then</em> <code>transpose()</code> will revert the list back to original state)</li>
 </ul>
-</section>
-</section>
-<section id="references" class="level2">
+</div>
+</div>
+<div id="references" class="section level2">
 <h2>References</h2>
-</section>
-<section class="footnotes">
+</div>
+<div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p><a href="http://r4ds.had.co.nz/lists.html" class="uri">http://r4ds.had.co.nz/lists.html</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p><a href="http://yihui.name/en/2010/10/on-the-gory-loops-in-r/" class="uri">http://yihui.name/en/2010/10/on-the-gory-loops-in-r/</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p><a href="http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions" class="uri">http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p><a href="https://developer.github.com/v3/" class="uri">https://developer.github.com/v3/</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
-<li id="fn5"><p><a href="https://en.wikipedia.org/wiki/Semi-structured_data" class="uri">https://en.wikipedia.org/wiki/Semi-structured_data</a><a href="#fnref5" class="footnote-back">↩</a></p></li>
-<li id="fn6"><p><a href="http://developers.squarespace.com/what-is-json/" class="uri">http://developers.squarespace.com/what-is-json/</a><a href="#fnref6" class="footnote-back">↩</a></p></li>
-<li id="fn7"><p><a href="https://renkun.me/rlist-tutorial/" class="uri">https://renkun.me/rlist-tutorial/</a><a href="#fnref7" class="footnote-back">↩</a></p></li>
-<li id="fn8"><p><a href="https://blog.rstudio.org/2015/09/29/purrr-0-1-0/" class="uri">https://blog.rstudio.org/2015/09/29/purrr-0-1-0/</a><a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p><a href="http://r4ds.had.co.nz/lists.html" class="uri">http://r4ds.had.co.nz/lists.html</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://yihui.name/en/2010/10/on-the-gory-loops-in-r/" class="uri">http://yihui.name/en/2010/10/on-the-gory-loops-in-r/</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions" class="uri">http://adv-r.had.co.nz/Functional-programming.html#anonymous-functions</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><a href="https://developer.github.com/v3/" class="uri">https://developer.github.com/v3/</a><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p><a href="https://en.wikipedia.org/wiki/Semi-structured_data" class="uri">https://en.wikipedia.org/wiki/Semi-structured_data</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p><a href="http://developers.squarespace.com/what-is-json/" class="uri">http://developers.squarespace.com/what-is-json/</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p><a href="https://renkun.me/rlist-tutorial/" class="uri">https://renkun.me/rlist-tutorial/</a><a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p><a href="https://blog.rstudio.org/2015/09/29/purrr-0-1-0/" class="uri">https://blog.rstudio.org/2015/09/29/purrr-0-1-0/</a><a href="#fnref8">↩</a></p></li>
 </ol>
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

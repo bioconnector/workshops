@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -463,9 +466,9 @@ div.tocify {
 
 <p>This section will cover fundamental concepts for creating effective data visualization and will introduce tools and techniques for visualizing large, high-dimensional data using R. We will review fundamental concepts for visually displaying quantitative information, such as using series of small multiples, avoiding “chart-junk,” and maximizing the data-ink ratio. We will cover the grammar of graphics (geoms, aesthetics, stats, and faceting), and using the ggplot2 package to create plots layer-by-layer.</p>
 <p>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a>, <a href="r-dataframes.html">data frames</a>, and <a href="r-dplyr-yeast.html">manipulating data with dplyr and <code>%&gt;%</code></a>.</p>
-<section id="review" class="level2">
+<div id="review" class="section level2">
 <h2>Review</h2>
-<section id="gapminder-data" class="level3">
+<div id="gapminder-data" class="section level3">
 <h3>Gapminder data</h3>
 <p>We’re going to work with a different dataset for this section. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download the <a href="data/gapminder.csv"><strong>gapminder.csv</strong> data by clicking here</a> or using the link above.</p>
 <p>Let’s read in the data to an object called <code>gm</code> and take a look with <code>View</code>. Remember, we need to load both the dplyr and readr packages for efficiently reading in and displaying this data.</p>
@@ -503,11 +506,11 @@ gm</code></pre>
 <li><code>gdpPercap</code>: GDP per capita</li>
 <li><code>lifeExp</code>: life expectancy</li>
 </ul>
-</section>
-<section id="dplyr-review" class="level3">
+</div>
+<div id="dplyr-review" class="section level3">
 <h3>dplyr review</h3>
 <p>The dplyr package gives you a handful of useful <strong>verbs</strong> for managing data. On their own they don’t do anything that base R can’t do. Here are some of the <em>single-table</em> verbs we’ll be working with in this lesson (single-table meaning that they only work on a single table – contrast that to <em>two-table</em> verbs used for joining data together). They all take a <code>data.frame</code> or <code>tbl</code> as their input for the first argument, and they all return a <code>data.frame</code> or <code>tbl</code> as output.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><code>filter()</code>: filters <em>rows</em> of the data where some condition is true</li>
 <li><code>select()</code>: selects out particular <em>columns</em> of interest</li>
 <li><code>mutate()</code>: adds new columns or changes values of existing columns</li>
@@ -516,7 +519,10 @@ gm</code></pre>
 <li><code>group_by()</code>: groups a data frame by one or more variable. Most data operations are useful done on groups defined by variables in the the dataset. The <code>group_by</code> function takes an existing data frame and converts it into a grouped data frame where <code>summarize()</code> operations are performed <em>by group</em>.</li>
 </ol>
 <p>Additionally, the <strong><code>%&gt;%</code></strong> operator allows you to “chain” operations together. Rather than nesting functions inside out, the <code>%&gt;%</code> operator allows you to write operations left-to-right, top-to-bottom. Let’s say we wanted to get the average life expectancy and GDP (not GDP per capita) for Asian countries for each year.</p>
-<p><img src="img/nest_vs_pipe_gm.png" /></p>
+<div class="figure">
+<img src="img/nest_vs_pipe_gm.png" />
+
+</div>
 <p>The <code>%&gt;%</code> would allow us to do this:</p>
 <pre class="r"><code>gm %&gt;%
   mutate(gdp=gdpPercap*pop) %&gt;%
@@ -546,9 +552,9 @@ gm</code></pre>
     continent==&quot;Asia&quot;), 
   year), 
 mean(lifeExp), mean(gdp))</code></pre>
-</section>
-</section>
-<section id="about-ggplot2" class="level2">
+</div>
+</div>
+<div id="about-ggplot2" class="section level2">
 <h2>About ggplot2</h2>
 <p><strong>ggplot2</strong> is a widely used R package that extends R’s visualization capabilities. It takes the hassle out of things like creating legends, mapping other variables to scales like color, or faceting plots into small multiples. We’ll learn about what all these things mean shortly.</p>
 <p><em>Where does the “gg” in ggplot2 come from?</em> The <strong>ggplot2</strong> package provides an R implementation of Leland Wilkinson’s <em>Grammar of Graphics</em> (1999). The <em>Grammar of Graphics</em> allows you to think beyond the garden variety plot types (e.g. scatterplot, barplot) and the consider the components that make up a plot or graphic, such as how data are represented on the plot (as lines, points, etc.), how variables are mapped to coordinates or plotting shape or color, what transformation or statistical summary is required, and so on.</p>
@@ -561,8 +567,8 @@ mean(lifeExp), mean(gdp))</code></pre>
 </ul>
 <p><em>First, a note about <code>qplot()</code>.</em> The <code>qplot()</code> function is a quick and dirty way of making ggplot2 plots. You might see it if you look for help with ggplot2, and it’s even covered extensively in the ggplot2 book. And if you’re used to making plots with built-in base graphics, the <code>qplot()</code> function will probably feel more familiar. But the sooner you abandon the <code>qplot()</code> syntax the sooner you’ll start to really understand ggplot2’s approach to building up plots layer by layer. So we’re not going to use it at all in this class.</p>
 <p>Finally, see <a href="help.html#ggplot2-resources">this course’s help page</a> for links to getting more help with ggplot2.</p>
-</section>
-<section id="plotting-bivariate-data-continuous-y-by-continuous-x" class="level2">
+</div>
+<div id="plotting-bivariate-data-continuous-y-by-continuous-x" class="section level2">
 <h2>Plotting bivariate data: continuous Y by continuous X</h2>
 <p>The <code>ggplot</code> function has two required arguments: the <em>data</em> used for creating the plot, and an <em>aesthetic</em> mapping to describe how variables in said data are mapped to things we can see on the plot.</p>
 <p>First let’s load the package:</p>
@@ -602,15 +608,13 @@ p + geom_point() + scale_x_log10()</code></pre>
 <li>Start with the <code>ggplot()</code> function.</li>
 <li>Use the gm data.</li>
 <li>Map <code>gdpPercap</code> to the x-axis and <code>lifeExp</code> to the y-axis.</li>
-<li>Add points to the plot
-<ul>
+<li>Add points to the plot</li>
 <li>Make the points size 3</li>
 <li>Map continent onto the aesthetics of the point</li>
-</ul></li>
 <li>Use a log<sub>10</sub> scale for the x-axis.</li>
 </ul>
 <hr />
-<section id="adding-layers" class="level3">
+<div id="adding-layers" class="section level3">
 <h3>Adding layers</h3>
 <p>Let’s add a fitted curve to the points. Recreate the plot in the <code>p</code> object if you need to.</p>
 <pre class="r"><code>p &lt;- ggplot(gm, aes(gdpPercap, lifeExp)) + scale_x_log10()
@@ -624,15 +628,15 @@ p + geom_point() + geom_smooth()</code></pre>
 <pre class="r"><code>p + aes(color = continent) + geom_point() + geom_smooth()
 p + aes(color = continent) + geom_point() + geom_smooth(se=F, lwd=2)</code></pre>
 <p><img src="r-viz-gapminder_files/figure-html/scatter_final-1.png" width="672" /></p>
-</section>
-<section id="faceting" class="level3">
+</div>
+<div id="faceting" class="section level3">
 <h3>Faceting</h3>
 <p>Facets display subsets of the data in different panels. There are a couple ways to do this, but <code>facet_wrap()</code> tries to sensibly wrap a series of facets into a 2-dimensional grid of small multiples. Just give it a formula specifying which variables to facet by. We can continue adding more layers, such as smoothing. If you have a look at the help for <code>?facet_wrap()</code> you’ll see that we can control how the wrapping is laid out.</p>
 <pre class="r"><code>p + geom_point() + facet_wrap(~continent)
 p + geom_point() + geom_smooth() + facet_wrap(~continent, ncol=1)</code></pre>
 <p><img src="r-viz-gapminder_files/figure-html/scatter_facet1-1.png" width="480" /></p>
-</section>
-<section id="saving-plots" class="level3">
+</div>
+<div id="saving-plots" class="section level3">
 <h3>Saving plots</h3>
 <p>There are a few ways to save ggplots. The quickest way, that works in an interactive session, is to use the <code>ggsave()</code> function. You give it a file name and by default it saves the last plot that was printed to the screen.</p>
 <pre class="r"><code>p + geom_point()
@@ -642,7 +646,7 @@ ggsave(file=&quot;myplot.png&quot;)</code></pre>
 ggsave(pfinal, file=&quot;myplot.pdf&quot;, width=5, height=15)</code></pre>
 <hr />
 <p><strong>EXERCISE 2</strong></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Make a scatter plot of <code>lifeExp</code> on the y-axis against <code>year</code> on the x.</li>
 <li>Make a series of small multiples faceting on continent.</li>
 <li>Add a fitted curve, smooth or lm, with and without facets.</li>
@@ -650,9 +654,9 @@ ggsave(pfinal, file=&quot;myplot.pdf&quot;, width=5, height=15)</code></pre>
 </ol>
 <p><img src="r-viz-gapminder_files/figure-html/spaghetti-1.png" width="768" /></p>
 <hr />
-</section>
-</section>
-<section id="plotting-bivariate-data-continuous-y-by-categorical-x" class="level2">
+</div>
+</div>
+<div id="plotting-bivariate-data-continuous-y-by-categorical-x" class="section level2">
 <h2>Plotting bivariate data: continuous Y by categorical X</h2>
 <p>With the last example we examined the relationship between a continuous Y variable against a continuous X variable. A scatter plot was the obvious kind of data visualization. But what if we wanted to visualize a continuous Y variable against a categorical X variable? We sort of saw what that looked like in the last exercise. <code>year</code> is a continuous variable, but in this dataset, it’s broken up into 5-year segments, so you could almost think of each year as a categorical variable. But a better example would be life expectancy against continent or country.</p>
 <p>First, let’s set up the basic plot:</p>
@@ -683,15 +687,15 @@ p + geom_violin() + geom_jitter(alpha=1/2)</code></pre>
 <p><img src="r-viz-gapminder_files/figure-html/boxplot-1.png" width="672" /></p>
 <hr />
 <p><strong>EXERCISE 3</strong></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Make a jittered strip plot of GDP per capita against continent.</li>
 <li>Make a box plot of GDP per capita against continent.</li>
 <li>Using a log<sub>10</sub> y-axis scale, overlay semitransparent jittered points on top of box plots, where outlying points are colored.</li>
 <li><strong>BONUS</strong>: Try to reorder the continents on the x-axis by GDP per capita. Why isn’t this working as expected? See <code>?reorder</code> for clues.</li>
 </ol>
 <hr />
-</section>
-<section id="plotting-univariate-continuous-data" class="level2">
+</div>
+<div id="plotting-univariate-continuous-data" class="section level2">
 <h2>Plotting univariate continuous data</h2>
 <p>What if we just wanted to visualize distribution of a single continuous variable? A histogram is the usual go-to visualization. Here we only have one aesthetic mapping instead of two.</p>
 <pre class="r"><code>p &lt;- ggplot(gm, aes(lifeExp))</code></pre>
@@ -719,7 +723,7 @@ p + geom_histogram(bins=200)</code></pre>
 <p><img src="r-viz-gapminder_files/figure-html/densityplot-1.png" width="672" /></p>
 <hr />
 <p><strong>EXERCISE 4</strong></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Plot a histogram of GDP Per Capita.</li>
 <li>Do the same but use a log<sub>10</sub> x-axis.</li>
 <li>Still on the log<sub>10</sub> x-axis scale, try a density plot mapping continent to the fill of each density distribution, and reduce the opacity.</li>
@@ -727,8 +731,8 @@ p + geom_histogram(bins=200)</code></pre>
 <li>Save this figure to a 6x10 PDF file.</li>
 </ol>
 <hr />
-</section>
-<section id="publication-ready-plots-themes" class="level2">
+</div>
+<div id="publication-ready-plots-themes" class="section level2">
 <h2>Publication-ready plots &amp; themes</h2>
 <p>Let’s make a plot we made earlier (life expectancy versus the log of GDP per capita with points colored by continent with lowess smooth curves overlaid without the standard error ribbon):</p>
 <pre class="r"><code>p &lt;- ggplot(gm, aes(gdpPercap, lifeExp)) 
@@ -760,16 +764,16 @@ p + theme_economist()
 p + theme_fivethirtyeight()
 p + theme_tufte()</code></pre>
 <p>Don’t forget - see <a href="help.html#ggplot2-resources">this course’s help page</a> for links to getting more help with ggplot2!</p>
-</section>
-<section id="homework" class="level2">
+</div>
+<div id="homework" class="section level2">
 <h2>Homework</h2>
 <p>Looking for more practice? <a href="r-viz-homework.html">Try this homework assignment</a>.</p>
 <hr />
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

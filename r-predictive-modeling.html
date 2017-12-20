@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -468,7 +471,7 @@ div.tocify {
 <!--
 **Slides**: [click here](slides/r-stats.html).
 -->
-<section id="predictive-modeling" class="level2">
+<div id="predictive-modeling" class="section level2">
 <h2>Predictive Modeling</h2>
 <p>Here we’re going to use some epidemiological data collected during an influenza A (H7N9) outbreak in China in 2013. Of 134 cases with data, 31 died, 46 recovered, but 57 cases do not have a recorded outcome. We’ll develop models capable of predicting death or recovery from the unlabeled cases. Along the way, we will:</p>
 <ul>
@@ -479,7 +482,7 @@ div.tocify {
 <li>We will develop models using several different approaches (Random Forest, stochastic gradient boosting, elastic net regularized logistic regression, <em>k</em>-nearest neighbor) by training and testing the models on the data where the outcome is known</li>
 <li>We will compare the performance of each of the models and apply the best to predict the outcome for cases where we didn’t know the outcome.</li>
 </ul>
-<section id="h7n9-outbreak-data" class="level3">
+<div id="h7n9-outbreak-data" class="section level3">
 <h3>H7N9 Outbreak Data</h3>
 <p>The data we’re using here is from the 2013 outbreak of <a href="https://en.wikipedia.org/wiki/Influenza_A_virus_subtype_H7N9">influenza A H7N9 in China</a>, analyzed by Kucharski et al., published in 2014.</p>
 <blockquote>
@@ -490,7 +493,7 @@ div.tocify {
 </blockquote>
 <p>The data is made available in the <a href="https://cran.r-project.org/web/packages/outbreaks/index.html">outbreaks</a> package, which is a collection of several simulated and real outbreak datasets, and has been very <a href="https://github.com/bioconnector/workshops/blame/master/r-predictive-flu.Rmd#L20">slightly modified</a> for use here. The analysis we’ll do here is inspired by and modified in part from a <a href="https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post">similar analysis by Shirin Glander</a>.</p>
 <p>There are two datasets available to download on the <a href="data.html">data</a> page:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><strong><a href="data/h7n9.csv">h7n9.csv</a></strong>: The original dataset. Contains the following variables, with lots of missing data throughout.
 <ul>
 <li><strong><code>case_id</code></strong>: the sample identifier</li>
@@ -518,8 +521,8 @@ div.tocify {
 <li><strong><code>Other</code></strong>: Indicator variable: 1 = the patient was from some other less common province.</li>
 </ul></li>
 </ol>
-</section>
-<section id="importing-h7n9-data" class="level3">
+</div>
+<div id="importing-h7n9-data" class="section level3">
 <h3>Importing H7N9 data</h3>
 <p>First, let’s load the packages we’ll need initially.</p>
 <pre class="r"><code>library(dplyr)
@@ -549,8 +552,8 @@ flu</code></pre>
 ##  9  case_9 2013-03-25           2013-03-25           NA    &lt;NA&gt;      m
 ## 10 case_10 2013-03-28           2013-04-01   2013-04-03   Death      m
 ## # ... with 124 more rows, and 2 more variables: age &lt;int&gt;, province &lt;chr&gt;</code></pre>
-</section>
-<section id="exploratory-data-analysis" class="level3">
+</div>
+<div id="exploratory-data-analysis" class="section level3">
 <h3>Exploratory data analysis</h3>
 <p>Let’s use ggplot2 to take a look at the data. Refer back to the <a href="r-viz-gapminder.html">ggplot2 class</a> if you need a refresher.</p>
 <p>The <strong>outcome</strong> variable is the thing we’re most interested in here – it’s the thing we want to eventually predict for the unknown cases. Let’s look at the distribution of that outcome variable (Death, Recover or unknown (NA)), by <strong>age</strong>. We’ll create a density distribution looking at age, with the fill of the distribution colored by outcome status.</p>
@@ -603,8 +606,8 @@ flugather %&gt;% arrange(case_id)</code></pre>
   geom_path(aes(group=case_id)) +
   facet_wrap(~province)</code></pre>
 <p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-7-1.png" width="960" /></p>
-</section>
-<section id="feature-extraction" class="level3">
+</div>
+<div id="feature-extraction" class="section level3">
 <h3>Feature Extraction</h3>
 <p>The variables in our data are useful for summary statistics, visualization, EDA, etc. But we need to do some <em>feature extraction</em> or variable recoding to get the most out of machine learning models.</p>
 <ul>
@@ -618,7 +621,7 @@ flugather %&gt;% arrange(case_id)</code></pre>
 <p>Let’s build up this pipeline one step at a time. If you want to skip ahead, you can simply read in the already extracted/recoded/imputed dataset at <a href="data/h7n9_analysisready.csv"><code>data/h7n9_analysisready.csv</code></a>.</p>
 <p>First, let’s make a backup of the original data in case we mess something up.</p>
 <pre class="r"><code>flu_orig &lt;- flu</code></pre>
-<section id="create-gender-hospitalization-indicators" class="level4">
+<div id="create-gender-hospitalization-indicators" class="section level4">
 <h4>Create gender / hospitalization indicators</h4>
 <p>Now let’s start recoding, one step at a time. First of all, when we mutate to add a new variable, we can put in a logical comparison to tell us whether a statement is TRUE or FALSE. For example, let’s look at the gender variable.</p>
 <pre class="r"><code>flu$gender</code></pre>
@@ -637,8 +640,8 @@ is.na(flu$date_hospitalization)
   mutate(male = gender==&quot;m&quot;) %&gt;% 
   select(-gender) %&gt;%
   mutate(hospital = !is.na(date_hospitalization))</code></pre>
-</section>
-<section id="convert-dates-to-days-to-___" class="level4">
+</div>
+<div id="convert-dates-to-days-to-___" class="section level4">
 <h4>Convert dates to “days to ___”</h4>
 <p>Let’s continue to add days from onset to hospitalization and days to outcome by subtracting one date from the other, and converting the value to numeric. We’ll also create an early outcome binary variable indicating whether the date of the outcome was less than the median, after removing missing variables. We’ll finally remove all the variables that start with “date.” Finally, we’ll use the <code>mutate_if</code> function, which takes a predicate and an action function. We’ll ask – <em>if</em> the variable is logical (TRUE/FALSE), turn it into an integer (1/0).</p>
 <pre class="r"><code># What&#39;s the median outcome date?
@@ -683,8 +686,8 @@ flu</code></pre>
 ## 10 case_10   Death    20 Shanghai     1        1                4
 ## # ... with 124 more rows, and 2 more variables: days_to_outcome &lt;dbl&gt;,
 ## #   early_outcome &lt;int&gt;</code></pre>
-</section>
-<section id="create-indicators-for-province" class="level4">
+</div>
+<div id="create-indicators-for-province" class="section level4">
 <h4>Create indicators for province</h4>
 <p>Now, there’s one more thing we want to do. Instead of a single “province” variable that has multiple levels, we want to do the dummy coding ourselves. When we ran regression models R handled this internally without our intervention. But we need to be explicit here. Here’s one way to do it.</p>
 <p>First, there’s a built-in function called <code>model.matrix</code> that creates dummy codes. You have to give it a formula like you do in linear models, but here, I give it a <code>~0+variable</code> syntax so that it doesn’t try to create an intercept. That is, instead of <em>k-1</em> dummy variables, it’ll create <em>k</em>. Try it.</p>
@@ -724,9 +727,9 @@ names(flu) &lt;- gsub(&quot;province&quot;, &quot;&quot;, names(flu))
 
 # Take a look
 flu</code></pre>
-</section>
-</section>
-<section id="imputation" class="level3">
+</div>
+</div>
+<div id="imputation" class="section level3">
 <h3>Imputation</h3>
 <p>We have a lot of missing data points throughout. Most of the data mining algorithms we’re going to use later can’t handle missing data, so observations with any missing data are excluded from the model completely. If we have a large dataset and only a few missing values, it’s probably better to exclude them and proceed. But since we’ve already got a pretty low number of observations, we need to try to impute missing values to maximize our use of the data we have.</p>
 <p>There are lots of different imputation approaches. An overly simplistic method is simply a mean or median imputation – you simply plug in the mean value for that column for the missing sample’s value. This leaves the mean unchanged (good) but artificially decreases the variance (not good). We’re going to use the <strong>mice</strong> package for imputation (Multivariate Imputation by Chained Equations). This package gives you functions that can impute continuous, binary, and ordered/unordered categorical data, imputing each incomplete variable with a separate model. It tries to account for relations in the data and uncertainty about those relationships. The methods are described in the paper.</p>
@@ -785,8 +788,8 @@ fluimp</code></pre>
 ## #   Jiangsu &lt;dbl&gt;, Other &lt;dbl&gt;, Shanghai &lt;dbl&gt;, Zhejiang &lt;dbl&gt;</code></pre>
 <p>At this point we’re almost ready to do some predictive modeling! If you didn’t make it this far and you just want to read in the analysis ready dataset, you can do that too.</p>
 <pre class="r"><code>fluimp &lt;- read_csv(&quot;data/h7n9_analysisready.csv&quot;)</code></pre>
-</section>
-<section id="the-caret-package" class="level3">
+</div>
+<div id="the-caret-package" class="section level3">
 <h3>The caret package</h3>
 <p>We’re going to use the <strong>caret</strong> package for building and testing predictive models using a variety of different data mining / ML algorithms. The package was published in JSS in 2008. Max Kuhn’s <a href="https://www.r-project.org/conferences/useR-2013/Tutorials/kuhn/user_caret_2up.pdf">slides from the 2013 useR! conference</a> are also a great resource, as is the <a href="https://cran.r-project.org/web/packages/caret/vignettes/caret.pdf">caret package vignette</a>, and the <a href="http://topepo.github.io/caret/">detailed e-book documentation</a>.</p>
 <blockquote>
@@ -799,33 +802,35 @@ fluimp</code></pre>
 <li>choose the “optimal” model across these parameters</li>
 <li>estimate model performance from a training set</li>
 </ul>
-<section id="models-available-in-caret" class="level4">
+<div id="models-available-in-caret" class="section level4">
 <h4>Models available in caret</h4>
 <p>First you have to choose a specific type of model or algorithm. Currently there are <strong>238</strong> different algorithms implemented in caret. Caret provides the interface to the method, but you still need the external package installed. For example, we’ll be fitting a Random Forest model, and for that we’ll need the <a href="https://cran.r-project.org/package=randomForest">randomForest</a> package installed. You can see all the methods that you can deploy by looking at the help for train.</p>
 <pre class="r"><code>library(caret)
 ?train</code></pre>
 <p>From here, click on the link to see the <a href="http://topepo.github.io/caret/available-models.html">available models</a> or <a href="http://topepo.github.io/caret/train-models-by-tag.html">models by tag</a>. From here you can search for particular models by name. We’re going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages <a href="https://cran.r-project.org/package=randomForest">randomForest</a>, <a href="https://cran.r-project.org/package=gbm">gbm</a>, <a href="https://cran.r-project.org/package=kknn">kknn</a>, and <a href="https://cran.r-project.org/package=glmnet">glmnet</a>, respectively.</p>
 <p>Each of the models may have one or more <em>tuning parameters</em> – some value or option you can set to tweak how the algorithm develops. In k-nearest neighbors, we can try different values of <em>k</em>. With random forest, we can set the <span class="math inline">\(m_{\text{try}}\)</span> option – the algorithm will select <span class="math inline">\(m_{\text{try}}\)</span> number of predictors to attempt a split for classification. Caret attempts to do this using a procedure like this:</p>
-<figure>
-<img src="img/caret-pseudocode.png" alt="The caret model training algorithm. Image from the caret paper." /><figcaption><em>The caret model training algorithm. Image from the caret paper.</em></figcaption>
-</figure>
+<div class="figure">
+<img src="img/caret-pseudocode.png" alt="The caret model training algorithm. Image from the caret paper." />
+<p class="caption"><em>The caret model training algorithm. Image from the caret paper.</em></p>
+</div>
 <p>That is, it sweeps through each possible parameter you can set for the particular type of model you choose, and uses some kind of resampling scheme with your training data, fitting the model on a subset and testing on the held-out samples.</p>
-</section>
-<section id="resampling" class="level4">
+</div>
+<div id="resampling" class="section level4">
 <h4>Resampling</h4>
 <p>The default resampling scheme caret uses is the <a href="https://en.wikipedia.org/wiki/Bootstrapping_(statistics)">bootstrap</a>. Bootstrapping takes a random sample <em>with replacement</em> from your data that’s the same size of the original data. Samples might be selected more than once, and some aren’t selected at all. On average, each sample has a ~63.2% chance of showing up at least once in a bootstrap sample. Some samples won’t show up at all, and these <em>held out</em> samples are the ones that are used for testing the performance of the trained model. You repeat this process many times (e.g., 25, 100, etc) to get an average performance estimate on unseen data. Here’s what it looks like in practice.</p>
-<figure>
-<img src="img/caret-bootstrap.png" alt="Bootstrapping schematic. Image from Max Kuhn’s 2013 useR! talk." /><figcaption><em>Bootstrapping schematic. Image from Max Kuhn’s 2013 useR! talk.</em></figcaption>
-</figure>
+<div class="figure">
+<img src="img/caret-bootstrap.png" alt="Bootstrapping schematic. Image from Max Kuhn’s 2013 useR! talk." />
+<p class="caption"><em>Bootstrapping schematic. Image from Max Kuhn’s 2013 useR! talk.</em></p>
+</div>
 <p>Many alternatives exist. Another popular approach is cross-validation. Here, a subset of your data (e.g., 4/5ths, or 80%) is used for training, and the remaining 1/5th or 20% is used for performance assessment. You slide the cross-validation interval over and use the next 4/5ths for training and 1/5th for testing. You do this again for all 5ths of the data. You can optionally repeat this process many times (<em>repeated cross-validation</em>) to get an average cross validation prediction accuracy for a given model and set of tuning parameters.</p>
 <p>The <code>trainControl</code> option in the <code>train</code> function controls this, and you can learn more about this under the <a href="http://topepo.github.io/caret/model-training-and-tuning.html#basic-parameter-tuning">Basic Parameter Tuning</a> section of the caret documentation.</p>
-</section>
-</section>
-<section id="model-training" class="level3">
+</div>
+</div>
+<div id="model-training" class="section level3">
 <h3>Model training</h3>
 <p>Let’s try it out! If you didn’t make it through the data preprocessing steps and you just want to read in the analysis ready dataset, you can do this:</p>
 <pre class="r"><code>fluimp &lt;- read_csv(&quot;data/h7n9_analysisready.csv&quot;)</code></pre>
-<section id="splitting-data-into-known-and-unknown-outcomes" class="level4">
+<div id="splitting-data-into-known-and-unknown-outcomes" class="section level4">
 <h4>Splitting data into known and unknown outcomes</h4>
 <p>Before we continue, let’s split the dataset into samples where we know the outcome, and those where we don’t. The unknown samples will be the ones where <code>is.na(outcome)</code> is TRUE. So you can use a filter statement.</p>
 <pre class="r"><code># Run the pipeline successfully first before you reassign!
@@ -840,8 +845,8 @@ known &lt;- fluimp %&gt;%
   filter(!is.na(outcome)) %&gt;%
   select(-case_id)
 known</code></pre>
-</section>
-<section id="a-note-on-reproducibility-and-set.seed" class="level4">
+</div>
+<div id="a-note-on-reproducibility-and-set.seed" class="section level4">
 <h4>A note on reproducibility and <code>set.seed()</code></h4>
 <p>When we train a model using resampling, that sampling is going to happen <em>pseudo</em>-randomly. Try running this function which generates five numbers from a random uniform distribution between 0 and 1.</p>
 <pre class="r"><code>runif(5)</code></pre>
@@ -849,8 +854,8 @@ known</code></pre>
 <pre class="r"><code>set.seed(22908)
 runif(5)</code></pre>
 <p>Eventually I’m going to compare different models to each other, so I want to set the random number seed generator to the same value for each model so the same random bootstrap samples are identical across models.</p>
-</section>
-<section id="random-forest" class="level4">
+</div>
+<div id="random-forest" class="section level4">
 <h4>Random Forest</h4>
 <p>Let’s fit a <a href="https://en.wikipedia.org/wiki/Random_forest">random forest</a> model. See the help for <code>?train</code> and click on the link therein to see what abbreviations correspond to which model. First set the random number seed generator to some number, e.g., 8382, that we’ll use for all other models we make. The model forumula here takes the know data, and the <code>responseVar~.</code> syntax says “predict <code>responseVar</code> using every other variable in the data.” Finally, notice how when we call <code>train()</code> from the <strong>caret</strong> package using “rf” as the type of model, it automatically loads the <strong><a href="https://cran.r-project.org/package=randomForest">randomForest</a></strong> package that you installed. If you didn’t have it installed, it would probably ask you to install it first.</p>
 <pre class="r"><code># Set the random number seed generator
@@ -884,7 +889,7 @@ modrf</code></pre>
 <blockquote>
 <p><strong><em>A bit about random forests.</em></strong> Random forests are an ensemble learning approach based on classification trees. The CART (classification and regression tree) method searches through all available predictors to try to find a value of a single variable that splits the data into two groups by minimizing the impurity of the outcome between the two groups. The process is repeated over and over again until a hierarchical (tree) structure is created. But trees don’t have great performance (prediction accuracy) compared to other models. Small changes in the data can drastically affect the structure of the tree.</p>
 <p>Tree algorithms are improved by ensemble approaches - instead of growing a single tree, grow many trees and aggregate (majority vote or averaging) the predictions made by the ensemble. The random forest algorithm is essentially:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>From the training data of <em>n</em> samples, draw a bootstrap sample of size <em>n</em>.</li>
 <li>For each bootstrap sample, grow a classification tree, but with a small modification compared to the traditional algorithm: instead of selecting from all possible predictor variables to form a split, choose the best split among a randomly selected subset of <span class="math inline">\(m_{\text{try}}\)</span> predictors. Here, <span class="math inline">\(m_{\text{try}}\)</span> is the only tuning parameter. The trees are grown to their maximum size and not “pruned” back.</li>
 <li>Repeat the steps agove until a large number of trees is grown.</li>
@@ -911,8 +916,8 @@ modrf</code></pre>
 <p>You can also pass that whole thing to <code>plot()</code>, or wrap the statement in <code>plot()</code>, to see a graphical representation.</p>
 <pre class="r"><code>varImp(modrf, scale=TRUE) %&gt;% plot()</code></pre>
 <p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
-</section>
-<section id="stochastic-gradient-boosting" class="level4">
+</div>
+<div id="stochastic-gradient-boosting" class="section level4">
 <h4>Stochastic Gradient Boosting</h4>
 <p>Let’s try a different method, <a href="https://en.wikipedia.org/wiki/Gradient_boosting">stochastic gradient boosting</a>, which uses a different method for building an ensemble of classification trees (see <a href="https://quantdare.com/what-is-the-difference-between-bagging-and-boosting/">this post</a> for a discussion of bagging vs boosting). This requires the <strong><a href="https://cran.r-project.org/package=gbm">gbm</a></strong> package. Again, set the random seed generator.</p>
 <pre class="r"><code>set.seed(8382)
@@ -950,8 +955,8 @@ modgbm</code></pre>
 <pre class="r"><code>library(gbm) # needed because new version of caret doesn&#39;t load
 varImp(modgbm, scale=TRUE)
 varImp(modgbm, scale=TRUE) %&gt;% plot()</code></pre>
-</section>
-<section id="model-comparison-random-forest-vs-gradient-boosting" class="level4">
+</div>
+<div id="model-comparison-random-forest-vs-gradient-boosting" class="section level4">
 <h4>Model comparison: Random Forest vs Gradient Boosting</h4>
 <p>Let’s compare those two models. Because the random seed was set to the same number (8382), the bootstrap resamples were identical across each model. Let’s directly compare the results for the best models from each method.</p>
 <pre class="r"><code>modsum &lt;- resamples(list(gbm=modgbm, rf=modrf))
@@ -973,8 +978,8 @@ summary(modsum)</code></pre>
 ## gbm 0.0249   0.152  0.220 0.272   0.404 0.574    0
 ## rf  0.0000   0.255  0.378 0.390   0.578 0.724    0</code></pre>
 <p>It appears that random forest is doing much better in terms of both accuracy and kappa. Let’s train a few other types of models.</p>
-</section>
-<section id="elastic-net-regularized-logistic-regression" class="level4">
+</div>
+<div id="elastic-net-regularized-logistic-regression" class="section level4">
 <h4>Elastic net regularized logistic regression</h4>
 <p><a href="https://en.wikipedia.org/wiki/Elastic_net_regularization">Elastic net regularization</a> is a method that combines both the <a href="https://en.wikipedia.org/wiki/Lasso_(statistics)">lasso</a> and <a href="https://en.wikipedia.org/wiki/Tikhonov_regularization">ridge</a> methods of reguarizing a model. <a href="https://en.wikipedia.org/wiki/Regularization_(mathematics)">Regularization</a> is a method for <em>penalizing</em> a model as it gains complexity with more predictors in an attempt to avoid overfitting. You’ll need the <strong><a href="https://cran.r-project.org/package=glmnet">glmnet</a></strong> package for this.</p>
 <pre class="r"><code>set.seed(8382)
@@ -1004,8 +1009,8 @@ modglmnet</code></pre>
 ## 
 ## Accuracy was used to select the optimal model using  the largest value.
 ## The final values used for the model were alpha = 1 and lambda = 0.0391.</code></pre>
-</section>
-<section id="k-nearest-neighbor" class="level4">
+</div>
+<div id="k-nearest-neighbor" class="section level4">
 <h4>k-nearest neighbor</h4>
 <p><a href="https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm">k-nearest neighbor</a> attempts to assign samples to their closest labeled neighbors in high-dimensional space. You’ll need the <strong><a href="https://cran.r-project.org/package=kknn">kknn</a></strong> package for this.</p>
 <pre class="r"><code>set.seed(8382)
@@ -1033,8 +1038,8 @@ modknn</code></pre>
 ## Accuracy was used to select the optimal model using  the largest value.
 ## The final values used for the model were kmax = 9, distance = 2 and
 ##  kernel = optimal.</code></pre>
-</section>
-<section id="compare-all-the-models" class="level4">
+</div>
+<div id="compare-all-the-models" class="section level4">
 <h4>Compare all the models</h4>
 <p>Now let’s look at the performance characteristics for the best performing model across all four types of models we produced. It still looks like random forest is coming through as the winner.</p>
 <pre class="r"><code>modsum &lt;- resamples(list(gbm=modgbm, rf=modrf, glmnet=modglmnet, knn=modknn))
@@ -1062,9 +1067,9 @@ summary(modsum)</code></pre>
 <p>The <code>bwplot()</code> function can take this model summary object and visualize it.</p>
 <pre class="r"><code>bwplot(modsum)</code></pre>
 <p><img src="r-predictive-modeling_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
-</section>
-</section>
-<section id="prediction-on-unknown-samples" class="level3">
+</div>
+</div>
+<div id="prediction-on-unknown-samples" class="section level3">
 <h3>Prediction on unknown samples</h3>
 <p>Once we have a model trained it’s fairly simple to predict the class of the unknown samples. Take a look at the unknown data again:</p>
 <pre class="r"><code>unknown</code></pre>
@@ -1107,11 +1112,11 @@ summary(modsum)</code></pre>
 ## 5 0.704   0.296
 ## 6 0.962   0.038</code></pre>
 <p>You could also imagine going further to get the prediction probabilities out of each type of model we made. You could add up the prediction probabilities for Death and Recovery for each individual across model types, and then compute a ratio. If across all the models that ratio is, for example, 2x in favor of death, you could predict death, or if it’s 2x in favor of recovery, you predict recover, and if it’s in between, you might call it “uncertain.” This lets you not only reap the advantages of ensemble learning within a single algorithm, but also lets you use information across a variety of different algorithm types.</p>
-</section>
-</section>
-<section id="forecasting" class="level2">
+</div>
+</div>
+<div id="forecasting" class="section level2">
 <h2>Forecasting</h2>
-<section id="the-prophet-package" class="level3">
+<div id="the-prophet-package" class="section level3">
 <h3>The Prophet Package</h3>
 <p>Forecasting is a common data science task that helps with things like capacity planning, goal setting, anomaly detection, and resource use projection. Forecasting can involve complex models, where overly simplistic models can be brittle and can be too inflexible to incorporate useful assumptions about the underlying data.</p>
 <p>Recently, the data science team at Facebook released as open-source a tool they developed for forecasting, called <strong>prophet</strong>, as both an R and python package.</p>
@@ -1139,16 +1144,17 @@ summary(modsum)</code></pre>
 <li>Trends that are non-linear growth curves, where a trend hits a natural limit or saturates</li>
 </ul>
 <p>These use cases are optimized for business forecasting problems encountered at Facebook, but many of the characteristics here apply well to other kinds of forecasting problems. Further, while the default settings can produce fairly high-quality forecasts, if the results aren’t satisfactory, you aren’t stuck with a completely automated model you can’t change. The prophet package allows you to tweak forecasts using different parameters. The process is summarized in the figure below.</p>
-<figure>
-<img src="img/prophet.png" alt="Schematic view of the analyst-in-the-loop approach to forecasting at scale, which best makes use of human and automated tasks. Image from the Prophet preprint noted above." /><figcaption><em>Schematic view of the analyst-in-the-loop approach to forecasting at scale, which best makes use of human and automated tasks. Image from the Prophet preprint noted above.</em></figcaption>
-</figure>
+<div class="figure">
+<img src="img/prophet.png" alt="Schematic view of the analyst-in-the-loop approach to forecasting at scale, which best makes use of human and automated tasks. Image from the Prophet preprint noted above." />
+<p class="caption"><em>Schematic view of the analyst-in-the-loop approach to forecasting at scale, which best makes use of human and automated tasks. Image from the Prophet preprint noted above.</em></p>
+</div>
 <p><strong><a href="https://cran.r-project.org/package=prophet">Prophet</a></strong> is a good replacement for the <strong><a href="https://cran.r-project.org/package=forecast">forecast</a></strong> package because:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><strong>Prophet makes it easy.</strong> The forecast package offers many different techniques, each with their own strengths, weaknesses, and tuning parameters. While the choice of parameter settings and model specification gives the expert user great flexibility, the downside is that choosing the wrong parameters as a non-expert can give you poor results. Prophet’s defaults work pretty well.</li>
 <li><strong>Prophet’s forecasts are intuitively customizable.</strong> You can choose smoothing parameters for seasonality that adjust how closely you fit historical cycles, and you can adjust how agressively to follow historical trend changes. You can manually specify the upper limit on growth curves, which allows for you to supplement the automatic forecast with your own prior information about how your forecast will grow (or decline). You can also specify irregular events or time points (e.g., election day, the Super Bowl, holiday travel times, etc) that can result in outlying data points.</li>
 </ol>
 <p>The prophet procedure is essentially a regression model with some additional components:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>A piecewise linear or logistic growth curve trend. Prophet automatically detects changes in trends by selecting changepoints from the data.</li>
 <li>A yearly seasonal component modeled using Fourier series.</li>
 <li>A weekly seasonal component using dummy variables.</li>
@@ -1158,8 +1164,8 @@ summary(modsum)</code></pre>
 <blockquote>
 <p>Taylor SJ, Letham B. (2017) Forecasting at scale. <em>PeerJ Preprints</em> 5:e3190v2 <a href="https://doi.org/10.7287/peerj.preprints.3190v2" class="uri">https://doi.org/10.7287/peerj.preprints.3190v2</a></p>
 </blockquote>
-</section>
-<section id="cdc-ili-time-series-data" class="level3">
+</div>
+<div id="cdc-ili-time-series-data" class="section level3">
 <h3>CDC ILI time series data</h3>
 <p>Here we’re going to use historical flu tracking data from the CDC’s U.S. Outpatient <a href="https://wwwn.cdc.gov/ilinet/">Influenza-like Illness Surveillance Network</a> along with data from the <a href="https://gis.cdc.gov/grasp/fluview/mortality.html">National Center for Health Statistics (NCHS) Mortality Surveillance System</a>. This contains ILI totals from CDC and flu + pneumonia death data from NCHS through the end of October 2017. It’s the <strong><a href="data/ilinet.csv">ilinet.csv</a></strong> file on the <a href="data.html">data</a> page. Let’s read it in, then take a look. Notice that <code>week_start</code> was automatically read in as a date data type. What you see as <code>2003-01-06</code> is actually represented internally as a date, not a character.</p>
 <pre class="r"><code># Read in the ILI data.
@@ -1190,8 +1196,8 @@ ili</code></pre>
 ## 4 2017-10-16    13195         966259        21            2441      41150
 ## 5 2017-10-23    14555         945007        16            2256      37616
 ## 6 2017-10-30    15494         934670        24            1894      34084</code></pre>
-</section>
-<section id="forecasting-with-prophet" class="level3">
+</div>
+<div id="forecasting-with-prophet" class="section level3">
 <h3>Forecasting with prophet</h3>
 <p>Let’s load the prophet library then take a look at the help for <code>?prophet</code>.</p>
 <pre class="r"><code>library(prophet)
@@ -1234,12 +1240,12 @@ plot(pmod, forecast) + ggtitle(&quot;Five year pneumonia death forecast&quot;)</
 <hr />
 <hr />
 <p><small><strong><em>Attribution</em>:</strong> Course material inspired by and/or modified in part from <a href="https://shiring.github.io/machine_learning/2016/11/27/flu_outcome_ML_post">Shirin Glander’s blog</a> and <a href="https://facebook.github.io/prophet/">Facebook’s Data Science team</a>.</p>
-</section>
-</section>
+</div>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

@@ -92,8 +92,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -419,6 +419,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -479,7 +482,7 @@ div.tocify {
 
 
 <p>(<em>Refer back to the <a href="r-viz-gapminder.html">Advanced Data Visualization lesson</a>).</em></p>
-<section id="key-concepts" class="level3">
+<div id="key-concepts" class="section level3">
 <h3>Key Concepts</h3>
 <blockquote>
 <ul>
@@ -491,11 +494,11 @@ div.tocify {
 <li>ggsave</li>
 </ul>
 </blockquote>
-</section>
-<section id="getting-started" class="level3">
+</div>
+<div id="getting-started" class="section level3">
 <h3>Getting Started</h3>
-<p>The data we’re going to look at is cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
-<ol type="1">
+<p>The data we’re going to look at is cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
+<ol style="list-style-type: decimal">
 <li><strong>Raise or lower their expression in response to growth rate</strong>. Growth-rate dependent expression patterns can tell us a lot about cell cycle control, and how the cell responds to stress. The authors found that expression of &gt;25% of all yeast genes is linearly correlated with growth rate, independent of the limiting nutrient. They also found that the subset of negatively growth-correlated genes is enriched for peroxisomal functions, and positively correlated genes mainly encode ribosomal functions.</li>
 <li><strong>Respond differently when different nutrients are being limited</strong>. If you see particular genes that respond very differently when a nutrient is sharply restricted, these genes might be involved in the transport or metabolism of that specific nutrient.</li>
 </ol>
@@ -525,27 +528,27 @@ ydat</code></pre>
 ##  9   EDC3         YEL015W  Glucose  0.05      -0.24
 ## 10   VPS5         YOR069W  Glucose  0.05      -0.16
 ## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
-</section>
-<section id="problem-set" class="level3">
+</div>
+<div id="problem-set" class="section level3">
 <h3>Problem Set</h3>
 <p>Follow the prompts and use <strong>ggplot2</strong> to reproduce the plots below.</p>
-<section id="part-1" class="level4">
+<div id="part-1" class="section level4">
 <h4>Part 1</h4>
 <p>We can start by taking a look at the distribution of the expression values.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Plot a histogram of the expression variable, and set the bin number equal to 100.</li>
 </ol>
 <pre class="r"><code>ggplot(ydat, aes(x = expression)) +
     geom_histogram(bins = 100) </code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Check the distribution of each nutrient in the data set by adjusting the fill aesthetic. Use the same bin number for this histogram.</li>
 </ol>
 <pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
     geom_histogram(bins = 100)</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <p>Wow. That’s ugly. Might be a candidate for <a href="http://accidental-art.tumblr.com/">accidental aRt</a> but not very helpful for our analysis.</p>
-<ol start="3" type="1">
+<ol start="3" style="list-style-type: decimal">
 <li>Now split off the same histogram into a faceted display with 3 columns.</li>
 </ol>
 <pre class="r"><code>ggplot(ydat, aes(x = expression, fill = nutrient)) +
@@ -553,12 +556,12 @@ ydat</code></pre>
     facet_wrap(~ nutrient, ncol = 3)</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>The basic exploratory process above confirms that the overall distribution (as well each distribution by nutrient) is normal.</p>
-</section>
-<section id="part-2" class="level4">
+</div>
+<div id="part-2" class="section level4">
 <h4>Part 2</h4>
 <p>Let’s compare the genes with the highest and lowest average expression values.</p>
 <p>We can figure out which these are using some familiar logic:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Take the original <em>ydat</em> data frame …</li>
 <li>Then <em>group by</em> symbol …</li>
 <li>Then <em>summarize</em> mean of all expression values for that symbol …</li>
@@ -577,7 +580,7 @@ ydat</code></pre>
 ## 1   HXT3    4.01
 ## 2   HXT6   -2.68</code></pre>
 <p>The output tells us that the gene with the highest mean expression is <em>HXT3</em>, while the gene with the lowest mean expression is <em>HXT6</em>.</p>
-<ol start="4" type="1">
+<ol start="4" style="list-style-type: decimal">
 <li>Subset the data to only include these genes, and create a stripplot that has expression values as “jittered” points on the y-axis and the gene symbols the x-axis.</li>
 </ol>
 <blockquote>
@@ -590,18 +593,18 @@ ydat</code></pre>
 ggplot(gene_exp, aes(x = symbol, y = expression)) +
     geom_jitter(width = 0.1)</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<ol start="5" type="1">
+<ol start="5" style="list-style-type: decimal">
 <li>Now map each observation to its nutrient by color and adjust the size of the points to be 2.</li>
 </ol>
 <pre class="r"><code>ggplot(gene_exp, aes(x = symbol, y = expression)) +
     geom_jitter(aes(col = nutrient), width = 0.1, size = 2)</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>Although these two genes are on opposite ends of the distribution of average expression values, they both seem to express similar amounts when Glucose is the restricted nutrient.</p>
-</section>
-<section id="part-3" class="level4">
+</div>
+<div id="part-3" class="section level4">
 <h4>Part 3</h4>
 <p>Now let’s try to make something that has a little bit more of a polished look.</p>
-<ol start="6" type="1">
+<ol start="6" style="list-style-type: decimal">
 <li>Using <strong>dplyr</strong> logic, create a data frame that has the mean expression values for all combinations of rate and nutrient (<em>hint</em>: use <code>group_by()</code> and <code>summarize()</code>). Create a plot of this data with rate on the x-axis and mean expression on the y-axis and lines colored by nutrient.</li>
 </ol>
 <pre class="r"><code>nutrient_rates &lt;-
@@ -611,14 +614,14 @@ ggplot(gene_exp, aes(x = symbol, y = expression)) +
 
 ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + geom_line(aes(col=nutrient))</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
-<ol start="7" type="1">
+<ol start="7" style="list-style-type: decimal">
 <li>Add black dotted line (lty=3) that represents the smoothed mean of expression across all combinations of nutrients and rates.</li>
 </ol>
 <pre class="r"><code>ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
   geom_line(aes(col=nutrient), lty=1) + 
   geom_smooth(col = &quot;black&quot;, lty=3, se = FALSE) </code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<ol start="8" type="1">
+<ol start="8" style="list-style-type: decimal">
 <li>Change the scale to include breaks for <em>all</em> of the rates.</li>
 </ol>
 <blockquote>
@@ -629,7 +632,7 @@ ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + geom_line(aes(col=nutrient
   geom_smooth(col = &quot;black&quot;, se = FALSE, lty=3) + 
   scale_x_continuous(breaks = nutrient_rates$rate)</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<ol start="9" type="1">
+<ol start="9" style="list-style-type: decimal">
 <li>By default <code>ggplot()</code> will name the x and y axes with names of their respective variables. You might want to apply more meaningful labels. Change the name of the x-axis to “Rate”, the name of the y-axis to “Mean Expression” and the plot title to “Mean Expression By Rate (Brauer)”</li>
 </ol>
 <blockquote>
@@ -642,7 +645,7 @@ ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + geom_line(aes(col=nutrient
   xlab(&quot;Rate&quot;) + ylab(&quot;Mean Expression&quot;) + 
   ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;)</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<ol start="10" type="1">
+<ol start="10" style="list-style-type: decimal">
 <li>Add a theme from the <strong>ggthemes</strong> package. The plot below is based on Edward Tufte’s book <em>The Visual Display of Quantitative Information</em>. Choose a theme that you like, but choose wisely – some of these themes will override other adjustments you’ve made to your plot above, including axis labels.</li>
 </ol>
 <blockquote>
@@ -660,7 +663,7 @@ ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) +
   ggtitle(&quot;Mean Expression By Rate (Brauer)&quot;) + 
   theme_tufte()</code></pre>
 <p><img src="r-viz-homework_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<ol start="11" type="1">
+<ol start="11" style="list-style-type: decimal">
 <li>The last step is to save the plot you’ve created. Write your plot to a 10 X 6 PDF using a <strong>ggplot2</strong> function.</li>
 </ol>
 <pre class="r"><code>p &lt;- ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) + 
@@ -672,12 +675,12 @@ ggplot(nutrient_rates, aes(x = rate, y =  meanexp)) +
   theme_tufte()
 
 ggsave(p, filename = &quot;plot.pdf&quot;, width = 10, height = 6)</code></pre>
-</section>
-</section>
+</div>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

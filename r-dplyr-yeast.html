@@ -91,8 +91,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -410,6 +410,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -464,18 +467,18 @@ div.tocify {
 <p>Data analysis involves a large amount of <a href="http://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html">janitor work</a> – munging and cleaning data to facilitate downstream data analysis. This lesson demonstrates techniques for advanced data manipulation and analysis with the split-apply-combine strategy. We will use the dplyr package in R to effectively manipulate and conditionally compute summary statistics over subsets of a “big” dataset containing many observations.</p>
 <p><strong>This lesson assumes a <a href="r-basics.html">basic familiarity with R</a> and <a href="r-dataframes.html">data frames</a>.</strong></p>
 <p><strong>Recommended reading:</strong> Review the <a href="http://r4ds.had.co.nz/tibbles.html#introduction-4"><em>Introduction</em> (10.1)</a> and <a href="http://r4ds.had.co.nz/tibbles.html#tibbles-vs.data.frame"><em>Tibbles vs. data.frame</em> (10.3)</a> sections of the <a href="http://r4ds.had.co.nz/tibbles.html"><strong><em>R for Data Science</em> book</strong></a>. We will initially be using the <code>read_*</code> functions from the <a href="http://readr.tidyverse.org/"><strong>readr</strong> package</a>. These functions load data into a <em>tibble</em> instead of R’s traditional data.frame. Tibbles are data frames, but they tweak some older behaviors to make life a little easier. These sections explain the few key small differences between traditional data.frames and tibbles.</p>
-<section id="review" class="level2">
+<div id="review" class="section level2">
 <h2>Review</h2>
-<section id="our-data" class="level3">
+<div id="our-data" class="section level3">
 <h3>Our data</h3>
-<p>We’re going to use the yeast gene expression dataset <a href="r-dataframes.html#our-data">described on the data frames lesson</a>. This is a cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
-<ol type="1">
+<p>We’re going to use the yeast gene expression dataset <a href="r-dataframes.html#our-data">described on the data frames lesson</a>. This is a cleaned up version of a gene expression dataset from <a href="http://www.ncbi.nlm.nih.gov/pubmed/17959824">Brauer et al. Coordination of Growth Rate, Cell Cycle, Stress Response, and Metabolic Activity in Yeast (2008) <em>Mol Biol Cell</em> 19:352-367</a>. This data is from a gene expression microarray, and in this paper the authors are examining the relationship between growth rate and gene expression in yeast cultures limited by one of six different nutrients (glucose, leucine, ammonium, sulfate, phosphate, uracil). If you give yeast a rich media loaded with nutrients except restrict the supply of a <em>single</em> nutrient, you can control the growth rate to any rate you choose. By starving yeast of specific nutrients you can find genes that:</p>
+<ol style="list-style-type: decimal">
 <li><strong>Raise or lower their expression in response to growth rate</strong>. Growth-rate dependent expression patterns can tell us a lot about cell cycle control, and how the cell responds to stress. The authors found that expression of &gt;25% of all yeast genes is linearly correlated with growth rate, independent of the limiting nutrient. They also found that the subset of negatively growth-correlated genes is enriched for peroxisomal functions, and positively correlated genes mainly encode ribosomal functions.</li>
 <li><strong>Respond differently when different nutrients are being limited</strong>. If you see particular genes that respond very differently when a nutrient is sharply restricted, these genes might be involved in the transport or metabolism of that specific nutrient.</li>
 </ol>
 <p>You can download the cleaned up version of the data at <a href="data.html">the link above</a>. The file is called <a href="data/brauer2007_tidy.csv"><strong>brauer2007_tidy.csv</strong></a>. Later on we’ll actually start with the original raw data (minimally processed) and manipulate it so that we can make it more amenable for analysis.</p>
-</section>
-<section id="reading-in-data" class="level3">
+</div>
+<div id="reading-in-data" class="section level3">
 <h3>Reading in data</h3>
 <p>We need to load both the dplyr and readr packages for efficiently reading in and displaying this data. We’re also going to use many other functions from the dplyr package. Make sure you have these packages installed as described on the <a href="setup.html">setup page</a>.</p>
 <pre class="r"><code># Load packages
@@ -504,9 +507,9 @@ ydat
 ##  9   EDC3         YEL015W  Glucose  0.05      -0.24
 ## 10   VPS5         YOR069W  Glucose  0.05      -0.16
 ## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
-</section>
-</section>
-<section id="the-dplyr-package" class="level2">
+</div>
+</div>
+<div id="the-dplyr-package" class="section level2">
 <h2>The dplyr package</h2>
 <p>The <a href="https://github.com/hadley/dplyr">dplyr package</a> is a relatively new R package that makes data manipulation fast and easy. It imports functionality from another package called magrittr that allows you to chain commands together into a pipeline that will completely change the way you write R code such that you’re writing code the way you’re thinking about the problem.</p>
 <p>When you read in data with the readr package (<code>read_csv()</code>) and you had the dplyr package loaded already, the data frame takes on this “special” class of data frames called a <code>tbl</code> (pronounced “tibble”), which you can see with <code>class(ydat)</code>. If you have other “regular” data frames in your workspace, the <code>as_tibble()</code> function will convert it into the special dplyr <code>tbl</code> that displays nicely (e.g.: <code>iris &lt;- as_tibble(iris)</code>). You don’t have to turn all your data frame objects into tibbles, but it does make working with large datasets a bit easier.</p>
@@ -515,11 +518,11 @@ ydat
 <li><code>options(tibble.print_max = n, tibble.print_min = m)</code>: if there are more than <em>n</em> rows, print only the first <em>m</em> rows. Use <code>options(tibble.print_max = Inf)</code> to always show all rows.</li>
 <li><code>options(tibble.width = Inf)</code> will always print all columns, regardless of the width of the screen.</li>
 </ul>
-</section>
-<section id="dplyr-verbs" class="level2">
+</div>
+<div id="dplyr-verbs" class="section level2">
 <h2>dplyr verbs</h2>
 <p>The dplyr package gives you a handful of useful <strong>verbs</strong> for managing data. On their own they don’t do anything that base R can’t do. Here are some of the <em>single-table</em> verbs we’ll be working with in this lesson (single-table meaning that they only work on a single table – contrast that to <em>two-table</em> verbs used for joining data together, which we’ll cover in a later lesson).</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li><code>filter()</code></li>
 <li><code>select()</code></li>
 <li><code>mutate()</code></li>
@@ -528,10 +531,10 @@ ydat
 <li><code>group_by()</code></li>
 </ol>
 <p>They all take a data frame or tibble as their input for the first argument, and they all return a data frame or tibble as output.</p>
-<section id="filter" class="level3">
+<div id="filter" class="section level3">
 <h3>filter()</h3>
 <p>If you want to filter <strong>rows</strong> of the data where some condition is true, use the <code>filter()</code> function.</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>The first argument is the data frame you want to filter, e.g. <code>filter(mydata, ...</code>.</li>
 <li>The second argument is a condition you must satisfy, e.g. <code>filter(ydat, symbol == &quot;LEU1&quot;)</code>. If you want to satisfy <em>all</em> of multiple conditions, you can use the “and” operator, <code>&amp;</code>. The “or” operator <code>|</code> (the pipe character, usually shift-backslash) will return a subset that meet <em>any</em> of the conditions.</li>
 </ol>
@@ -638,15 +641,15 @@ filter(ydat, symbol==&quot;LEU1&quot;) %&gt;%
 <p>Look closely at that! LEU1 is <em>highly expressed</em> when starved of leucine because the cell has to synthesize its own! And as the amount of leucine in the environment (the growth <em>rate</em>) increases, the cell can worry less about synthesizing leucine, so LEU1 expression goes back down. Consequently the cell can devote more energy into other functions, and we see other genes’ expression very slightly raising.</p>
 <hr />
 <p><strong>EXERCISE 1</strong></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>Display the data where the gene ontology biological process (the <code>bp</code> variable) is “leucine biosynthesis” (case-sensitive) <em>and</em> the limiting nutrient was Leucine. (Answer should return a 24-by-7 data frame – 4 genes <span class="math inline">\(\times\)</span> 6 growth rates).</li>
 <li>Gene/rate combinations had high expression (in the top 1% of expressed genes)? <em>Hint:</em> see <code>?quantile</code> and try <code>quantile(ydat$expression, probs=.99)</code> to see the expression value which is higher than 99% of all the data, then <code>filter()</code> based on that. Try wrapping your answer with a <code>View()</code> function so you can see the whole thing. What does it look like those genes are doing? Answer should return a 1971-by-7 data frame.</li>
 </ol>
 <hr />
-<section id="aside-writing-data-to-file" class="level4">
+<div id="aside-writing-data-to-file" class="section level4">
 <h4>Aside: Writing Data to File</h4>
 <p>What we’ve done up to this point is read in data from a file (<code>read_csv(...)</code>), and assigning that to an object in our <em>workspace</em> (<code>ydat &lt;- ...</code>). When we run operations like <code>filter()</code> on our data, consider two things:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>The <code>ydat</code> object in our workspace is not being modified directly. That is, we can <code>filter(ydat, ...)</code>, and a result is returned to the screen, but <code>ydat</code> remains the same. This effect is similar to what we demonstrated in our first session.</li>
 </ol>
 <pre class="r"><code># Assign the value &#39;50&#39; to the weight object.
@@ -665,7 +668,7 @@ weight
 weight &lt;- weight+10
 # Weight is now 60
 weight</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>More importantly, the <em>data file on disk</em> (<code>data/brauer2007_tidy.csv</code>) is <em>never</em> modified. No matter what we do to ydat, the file is never modified. If we want to <em>save</em> the result of an operation to a file on disk, we can assign the result of an operation to an object, and <code>write_csv</code> that object to disk. See the help for <code>?write_csv</code> (note, <code>write_csv()</code> with an underscore is part of the <strong>readr</strong> package – not to be confused with the built-in <code>write.csv()</code> function).</li>
 </ol>
 <pre class="r"><code># What&#39;s the result of this filter operation?
@@ -677,9 +680,9 @@ leudat &lt;- filter(ydat, nutrient==&quot;Leucine&quot; &amp; bp==&quot;leucine 
 # Write that out to disk
 write_csv(leudat, &quot;leucinedata.csv&quot;)</code></pre>
 <p>Note that this is different than saving your <em>entire workspace to an Rdata file</em>, which would contain all the objects we’ve created (weight, ydat, leudat, etc).</p>
-</section>
-</section>
-<section id="select" class="level3">
+</div>
+</div>
+<div id="select" class="section level3">
 <h3>select()</h3>
 <p>The <code>filter()</code> function allows you to return only certain <em>rows</em> matching a condition. The <code>select()</code> function returns only certain <em>columns</em>. The first argument is the data, and subsequent arguments are the columns you want.</p>
 <pre class="r"><code># Select just the symbol and systematic_name
@@ -775,8 +778,8 @@ ydat</code></pre>
 ##  9   EDC3         YEL015W  Glucose  0.05      -0.24
 ## 10   VPS5         YOR069W  Glucose  0.05      -0.16
 ## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
-</section>
-<section id="mutate" class="level3">
+</div>
+<div id="mutate" class="section level3">
 <h3>mutate()</h3>
 <p>The <code>mutate()</code> function adds new columns to the data. Remember, it doesn’t actually modify the data frame you’re operating on, and the result is transient unless you assign it to a new object or reassign it back to itself (generally, not always a good practice).</p>
 <p>The expression level reported here is the <span class="math inline">\(log_2\)</span> of the sample signal divided by the signal in the reference channel, where the reference RNA for all samples was taken from the glucose-limited chemostat grown at a dilution rate of 0.25 <span class="math inline">\(h^{-1}\)</span>. Let’s mutate this data to add a new variable called “signal” that’s the actual raw signal ratio instead of the log-transformed signal.</p>
@@ -803,8 +806,8 @@ mutate(nogo, signal=2^expression, sigsr=sqrt(signal)) %&gt;%
   gather(unit, value, expression:sigsr) %&gt;% 
   ggplot(aes(value)) + geom_histogram(bins=100) + facet_wrap(~unit, scales=&quot;free&quot;)</code></pre>
 <p><img src="r-dplyr-yeast_files/figure-html/demo_plot_expression_units-1.png" width="960" /></p>
-</section>
-<section id="arrange" class="level3">
+</div>
+<div id="arrange" class="section level3">
 <h3>arrange()</h3>
 <p>The <code>arrange()</code> function does what it sounds like. It takes a data frame or tbl and arranges (or sorts) by column(s) of interest. The first argument is the data, and subsequent arguments are columns to sort on. Use the <code>desc()</code> function to arrange by descending.</p>
 <pre class="r"><code># arrange by gene symbol
@@ -857,14 +860,14 @@ arrange(ydat, desc(expression))</code></pre>
 ## # ... with 198,420 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
 <hr />
 <p><strong>EXERCISE 2</strong></p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>First, re-run the command you used above to filter the data for genes involved in the “leucine biosynthesis” biological process <em>and</em> where the limiting nutrient is Leucine.</li>
 <li>Wrap this entire filtered result with a call to <code>arrange()</code> where you’ll arrange the result of #1 by the gene symbol.</li>
 <li>Wrap this entire result in a <code>View()</code> statement so you can see the entire result.</li>
 </ol>
 <hr />
-</section>
-<section id="summarize" class="level3">
+</div>
+<div id="summarize" class="section level3">
 <h3>summarize()</h3>
 <p>The <code>summarize()</code> function summarizes multiple values to a single value. On its own the <code>summarize()</code> function doesn’t seem to be all that useful. The dplyr package provides a few convenience functions called <code>n()</code> and <code>n_distinct()</code> that tell you the number of observations or the number of distinct values of a particular variable.</p>
 <p>Notice that summarize takes a data frame and returns a data frame. In this case it’s a 1x1 data frame with a single row and a single column. The name of the column, by default is whatever the expression was used to summarize the data. This usually isn’t pretty, and if we wanted to work with this resulting data frame later on, we’d want to name that returned value something easier to deal with.</p>
@@ -898,8 +901,8 @@ summarize(ydat, n_distinct(symbol))</code></pre>
 ##   `n_distinct(symbol)`
 ##                  &lt;int&gt;
 ## 1                 4211</code></pre>
-</section>
-<section id="group_by" class="level3">
+</div>
+<div id="group_by" class="section level3">
 <h3>group_by()</h3>
 <p>We saw that <code>summarize()</code> isn’t that useful on its own. Neither is <code>group_by()</code> All this does is takes an existing data frame and coverts it into a grouped data frame where operations are performed by group.</p>
 <pre class="r"><code>ydat</code></pre>
@@ -979,11 +982,11 @@ summarize(group_by(ydat, nutrient), r=cor(rate, expression))</code></pre>
 ## 4 Phosphate -0.0194
 ## 5   Sulfate -0.0166
 ## 6    Uracil -0.0353</code></pre>
-</section>
-</section>
-<section id="the-pipe" class="level2">
+</div>
+</div>
+<div id="the-pipe" class="section level2">
 <h2>The pipe: <strong>%&gt;%</strong></h2>
-<section id="how-works" class="level3">
+<div id="how-works" class="section level3">
 <h3>How %&gt;% works</h3>
 <p>This is where things get awesome. The dplyr package imports functionality from the <a href="https://github.com/smbache/magrittr">magrittr</a> package that lets you <em>pipe</em> the output of one function to the input of another, so you can avoid nesting functions. It looks like this: <strong><code>%&gt;%</code></strong>. You don’t have to load the magrittr package to use it since dplyr imports its functionality when you load the dplyr package.</p>
 <p>Here’s the simplest way to use it. Remember the <code>tail()</code> function. It expects a data frame as input, and the next argument is the number of lines to print. These two commands are identical:</p>
@@ -1038,12 +1041,12 @@ summarize(group_by(ydat, nutrient), r=cor(rate, expression))</code></pre>
 ##  9   EDC3         YEL015W  Leucine  0.05       0.12
 ## 10   VPS5         YOR069W  Leucine  0.05      -0.20
 ## # ... with 33,168 more rows, and 2 more variables: bp &lt;chr&gt;, mf &lt;chr&gt;</code></pre>
-</section>
-<section id="nesting-versus" class="level3">
+</div>
+<div id="nesting-versus" class="section level3">
 <h3>Nesting versus %&gt;%</h3>
 <p>So what?</p>
 <p>Now, think about this for a minute. What if we wanted to get the correlation between the growth rate and expression separately for each limiting nutrient only for genes in the leucine biosynthesis pathway, and return a sorted list of those correlation coeffients rounded to two digits? Mentally we would do something like this:</p>
-<ol start="0" type="1">
+<ol start="0" style="list-style-type: decimal">
 <li>Take the <code>ydat</code> dataset</li>
 <li><em>then</em> <code>filter()</code> it for genes in the leucine biosynthesis pathway</li>
 <li><em>then</em> <code>group_by()</code> the limiting nutrient</li>
@@ -1083,9 +1086,10 @@ r)</code></pre>
 ## 5 Phosphate  0.44
 ## 6    Uracil  0.58</code></pre>
 <p>Now compare that with the mental process of what you’re actually trying to accomplish. The way you would do this without pipes is completely inside-out and backwards from the way you express in words and in thought what you want to do. The pipe operator <code>%&gt;%</code> allows you to pass the output data frame from one function to the input data frame to another function.</p>
-<figure>
-<img src="img/nest_vs_pipe.jpg" alt="Nesting functions versus piping" /><figcaption>Nesting functions versus piping</figcaption>
-</figure>
+<div class="figure">
+<img src="img/nest_vs_pipe.jpg" alt="Nesting functions versus piping" />
+<p class="caption">Nesting functions versus piping</p>
+</div>
 <p>This is how we would do that in code. It’s as simple as replacing the word “then” in words to the symbol <code>%&gt;%</code> in code. (There’s a keyboard shortcut that I’ll use frequently to insert the <code>%&gt;%</code> sequence – you can see what it is by clicking the <em>Tools</em> menu in RStudio, then selecting <em>Keyboard Shortcut Help</em>. On Mac, it’s CMD-SHIFT-M.)</p>
 <pre class="r"><code>ydat %&gt;% 
   filter(bp==&quot;leucine biosynthesis&quot;) %&gt;%
@@ -1102,8 +1106,8 @@ r)</code></pre>
 ## 4   Sulfate  0.33
 ## 5 Phosphate  0.44
 ## 6    Uracil  0.58</code></pre>
-</section>
-<section id="piping-exercises" class="level3">
+</div>
+<div id="piping-exercises" class="section level3">
 <h3>Piping exercises</h3>
 <p><strong>EXERCISE 3</strong></p>
 <p>Here’s a warm-up round. Try the following.</p>
@@ -1280,17 +1284,17 @@ r)</code></pre>
 ## 4 Phosphate telomerase-independent telomere maintenance -0.90      7  0.90
 ## 5    Uracil telomerase-independent telomere maintenance -0.81      7  0.81
 ## 6   Sulfate                   translational elongation*  0.79      5  0.79</code></pre>
-</section>
-</section>
-<section id="homework" class="level2">
+</div>
+</div>
+<div id="homework" class="section level2">
 <h2>Homework</h2>
 <p>Looking for more practice? <a href="r-dplyr-homework.html">Try this homework assignment</a>.</p>
 <hr />
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--

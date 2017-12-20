@@ -92,8 +92,8 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="styles.css" type="text/css" />
 
 </head>
 
@@ -419,6 +419,9 @@ div.tocify {
     <li>
       <a href="r-survival.html">Survival Analysis with TCGA Data</a>
     </li>
+    <li>
+      <a href="r-predictive-modeling.html">Predictive Analytics &amp; Forecasting Influenza</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">--- Homework ---</li>
     <li>
@@ -479,7 +482,7 @@ div.tocify {
 
 
 <p>(<em>Refer back to the <a href="r-dplyr-yeast.html">Advanced Data Manipulation lesson</a>).</em></p>
-<section id="key-concepts" class="level3">
+<div id="key-concepts" class="section level3">
 <h3>Key Concepts</h3>
 <blockquote>
 <ul>
@@ -493,8 +496,8 @@ div.tocify {
 <li>window functions</li>
 </ul>
 </blockquote>
-</section>
-<section id="getting-started" class="level3">
+</div>
+<div id="getting-started" class="section level3">
 <h3>Getting Started</h3>
 <p>We’re going to work with a different dataset for the homework here. It’s a <a href="https://github.com/jennybc/gapminder">cleaned-up excerpt</a> from the <a href="http://www.gapminder.org/data/">Gapminder data</a>. Download the <a href="data/gapminder.csv"><strong>gapminder.csv</strong> data by clicking here</a> or using the link above. Download it, and save it in a <code>data/</code> subfolder of the project directory where you can access it easily from R.</p>
 <p>Load the <strong>dplyr</strong> and <strong>readr</strong> packages, and read the gapminder data into R using the <code>read_csv()</code> function (n.b. <code>read_csv()</code> is <em>not</em> the same as <code>read.csv()</code>). Assign the data to an object called <code>gm</code>. Run <code>gm</code> to display it.</p>
@@ -523,11 +526,11 @@ gm</code></pre>
 ##  9 Afghanistan      Asia  1992  41.674 16317921  649.3414
 ## 10 Afghanistan      Asia  1997  41.763 22227415  635.3414
 ## # ... with 1,694 more rows</code></pre>
-</section>
-<section id="problem-set" class="level3">
+</div>
+<div id="problem-set" class="section level3">
 <h3>Problem set</h3>
 <p>Use <strong>dplyr</strong> functions to address the following questions:</p>
-<ol type="1">
+<ol style="list-style-type: decimal">
 <li>How many unique countries are represented per continent? (<em>Hint:</em> <code>group_by</code> then summarize with a call to <code>n_distinct(...)</code>).</li>
 </ol>
 <pre class="r"><code>gm %&gt;% 
@@ -541,7 +544,7 @@ gm</code></pre>
 ## 3      Asia    33
 ## 4    Europe    30
 ## 5   Oceania     2</code></pre>
-<ol start="2" type="1">
+<ol start="2" style="list-style-type: decimal">
 <li>Which European nation had the lowest GDP per capita in 1997? (<em>Hint:</em> filter, arrange, <code>head(n=1)</code>)</li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -552,7 +555,7 @@ gm</code></pre>
 ##   country continent  year lifeExp     pop gdpPercap
 ##     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
 ## 1 Albania    Europe  1997   72.95 3428038  3193.055</code></pre>
-<ol start="3" type="1">
+<ol start="3" style="list-style-type: decimal">
 <li>According to the data available, what was the average life expectancy across each continent in the 1980s? (<em>Hint:</em> filter, group_by, summarize)</li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -567,7 +570,7 @@ gm</code></pre>
 ## 3      Asia     63.73456
 ## 4    Europe     73.22428
 ## 5   Oceania     74.80500</code></pre>
-<ol start="4" type="1">
+<ol start="4" style="list-style-type: decimal">
 <li>What 5 countries have the highest total GDP over all years combined? (<em>Hint:</em> GDP per capita is simply GDP divided by the total population size. To get GDP back, you’d mutate to calculate GDP as the product of GDP per capita times the population size. Mutate, group_by, summarize, arrange, <code>head(n=5)</code>)</li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -584,7 +587,7 @@ gm</code></pre>
 ## 3          China 2.039549e+13
 ## 4        Germany 1.949689e+13
 ## 5 United Kingdom 1.328937e+13</code></pre>
-<ol start="5" type="1">
+<ol start="5" style="list-style-type: decimal">
 <li>What countries and years had life expectancies of <em>at least</em> 80 years? <em>N.b. only output the columns of interest: country, life expectancy and year (in that order).</em></li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -604,7 +607,7 @@ gm</code></pre>
 ##  9          Iceland  81.757  2007
 ## 10           Israel  80.745  2007
 ## # ... with 12 more rows</code></pre>
-<ol start="6" type="1">
+<ol start="6" style="list-style-type: decimal">
 <li>What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?</li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -625,7 +628,7 @@ gm</code></pre>
 ##  8         Israel 0.9884894
 ##  9        Denmark 0.9870896
 ## 10      Australia 0.9864457</code></pre>
-<ol start="7" type="1">
+<ol start="7" style="list-style-type: decimal">
 <li>Which combinations of continent (besides Asia) and year have the highest average population across all countries? <em>N.b. your output should include all results sorted by highest average population</em>. (<em>Hint:</em> filter where continent <code>!=</code> Asia, group by two variables, summarize, then arrange.)</li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -648,7 +651,7 @@ gm</code></pre>
 ##  9    Europe  2007 19536618
 ## 10    Europe  2002 19274129
 ## # ... with 38 more rows</code></pre>
-<ol start="8" type="1">
+<ol start="8" style="list-style-type: decimal">
 <li>Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data?</li>
 </ol>
 <pre class="r"><code>gm %&gt;%
@@ -662,7 +665,7 @@ gm</code></pre>
 ## 1 Sao Tome and Principe 45906.14
 ## 2               Iceland 48541.68
 ## 3            Montenegro 99737.94</code></pre>
-<ol start="9" type="1">
+<ol start="9" style="list-style-type: decimal">
 <li><strong><em>Bonus!</em></strong> Which observations indicate that the population of a country has <em>decreased</em> from the previous year <strong>and</strong> the life expectancy has <em>increased</em> from the previous year? See <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html">the vignette on window functions</a>.</li>
 </ol>
 <pre class="r"><code>gm %&gt;% 
@@ -684,11 +687,11 @@ gm</code></pre>
 ##  9         Czech Republic    Europe  2007  76.486 10228744 22833.3085
 ## 10      Equatorial Guinea    Africa  1977  42.024   192675   958.5668
 ## # ... with 26 more rows</code></pre>
-</section>
+</div>
 
 <div class="footer">
 This work is licensed under the  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0 Creative Commons License</a>.<br>
-For more information, visit <a href="http://www.bioconnector.virginia.edu/" target="_blank">bioconnector.virginia.edu</a>.<br>
+For more information, visit <a href="http://data.hsl.virginia.edu/" target="_blank">data.hsl.virginia.edu</a>.<br>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter fa-lg"></i></a>&nbsp;
 <a href="https://github.com/bioconnector/workshops" target="_blank"><i class="fa fa-github fa-lg"></i></a>&nbsp;
 <!--
