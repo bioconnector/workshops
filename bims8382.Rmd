@@ -4,22 +4,54 @@ title: "BIMS8382 Syllabus"
 
 ## General Information
 
-**Lead Instructor:** Stephen Turner, PhD
+### Logistics
 
-**Co-instructor:** VP Nagraj
+**_Instructors:_**
 
-**When:**  Spring 2018 (more info TBA).
-<!--
+**Stephen Turner**&nbsp;
+<a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address"><i class="fa fa-envelope"></i></a>
+<a href="https://med.virginia.edu/phs/faculty-and-staff-directory/stephen-d-turner-ph-d/" target="_blank"><i class="fa fa-phone"></i></a>
+<a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter"></i></a>
+<a href="https://github.com/stephenturner/" target="_blank"><i class="fa fa-github"></i></a>
+<a href="http://www.gettinggeneticsdone.com/" target="_blank"><i class="fa fa-rss"></i></a>  
+<small>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.</small>
+
+**VP Nagraj**&nbsp;
+<a href="http://www.google.com/recaptcha/mailhide/d?k=01Gesfil1uO8eSVk2xxZE8-A==&amp;c=R-N4My3ieH1gcdMc4cSsEUXhOynxA_zK0XQWKoyNLO0=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\x3d01Gesfil1uO8eSVk2xxZE8-A\x3d\x3d\x26c\x3dR-N4My3ieH1gcdMc4cSsEUXhOynxA_zK0XQWKoyNLO0\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address"><i class="fa fa-envelope"></i></a>  
+<small>Pete Nagraj teaches, consults and contributes to scientific programming and data analysis projects in [UVA SOMRC](https://somrc.virginia.edu). With expertise in R and Python, he's been active in package development and a variety of open-source collaborations.</small>
+
+**_Where:_** BIMS Education Center (McKim Hall)
+
+**_When:_**  
 Spring 2017 Module S1  
-Feb 13 - Mar 27, 2017  
+Feb 12 - Mar 26, 2017 <small>_(No exam -- final class period will be held March 26.)_</small>  
 2:00pm - 5:00pm  
--->
 
-**Where:** TBA
 
-<!-- **Where:** BIMS Education Center (McKim Hall) -->
+### About this course
+
+This course introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, and culminates with analyses of real experimental NGS data using R and Bioconductor packages.
+
+**This is not a _"Tool X"_ or _"Software Y"_ class.** I want you to take away from this series the ability to use an extremely powerful scientific computing environment (R) to do many of the things that you'll do _across study designs and disciplines_ -- managing, manipulating, visualizing, and analyzing large, sometimes high-dimensional data. Whether that data is gene expression data from yeast, microbial genomics data from _B. pertussis_, public health data from [Gapminder](http://www.gapminder.org/), RNA-seq data from humans, influenza outbreak data, movie preference trends from Netflix, or truck routing data from FedEx, you'll need the same computational know-how and data literacy to do the same kinds of basic tasks in each. I might show you how to use specific tools here and there (DESeq2 for RNA-seq analysis, ggtree for drawing phylogenetic trees, etc.), but these are not important -- you probably won't be using the same specific software or methods 10 years from now, but you'll still use the same underlying data and computational foundation. **That** is the point of this series -- to arm you with a basic foundation, and more importantly, to **enable you to figure out how to use _this tool_ or _that tool_ on your own**, when you need to.
+
+**_This is not a statistics class._** There is a short lesson on [essential statistics using R](r-stats.html) but this 3-hour lesson offers neither a comprehensive background on underlying theory nor in-depth coverage of implementation strategies using R. Some general knowledge of statistics and study design is helpful, but isn't required for this course.
+
+
+
+## Setup
+
+**[Click the <i class="fa fa-cog"></i> Setup](setup.html) link on the navbar at the top and review all the information and follow the instructions _prior to the workshop_**.
+
+You should set aside a couple hours to download, install, and test all the software needed for the course. All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have much time for troubleshooting software installation issues during class. [Email us](people.html) if you're having difficulty.
+
+After installing and testing the software we'll be using, please download the data as instructed, and review the required reading _prior to class_.
+
+
+
 
 ## Course Schedule
+
+_(Subject to change)_
 
 ### Week 1: Intro to R
 
@@ -45,50 +77,49 @@ This session will provide hands-on instruction and exercises covering basic stat
 
 This session will provide hands-on instruction and exercises covering survival analysis using R. The data for parts of this session will come from The Cancer Genome Atlas (TCGA), where we will also cover programmatic access to TCGA through Bioconductor.
 
-### Week 7: Introduction to RNA-seq Data Analysis
+<!-- ### Week 6-7b: Visualizing and Annotating Phylogenetic Trees -->
 
-This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results.
+<!-- This lesson demonstrates how to use R and ggtree, an extension of the ggplot2 package, to visualize and annotate phylogenetic trees. This lesson does _not_ cover methods and software for _generating_ phylogenetic trees, nor does it it cover _interpreting_ phylogenies. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson. -->
 
+
+<!-- ### Week 6-7c: Introduction to RNA-seq Data Analysis -->
+
+<!-- This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results. -->
+
+### Week 7: Predictive Modeling & Forecasting
+
+This session will provide hands-on instruction for using machine learning algorithms to predict a disease outcome. We will cover data cleaning, feature extraction, imputation, and using a variety of models to try to predict disease outcome. We will use resampling strategies to assess the performance of predictive modeling procedures such as Random Forest, stochastic gradient boosting, elastic net regularized regression (LASSO), and k-nearest neighbors. We will also demonstrate demonstrate how to _forecast_ future trends given historical infectious disease surveillance data using methodology that accounts for seasonality and nonlinearity. 
 
 ## FAQ
 
-### What's this class all about? 
-
-This class introduces methods, tools, and software for reproducibly managing, manipulating, analyzing, and visualizing large-scale biomedical data. Specifically, the course introduces the R statistical computing environment and packages for manipulating and visualizing high-dimensional data, covers strategies for reproducible research, essential statistics and survival analysis, and culminates with analyses of real experimental NGS data using R and Bioconductor packages.
-
-
-**This is not a _"Tool X"_ or _"Software Y"_ class.** I want you to take away from this series the ability to use an extremely powerful scientific computing environment (R) to do many of the things that you'll do _across study designs and disciplines_ -- managing, manipulating, visualizing, and analyzing large, sometimes high-dimensional data. Whether that data is gene expression data from yeast, microbial genomics data from _B. pertussis_, public health data from [Gapminder](http://www.gapminder.org/), RNA-seq data from humans, movie preference trends from Netflix, or truck routing data from FedEx, you'll need the same computational know-how and data literacy to do the same kinds of basic tasks in each. I might show you how to use specific tools here and there (DESeq2 for RNA-seq analysis, ggtree for drawing phylogenetic trees, etc.), but these are not important -- you probably won't be using the same specific software or methods 10 years from now, but you'll still use the same underlying data and computational foundation. **That** is the point of this series -- to arm you with a basic foundation, and more importantly, to **enable you to figure out how to use _this tool_ or _that tool_ on your own**, when you need to.
-
-**_This is not a statistics class._** There is a short lesson on [essential statistics using R](r-stats.html) but this 3-hour lesson offers neither a comprehensive background on underlying theory nor in-depth coverage of implementation strategies using R. Some general knowledge of statistics and study design is helpful, but isn't required for this course.
-
-
 ### What are the pre-requisites?
 
-_There are none!_ This class doesn't assume any knowledge of programming or using a command-line interface, but if you've ever had any experience here, the content won't come as so much of a shock. But _don't panic._ Command-line interfaces and programming languages like R are _incredibly powerful_ and will be utterly transformative on your research. There's a learning curve, and it's near-vertical in the beginning, but it's surmountable and the payoff is worth it! Some general knowledge of statistics and study design is helpful, but isn't strictly required.
+_There are none!_ [(But there is some required reading and software setup required before the course)](setup.html). This course doesn't assume any knowledge of programming or using a command-line interface, but if you've ever had any experience here, the content won't come as so much of a shock. But _don't panic._ Command-line interfaces and programming languages like R are _incredibly powerful_ and will be utterly transformative on your research. There's a learning curve, and it's near-vertical in the beginning, but it's surmountable and the payoff is worth it! 
 
+
+### Do I need a laptop?
+
+**YES.** You must have access to a computer on which you can install software. The class will be a mix of lecture, discussion, but primarily live coding. You must bring your laptop to the course every day. Bring your charging cable also. Please follow the [setup instructions](setup.html) prior to the workshop.
+
+### Where can I get more help?
+
+Glad you asked! [See here](help.html).
+
+
+<!-- 
 ### Can I audit?
 
 Yes! However, **_you will be expected to attend every class meeting, participate in coding exercises during class, and complete any and all assignments_**, just as if you are taking the course for credit. 
 
 Please [email Stephen Turner](people.html) if you'd like to audit. Instructions for signing up to audit will be forthcoming.
 
-<!-- 
 **_UPDATE Feb 9 2016_**: The class is currently full.
 
 [Click here to register to request to audit](https://docs.google.com/forms/d/1tHO-X4DupnHgIEsUei0K3kX5_UfLRK-y2KfxmxC6Ux0/viewform). The first day of the course is Monday, Feb 15, 2016. One week prior to the course starting, I will allow anyone who's requested to audit into the course, giving priority to people registering for credit. There are still plenty of seats open, so good chances you'll be able to get in.
 -->
 
-### Where do I get additional help?
 
-Glad you asked! [See here](help.html).
 
-### Do I need a laptop?
-
-**YES.** You must have access to a computer on which you can install software. The class will be a mix of lecture, discussion, but primarily live coding. You must bring your laptop to the course every day. Bring your charging cable also.
-
-## Software requirements
-
-All the software we're using in class is open-source and freely available online. This setup must be completed _prior to class_, as we will not have time for troubleshooting software installation issues during class. See the [setup instructions](setup.html).
 
 <!--
 , and follow all instructions under the major headings for:
