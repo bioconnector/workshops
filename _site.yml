@@ -49,7 +49,7 @@ navbar:
         - text: "RNA-seq Data Analysis"
           href: r-rnaseq-airway.html
         - text: "Predictive Analytics & Forecasting Influenza"
-#          href: r-flu.html
+#          href: r-predictive-modeling.html
 
 #    - text: "THRIV"
 #      icon: fa-university
