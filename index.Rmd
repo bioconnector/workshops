@@ -1,9 +1,13 @@
 ---
-title: "Bioconnector Workshops & Courses"
+title: "UVA HSL Research & Data Courses"
 output: 
   html_document:
     toc: yes
 ---
+
+### BIMS 8382
+
+[BIMS 8382](bims8382.html) is a graduate class that will run in Spring 2018. Please see the [BIMS 8382 syllabus](bims8382.html) for more information.
 
 ### Workshops
 
@@ -14,11 +18,6 @@ These workshops introduce methods, tools, and software for reproducibly managing
 ### THRIV Data Science
 
 The [THRIV Scholars Data Science Training Program](thriv.html) is a seven-part series of courses on the essentials of biological data science directed toward junior faculty seeking a clinical and translational research career. Please see the [THRIV syllabus](thriv.html) for more information.
-
-### BIMS 8382
-
-[BIMS 8382](bims8382.html) is a graduate class that will run in Spring 2018. Please see the [BIMS 8382 syllabus](bims8382.html) for more information.
-
 
 
 ### FAQ
