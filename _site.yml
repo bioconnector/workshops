@@ -44,12 +44,12 @@ navbar:
           href: r-stats.html
         - text: "Survival Analysis with TCGA Data"
           href: r-survival.html
-        - text: "Predictive Analytics & Forecasting Influenza"
-          href: r-flu.html
         - text: "Drawing & annotating phylogenetic trees"
           href: r-ggtree.html
         - text: "RNA-seq Data Analysis"
           href: r-rnaseq-airway.html
+        - text: "Predictive Analytics & Forecasting Influenza"
+#          href: r-flu.html
 
 #    - text: "THRIV"
 #      icon: fa-university
