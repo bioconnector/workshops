@@ -268,7 +268,7 @@ The variables in our data are useful for summary statistics, visualization, EDA,
 
 Let's build up this pipeline one step at a time. If you want to skip ahead, you can simply read in the already extracted/recoded/imputed dataset at [`data/h7n9_analysisready.csv`](data/h7n9_analysisready.csv).
 
-First, let's make a backup of the original data in case we mess something up.
+First, let's make a backup of the original data in case we mess something up. 
 
 ```{r}
 flu_orig <- flu
