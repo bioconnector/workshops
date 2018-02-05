@@ -1,5 +1,5 @@
 ---
-title: "**BIMS8382**"
+title: "**BIMS 8382**"
 author: "<small>Spring 2018, Feb 12 - Mar26<br>Mondays, 2:00-5:00pm</small>"
 date: "_Please sign in and let me know if you had installation issues._"
 output: 
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### Meetings
 
-- Mondays, Feb 13 - Mar 27
+- Mondays, Feb 12 - Mar 26
 - 2-5pm in this room (BIMS education center)
 
 ### Instructors
@@ -36,15 +36,17 @@ Pete Nagraj (Data Scientist, SOM Research Computing)
 
 Subject to change!
 
-1. Week 1 (Feb 13): Intro to R
-1. Week 2 (Feb 20): Advanced Data Manipulation & Tidy Data
-1. Week 3 (Feb 27): Advanced Data Visualization with ggplot2
-1. Week 4 (Mar 6): Reproducible Research & Dynamic Documents
-1. Week 5 (Mar 13): Essential Statistics
-1. Week 6 (Mar 20): Survival Analysis
-1. Week 7 (Mar 27): Introduction to RNA-seq Data Analysis
+1. Week 1 (Feb 12): Intro to R
+1. Week 2 (Feb 19): Advanced Data Manipulation & Tidy Data
+1. Week 3 (Feb 26): Advanced Data Visualization with ggplot2
+1. Week 4 (Mar 5): Reproducible Research & Dynamic Documents
+1. Week 5 (Mar 12): Essential Statistics
+1. Week 6 (Mar 19): Survival Analysis
+1. Week 7 (Mar 26): Predictive Modeling & Forecasting\*
 
-Friday, March 24, 2-5pm is reserved as a make-up day (snow, etc.)
+<small><small>(\* = or other options... RNA-seq, phylogenetic trees, ...)</small></small>
+
+<!-- Friday, March 24, 2-5pm is reserved as a make-up day (snow, etc.) -->
 
 
 ## Week 1 (today!): Intro to R
@@ -61,22 +63,22 @@ Novice-level introduction to the R, RStudio, and basic functionality such as cre
 - Reproducible research (Week 4)
 - Tons of resources ([StackOverflow](http://stackoverflow.com/questions/tagged/r), [Coursera](https://www.coursera.org/specializations/jhu-data-science), ...)
 
-## Week 2 (Feb 20): Advanced Data Manipulation & Tidy Data
+## Week 2 (Feb 19): Advanced Data Manipulation & Tidy Data
 
 **[Janitor work](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html):** Filtering, reshaping, subsetting, split-apply-combine, joining, etc.
 
 <img height=800, src="../img/dplyr-cheatsheet.png">
 
-## Week 3 (Feb 27): Advanced Data Visualization with ggplot2
+## Week 3 (Feb 26): Advanced Data Visualization with ggplot2
 
 <img height=800, src="../img/ggplot2-cheatsheet.png">
 
-## Week 4 (Mar 6): Reproducible Research & Dynamic Documents {.bigger}
+## Week 4 (Mar 5): Reproducible Research & Dynamic Documents {.bigger}
 
 - What's reproducible research all about?
 - How to do it with **[RMarkdown](http://rmarkdown.rstudio.com/)**.
 
-## Week 5 (Mar 13): Essential Statistics
+## Week 5 (Mar 12): Essential Statistics
 
 1. Descriptive statistics & Exploratory data analysis (EDA)
 1. Continuous variable statistics
@@ -92,7 +94,7 @@ Novice-level introduction to the R, RStudio, and basic functionality such as cre
 1. _Bonus_: Model tidying and extraction
 
 
-## Week 6 (Mar 20): Survival Analysis
+## Week 6 (Mar 19): Survival Analysis
 
 1. Survival analysis overview, definitions
 1. Survival analysis in R using built-in data
@@ -101,17 +103,25 @@ Novice-level introduction to the R, RStudio, and basic functionality such as cre
     - Cox proportional hazards regression
 1. Example with TCGA data
 
-## Week 7 (Mar 27): Introduction to RNA-seq Data Analysis
+## Week 7 (Mar 26) {.smaller}
 
-1. Our data: source, pre-processing, structure
-1. Importing & exploring
+### _Option A:_ Predictive Modeling & Forecasting
+
+1. Data pre-processing: feature extraction & imputation
+1. Model training, tuning, resampling, and prediction
+1. Forecasting at scale
+
+### Option B: Introduction to RNA-seq Data Analysis
+
+1. Data overview: source, pre-processing, structure
 1. Processing and analysis with [DESeq2](http://bioconductor.org/packages/DESeq2)
-    - Structuring the count data and metadata
-    - Running the analysis (normalization, dispersion estimation, model fitting)
-    - Extracting results
-1. Data visualization
-1. Alternative approaches
 1. Pathway analysis
+
+### Option C: Phylogenetic Trees
+
+1. Importing phylogenetic tree data
+1. Drawing and annotating phylogenetic trees
+
 
 ## Rubric
 

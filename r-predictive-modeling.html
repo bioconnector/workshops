@@ -584,8 +584,8 @@ flugather %&gt;% arrange(case_id)</code></pre>
 <li>Gender: instead of m/f, let’s convert this into a binary indicator variable where 0=female, 1=male.</li>
 <li>Province: along the same lines, let’s create binary classifiers that indicate Shanghai, Zhejiang, Jiangsu, or other provinces.</li>
 <li>Hospitalization: let’s create a binary classifier where 0=not hospitalized, 1=hospitalized.</li>
-<li>Early onset: let’s create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).</li>
 <li>Dates: Let’s also take the <em>dates</em> of onset, hospitalization, and outcome, and transform these into <em>days</em> between onset and hospitalization, and days from onset to outcome. The algorithms aren’t going to look at one column then another to do this math – we have to extract this feature ourselves.</li>
+<li>Early outcome: let’s create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).</li>
 </ul>
 <p>Let’s build up this pipeline one step at a time. If you want to skip ahead, you can simply read in the already extracted/recoded/imputed dataset at <a href="data/h7n9_analysisready.csv"><code>data/h7n9_analysisready.csv</code></a>.</p>
 <p>First, let’s make a backup of the original data in case we mess something up.</p>

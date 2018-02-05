@@ -28,7 +28,7 @@ Here we're going to use some epidemiological data collected during an influenza 
 - Gender: instead of m/f, convert to binary indicator variable where 0=female, 1=male. 
 - Hospitalization: create a binary classifier where  0=not hospitalized, 1=hospitalized.
 - Dates: Let's take the _dates_ of onset, hospitalization, and outcome, and transform these into _days_ between onset and hospitalization, and days from onset to outcome. The algorithms aren't going to look at one column then another to do this math -- we have to extract this feature ourselves.
-- Early onset: create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).
+- Early outcome: create another binary 0/1 indicating whether someone had an early outcome (earlier than the median outcome date observed).
 
 ```r
 flu <- flu %>%

@@ -52,16 +52,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="predictive-analytics-predicting-and-forecasting-influenza" class="slide section level2 bigger">
 <h2>Predictive Analytics: Predicting and Forecasting Influenza</h2>
 <p>Ensure you have the following packages installed by loading them.</p>
-<p><small><small><small>Ask for help if any of these fail with an error. Setup instructions at <strong>bioconnector.org</strong> under the <em>Setup</em> – <em>Predictive modeling</em> heading.</small></small><br />
-<small><small><small>Use <strong><code>install.packages(&quot;theMissingPackage&quot;)</code></strong> as needed.</small></small></small></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(caret)
+<p><small><small><small>Ask for help if any of these fail with an error. Setup instructions at <strong>bioconnector.org</strong> under the <em>Setup</em> – <em>Predictive modeling</em> heading. Use <strong><code>install.packages(&quot;theMissingPackage&quot;)</code></strong> as needed.</small></small></small></p>
+<p><small></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+<span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(tidyr)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(caret)
 <span class="kw">library</span>(randomForest)
 <span class="kw">library</span>(gbm)
 <span class="kw">library</span>(kknn)
 <span class="kw">library</span>(glmnet)
 <span class="kw">library</span>(mice)
 <span class="kw">library</span>(prophet)</code></pre></div>
-<p><strong><a href="http://data.hsl.virginia.edu/">data.hsl.virginia.edu</a></strong></p>
+<p></small></p>
 </div>
 <div id="predictive-analytics-agenda" class="slide section level2">
 <h2>Predictive Analytics: Agenda</h2>
@@ -115,6 +119,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Setup instructions</li>
 <li>Lessons dropdown: all course material</li>
 <li><strong><code>?</code></strong> dropdown: FAQs, resources, etc.</li>
+<li><strong><a href="http://data.hsl.virginia.edu/">data.hsl.virginia.edu</a></strong>: Info and registration for other HSL classes.</li>
 </ul>
 </div>
 <div id="getting-started" class="slide section level2">

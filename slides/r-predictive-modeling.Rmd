@@ -13,13 +13,18 @@ knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
 
 ## Predictive Analytics: Predicting and Forecasting Influenza {.bigger}
 
-Ensure you have the following packages installed by loading them. 
+Ensure you have the following packages installed by loading them.
 
-<small><small><small>Ask for help if any of these fail with an error. Setup instructions at **bioconnector.org** under the _Setup_ -- _Predictive modeling_ heading.</small></small>  
-<small><small><small>Use **`install.packages("theMissingPackage")`** as needed.</small></small></small>
+<small><small><small>Ask for help if any of these fail with an error. Setup instructions at **bioconnector.org** under the _Setup_ -- _Predictive modeling_ heading. Use **`install.packages("theMissingPackage")`** as needed.</small></small></small>
 
+
+<small>
 
 ```r
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
 library(caret)
 library(randomForest)
 library(gbm)
@@ -29,7 +34,7 @@ library(mice)
 library(prophet)
 ```
 
-**[data.hsl.virginia.edu](http://data.hsl.virginia.edu/)**
+</small>
 
 ## Predictive Analytics: Agenda 
 
@@ -68,6 +73,7 @@ library(prophet)
 - Setup instructions
 - Lessons dropdown: all course material
 - **`?`** dropdown: FAQs, resources, etc.
+- **[data.hsl.virginia.edu](http://data.hsl.virginia.edu/)**: Info and registration for other HSL classes.
 
 ## Getting started
 
