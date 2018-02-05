@@ -1,9 +1,9 @@
 # See http://rmarkdown.rstudio.com/rmarkdown_websites.html
 
-name: "Bioconnector Workshops"
+name: "UVA HSL Research & Data Courses"
 
 navbar:
-  title: "BIOCONNECTOR"
+  title: "DATA@HSL"
   icon: fa-home
   type: inverse
   left:
