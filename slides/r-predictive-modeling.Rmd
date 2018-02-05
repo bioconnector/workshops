@@ -1,0 +1,93 @@
+---
+# title: "Predictive Analytics: Predicting and Forecasting Influenza"
+# author: "Sign in and pick up handouts"
+# date: "`r format(Sys.time(), '%m/%d/%Y')`"
+output: 
+  slidy_presentation:
+    footer: "Predictive Analytics: Predicting and Forecasting Influenza"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, eval=FALSE)
+```
+
+## Predictive Analytics: Predicting and Forecasting Influenza {.bigger}
+
+Ensure you have the following packages installed by loading them. 
+
+<small><small><small>Ask for help if any of these fail with an error. Setup instructions at **bioconnector.org** under the _Setup_ -- _Predictive modeling_ heading.</small></small>  
+<small><small><small>Use **`install.packages("theMissingPackage")`** as needed.</small></small></small>
+
+
+```r
+library(caret)
+library(randomForest)
+library(gbm)
+library(kknn)
+library(glmnet)
+library(mice)
+library(prophet)
+```
+
+**[data.hsl.virginia.edu](http://data.hsl.virginia.edu/)**
+
+## Predictive Analytics: Agenda 
+
+1. Data cleaning & preparation.
+    - 80% of data science is data cleaning/preparation <small><small>  
+    (the remaining 20% is complaining about how much time we spend cleaning/preparing data)</small></small>.
+    - Exploratory data analysis
+    - Feature Extraction
+    - Imputation
+1. The **`caret`** package
+    - Package overview
+    - Resampling approaches
+1. Model training and evaluation
+    - Random forest
+    - Stochastic gradient boosting
+    - Elastic net regularized regression
+    - _k_-nearest neighbor
+1. Prediction on unknown samples
+1. _If time allows:_ Forecasting
+
+## What this class is _not_ {.bigger}
+
+- This is _not_ an introductory R class. Pre-requisites: 
+    - Installing/using packages
+    - Familiarity with readr, dplyr `%>%`, and ggplot2
+    - Advanced/expert proficiency manipulating data frames
+- This is _not_ a statistics/ML course. Not covering:
+    - Underlying mathematical motivation
+    - How each ML method works
+    - Model assumptions
+    - Interpreting every aspect of model output
+
+## Course website: **[bioconnector.org](http://bioconnector.org)** {.bigger}
+
+- Data
+- Setup instructions
+- Lessons dropdown: all course material
+- **`?`** dropdown: FAQs, resources, etc.
+
+## Getting started
+
+Go to **[bioconnector.org](http://bioconnector.org)**. Hit the **data** link. Download **`h7n9.csv`**, **`h7n9_analysisready.csv`** and **`ilinet.csv`**. Save them both somewhere on your computer you can easily find. E.g., create a new folder on your desktop called **`predictive`** and save it there.
+
+Open RStudio. **File** -- **New file** -- **R script**. Save this file as **`predictive_analysis.R`** in the same **`predictive`** folder above.
+
+Quit RStudio, then double-click the R script to open R running in the `predictive` folder. You can also do this through the menu with **Session** -- **Set working directory** -- **To Source File Location**.
+
+You could also do this using RStudio project management, if you're familiar with that.
+
+Load the packages we'll need immediately, and import the data.
+
+```r
+library(dplyr)
+library(readr)
+library(tidyr)
+library(ggplot2)
+
+flu <- read_csv("data/h7n9.csv")
+```
+
+**[data.hsl.virginia.edu](http://data.hsl.virginia.edu/)**
