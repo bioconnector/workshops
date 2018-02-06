@@ -1,6 +1,6 @@
 ---
 title: "**BIMS 8382**"
-author: "<small>Spring 2018, Feb 12 - Mar26<br>Mondays, 2:00-5:00pm</small>"
+author: "<small>Spring 2018, Feb 12 - Mar 26<br>Mondays, 2:00-5:00pm</small>"
 date: "_Please sign in and let me know if you had installation issues._"
 output: 
   slidy_presentation:
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ### Meetings
 
-- Mondays, Feb 12 - Mar 26
+- Mondays, Feb 12 - Mar 26 <small>_(No exam -- final class held March 26.)_</small>
 - 2-5pm in this room (BIMS education center)
 
 ### Instructors
@@ -111,13 +111,13 @@ Novice-level introduction to the R, RStudio, and basic functionality such as cre
 1. Model training, tuning, resampling, and prediction
 1. Forecasting at scale
 
-### Option B: Introduction to RNA-seq Data Analysis
+### _Option B_: Introduction to RNA-seq Data Analysis
 
 1. Data overview: source, pre-processing, structure
 1. Processing and analysis with [DESeq2](http://bioconductor.org/packages/DESeq2)
 1. Pathway analysis
 
-### Option C: Phylogenetic Trees
+### _Option C_: Phylogenetic Trees
 
 1. Importing phylogenetic tree data
 1. Drawing and annotating phylogenetic trees
