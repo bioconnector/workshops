@@ -1,9 +1,10 @@
 # See http://rmarkdown.rstudio.com/rmarkdown_websites.html
 
-name: "UVA HSL Research & Data Courses"
+#name: "UVA HSL Research & Data Courses"
+name: "BIMS 8382"
 
 navbar:
-  title: "DATA@HSL"
+  title: "BIMS8382"
   icon: fa-home
   type: inverse
   left:
