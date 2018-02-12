@@ -97,10 +97,10 @@ navbar:
           href: bims8382.html
         - text: "----"
         - text: "--- Lessons ---"
-#        - text: "R Basics"
-#          href: r-basics.html
-#        - text: "Data Frames"
-#          href: r-dataframes.html
+        - text: "R Basics"
+          href: r-basics.html
+        - text: "Data Frames"
+          href: r-dataframes.html
 #        - text: "Data Manipulation"
 #          href: r-dplyr-yeast.html
 #        - text: "Tidying data"
