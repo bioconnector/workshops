@@ -65,15 +65,15 @@ Data analysis involves a large amount of janitor work -- munging and cleaning da
 
 This session will cover fundamental concepts for creating effective data visualization and will introduce tools and techniques for visualizing large, high-dimensional data using R. We will review fundamental concepts for visually displaying quantitative information, such as using series of small multiples, avoiding "chart-junk," and maximizing the data-ink ratio. After briefly covering data visualization using base R graphics, we will introduce the _ggplot2_ package for advanced high-dimensional visualization. We will cover the grammar of graphics (geoms, aesthetics, stats, and faceting), and using ggplot2 to create plots layer-by-layer. Upon completing this lesson, students will be able to use R to explore a high-dimensional dataset by faceting and scaling arbitrarily complex plots in small multiples.
 
-### Week 4: Reproducible Research & Dynamic Documents
+### _On your own_: Reproducible Research & Dynamic Documents
 
-Contemporary life sciences research is plagued by reproducibility issues. This session covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this session we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents.
+**Further instructions for learning RMarkdown on your own will be forthcoming.** Contemporary life sciences research is plagued by reproducibility issues. This session covers some of the barriers to reproducible research and how to start to address some of those problems during the data management and analysis phases of the research life cycle. In this session we will cover using R and dynamic document generation with RMarkdown and RStudio to weave together reporting text with executable R code to automatically generate reports in the form of PDF, Word, or HTML documents.
 
-### Week 5: Essential Statistics
+### Week 4: Essential Statistics
 
 This session will provide hands-on instruction and exercises covering basic statistical analysis in R. This will cover descriptive statistics, t-tests, linear models, chi-square, clustering, dimensionality reduction, and resampling strategies. We will also cover methods for "tidying" model results for downstream visualization and summarization.
 
-### Week 6: Survival Analysis
+### Week 5: Survival Analysis
 
 This session will provide hands-on instruction and exercises covering survival analysis using R. The data for parts of this session will come from The Cancer Genome Atlas (TCGA), where we will also cover programmatic access to TCGA through Bioconductor.
 
@@ -82,9 +82,9 @@ This session will provide hands-on instruction and exercises covering survival a
 <!-- This lesson demonstrates how to use R and ggtree, an extension of the ggplot2 package, to visualize and annotate phylogenetic trees. This lesson does _not_ cover methods and software for _generating_ phylogenetic trees, nor does it it cover _interpreting_ phylogenies. Genome-wide sequencing allows for examination of the entire genome, and from this, many methods and software tools exist for comparative genomics using SNP- and gene-based phylogenetic analysis, either from unassembled sequencing reads, draft assemblies/contigs, or complete genome sequences. These methods are beyond the scope of this lesson. -->
 
 
-<!-- ### Week 6-7c: Introduction to RNA-seq Data Analysis -->
+### Week 6: Introduction to RNA-seq Data Analysis
 
-<!-- This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results. -->
+This session focuses on analyzing real data from a biological application - analyzing RNA-seq data for differentially expressed genes. This session provides an introduction to RNA-seq data analysis, involving reading in count data from an RNA-seq experiment, exploring the data using base R functions and then analysis with the DESeq2 Bioconductor package. The session will conclude with downstream pathway analysis and exploring the biological and functional context of the results.
 
 ### Week 7: Predictive Modeling & Forecasting
 
