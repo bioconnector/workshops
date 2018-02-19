@@ -101,10 +101,10 @@ navbar:
           href: r-basics.html
         - text: "Data Frames"
           href: r-dataframes.html
-#        - text: "Data Manipulation"
-#          href: r-dplyr-yeast.html
-#        - text: "Tidying data"
-#          href: r-tidy.html
+        - text: "Data Manipulation"
+          href: r-dplyr-yeast.html
+        - text: "Tidying data"
+          href: r-tidy.html
 #        - text: "Data Visualization"
 #          href: r-viz-gapminder.html
 #        - text: "Reproducible Research & RMarkdown"
@@ -117,8 +117,8 @@ navbar:
 #          href: r-rnaseq-airway.html
         - text: "----"
         - text: "--- Homework ---"
-#        - text: "Data Manipulation"
-#          href: r-dplyr-homework.html
+        - text: "Data Manipulation"
+          href: r-dplyr-homework.html
 #        - text: "Data Visualization"
 #          href: r-dataviz-homework.html
 #        - text: "Reproducible Research & RMarkdown"
