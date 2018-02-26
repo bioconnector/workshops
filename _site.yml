@@ -105,10 +105,10 @@ navbar:
           href: r-dplyr-yeast.html
         - text: "Tidying data"
           href: r-tidy.html
-#        - text: "Data Visualization"
-#          href: r-viz-gapminder.html
-#        - text: "Reproducible Research & RMarkdown"
-#          href: r-rmarkdown.html
+        - text: "Data Visualization"
+          href: r-viz-gapminder.html
+        - text: "Reproducible Research & RMarkdown"
+          href: r-rmarkdown.html
 #        - text: "Essential Statistics with R"
 #          href: r-stats.html
 #        - text: "Survival Analysis with TCGA Data"
@@ -119,10 +119,10 @@ navbar:
         - text: "--- Homework ---"
         - text: "Data Manipulation"
           href: r-dplyr-homework.html
-#        - text: "Data Visualization"
-#          href: r-dataviz-homework.html
-#        - text: "Reproducible Research & RMarkdown"
-#          href: r-rmarkdown-homework.html
+        - text: "Data Visualization"
+          href: r-dataviz-homework.html
+        - text: "Reproducible Research & RMarkdown"
+          href: r-rmarkdown-homework.html
 #        - text: "Essential Statistics"
 #          href: r-stats-homework.html
 #        - text: "RNA-seq Data Analysis"
