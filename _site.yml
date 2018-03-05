@@ -109,8 +109,8 @@ navbar:
           href: r-viz-gapminder.html
         - text: "Reproducible Research & RMarkdown"
           href: r-rmarkdown.html
-#        - text: "Essential Statistics with R"
-#          href: r-stats.html
+        - text: "Essential Statistics with R"
+          href: r-stats.html
 #        - text: "Survival Analysis with TCGA Data"
 #          href: r-survival.html
 #        - text: "RNA-Seq Data Analysis"
@@ -123,8 +123,8 @@ navbar:
           href: r-viz-homework.html
         - text: "Reproducible Research & RMarkdown"
           href: r-rmarkdown-homework.html
-#        - text: "Essential Statistics"
-#          href: r-stats-homework.html
+        - text: "Essential Statistics"
+          href: r-stats-homework.html
 #        - text: "RNA-seq Data Analysis"
 #          href: r-rnaseq-homework.html
 
