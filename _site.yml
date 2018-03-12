@@ -111,8 +111,8 @@ navbar:
           href: r-rmarkdown.html
         - text: "Essential Statistics with R"
           href: r-stats.html
-#        - text: "Survival Analysis with TCGA Data"
-#          href: r-survival.html
+        - text: "Survival Analysis with TCGA Data"
+          href: r-survival.html
 #        - text: "RNA-Seq Data Analysis"
 #          href: r-rnaseq-airway.html
         - text: "----"
