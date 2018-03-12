@@ -502,9 +502,9 @@ div.tocify {
 <p>Cox PH regression models the natural log of the hazard at time <em>t</em>, denoted <span class="math inline">\(h(t)\)</span>, as a function of the baseline hazard (<span class="math inline">\(h_0(t)\)</span>) (the hazard for an individual where all exposure variables are 0) and multiple exposure variables <span class="math inline">\(x_1\)</span>, <span class="math inline">\(x_1\)</span>, <span class="math inline">\(...\)</span>, <span class="math inline">\(x_p\)</span>. The form of the Cox PH model is:</p>
 <p><span class="math display">\[ log(h(t)) = log(h_0(t)) + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_p x_p \]</span></p>
 <p>If you exponentiate both sides of the equation, and limit the right hand side to just a single categorical exposure variable (<span class="math inline">\(x_1\)</span>) with two groups (<span class="math inline">\(x_1=1\)</span> for exposed and <span class="math inline">\(x_1=0\)</span> for unexposed), the equation becomes:</p>
-<p><span class="math display">\[ h_1(t) = h_0(t) + e^{\beta_1 x_1} \]</span></p>
+<p><span class="math display">\[ h_1(t) = h_0(t) \times e^{\beta_1 x_1} \]</span></p>
 <p>Rearranging that equation lets you estimate the <strong>hazard ratio</strong>, comparing the exposed to the unexposed individuals at time <em>t</em>:</p>
-<p><span class="math display">\[ HR(t) = \frac{h_0(t) e^{\beta_1}}{h_0(t)} = e^{\beta_1} \]</span></p>
+<p><span class="math display">\[ HR(t) = \frac{h_1(t)}{h_0(t)} = e^{\beta_1} \]</span></p>
 <p>This model shows that <strong>the hazard ratio is <span class="math inline">\(e^{\beta_1}\)</span>,</strong> and remains constant over time <em>t</em> (hence the name <em>proportional hazards regression</em>). The <span class="math inline">\(\beta\)</span> values are the regression coefficients that are estimated from the model, and represent the <span class="math inline">\(log(Hazard\, Ratio)\)</span> for each unit increase in the corresponding predictor variable. The interpretation of the hazards ratio depends on the measurement scale of the predictor variable, but in simple terms, a positive coefficient indicates worse survival and a negative coefficient indicates better survival for the variable in question.</p>
 </div>
 </div>
