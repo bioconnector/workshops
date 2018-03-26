@@ -49,8 +49,8 @@ navbar:
           href: r-ggtree.html
         - text: "RNA-seq Data Analysis"
           href: r-rnaseq-airway.html
-#        - text: "Predictive Analytics & Forecasting Influenza"
-#          href: r-predictive-modeling.html
+        - text: "Predictive Analytics & Forecasting Influenza"
+          href: r-predictive-modeling.html
 
 #    - text: "THRIV"
 #      icon: fa-university
@@ -127,6 +127,9 @@ navbar:
           href: r-stats-homework.html
         - text: "RNA-seq Data Analysis"
           href: r-rnaseq-homework.html
+        - text: "Predictive Analytics & Forecasting Influenza"
+          href: r-predictive-modeling.html
+
 
   right:
     - icon: fa-question fa-lg
