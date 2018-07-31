@@ -25,7 +25,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Font Awesome -->
 <!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 <!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
@@ -114,6 +116,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -498,15 +503,15 @@ div.tocify {
 <h2>Who cares about reproducible research?</h2>
 <p>Science is plagued by reproducibility problems. Especially genomics!</p>
 <ul>
-<li>Scientists in the United States spend <a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165">$28 billion</a> each year on basic biomedical research that cannot be repeated successfully.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
-<li>A reproducibility study in psychology found that only <a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433">39 of 100 studies could be reproduced</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
-<li>The Journal <em>Nature</em> on the <a href="http://www.nature.com/news/reproducibility-1.17552">issue of reproducibility</a>:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>
+<li>Scientists in the United States spend <a href="http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002165">$28 billion</a> each year on basic biomedical research that cannot be repeated successfully.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
+<li>A reproducibility study in psychology found that only <a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433">39 of 100 studies could be reproduced</a>.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
+<li>The Journal <em>Nature</em> on the <a href="http://www.nature.com/news/reproducibility-1.17552">issue of reproducibility</a>:<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>
 <ul>
 <li>“<em>Nature</em> and the Nature research journals will introduce editorial measures to address the problem by improving the consistency and quality of reporting in life-sciences articles… <strong>we will give more space to methods sections. We will examine statistics more closely and encourage authors to be transparent, for example by including their raw data.</strong>”<br />
 </li>
 <li><em>Nature</em> also released a <a href="http://www.nature.com/authors/policies/checklist.pdf">checklist</a>, unfortunately with <em>wimpy</em> computational check <em>(see #18)</em>.</li>
 </ul></li>
-<li>On microarray reproducibility:<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>
+<li>On microarray reproducibility:<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>
 <ul>
 <li>18 Nat. Genet. microarray experiments</li>
 <li>Less than 50% reproducible</li>
@@ -517,7 +522,7 @@ div.tocify {
 <li>Missing method/processing details (66%)</li>
 </ul></li>
 </ul></li>
-<li>NGS: run-of-the-mill variant calling (align, process, call variants):<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a>
+<li>NGS: run-of-the-mill variant calling (align, process, call variants):<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>
 <ul>
 <li>299 articles published in 2011 citing the 1000 Genomes project pilot publication</li>
 <li>Only 19 were NGS studies with similar design</li>
@@ -526,10 +531,7 @@ div.tocify {
 </ul></li>
 </ul>
 <p>Consider this figure:</p>
-<div class="figure">
-<img src="img/gm-lifeexp-vs-gdp.png" />
-
-</div>
+<p><img src="img/gm-lifeexp-vs-gdp.png" /></p>
 <p>How do we reproduce it? What do we need?</p>
 <ul>
 <li>The data.
@@ -584,7 +586,7 @@ div.tocify {
 </li>
 <li>Make names/variables consistent, distinctive and meaningful.<br />
 </li>
-<li>Adopt a <a href="http://adv-r.had.co.nz/Style.html">style</a> be consistent.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+<li>Adopt a <a href="http://adv-r.had.co.nz/Style.html">style</a> be consistent.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></li>
 <li>Write concise and clear comments.</li>
 </ul></li>
 <li><strong>Make incremental changes.</strong> Work in small steps with frequent feedback. Use version control. See <a href="http://swcarpentry.github.io/git-novice/" class="uri">http://swcarpentry.github.io/git-novice/</a> for resources on version control.</li>
@@ -631,10 +633,7 @@ div.tocify {
 <div id="rmarkdown-workflow" class="section level3">
 <h3>RMarkdown workflow</h3>
 <p>RMarkdown is an enhanced version of Markdown that lets you embed R code into the document. When the document is compiled/rendered, the R code is executed by R, the output is then automatically rendered as Markdown with the rest of the document. The Markdown is then further processed to final output formats like HTML, PDF, DOCX, etc.</p>
-<div class="figure">
-<img src="img/rmarkdown-workflow.png" />
-
-</div>
+<p><img src="img/rmarkdown-workflow.png" /></p>
 <p>Visit <strong><a href="http://bioconnector.github.io/markdown/#!rmarkdown.md">bioconnector.github.io/markdown</a></strong> for a quick reference on RMarkdown.</p>
 </div>
 </div>
@@ -815,12 +814,12 @@ output:
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p>Freedman, et al. “The economics of reproducibility in preclinical research.” <em>PLoS Biol</em> 13.6 (2015): e1002165.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p><a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433" class="uri">http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433</a><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p><a href="http://www.nature.com/news/reproducibility-1.17552" class="uri">http://www.nature.com/news/reproducibility-1.17552</a><a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>Ioannidis, John PA, et al. “Repeatability of published microarray gene expression analyses.” <em>Nature genetics</em> 41.2 (2009): 149-155.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p>Nekrutenko, Anton, and James Taylor. “Next-generation sequencing data interpretation: enhancing reproducibility and accessibility.” <em>Nature Reviews Genetics</em> 13.9 (2012): 667-672.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p><a href="http://adv-r.had.co.nz/Style.html" class="uri">http://adv-r.had.co.nz/Style.html</a><a href="#fnref6">↩</a></p></li>
+<li id="fn1"><p>Freedman, et al. “The economics of reproducibility in preclinical research.” <em>PLoS Biol</em> 13.6 (2015): e1002165.<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433" class="uri">http://www.nature.com/news/first-results-from-psychology-s-largest-reproducibility-test-1.17433</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p><a href="http://www.nature.com/news/reproducibility-1.17552" class="uri">http://www.nature.com/news/reproducibility-1.17552</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p>Ioannidis, John PA, et al. “Repeatability of published microarray gene expression analyses.” <em>Nature genetics</em> 41.2 (2009): 149-155.<a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p>Nekrutenko, Anton, and James Taylor. “Next-generation sequencing data interpretation: enhancing reproducibility and accessibility.” <em>Nature Reviews Genetics</em> 13.9 (2012): 667-672.<a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><a href="http://adv-r.had.co.nz/Style.html" class="uri">http://adv-r.had.co.nz/Style.html</a><a href="#fnref6" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

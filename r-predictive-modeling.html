@@ -25,7 +25,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Font Awesome -->
 <!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 <!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
@@ -114,6 +116,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -820,7 +825,7 @@ fluimp</code></pre>
 </ul>
 <div id="models-available-in-caret" class="section level4">
 <h4>Models available in caret</h4>
-<p>First you have to choose a specific type of model or algorithm. Currently there are <strong>238</strong> different algorithms implemented in caret. Caret provides the interface to the method, but you still need the external package installed. For example, we’ll be fitting a Random Forest model, and for that we’ll need the <a href="https://cran.r-project.org/package=randomForest">randomForest</a> package installed. You can see all the methods that you can deploy by looking at the help for train.</p>
+<p>First you have to choose a specific type of model or algorithm. Currently there are <strong>237</strong> different algorithms implemented in caret. Caret provides the interface to the method, but you still need the external package installed. For example, we’ll be fitting a Random Forest model, and for that we’ll need the <a href="https://cran.r-project.org/package=randomForest">randomForest</a> package installed. You can see all the methods that you can deploy by looking at the help for train.</p>
 <pre class="r"><code>library(caret)
 ?train</code></pre>
 <p>From here, click on the link to see the <a href="http://topepo.github.io/caret/available-models.html">available models</a> or <a href="http://topepo.github.io/caret/train-models-by-tag.html">models by tag</a>. From here you can search for particular models by name. We’re going to fit models using Random Forest, stochastic gradient boosting, k-Nearest Neighbors, Lasso and Elastic-Net Regularized Generalized Linear Models. These require the packages <a href="https://cran.r-project.org/package=randomForest">randomForest</a>, <a href="https://cran.r-project.org/package=gbm">gbm</a>, <a href="https://cran.r-project.org/package=kknn">kknn</a>, and <a href="https://cran.r-project.org/package=glmnet">glmnet</a>, respectively.</p>

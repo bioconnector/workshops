@@ -25,7 +25,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Font Awesome -->
 <!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 <!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
@@ -114,6 +116,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -491,11 +496,11 @@ div.tocify {
 <p>Shiny is built to run code written in R, and it can showcase any of the computational power R is capable of.</p>
 <p>It’s maintained by RStudio, and there’s robust documentation and resources for both beginners and advanced Shiny developers:</p>
 <ul>
-<li>Tutorial for those new to Shiny<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
-<li>Collection of posts covering the basics of layout, reactivity and extensions for Shiny<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></li>
-<li>RStudio ‘cheatsheet’ for Shiny<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></li>
-<li>R-Bloggers articles featuring Shiny apps<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></li>
-<li>RStudio webinar slides for getting started with Shiny<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></li>
+<li>Tutorial for those new to Shiny<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></li>
+<li>Collection of posts covering the basics of layout, reactivity and extensions for Shiny<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
+<li>RStudio ‘cheatsheet’ for Shiny<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></li>
+<li>R-Bloggers articles featuring Shiny apps<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></li>
+<li>RStudio webinar slides for getting started with Shiny<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></li>
 </ul>
 </div>
 <div id="bones-of-a-shiny-app" class="section level2">
@@ -505,7 +510,7 @@ div.tocify {
 <li>ui.R</li>
 <li>server.R</li>
 </ul>
-<p>You can think of these as holding the form (ui.R) and function (server.R) of the app. It is possible to create single file apps<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> but for the sake of clarity, we’ll keep the scripts separate. Note that you must name the scripts accordingly – in other words, you can’t have a ui script called my_ui.R or appui.R or youi.R … it has to be ui.R and ditto for server.R</p>
+<p>You can think of these as holding the form (ui.R) and function (server.R) of the app. It is possible to create single file apps<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> but for the sake of clarity, we’ll keep the scripts separate. Note that you must name the scripts accordingly – in other words, you can’t have a ui script called my_ui.R or appui.R or youi.R … it has to be ui.R and ditto for server.R</p>
 <p>There are a couple ways to build out the skeleton of your first Shiny project. You could find the code for an app that you want to mimic and use that as a baseline for your ui.R and server.R scripts. But that copy-and-paste workflow can be tedious, error-prone and unnecessary if you’re using RStudio …</p>
 <p>Like we mentioned above, Shiny is developed by RStudio. So it’s no suprise that the RStudio IDE has some Shiny-related features. In particular, the Shiny project structure makes it really easy to spin up app templates. To use this feature:</p>
 <ol style="list-style-type: decimal">
@@ -551,7 +556,7 @@ ggplot(moma_by_year, aes(year.acquired, nworks)) +
 <p>Within that you can specify if you want your layout to be a <code>fluidPage()</code> (the default if you’re using a template from RStudio), <code>navbarPage()</code> (as the name suggests, helpful for creating naviagtion) or <code>fixedPage()</code> (not recommended … “breaks” the bootstrap).</p>
 <p>Nested further, you can include sub layout regions like <code>sidebarLayout()</code> and <code>fluidRow</code>.</p>
 <p>And even <em>further</em> you can nest individual elements with <code>tabPanel()</code> or <code>sidebarPanel()</code> or <code>column()</code> functions.</p>
-<p>We’ll stick with default sidebar layout that RStudio gives us. But you can refer to the Shiny Application layout guide<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> for more advanced configurations.</p>
+<p>We’ll stick with default sidebar layout that RStudio gives us. But you can refer to the Shiny Application layout guide<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> for more advanced configurations.</p>
 <pre class="r"><code>library(shiny)
 
 shinyUI(fluidPage(
@@ -575,7 +580,7 @@ shinyUI(fluidPage(
 <h2>Input / Output</h2>
 <p>You’ve got the “scratch” code doing what you want it to. And you’ve got the basic idea of what the layout will be.</p>
 <p>But now what?</p>
-<p>You need to decide what parameter you want to make dynamic – in other words, what variable do you want your users to be able to adjust to see how the results change. The class of this object will determine what kind of widget you’ll start with. For example, if you have a continuous (numeric) variable then you may want to use a slider input or input box. On the other hand, if you have a discrete (factor) variable then you might need to use a select input or checkbox. There are a lot of widgets<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> to choose from and a lot of ways you can use them.</p>
+<p>You need to decide what parameter you want to make dynamic – in other words, what variable do you want your users to be able to adjust to see how the results change. The class of this object will determine what kind of widget you’ll start with. For example, if you have a continuous (numeric) variable then you may want to use a slider input or input box. On the other hand, if you have a discrete (factor) variable then you might need to use a select input or checkbox. There are a lot of widgets<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> to choose from and a lot of ways you can use them.</p>
 <p>Once you’ve decided what input method use you’ll need to write the code for that widget in the ui.R script. Widgets can go inside any of the layout elements.</p>
 <p>Every widget needs a name – this is a semi-arbitrary distinction you can make with the first, inputId argument to the widget function. Although you can freely name the widget, it’s only semi-arbitrary because it the inputId must be unique (not used by another widget) and should be somewhat meaningful as you’ll be calling the widget in the server.R script as well.</p>
 <pre class="r"><code>library(shiny)
@@ -664,7 +669,7 @@ shinyServer(function(input, output) {
 <li><p>You can <em>trigger</em> reactions with <code>observeEvent()</code></p></li>
 </ul>
 <p>Reactivity is a beast.</p>
-<p>Credit is due to the RStudio group that put together the Shiny webinar series … their material<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> makes it much easier to understand the concept.</p>
+<p>Credit is due to the RStudio group that put together the Shiny webinar series … their material<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> makes it much easier to understand the concept.</p>
 <pre class="r"><code>library(shiny)
 library(readr)
 library(dplyr)
@@ -770,8 +775,8 @@ shinyServer(function(input, output) {
 <p>But yes you can totally “make the font bigger … oh no not that big … yeah that’s perfect … actually maybe it was better before …”</p>
 <p>The tags syntax allows you to access individual HTML elements. For example, <code>tags$b(textOutput(&quot;example&quot;))</code> in the ui.R script would make all of the text output for “example” bold.</p>
 <p>By creating a “www” directory in the root your app file structure (i.e. next to your ui.R and server.R scripts) you can insert style-sheet (CSS) files. The CSS is used to control how individual HTML elements display on the page(s) of your Shiny app. Note that these <em>must</em> go in a directory called “www”.</p>
-<p>If you’re really into pixel pushing with CSS, try checking out this tutorial<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>.</p>
-<p>And if you just want to try out some different theming options (for font size, button style, etc.) you can use the <strong>shinythemes</strong> package. RStudio has written some helpful documentation<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> for that library.</p>
+<p>If you’re really into pixel pushing with CSS, try checking out this tutorial<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>.</p>
+<p>And if you just want to try out some different theming options (for font size, button style, etc.) you can use the <strong>shinythemes</strong> package. RStudio has written some helpful documentation<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> for that library.</p>
 <pre class="r"><code>library(shiny)
 library(shinythemes)
 
@@ -812,9 +817,9 @@ shiny::runGitHub(&#39;names&#39;, &#39;vpnagraj&#39;) </code></pre>
 <p>To host the app so other people can view it on the internet, you’ll need a system with a Shiny server that’s running and configured.</p>
 <p>There are a few avenues you could pursue:</p>
 <ul>
-<li>shinyapps.io<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> (mix of free and fee-based options depending on up-time, number of apps and authentication)</li>
-<li>Shiny Server<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a> (free but must be configured and installed on your hardware)</li>
-<li>Shiny Server Pro<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a> (fee-based but is professionally configured and maintained)</li>
+<li>shinyapps.io<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a> (mix of free and fee-based options depending on up-time, number of apps and authentication)</li>
+<li>Shiny Server<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a> (free but must be configured and installed on your hardware)</li>
+<li>Shiny Server Pro<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a> (fee-based but is professionally configured and maintained)</li>
 </ul>
 <blockquote>
 <p><strong>nb</strong> Each of these solutions has advantages and disadvantages. If you’re intereseted in hosting an app, think long and hard about the budget you have for your app, the longevity of the project and any security concerns you have for the data involved.</p>
@@ -832,20 +837,20 @@ deployApp()</code></pre>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p><a href="http://shiny.rstudio.com/tutorial/" class="uri">http://shiny.rstudio.com/tutorial/</a><a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p><a href="http://shiny.rstudio.com/articles/" class="uri">http://shiny.rstudio.com/articles/</a><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/shiny-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/shiny-cheatsheet.pdf</a><a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p><a href="http://www.r-bloggers.com/?s=shiny" class="uri">http://www.r-bloggers.com/?s=shiny</a><a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p><a href="https://github.com/rstudio/webinars" class="uri">https://github.com/rstudio/webinars</a><a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p><a href="http://shiny.rstudio.com/articles/single-file.html" class="uri">http://shiny.rstudio.com/articles/single-file.html</a><a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p><a href="http://shiny.rstudio.com/articles/layout-guide.html" class="uri">http://shiny.rstudio.com/articles/layout-guide.html</a><a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p><a href="http://shiny.rstudio.com/gallery/widget-gallery.html" class="uri">http://shiny.rstudio.com/gallery/widget-gallery.html</a><a href="#fnref8">↩</a></p></li>
-<li id="fn9"><p><a href="https://github.com/rstudio/webinars/blob/master/09-How-to-start-with-Shiny-Part-2/02-How-to-start-2.pdf" class="uri">https://github.com/rstudio/webinars/blob/master/09-How-to-start-with-Shiny-Part-2/02-How-to-start-2.pdf</a><a href="#fnref9">↩</a></p></li>
-<li id="fn10"><p><a href="http://shiny.rstudio.com/articles/css.html" class="uri">http://shiny.rstudio.com/articles/css.html</a><a href="#fnref10">↩</a></p></li>
-<li id="fn11"><p><a href="http://rstudio.github.io/shinythemes/" class="uri">http://rstudio.github.io/shinythemes/</a><a href="#fnref11">↩</a></p></li>
-<li id="fn12"><p><a href="https://www.shinyapps.io/" class="uri">https://www.shinyapps.io/</a><a href="#fnref12">↩</a></p></li>
-<li id="fn13"><p><a href="https://www.rstudio.com/products/shiny/shiny-server/" class="uri">https://www.rstudio.com/products/shiny/shiny-server/</a><a href="#fnref13">↩</a></p></li>
-<li id="fn14"><p><a href="https://www.rstudio.com/products/shiny-server-pro/" class="uri">https://www.rstudio.com/products/shiny-server-pro/</a><a href="#fnref14">↩</a></p></li>
+<li id="fn1"><p><a href="http://shiny.rstudio.com/tutorial/" class="uri">http://shiny.rstudio.com/tutorial/</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="http://shiny.rstudio.com/articles/" class="uri">http://shiny.rstudio.com/articles/</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p><a href="https://www.rstudio.com/wp-content/uploads/2015/02/shiny-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/shiny-cheatsheet.pdf</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p><a href="http://www.r-bloggers.com/?s=shiny" class="uri">http://www.r-bloggers.com/?s=shiny</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p><a href="https://github.com/rstudio/webinars" class="uri">https://github.com/rstudio/webinars</a><a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><a href="http://shiny.rstudio.com/articles/single-file.html" class="uri">http://shiny.rstudio.com/articles/single-file.html</a><a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p><a href="http://shiny.rstudio.com/articles/layout-guide.html" class="uri">http://shiny.rstudio.com/articles/layout-guide.html</a><a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p><a href="http://shiny.rstudio.com/gallery/widget-gallery.html" class="uri">http://shiny.rstudio.com/gallery/widget-gallery.html</a><a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p><a href="https://github.com/rstudio/webinars/blob/master/09-How-to-start-with-Shiny-Part-2/02-How-to-start-2.pdf" class="uri">https://github.com/rstudio/webinars/blob/master/09-How-to-start-with-Shiny-Part-2/02-How-to-start-2.pdf</a><a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn10"><p><a href="http://shiny.rstudio.com/articles/css.html" class="uri">http://shiny.rstudio.com/articles/css.html</a><a href="#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn11"><p><a href="http://rstudio.github.io/shinythemes/" class="uri">http://rstudio.github.io/shinythemes/</a><a href="#fnref11" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p><a href="https://www.shinyapps.io/" class="uri">https://www.shinyapps.io/</a><a href="#fnref12" class="footnote-back">↩</a></p></li>
+<li id="fn13"><p><a href="https://www.rstudio.com/products/shiny/shiny-server/" class="uri">https://www.rstudio.com/products/shiny/shiny-server/</a><a href="#fnref13" class="footnote-back">↩</a></p></li>
+<li id="fn14"><p><a href="https://www.rstudio.com/products/shiny-server-pro/" class="uri">https://www.rstudio.com/products/shiny-server-pro/</a><a href="#fnref14" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

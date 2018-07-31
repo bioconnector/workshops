@@ -85,7 +85,9 @@
 <link href="site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
 <script src="site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
 <script src="site_libs/globe-binding-0.3.1/globe.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Font Awesome -->
 <!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 <!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
@@ -174,6 +176,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -547,11 +552,11 @@ div.tocify {
 <p>This tutorial will introduce several JavaScript libraries that are capable of producing interactive data visualizations. The goal is to demonstrate how to implement some of these tools in the context of the R programming language.</p>
 <div id="r" class="section level3">
 <h3>R</h3>
-<p>R is an open-source, statistical computing language. One of its strengths is its ability to produce clean, high dimensional data visualizations. The development of <strong>ggplot2</strong>, which is among the language’s most downloaded add-on packages, has strengthened R’s position as a “gold-standard” data visualization tool<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p>
+<p>R is an open-source, statistical computing language. One of its strengths is its ability to produce clean, high dimensional data visualizations. The development of <strong>ggplot2</strong>, which is among the language’s most downloaded add-on packages, has strengthened R’s position as a “gold-standard” data visualization tool<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 </div>
 <div id="javascript" class="section level3">
 <h3>JavaScript</h3>
-<p>JavaScript is a programming language that is widely used in web development. It may be worth stopping and pointing out that (despite its name) JavaScript bears no relation to Java<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. Java is a compiled langauge, while JavaScript (like R) is a scripting language that can be saved as a text file and run via an interpreter. Its name (among other features …) has been a source to confusion about what JavaScript is and how to use it<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>. For our purposes, we will focus on JavaScript as means for data visualization. There are number of libraries that can produce powerful, interactive plots. Below are a few examples of available frameworks:</p>
+<p>JavaScript is a programming language that is widely used in web development. It may be worth stopping and pointing out that (despite its name) JavaScript bears no relation to Java<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Java is a compiled langauge, while JavaScript (like R) is a scripting language that can be saved as a text file and run via an interpreter. Its name (among other features …) has been a source to confusion about what JavaScript is and how to use it<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. For our purposes, we will focus on JavaScript as means for data visualization. There are number of libraries that can produce powerful, interactive plots. Below are a few examples of available frameworks:</p>
 <ul>
 <li>d3.js</li>
 <li>c3.js</li>
@@ -563,7 +568,7 @@ div.tocify {
 </div>
 <div id="htmlwidgets" class="section level3">
 <h3>htmlwidgets</h3>
-<p>R and JavaScript are both capable of data preparation and visualization on their own. But together they can make an efficient and impressive pipeline. The principal bridge between these two tools is <strong>htmlwidgets</strong><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a>. This package provides scaffolding to build connectors (or “bindings”) from JavaScript to R.</p>
+<p>R and JavaScript are both capable of data preparation and visualization on their own. But together they can make an efficient and impressive pipeline. The principal bridge between these two tools is <strong>htmlwidgets</strong><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. This package provides scaffolding to build connectors (or “bindings”) from JavaScript to R.</p>
 <p>The workflow is as follows:</p>
 <ol style="list-style-type: decimal">
 <li>Data are read into R</li>
@@ -573,10 +578,7 @@ div.tocify {
 <li>Data are processed (and potentially manipulated) by JavaScript</li>
 <li>Data are mapped to plotting features and rendered</li>
 </ol>
-<div class="figure">
-<img src="img/intvizgraphic.png" />
-
-</div>
+<p><img src="img/intvizgraphic.png" /></p>
 <blockquote>
 <p><strong>nb</strong> Many JavaScript / R bindings developed with <strong>htmlwidgets</strong> support piping with <strong>magrittr</strong>, and the examples that follow will make extensive use of the <code>%&gt;%</code> syntax. For more information on the pipe, refer to the <a href="r-dplyr-yeast.html#the_pipe:_%%"><strong>dplyr</strong> lesson</a> material.</p>
 </blockquote>
@@ -587,8 +589,8 @@ div.tocify {
 <h2>Examples</h2>
 <div id="d3heatmap" class="section level3">
 <h3>d3heatmap</h3>
-<p>D3 (Data Driven Documents) is one of the most well-known JavaScript visualization libraries. In use since 2011, D3 is a staple of many interactive graphs featured on media outlets like the New York Times. D3 can produce everything from choropleths<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> to scatter plots to dygraphs to network visualizations<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> … and beyond. So far, individual D3 plotting methods have been distributed across multiple R packages. For this tutorial we’ll focus on single D3 feature: interactive heatmapping<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>.</p>
-<p>The data of interest below is the <strong>gapminder</strong> data set, which includes life expectancy, GDP per capita, and population, every five years, from 1952 to 2007 for 142 countries as a data frame<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>. One question that this data could address is the “similarity” of countries. By aggregating on country, one calculate historical summary statistics about each nation and then visualize these side-by-side. But since there are 142 countries, this may be easier to visualize on a subset. For our purposes, we’ll look at current UN Security Council member nations<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a> and their similarity based on life expectancy and GDP per capita. The code below reads in the raw data, identifies security council countries, filters the data to only include these countries, aggregates and calculates the mean and standard deviation of each variable of interest.</p>
+<p>D3 (Data Driven Documents) is one of the most well-known JavaScript visualization libraries. In use since 2011, D3 is a staple of many interactive graphs featured on media outlets like the New York Times. D3 can produce everything from choropleths<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> to scatter plots to dygraphs to network visualizations<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> … and beyond. So far, individual D3 plotting methods have been distributed across multiple R packages. For this tutorial we’ll focus on single D3 feature: interactive heatmapping<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>.</p>
+<p>The data of interest below is the <strong>gapminder</strong> data set, which includes life expectancy, GDP per capita, and population, every five years, from 1952 to 2007 for 142 countries as a data frame<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>. One question that this data could address is the “similarity” of countries. By aggregating on country, one calculate historical summary statistics about each nation and then visualize these side-by-side. But since there are 142 countries, this may be easier to visualize on a subset. For our purposes, we’ll look at current UN Security Council member nations<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> and their similarity based on life expectancy and GDP per capita. The code below reads in the raw data, identifies security council countries, filters the data to only include these countries, aggregates and calculates the mean and standard deviation of each variable of interest.</p>
 <blockquote>
 <p><strong>nb</strong> Russia is a member of the UN Security Council but does not appear in the gapminder data set</p>
 </blockquote>
@@ -735,7 +737,7 @@ gmun &lt;-
 </div>
 <div id="leaflet" class="section level3">
 <h3>Leaflet</h3>
-<p>Leaflet is an open-source JavaScript library that is widely used in interactive GIS (mapping) applications. The R package supporting Leaflet is written and maintained by RStudio, and ports over the library’s (very extensive) list of features<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>. Leaflet enables developers to create maps that include markers (i.e. data points), popup text, custom zoom levels, a variety of tiles (i.e. types of maps), polygons (i.e. custom boundaries), panning, and more.</p>
+<p>Leaflet is an open-source JavaScript library that is widely used in interactive GIS (mapping) applications. The R package supporting Leaflet is written and maintained by RStudio, and ports over the library’s (very extensive) list of features<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>. Leaflet enables developers to create maps that include markers (i.e. data points), popup text, custom zoom levels, a variety of tiles (i.e. types of maps), polygons (i.e. custom boundaries), panning, and more.</p>
 <p>The example below will use a list of academic research institutions in the United States. This data set has been previously geocoded with the <strong>ggmap</strong> package to calculate latitude and longitude.</p>
 <p>The code below reads in the data and makes sure we will we be using fully geocoded data, without any NAs in latitude or longitude fields.</p>
 <pre class="r"><code># read in institution data from github using readr read_csv() function
@@ -749,7 +751,7 @@ leaflet() %&gt;%
 addTiles()</code></pre>
 <div id="htmlwidget-95f3e91311f02ae92b4c" style="width:672px;height:480px;" class="leaflet html-widget"></div>
 <script type="application/json" data-for="htmlwidget-95f3e91311f02ae92b4c">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"maxNativeZoom":null,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"continuousWorld":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]}]},"evals":[],"jsHooks":[]}</script>
-<p>In order to customize the appearance of this map, we can add special “provider” tiles<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>. These are third-party map styles that have been made available to use via Leaflet. For example, you could use a National Geographic style map like the one below:</p>
+<p>In order to customize the appearance of this map, we can add special “provider” tiles<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>. These are third-party map styles that have been made available to use via Leaflet. For example, you could use a National Geographic style map like the one below:</p>
 <pre class="r"><code>leaflet() %&gt;%
 addProviderTiles(&quot;Esri.NatGeoWorldMap&quot;)</code></pre>
 <div id="htmlwidget-09669c3f0548d0b8872f" style="width:672px;height:480px;" class="leaflet html-widget"></div>
@@ -776,9 +778,9 @@ addCircleMarkers(lng=inst$Longitude, lat=inst$Latitude, popup = paste0(inst$Inst
 </div>
 <div id="visnetwork" class="section level3">
 <h3>visNetwork</h3>
-<p>Network visualization refers to the graphical representation of a collection of nodes (entities) and edges (connections between those entities). There are a number of JavaScript libraries that are capable of producing these kinds of plots, and vis.js<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> is one of the most robust. The associated R package for this library is <strong>visNetwork</strong><a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>.</p>
+<p>Network visualization refers to the graphical representation of a collection of nodes (entities) and edges (connections between those entities). There are a number of JavaScript libraries that are capable of producing these kinds of plots, and vis.js<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a> is one of the most robust. The associated R package for this library is <strong>visNetwork</strong><a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>.</p>
 <p>Data for network plots must be prepared with nodes and edges in mind. <strong>visNetwork</strong> in particular requires that these two should be separted into distinct data frames: one for the nodes (with an <em>id</em> column as well as any relevant attributes) and one for the edges (with a <em>from</em> and <em>to</em> as well as any associated attributes).</p>
-<p>For the example that follows we’ll use data describing the flow of patients from an outpatient orthopaedic clinic visit to surgery<a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a>. This dataset is available on Github, and must be converted from JSON format to a data frame object using the <code>fromJSON()</code> function from the <strong>jsonlite</strong> package.</p>
+<p>For the example that follows we’ll use data describing the flow of patients from an outpatient orthopaedic clinic visit to surgery<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a>. This dataset is available on Github, and must be converted from JSON format to a data frame object using the <code>fromJSON()</code> function from the <strong>jsonlite</strong> package.</p>
 <pre class="r"><code>library(visNetwork)
 library(jsonlite)
 
@@ -908,9 +910,9 @@ names(patientlinks) &lt;- c(&quot;from&quot;, &quot;to&quot;, &quot;value&quot;)
 </div>
 <div id="highcharter" class="section level3">
 <h3>Highcharter</h3>
-<p>Like D3, Highcharts is a flexible JavaScript visualization tool that can produce a variety of different kinds of plots: line, spline, area, areaspline, column, bar, pie, scatter, angular gauges, arearange, areasplinerange, columnrange and polar chart<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a>. Unlike D3, the implementation of the library through the <strong>highcharter</strong> package condenses many of these types of plots into a single set of functions<a href="#fn16" class="footnoteRef" id="fnref16"><sup>16</sup></a>.</p>
-<p>Note that Highcharts is free for non-commerical use, but must be licensed for commercial applications<a href="#fn17" class="footnoteRef" id="fnref17"><sup>17</sup></a>.</p>
-<p>For the example that follows we’ll look at different methods for creating interactive scatterplots. The data are records describing movies in the Internet Movie Database (IMDB) as collected and made available via Hadley Wickham’s <strong>ggplot2movies</strong> package<a href="#fn18" class="footnoteRef" id="fnref18"><sup>18</sup></a>.</p>
+<p>Like D3, Highcharts is a flexible JavaScript visualization tool that can produce a variety of different kinds of plots: line, spline, area, areaspline, column, bar, pie, scatter, angular gauges, arearange, areasplinerange, columnrange and polar chart<a href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a>. Unlike D3, the implementation of the library through the <strong>highcharter</strong> package condenses many of these types of plots into a single set of functions<a href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a>.</p>
+<p>Note that Highcharts is free for non-commerical use, but must be licensed for commercial applications<a href="#fn17" class="footnote-ref" id="fnref17"><sup>17</sup></a>.</p>
+<p>For the example that follows we’ll look at different methods for creating interactive scatterplots. The data are records describing movies in the Internet Movie Database (IMDB) as collected and made available via Hadley Wickham’s <strong>ggplot2movies</strong> package<a href="#fn18" class="footnote-ref" id="fnref18"><sup>18</sup></a>.</p>
 <p>First we need to load the packages and read the data directly from the package’s development repository on Github. In this case, we’ll assume we’re interested in a particular subset of the data: movies directed by Stanley Kubrick.</p>
 <pre class="r"><code>library(highcharter)
 library(dplyr)
@@ -1061,7 +1063,7 @@ highchart() %&gt;%
 <div id="htmlwidget-c3a2f4633f0659365048" style="width:100%;height:500px;" class="highchart html-widget"></div>
 <script type="application/json" data-for="htmlwidget-c3a2f4633f0659365048">{"x":{"hc_opts":{"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"plotOptions":{"series":{"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"},"bubble":{"minSize":5,"maxSize":25}},"annotationsOptions":{"enabledButtons":false},"tooltip":{"delayForDisplay":10},"series":[{"data":[{"x":1999,"y":7,"z":65000000,"label":"Eyes Wide Shut"},{"x":1987,"y":8.2,"z":30000000,"label":"Full Metal Jacket"},{"x":1980,"y":8.3,"z":19000000,"label":"Shining, The"},{"x":1975,"y":8,"z":11000000,"label":"Barry Lyndon"},{"x":1971,"y":8.3,"z":2200000,"label":"Clockwork Orange, A"},{"x":1968,"y":8.3,"z":10500000,"label":"2001: A Space Odyssey"},{"x":1964,"y":8.7,"z":1800000,"label":"Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb"},{"x":1962,"y":7.6,"z":2000000,"label":"Lolita"},{"x":1960,"y":8,"z":12000000,"label":"Spartacus"},{"x":1957,"y":8.6,"z":935000,"label":"Paths of Glory"},{"x":1956,"y":8.1,"z":320000,"label":"Killing, The"},{"x":1955,"y":6.6,"z":75000,"label":"Killer's Kiss"},{"x":1953,"y":6.3,"z":20000,"label":"Fear and Desire"}],"type":"bubble","dataLabels":{"enabled":true,"format":"{point.label}"}}]},"theme":{"chart":{"backgroundColor":"transparent"}},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","drillUpText":"Back to {series.name}","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"thousandsSep":" ","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
 <p>The plot above provides much more information and interactivity than the previous visualizations. However, it can still be improved.</p>
-<p>For one thing, the plot should have a title. We can give it one with <code>hc_title()</code>. But another issue is that the individual movie titles aren’t all visible. It appears that overlapping labels are hidden. The solution to this issue is relatively obscure, but illustrates an important feature of using JavaScript libraries in R. Like many clients, the <strong>highcharter</strong> package makes it possible to pass arbitrary agruments to the original Highcarts API. Unfortunately, these options aren’t documented within the package. But by looking at the API documentation<a href="#fn19" class="footnoteRef" id="fnref19"><sup>19</sup></a>, it’s clear that you can control (and disable) the behavior in question. The key is that these options must be passed into the <code>highcharter()</code> function via the <code>hc_opts</code> argument, and must be defined as a named list that walks down through the HTML container for the visualization. This workflow can be tedious … but very useful. Plots can be fully customized based on these parameters.</p>
+<p>For one thing, the plot should have a title. We can give it one with <code>hc_title()</code>. But another issue is that the individual movie titles aren’t all visible. It appears that overlapping labels are hidden. The solution to this issue is relatively obscure, but illustrates an important feature of using JavaScript libraries in R. Like many clients, the <strong>highcharter</strong> package makes it possible to pass arbitrary agruments to the original Highcarts API. Unfortunately, these options aren’t documented within the package. But by looking at the API documentation<a href="#fn19" class="footnote-ref" id="fnref19"><sup>19</sup></a>, it’s clear that you can control (and disable) the behavior in question. The key is that these options must be passed into the <code>highcharter()</code> function via the <code>hc_opts</code> argument, and must be defined as a named list that walks down through the HTML container for the visualization. This workflow can be tedious … but very useful. Plots can be fully customized based on these parameters.</p>
 <pre class="r"><code># specify options
 kubrickopts &lt;- list(plotOptions = list(series = 
                                          list(dataLabels =
@@ -1080,8 +1082,8 @@ highchart(hc_opts = kubrickopts) %&gt;%
 </div>
 <div id="threejs" class="section level3">
 <h3>threejs</h3>
-<p>The <strong>threejs</strong> R package<a href="#fn20" class="footnoteRef" id="fnref20"><sup>20</sup></a> is another htmlwidget, which makes it possible to make several kinds of data visualizations baded on the <strong>three.js</strong> JavaScript library<a href="#fn21" class="footnoteRef" id="fnref21"><sup>21</sup></a>.</p>
-<p>The help documentation for <strong>threejs</strong> categorizes the possible visualizations as follows<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a>:</p>
+<p>The <strong>threejs</strong> R package<a href="#fn20" class="footnote-ref" id="fnref20"><sup>20</sup></a> is another htmlwidget, which makes it possible to make several kinds of data visualizations baded on the <strong>three.js</strong> JavaScript library<a href="#fn21" class="footnote-ref" id="fnref21"><sup>21</sup></a>.</p>
+<p>The help documentation for <strong>threejs</strong> categorizes the possible visualizations as follows<a href="#fn22" class="footnote-ref" id="fnref22"><sup>22</sup></a>:</p>
 <blockquote>
 <ul>
 <li><code>graphjs</code>: an interactive network visualization widget</li>
@@ -1089,7 +1091,7 @@ highchart(hc_opts = kubrickopts) %&gt;%
 <li><code>globejs</code> : a somewhat silly widget that plots data and images on a 3-d globe</li>
 </ul>
 </blockquote>
-<p><code>graphjs</code> implements 3D interactive network visualizations. The first argument to the function is an <code>igraph</code> object, which is a data structure that manages the definition of nodes and edges (and associated attributes)<a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a>.</p>
+<p><code>graphjs</code> implements 3D interactive network visualizations. The first argument to the function is an <code>igraph</code> object, which is a data structure that manages the definition of nodes and edges (and associated attributes)<a href="#fn23" class="footnote-ref" id="fnref23"><sup>23</sup></a>.</p>
 <p>We can use the patients data from the <strong>visNetwork</strong> example to try it out:</p>
 <pre class="r"><code>library(threejs)
 library(igraph)
@@ -1137,12 +1139,12 @@ globejs(lat = airports$lat,
 </div>
 <div id="shiny" class="section level2">
 <h2>Shiny</h2>
-<p>One of the principal advantages of JavaScript visualizations is that they are ready to insert directly into web applications. They can potentially be embedded in HTML content, and included in a variety of frameworks. One such framework, specific to R development, is Shiny<a href="#fn24" class="footnoteRef" id="fnref24"><sup>24</sup></a>.</p>
+<p>One of the principal advantages of JavaScript visualizations is that they are ready to insert directly into web applications. They can potentially be embedded in HTML content, and included in a variety of frameworks. One such framework, specific to R development, is Shiny<a href="#fn24" class="footnote-ref" id="fnref24"><sup>24</sup></a>.</p>
 <p>Created and maintained by RStudio, Shiny is a web application framework developing interactive, web-based tools with R. JavaScript / R bindings developed with <strong>htmlwidgets</strong> include functions (<code>render*()</code> for server.R and <code>*Output()</code> for ui.R) to create and update these visualizations in a Shiny app.</p>
 </div>
 <div id="future-features" class="section level2">
 <h2>Future Features</h2>
-<p>The <strong>htmlwidgets</strong> package significantly cuts down on the complexity of integrating JavaScript libraries into R<a href="#fn25" class="footnoteRef" id="fnref25"><sup>25</sup></a>. As mentioned above, this package creates boilerplate outlines and provides a helpful structure for writing the pieces of R and JavaScript code that will communicate with one another. The end result of the binding is a package that includes functions to be called to create the visualization of interest. The relative ease of this workflow has resulted in a flood of new JavaScript / R visualization tools in the past year<a href="#fn26" class="footnoteRef" id="fnref26"><sup>26</sup></a> … and there will likely be many more released in the future. Another new tool in development is <strong>crosstalk</strong>, which aims to facilitate interaction <em>across</em> JavaScript frameworks via R<a href="#fn27" class="footnoteRef" id="fnref27"><sup>27</sup></a>.</p>
+<p>The <strong>htmlwidgets</strong> package significantly cuts down on the complexity of integrating JavaScript libraries into R<a href="#fn25" class="footnote-ref" id="fnref25"><sup>25</sup></a>. As mentioned above, this package creates boilerplate outlines and provides a helpful structure for writing the pieces of R and JavaScript code that will communicate with one another. The end result of the binding is a package that includes functions to be called to create the visualization of interest. The relative ease of this workflow has resulted in a flood of new JavaScript / R visualization tools in the past year<a href="#fn26" class="footnote-ref" id="fnref26"><sup>26</sup></a> … and there will likely be many more released in the future. Another new tool in development is <strong>crosstalk</strong>, which aims to facilitate interaction <em>across</em> JavaScript frameworks via R<a href="#fn27" class="footnote-ref" id="fnref27"><sup>27</sup></a>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
@@ -1150,33 +1152,33 @@ globejs(lat = airports$lat,
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p><a href="https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields" class="uri">https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields</a><a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p><a href="http://stackoverflow.com/a/245068" class="uri">http://stackoverflow.com/a/245068</a><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p><a href="http://www.crockford.com/javascript/javascript.html" class="uri">http://www.crockford.com/javascript/javascript.html</a><a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p><a href="http://www.htmlwidgets.org/" class="uri">http://www.htmlwidgets.org/</a><a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p><a href="https://bl.ocks.org/mbostock/4060606" class="uri">https://bl.ocks.org/mbostock/4060606</a><a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p><a href="http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/" class="uri">http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/</a><a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p><a href="https://en.wikipedia.org/wiki/Heat_map" class="uri">https://en.wikipedia.org/wiki/Heat_map</a><a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p><a href="https://cran.r-project.org/web/packages/gapminder/index.html" class="uri">https://cran.r-project.org/web/packages/gapminder/index.html</a><a href="#fnref8">↩</a></p></li>
-<li id="fn9"><p><a href="http://www.un.org/en/sc/members/" class="uri">http://www.un.org/en/sc/members/</a><a href="#fnref9">↩</a></p></li>
-<li id="fn10"><p><a href="https://rstudio.github.io/leaflet/" class="uri">https://rstudio.github.io/leaflet/</a><a href="#fnref10">↩</a></p></li>
-<li id="fn11"><p><a href="https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf" class="uri">https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf</a><a href="#fnref11">↩</a></p></li>
-<li id="fn12"><p><a href="http://visjs.org/network_examples.html" class="uri">http://visjs.org/network_examples.html</a><a href="#fnref12">↩</a></p></li>
-<li id="fn13"><p><a href="http://datastorm-open.github.io/visNetwork/" class="uri">http://datastorm-open.github.io/visNetwork/</a><a href="#fnref13">↩</a></p></li>
-<li id="fn14"><p><a href="https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016" class="uri">https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016</a><a href="#fnref14">↩</a></p></li>
-<li id="fn15"><p><a href="https://shop.highsoft.com/highcharts" class="uri">https://shop.highsoft.com/highcharts</a><a href="#fnref15">↩</a></p></li>
-<li id="fn16"><p><a href="http://jkunst.com/highcharter/" class="uri">http://jkunst.com/highcharter/</a><a href="#fnref16">↩</a></p></li>
-<li id="fn17"><p><a href="https://shop.highsoft.com/highcharts" class="uri">https://shop.highsoft.com/highcharts</a><a href="#fnref17">↩</a></p></li>
-<li id="fn18"><p><a href="http://leaflet-extras.github.io/leaflet-providers/preview/index.html" class="uri">http://leaflet-extras.github.io/leaflet-providers/preview/index.html</a><a href="#fnref18">↩</a></p></li>
-<li id="fn19"><p><a href="http://api.highcharts.com/highcharts" class="uri">http://api.highcharts.com/highcharts</a><a href="#fnref19">↩</a></p></li>
-<li id="fn20"><p><a href="https://bwlewis.github.io/rthreejs/" class="uri">https://bwlewis.github.io/rthreejs/</a><a href="#fnref20">↩</a></p></li>
-<li id="fn21"><p><a href="https://threejs.org/" class="uri">https://threejs.org/</a><a href="#fnref21">↩</a></p></li>
-<li id="fn22"><p><a href="https://github.com/bwlewis/rthreejs" class="uri">https://github.com/bwlewis/rthreejs</a><a href="#fnref22">↩</a></p></li>
-<li id="fn23"><p><a href="http://igraph.org/r/" class="uri">http://igraph.org/r/</a><a href="#fnref23">↩</a></p></li>
-<li id="fn24"><p><a href="http://shiny.rstudio.com/" class="uri">http://shiny.rstudio.com/</a><a href="#fnref24">↩</a></p></li>
-<li id="fn25"><p><a href="http://www.htmlwidgets.org/develop_intro.html" class="uri">http://www.htmlwidgets.org/develop_intro.html</a><a href="#fnref25">↩</a></p></li>
-<li id="fn26"><p><a href="http://www.buildingwidgets.com/" class="uri">http://www.buildingwidgets.com/</a><a href="#fnref26">↩</a></p></li>
-<li id="fn27"><p><a href="http://igraph.org/r/" class="uri">http://igraph.org/r/</a><a href="#fnref27">↩</a></p></li>
+<li id="fn1"><p><a href="https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields" class="uri">https://www.quora.com/ggplot2-is-the-gold-standard-for-making-graphs-and-visualizations-in-R-What-are-the-most-popular-tools-for-creating-visualizations-in-other-fields</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="http://stackoverflow.com/a/245068" class="uri">http://stackoverflow.com/a/245068</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p><a href="http://www.crockford.com/javascript/javascript.html" class="uri">http://www.crockford.com/javascript/javascript.html</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p><a href="http://www.htmlwidgets.org/" class="uri">http://www.htmlwidgets.org/</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p><a href="https://bl.ocks.org/mbostock/4060606" class="uri">https://bl.ocks.org/mbostock/4060606</a><a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><a href="http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/" class="uri">http://flowingdata.com/2012/08/02/how-to-make-an-interactive-network-visualization/</a><a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p><a href="https://en.wikipedia.org/wiki/Heat_map" class="uri">https://en.wikipedia.org/wiki/Heat_map</a><a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p><a href="https://cran.r-project.org/web/packages/gapminder/index.html" class="uri">https://cran.r-project.org/web/packages/gapminder/index.html</a><a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p><a href="http://www.un.org/en/sc/members/" class="uri">http://www.un.org/en/sc/members/</a><a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn10"><p><a href="https://rstudio.github.io/leaflet/" class="uri">https://rstudio.github.io/leaflet/</a><a href="#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn11"><p><a href="https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf" class="uri">https://cran.r-project.org/web/packages/ggplot2movies/ggplot2movies.pdf</a><a href="#fnref11" class="footnote-back">↩</a></p></li>
+<li id="fn12"><p><a href="http://visjs.org/network_examples.html" class="uri">http://visjs.org/network_examples.html</a><a href="#fnref12" class="footnote-back">↩</a></p></li>
+<li id="fn13"><p><a href="http://datastorm-open.github.io/visNetwork/" class="uri">http://datastorm-open.github.io/visNetwork/</a><a href="#fnref13" class="footnote-back">↩</a></p></li>
+<li id="fn14"><p><a href="https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016" class="uri">https://github.com/micahstubbs/sankey-datasets/tree/master/patient-flow-bos-2016</a><a href="#fnref14" class="footnote-back">↩</a></p></li>
+<li id="fn15"><p><a href="https://shop.highsoft.com/highcharts" class="uri">https://shop.highsoft.com/highcharts</a><a href="#fnref15" class="footnote-back">↩</a></p></li>
+<li id="fn16"><p><a href="http://jkunst.com/highcharter/" class="uri">http://jkunst.com/highcharter/</a><a href="#fnref16" class="footnote-back">↩</a></p></li>
+<li id="fn17"><p><a href="https://shop.highsoft.com/highcharts" class="uri">https://shop.highsoft.com/highcharts</a><a href="#fnref17" class="footnote-back">↩</a></p></li>
+<li id="fn18"><p><a href="http://leaflet-extras.github.io/leaflet-providers/preview/index.html" class="uri">http://leaflet-extras.github.io/leaflet-providers/preview/index.html</a><a href="#fnref18" class="footnote-back">↩</a></p></li>
+<li id="fn19"><p><a href="http://api.highcharts.com/highcharts" class="uri">http://api.highcharts.com/highcharts</a><a href="#fnref19" class="footnote-back">↩</a></p></li>
+<li id="fn20"><p><a href="https://bwlewis.github.io/rthreejs/" class="uri">https://bwlewis.github.io/rthreejs/</a><a href="#fnref20" class="footnote-back">↩</a></p></li>
+<li id="fn21"><p><a href="https://threejs.org/" class="uri">https://threejs.org/</a><a href="#fnref21" class="footnote-back">↩</a></p></li>
+<li id="fn22"><p><a href="https://github.com/bwlewis/rthreejs" class="uri">https://github.com/bwlewis/rthreejs</a><a href="#fnref22" class="footnote-back">↩</a></p></li>
+<li id="fn23"><p><a href="http://igraph.org/r/" class="uri">http://igraph.org/r/</a><a href="#fnref23" class="footnote-back">↩</a></p></li>
+<li id="fn24"><p><a href="http://shiny.rstudio.com/" class="uri">http://shiny.rstudio.com/</a><a href="#fnref24" class="footnote-back">↩</a></p></li>
+<li id="fn25"><p><a href="http://www.htmlwidgets.org/develop_intro.html" class="uri">http://www.htmlwidgets.org/develop_intro.html</a><a href="#fnref25" class="footnote-back">↩</a></p></li>
+<li id="fn26"><p><a href="http://www.buildingwidgets.com/" class="uri">http://www.buildingwidgets.com/</a><a href="#fnref26" class="footnote-back">↩</a></p></li>
+<li id="fn27"><p><a href="http://igraph.org/r/" class="uri">http://igraph.org/r/</a><a href="#fnref27" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

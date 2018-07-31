@@ -25,7 +25,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Font Awesome -->
 <!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 <!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
@@ -114,6 +116,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -483,8 +488,8 @@ div.tocify {
 <p>The National Center for Biotechnology Information (NCBI) maintains biological and bibliographic databases including PubMed, GenBank, among many others. Although the data are hosted on NCBI servers, they are accesible through an application programming interface (API). This workshop will introduce a package called <strong>rentrez</strong>, which facilitates API calls for NCBI data via the R programming language. By the end of the class, students will be familiar with the syntax for retrieving, linking and analyzing records from NCBI databases.</p>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>NCBI houses a tremendous variety of biomedical data. From publication abstracts and keywords … to raw sequence data … to taxanomic names and lineages<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. These records are stored in disparate databases but can be searched, retrieved and even linked together with a common set of tools. The application programming interface (API) for NCBI is the conduit that provides this access. The API is sometimes referred to as <em>Entrez</em>, which is techincally the name of the global search system (including the web interface), or as <em>eUtils</em>.</p>
-<p>It’s probably worth noting that API tools can offer services at different levels of software development. More specifically, eUtils is a “Web API”<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>. So from a computer connected to a network, you can execute a script that sends a “request” to the NCBI servers with a series of parameters in a pre-defined “endpoint” syntax. The “response” from this query can be returned in a variety of formats, but in this case will typically be in Extensible Markup Language (XML) structure<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>.</p>
+<p>NCBI houses a tremendous variety of biomedical data. From publication abstracts and keywords … to raw sequence data … to taxanomic names and lineages<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. These records are stored in disparate databases but can be searched, retrieved and even linked together with a common set of tools. The application programming interface (API) for NCBI is the conduit that provides this access. The API is sometimes referred to as <em>Entrez</em>, which is techincally the name of the global search system (including the web interface), or as <em>eUtils</em>.</p>
+<p>It’s probably worth noting that API tools can offer services at different levels of software development. More specifically, eUtils is a “Web API”<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. So from a computer connected to a network, you can execute a script that sends a “request” to the NCBI servers with a series of parameters in a pre-defined “endpoint” syntax. The “response” from this query can be returned in a variety of formats, but in this case will typically be in Extensible Markup Language (XML) structure<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
 <p>XML is organized as a set of nodes, each of which usually has a individual fields.</p>
 <p>Let’s take a look at an example:</p>
 <pre><code>&lt;playlist&gt;
@@ -509,11 +514,11 @@ div.tocify {
 &lt;/playlist&gt;</code></pre>
 <p>The value of the data housed in NCBI databases has driven the development of numerous API “clients” written and executed in various programming languages:</p>
 <ul>
-<li>Entrez Direct (EDirect)<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></li>
-<li>Bio.Entrez<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a></li>
-<li>bionode<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></li>
+<li>Entrez Direct (EDirect)<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></li>
+<li>Bio.Entrez<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></li>
+<li>bionode<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></li>
 </ul>
-<p>As mentioned above, this tutorial will use <strong>rentrez</strong>, which is a package developed and maintained by David Winter<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>. Because it’s written in R, it’s possible to incorporate any of the language’s data manipulation or statistical analysis functionality.</p>
+<p>As mentioned above, this tutorial will use <strong>rentrez</strong>, which is a package developed and maintained by David Winter<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>. Because it’s written in R, it’s possible to incorporate any of the language’s data manipulation or statistical analysis functionality.</p>
 <p>The package is available on the Comprehensive R Archive Network (CRAN). A stable release is available there. For the most recent development release (may include newer functions or versions of existing functions) you can install the package via Github:</p>
 <pre class="r"><code># install via CRAN
 install.packages(&quot;rentrez&quot;)
@@ -628,7 +633,7 @@ devtools::install_github(&quot;ropensci/rentrez&quot;)</code></pre>
 ##   HGNC    Identifier for Gene assigned by HUGO Gene Nomenclature Committee (HGNC) 
 ##   VID     Unique number assigned to variation 
 ##   IMOD    The latest date for each interpretation of a variant</code></pre>
-<p><strong>nb</strong> in order to construct thorough, complex queries to these databases, you may be best served starting in a web browser and using the graphical “Advanced Search Builder” for the database of choice<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a>.</p>
+<p><strong>nb</strong> in order to construct thorough, complex queries to these databases, you may be best served starting in a web browser and using the graphical “Advanced Search Builder” for the database of choice<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a>.</p>
 </div>
 <div id="entrez_search" class="section level2">
 <h2><code>entrez_search()</code></h2>
@@ -667,7 +672,7 @@ devtools::install_github(&quot;ropensci/rentrez&quot;)</code></pre>
 <p>Two functions that could be particularly useful when working with this XML are <code>xpathSApply()</code> and <code>xmlToList()</code>:</p>
 <pre class="r"><code>?xpathSApply
 ?xmlToList</code></pre>
-<p>XML documents are arranged as “trees” or “document object models (DOM)” … these must be traversed in order to find the information of interest. We need to define a starting point in that structure using XPath<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a>. The <code>//</code> and <code>/</code> syntax helps point the query to the appropriate context in the document.</p>
+<p>XML documents are arranged as “trees” or “document object models (DOM)” … these must be traversed in order to find the information of interest. We need to define a starting point in that structure using XPath<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a>. The <code>//</code> and <code>/</code> syntax helps point the query to the appropriate context in the document.</p>
 <p><code>xpathSApply()</code> uses base R’s <code>sapply()</code> to iterate over a list and return a vector.</p>
 <pre class="r"><code>xpathSApply(recs, &quot;//MedlineCitation/Article/ArticleTitle&quot;, xmlValue)</code></pre>
 <p>Antoher workflow for parsing these results is to use <code>entrez_summary()</code> and <code>extract_from_esummary()</code>.</p>
@@ -791,7 +796,7 @@ length(plosidtitles) == res$count</code></pre>
 </div>
 <div id="entrez_post" class="section level3">
 <h3><code>entrez_post()</code></h3>
-<p>Another way to store IDs on NCBI servers is with the <code>entrez_post()</code> function. This feature effectively also creats a web history object, but does so by explicitly using a POST protocol<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a>.</p>
+<p>Another way to store IDs on NCBI servers is with the <code>entrez_post()</code> function. This feature effectively also creats a web history object, but does so by explicitly using a POST protocol<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>.</p>
 <pre class="r"><code>res &lt;- entrez_search(db = &quot;clinvar&quot;, term= &quot;atherosclerosis[Disease/Phenotype]&quot;)
 postids &lt;- entrez_post(db = &quot;clinvar&quot;, res$ids)
 postids</code></pre>
@@ -1001,7 +1006,7 @@ postids</code></pre>
 </div>
 <div id="acknowledgments" class="section level2">
 <h2>Acknowledgments</h2>
-<p>Many of the examples and workflows presented in this lesson are heavily inspired by the developer of <strong>rentrez</strong>, David Winter, and his awesome vignette for the package<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a>.</p>
+<p>Many of the examples and workflows presented in this lesson are heavily inspired by the developer of <strong>rentrez</strong>, David Winter, and his awesome vignette for the package<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a>.</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
@@ -1009,17 +1014,17 @@ postids</code></pre>
 <div class="footnotes">
 <hr />
 <ol>
-<li id="fn1"><p><a href="http://www.ncbi.nlm.nih.gov/guide/all/" class="uri">http://www.ncbi.nlm.nih.gov/guide/all/</a><a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Web_API" class="uri">https://en.wikipedia.org/wiki/Web_API</a><a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p><a href="https://en.wikipedia.org/wiki/XML" class="uri">https://en.wikipedia.org/wiki/XML</a><a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p><a href="http://www.ncbi.nlm.nih.gov/books/NBK179288/" class="uri">http://www.ncbi.nlm.nih.gov/books/NBK179288/</a><a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p><a href="http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html" class="uri">http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html</a><a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p><a href="https://github.com/bionode/bionode-ncbi" class="uri">https://github.com/bionode/bionode-ncbi</a><a href="#fnref6">↩</a></p></li>
-<li id="fn7"><p><a href="https://cran.r-project.org/web/packages/rentrez/index.html" class="uri">https://cran.r-project.org/web/packages/rentrez/index.html</a><a href="#fnref7">↩</a></p></li>
-<li id="fn8"><p><a href="https://www.ncbi.nlm.nih.gov/gquery/?term" class="uri">https://www.ncbi.nlm.nih.gov/gquery/?term</a>=<a href="#fnref8">↩</a></p></li>
-<li id="fn9"><p><a href="http://www.w3schools.com/xml/xml_xpath.asp" class="uri">http://www.w3schools.com/xml/xml_xpath.asp</a><a href="#fnref9">↩</a></p></li>
-<li id="fn10"><p><a href="https://en.wikipedia.org/wiki/POST_(HTTP)" class="uri">https://en.wikipedia.org/wiki/POST_(HTTP)</a><a href="#fnref10">↩</a></p></li>
-<li id="fn11"><p><a href="https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html" class="uri">https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html</a><a href="#fnref11">↩</a></p></li>
+<li id="fn1"><p><a href="http://www.ncbi.nlm.nih.gov/guide/all/" class="uri">http://www.ncbi.nlm.nih.gov/guide/all/</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Web_API" class="uri">https://en.wikipedia.org/wiki/Web_API</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p><a href="https://en.wikipedia.org/wiki/XML" class="uri">https://en.wikipedia.org/wiki/XML</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
+<li id="fn4"><p><a href="http://www.ncbi.nlm.nih.gov/books/NBK179288/" class="uri">http://www.ncbi.nlm.nih.gov/books/NBK179288/</a><a href="#fnref4" class="footnote-back">↩</a></p></li>
+<li id="fn5"><p><a href="http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html" class="uri">http://people.duke.edu/~ccc14/pcfb/biopython/BiopythonEntrez.html</a><a href="#fnref5" class="footnote-back">↩</a></p></li>
+<li id="fn6"><p><a href="https://github.com/bionode/bionode-ncbi" class="uri">https://github.com/bionode/bionode-ncbi</a><a href="#fnref6" class="footnote-back">↩</a></p></li>
+<li id="fn7"><p><a href="https://cran.r-project.org/web/packages/rentrez/index.html" class="uri">https://cran.r-project.org/web/packages/rentrez/index.html</a><a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn8"><p><a href="https://www.ncbi.nlm.nih.gov/gquery/?term=" class="uri">https://www.ncbi.nlm.nih.gov/gquery/?term=</a><a href="#fnref8" class="footnote-back">↩</a></p></li>
+<li id="fn9"><p><a href="http://www.w3schools.com/xml/xml_xpath.asp" class="uri">http://www.w3schools.com/xml/xml_xpath.asp</a><a href="#fnref9" class="footnote-back">↩</a></p></li>
+<li id="fn10"><p><a href="https://en.wikipedia.org/wiki/POST_(HTTP)" class="uri">https://en.wikipedia.org/wiki/POST_(HTTP)</a><a href="#fnref10" class="footnote-back">↩</a></p></li>
+<li id="fn11"><p><a href="https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html" class="uri">https://cran.r-project.org/web/packages/rentrez/vignettes/rentrez_tutorial.html</a><a href="#fnref11" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 

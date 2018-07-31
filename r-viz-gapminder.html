@@ -25,7 +25,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 <!-- Font Awesome -->
 <!-- <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" /> -->
 <!-- <script src="https://use.fontawesome.com/54ee8c2dfd.js"></script> -->
@@ -114,6 +116,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -535,10 +540,7 @@ gm</code></pre>
 <li><code>group_by()</code>: groups a data frame by one or more variable. Most data operations are useful done on groups defined by variables in the the dataset. The <code>group_by</code> function takes an existing data frame and converts it into a grouped data frame where <code>summarize()</code> operations are performed <em>by group</em>.</li>
 </ol>
 <p>Additionally, the <strong><code>%&gt;%</code></strong> operator allows you to “chain” operations together. Rather than nesting functions inside out, the <code>%&gt;%</code> operator allows you to write operations left-to-right, top-to-bottom. Let’s say we wanted to get the average life expectancy and GDP (not GDP per capita) for Asian countries for each year.</p>
-<div class="figure">
-<img src="img/nest_vs_pipe_gm.png" />
-
-</div>
+<p><img src="img/nest_vs_pipe_gm.png" /></p>
 <p>The <code>%&gt;%</code> would allow us to do this:</p>
 <pre class="r"><code>gm %&gt;%
   mutate(gdp=gdpPercap*pop) %&gt;%
@@ -624,9 +626,11 @@ p + geom_point() + scale_x_log10()</code></pre>
 <li>Start with the <code>ggplot()</code> function.</li>
 <li>Use the gm data.</li>
 <li>Map <code>gdpPercap</code> to the x-axis and <code>lifeExp</code> to the y-axis.</li>
-<li>Add points to the plot</li>
+<li>Add points to the plot
+<ul>
 <li>Make the points size 3</li>
 <li>Map continent onto the aesthetics of the point</li>
+</ul></li>
 <li>Use a log<sub>10</sub> scale for the x-axis.</li>
 </ul>
 <hr />
