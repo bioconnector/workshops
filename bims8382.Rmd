@@ -9,7 +9,7 @@ title: "BIMS8382 Syllabus"
 **_Instructors:_**
 
 **Stephen Turner**&nbsp;
-<a href="http://www.google.com/recaptcha/mailhide/d?k=01Wp6BFjxhU6BE1ONDOeDAZg==&amp;c=hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\07501Wp6BFjxhU6BE1ONDOeDAZg\75\75\46c\75hClvy-RObaqm8ONK69PMtLKUh74mVHLjokUJXLgkUHk\075', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address"><i class="fa fa-envelope"></i></a>
+<a href="people.html"><i class="fa fa-envelope"></i></a>
 <a href="https://med.virginia.edu/phs/faculty-and-staff-directory/stephen-d-turner-ph-d/" target="_blank"><i class="fa fa-phone"></i></a>
 <a href="https://twitter.com/strnr" target="_blank"><i class="fa fa-twitter"></i></a>
 <a href="https://github.com/stephenturner/" target="_blank"><i class="fa fa-github"></i></a>
@@ -17,7 +17,7 @@ title: "BIMS8382 Syllabus"
 <small>Stephen Turner, Ph.D. is faculty in the Department of Public Health Sciences, and director of the [Bioinformatics Core](http://bioinformatics.virginia.edu) at the UVA School of Medicine.</small>
 
 **VP Nagraj**&nbsp;
-<a href="http://www.google.com/recaptcha/mailhide/d?k=01Gesfil1uO8eSVk2xxZE8-A==&amp;c=R-N4My3ieH1gcdMc4cSsEUXhOynxA_zK0XQWKoyNLO0=" onclick="window.open('http://www.google.com/recaptcha/mailhide/d?k\x3d01Gesfil1uO8eSVk2xxZE8-A\x3d\x3d\x26c\x3dR-N4My3ieH1gcdMc4cSsEUXhOynxA_zK0XQWKoyNLO0\x3d', '', 'toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=500,height=300'); return false;" title="Reveal this e-mail address"><i class="fa fa-envelope"></i></a>  
+<a href="people.html"><i class="fa fa-envelope"></i></a>
 <small>Pete Nagraj teaches, consults and contributes to scientific programming and data analysis projects in [UVA SOMRC](https://somrc.virginia.edu). With expertise in R and Python, he's been active in package development and a variety of open-source collaborations.</small>
 
 **_Where:_** BIMS Education Center (McKim Hall)
